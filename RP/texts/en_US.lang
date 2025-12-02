@@ -1,0 +1,23 @@
+entity.utilitycraft:power_condenser.name=Power Condenser Matrix
+entity.utilitycraft:thermo_reactor.name=Thermal Reactor
+
+tile.utilitycraft:basic_power_condenser_unit.name=§eBasic Power Condenser Unit
+tile.utilitycraft:advanced_power_condenser_unit.name=§cAdvanced Power Condenser Unit
+tile.utilitycraft:expert_power_condenser_unit.name=§bExpert Power Condenser Unit
+tile.utilitycraft:ultimate_power_condenser_unit.name=§8Ultimate Power Condenser Unit
+
+tile.utilitycraft:processing_module.name=Processing Module
+tile.utilitycraft:speed_module.name=Speed Module
+tile.utilitycraft:efficiency_module.name=Efficiency Module
+tile.utilitycraft:energy_cell.name=Energy Cell
+
+tile.utilitycraft:crusher_controller.name=Crusher Controller
+tile.utilitycraft:power_condenser_controller.name=Power Condenser Controller
+tile.utilitycraft:thermo_reactor_controller.name=Thermal Reactor Controller
+
+tile.utilitycraft:reinforced_glass.name=Reinforced Glass
+tile.utilitycraft:steel_plate_block.name=Steel Plate Block
+tile.utilitycraft:energy_input.name=Energy Input Block
+tile.utilitycraft:fluid_input.name=Fluid Input Block
+tile.utilitycraft:item_input.name=Item Input Block
+item.utilitycraft:bronze_ingot=Bronze Ingot

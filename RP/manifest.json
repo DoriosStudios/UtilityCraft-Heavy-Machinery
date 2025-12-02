@@ -1,0 +1,44 @@
+{
+	"format_version": 2,
+	"metadata": {
+		"authors": [
+			"Dorios Studios"
+		]
+	},
+	"header": {
+		"name": "UtilityCraft Heavy Machinery",
+		"description": "",
+		"min_engine_version": [
+			1,
+			21,
+			90
+		],
+		"uuid": "6b73e899-731b-4fc6-a3e9-45da4f00efa0",
+		"version": [
+			1,
+			0,
+			0
+		]
+	},
+	"modules": [
+		{
+			"type": "resources",
+			"uuid": "df6425df-ce6d-44e2-99fe-64da8d4d0390",
+			"version": [
+				1,
+				0,
+				0
+			]
+		}
+	],
+	"dependencies": [
+		{
+			"uuid": "f99ab81c-e320-4e3e-aae3-2f7f5ac11775",
+			"version": [
+				1,
+				0,
+				0
+			]
+		}
+	]
+}

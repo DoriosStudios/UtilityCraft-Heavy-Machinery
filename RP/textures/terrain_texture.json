@@ -1,0 +1,158 @@
+{
+	"num_mip_levels": 4,
+	"padding": 8,
+	"resource_pack_name": "UtilityCraft Heavy Machinery",
+	"texture_name": "atlas.terrain",
+	"texture_data": {
+		"utilitycraft_crusher_controller": {
+			"textures": "textures/blocks/multiblock/crusher_controller"
+		},
+		"utilitycraft_efficiency_module": {
+			"textures": "textures/blocks/multiblock/efficiency_module"
+		},
+		"utilitycraft_energy_cell": {
+			"textures": "textures/blocks/multiblock/energy_cell"
+		},
+		"utilitycraft_processing_module": {
+			"textures": "textures/blocks/multiblock/processing_module"
+		},
+		"utilitycraft_speed_module": {
+			"textures": "textures/blocks/multiblock/speed_module"
+		},
+		"utilitycraft_power_condenser_controller": {
+			"textures": "textures/blocks/multiblock/power_condenser_controller"
+		},
+		"utilitycraft_ultimate_power_condenser_unit": {
+			"textures": "textures/blocks/multiblock/ultimate_energy_condenser"
+		},
+		"utilitycraft_expert_power_condenser_unit": {
+			"textures": "textures/blocks/multiblock/expert_energy_condenser"
+		},
+		"utilitycraft_advanced_power_condenser_unit": {
+			"textures": "textures/blocks/multiblock/advanced_energy_condenser"
+		},
+		"utilitycraft_basic_power_condenser_unit": {
+			"textures": "textures/blocks/multiblock/basic_energy_condenser"
+		},
+		"utilitycraft_fluid_cell": {
+			"textures": "textures/blocks/multiblock/fluid_cell"
+		},
+		"utilitycraft_heat_conductor": {
+			"textures": "textures/blocks/multiblock/heat_conductor"
+		},
+		"utilitycraft_thermo_core": {
+			"textures": "textures/blocks/multiblock/thermo_core"
+		},
+		"utilitycraft_burnt_thermo_core": {
+			"textures": "textures/blocks/multiblock/burnt_thermo_core"
+		},
+		// Bronze
+		"utilitycraft_thermal_reactor_controller": {
+			"textures": "textures/blocks/multiblock/bronze/thermal_reactor_controller"
+		},
+		"utilitycraft_bronze_vent_panel": {
+			"textures": "textures/blocks/multiblock/bronze/bronze_vent_panel"
+		},
+		"utilitycraft_bronze_steel_case": {
+			"textures": "textures/blocks/multiblock/bronze/bronze_steel_case"
+		},
+		"utilitycraft_bronze_case": {
+			"textures": "textures/blocks/multiblock/bronze/bronze_case"
+		},
+		"utilitycraft_bronze_hazard_block": {
+			"textures": "textures/blocks/multiblock/bronze/bronze_hazard_block"
+		},
+		"utilitycraft_bronze_bricks": {
+			"textures": "textures/blocks/multiblock/bronze/bronze_bricks"
+		},
+		"utilitycraft_block_of_bronze": {
+			"textures": "textures/blocks/multiblock/bronze/block_of_bronze"
+		},
+		"utilitycraft_bronze_plated_block": {
+			"textures": "textures/blocks/multiblock/bronze/bronze_plated_block"
+		},
+		"utilitycraft_reinforced_bronze_glass": {
+			"textures": "textures/blocks/multiblock/bronze/reinforced_bronze_glass"
+		},
+		"utilitycraft_tempered_bronze_glass": {
+			"textures": "textures/blocks/multiblock/bronze/tempered_bronze_glass"
+		},
+		"utilitycraft_bronze_energy_port": {
+			"textures": "textures/blocks/multiblock/bronze/bronze_energy_port"
+		},
+		"utilitycraft_bronze_fluid_port": {
+			"textures": "textures/blocks/multiblock/bronze/bronze_fluid_port"
+		},
+		"utilitycraft_bronze_item_port": {
+			"textures": "textures/blocks/multiblock/bronze/bronze_item_port"
+		},
+		// Steel
+		"utilitycraft_steel_vent_panel": {
+			"textures": "textures/blocks/multiblock/steel/steel_vent_panel"
+		},
+		"utilitycraft_steel_case": {
+			"textures": "textures/blocks/multiblock/steel/steel_case"
+		},
+		"utilitycraft_brushed_steel_bricks": {
+			"textures": "textures/blocks/multiblock/steel/brushed_steel_bricks"
+		},
+		"utilitycraft_steel_hazard_block": {
+			"textures": "textures/blocks/multiblock/steel/steel_hazard_block"
+		},
+		"utilitycraft_steel_bricks": {
+			"textures": "textures/blocks/multiblock/steel/steel_bricks"
+		},
+		"utilitycraft_steel_plated_block": {
+			"textures": "textures/blocks/multiblock/steel/steel_plated_block"
+		},
+		"utilitycraft_reinforced_steel_glass": {
+			"textures": "textures/blocks/multiblock/steel/reinforced_steel_glass"
+		},
+		"utilitycraft_tempered_steel_glass": {
+			"textures": "textures/blocks/multiblock/steel/tempered_steel_glass"
+		},
+		"utilitycraft_steel_energy_port": {
+			"textures": "textures/blocks/multiblock/steel/steel_energy_port"
+		},
+		"utilitycraft_steel_fluid_port": {
+			"textures": "textures/blocks/multiblock/steel/steel_fluid_port"
+		},
+		"utilitycraft_steel_item_port": {
+			"textures": "textures/blocks/multiblock/steel/steel_item_port"
+		},
+		// Netherite
+		"utilitycraft_netherite_vent_panel": {
+			"textures": "textures/blocks/multiblock/netherite/netherite_vent_panel"
+		},
+		"utilitycraft_netherite_case": {
+			"textures": "textures/blocks/multiblock/netherite/netherite_case"
+		},
+		"utilitycraft_netherite_hazard_block": {
+			"textures": "textures/blocks/multiblock/netherite/netherite_hazard_block"
+		},
+		"utilitycraft_netherite_bricks": {
+			"textures": "textures/blocks/multiblock/netherite/netherite_bricks"
+		},
+		"utilitycraft_netherite_bricks_top": {
+			"textures": "textures/blocks/multiblock/netherite/netherite_bricks_top"
+		},
+		"utilitycraft_netherite_plated_block": {
+			"textures": "textures/blocks/multiblock/netherite/netherite_plated_block"
+		},
+		"utilitycraft_reinforced_netherite_glass": {
+			"textures": "textures/blocks/multiblock/netherite/reinforced_netherite_glass"
+		},
+		"utilitycraft_tempered_netherite_glass": {
+			"textures": "textures/blocks/multiblock/netherite/tempered_netherite_glass"
+		},
+		"utilitycraft_netherite_energy_port": {
+			"textures": "textures/blocks/multiblock/netherite/netherite_energy_port"
+		},
+		"utilitycraft_netherite_fluid_port": {
+			"textures": "textures/blocks/multiblock/netherite/netherite_fluid_port"
+		},
+		"utilitycraft_netherite_item_port": {
+			"textures": "textures/blocks/multiblock/netherite/netherite_item_port"
+		}
+	}
+}

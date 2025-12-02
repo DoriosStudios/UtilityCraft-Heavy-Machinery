@@ -1,0 +1,8 @@
+{
+    "ui_defs": [
+        "ui/power_condenser.json",
+        "ui/thermo_reactor.json",
+        "ui/9_slots_test.json",
+        "ui/machineryCommon.json"
+    ]
+}

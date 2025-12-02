@@ -1,0 +1,16 @@
+{
+	"format_version": "1.20.80",
+	"minecraft:block": {
+		"description": {
+			"identifier": "utilitycraft:netherite_fluid_port",
+			"menu_category": {
+				"category": "construction"
+			}
+		},
+		"components": {
+			"tag:dorios:fluid": {},
+			"tag:dorios:input_block": {},
+			"tag:dorios:multiblock_case": {}
+		}
+	}
+}

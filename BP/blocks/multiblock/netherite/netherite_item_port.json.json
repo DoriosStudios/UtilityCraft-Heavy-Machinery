@@ -1,0 +1,16 @@
+{
+	"format_version": "1.20.80",
+	"minecraft:block": {
+		"description": {
+			"identifier": "utilitycraft:netherite_item_port",
+			"menu_category": {
+				"category": "construction"
+			}
+		},
+		"components": {
+			"tag:dorios:item": {},
+			"tag:dorios:input_block": {},
+            "tag:dorios:multiblock_case": {}
+		}
+	}
+}

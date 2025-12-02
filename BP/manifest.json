@@ -1,0 +1,85 @@
+{
+	"format_version": 2,
+	"metadata": {
+		"authors": [
+			"Dorios Studios"
+		]
+	},
+	"header": {
+		"name": "UtilityCraft Heavy Machinery",
+		"description": "",
+		"min_engine_version": [
+			1,
+			21,
+			90
+		],
+		"uuid": "f99ab81c-e320-4e3e-aae3-2f7f5ac11775",
+		"version": [
+			1,
+			0,
+			0
+		]
+	},
+	"modules": [
+		{
+			"type": "data",
+			"uuid": "4fad31fe-5151-4a29-beb6-98c50717b03a",
+			"version": [
+				1,
+				0,
+				0
+			]
+		},
+		{
+			"type": "script",
+			"language": "javascript",
+			"uuid": "003372a8-ee73-48e1-860a-c9a8f104e475",
+			"entry": "scripts/main.js",
+			"version": [
+				1,
+				0,
+				0
+			]
+		}
+	],
+	"dependencies": [
+		{
+			"uuid": "6b73e899-731b-4fc6-a3e9-45da4f00efa0",
+			"version": [
+				1,
+				0,
+				0
+			]
+		},
+		{
+			"module_name": "@minecraft/server",
+			"version": "2.0.0"
+		},
+		{
+			"module_name": "@minecraft/server-ui",
+			"version": "2.0.0"
+		}
+	],
+	"subpacks": [
+		{
+			"folder_name": "Super Fast",
+			"name": "Super Fast",
+			"memory_tier": 0
+		},
+		{
+			"folder_name": "Fast",
+			"name": "Fast",
+			"memory_tier": 1
+		},
+		{
+			"folder_name": "Normal",
+			"name": "Normal",
+			"memory_tier": 2
+		},
+		{
+			"folder_name": "Slow",
+			"name": "Slow",
+			"memory_tier": 3
+		}
+	]
+}

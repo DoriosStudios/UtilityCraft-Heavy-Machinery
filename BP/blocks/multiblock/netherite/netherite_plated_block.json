@@ -1,0 +1,25 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:block": {
+        "description": {
+            "identifier": "utilitycraft:netherite_plated_block",
+            "menu_category": {
+                "category": "construction"
+            }
+        },
+        "components": {
+            "minecraft:geometry": "geometry.utilitycraft_block",
+            "minecraft:material_instances": {
+                "*": {
+                    "texture": "utilitycraft_netherite_plated_block",
+                    "render_method": "alpha_test"
+                }
+            },
+            "minecraft:destructible_by_mining": {
+                "seconds_to_destroy": 1
+            },
+            "minecraft:destructible_by_explosion": false,
+            "tag:dorios:multiblock_case": {}
+        }
+    }
+}

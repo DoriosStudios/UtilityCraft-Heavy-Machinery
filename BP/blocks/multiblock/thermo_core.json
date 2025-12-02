@@ -1,0 +1,45 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:block": {
+        "description": {
+            "identifier": "utilitycraft:thermo_core",
+            "menu_category": {
+                "category": "construction"
+            },
+            "states": {
+                "utilitycraft:state": [
+                    0,
+                    1
+                ]
+            }
+        },
+        "components": {
+            "minecraft:geometry": "geometry.utilitycraft_block_3",
+            "minecraft:material_instances": {
+                "*": {
+                    "texture": "utilitycraft_thermo_core",
+                    "render_method": "alpha_test"
+                }
+            },
+            "minecraft:destructible_by_mining": {
+                "seconds_to_destroy": 1
+            },
+            "minecraft:destructible_by_explosion": false,
+            "tag:dorios:multiblock_case": {},
+            "tag:dorios:multiblock_component": {}
+        },
+        "permutations": [
+            {
+                "condition": "q.block_state('utilitycraft:state') == 1 ",
+                "components": {
+                    "minecraft:material_instances": {
+                        "*": {
+                            "texture": "utilitycraft_burnt_thermo_core",
+                            "render_method": "alpha_test"
+                        }
+                    }
+                }
+            }
+        ]
+    }
+}

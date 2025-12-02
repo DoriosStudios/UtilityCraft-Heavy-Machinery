@@ -1,0 +1,140 @@
+{
+	"format_version": [
+		1,
+		1,
+		0
+	],
+	// Bronze
+	"utilitycraft:reinforced_bronze_glass": {
+		"sound": "glass"
+	},
+	"utilitycraft:tempered_bronze_glass": {
+		"sound": "glass"
+	},
+	"utilitycraft:bronze_energy_port": {
+		"sound": "copper",
+		"textures": "utilitycraft_bronze_energy_port"
+	},
+	"utilitycraft:bronze_fluid_port": {
+		"sound": "copper",
+		"textures": "utilitycraft_bronze_fluid_port"
+	},
+	"utilitycraft:bronze_item_port": {
+		"sound": "copper",
+		"textures": "utilitycraft_bronze_item_port"
+	},
+	"utilitycraft:bronze_plated_block": {
+		"sound": "copper",
+		"textures": "utilitycraft_bronze_plated_block"
+	},
+	"utilitycraft:block_of_bronze": {
+		"sound": "copper",
+		"textures": "utilitycraft_block_of_bronze"
+	},
+	"utilitycraft:bronze_case": {
+		"sound": "copper",
+		"textures": "utilitycraft_bronze_case"
+	},
+	"utilitycraft:bronze_hazard_block": {
+		"sound": "copper",
+		"textures": "utilitycraft_bronze_hazard_block"
+	},
+	"utilitycraft:bronze_bricks": {
+		"sound": "copper",
+		"textures": "utilitycraft_bronze_bricks"
+	},
+	"utilitycraft:bronze_vent_panel": {
+		"sound": "copper",
+		"textures": "utilitycraft_bronze_vent_panel"
+	},
+	// Steel
+	"utilitycraft:reinforced_steel_glass": {
+		"sound": "glass"
+	},
+	"utilitycraft:tempered_steel_glass": {
+		"sound": "glass"
+	},
+	"utilitycraft:steel_energy_port": {
+		"sound": "iron",
+		"textures": "utilitycraft_steel_energy_port"
+	},
+	"utilitycraft:steel_fluid_port": {
+		"sound": "iron",
+		"textures": "utilitycraft_steel_fluid_port"
+	},
+	"utilitycraft:steel_item_port": {
+		"sound": "iron",
+		"textures": "utilitycraft_steel_item_port"
+	},
+	"utilitycraft:steel_plated_block": {
+		"sound": "iron",
+		"textures": "utilitycraft_steel_plated_block"
+	},
+	"utilitycraft:steel_case": {
+		"sound": "iron",
+		"textures": "utilitycraft_steel_case"
+	},
+	"utilitycraft:steel_bricks": {
+		"sound": "iron",
+		"textures": "utilitycraft_steel_bricks"
+	},
+	"utilitycraft:steel_hazard_block": {
+		"sound": "iron",
+		"textures": {
+			"up": "utilitycraft_steel_plated_block",
+			"down": "utilitycraft_steel_plated_block",
+			"side": "utilitycraft_steel_hazard_block"
+		}
+	},
+	"utilitycraft:steel_vent_panel": {
+		"sound": "iron",
+		"textures": "utilitycraft_steel_vent_panel"
+	},
+	// Netherite
+	"utilitycraft:reinforced_netherite_glass": {
+		"sound": "glass"
+	},
+	"utilitycraft:tempered_netherite_glass": {
+		"sound": "glass"
+	},
+	"utilitycraft:netherite_energy_port": {
+		"sound": "netherite",
+		"textures": "utilitycraft_netherite_energy_port"
+	},
+	"utilitycraft:netherite_fluid_port": {
+		"sound": "netherite",
+		"textures": "utilitycraft_netherite_fluid_port"
+	},
+	"utilitycraft:netherite_item_port": {
+		"sound": "netherite",
+		"textures": "utilitycraft_netherite_item_port"
+	},
+	"utilitycraft:netherite_plated_block": {
+		"sound": "netherite",
+		"textures": "utilitycraft_netherite_plated_block"
+	},
+	"utilitycraft:netherite_case": {
+		"sound": "netherite",
+		"textures": "utilitycraft_netherite_case"
+	},
+	"utilitycraft:netherite_bricks": {
+		"sound": "netherite",
+		"textures": {
+			"up": "utilitycraft_netherite_bricks_top",
+			"down": "utilitycraft_netherite_plated_block",
+			"side": "utilitycraft_netherite_bricks"
+		}
+	},
+	"utilitycraft:netherite_hazard_block": {
+		"sound": "netherite",
+		"textures": {
+			"up": "utilitycraft_netherite_plated_block",
+			"down": "utilitycraft_netherite_plated_block",
+			"side": "utilitycraft_netherite_hazard_block"
+		}
+	},
+	"utilitycraft:netherite_vent_panel": {
+		"sound": "netherite",
+		"textures": "utilitycraft_netherite_vent_panel"
+	}
+}

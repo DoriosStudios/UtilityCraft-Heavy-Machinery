@@ -1,0 +1,46 @@
+{
+	"type": "minecraftBedrock",
+	"name": "UtilityCraft Heavy Machinery",
+	"namespace": "utilitycraft",
+	"authors": [
+		"Dorios Studios"
+	],
+	"targetVersion": "1.21.90",
+	"description": "",
+	"experimentalGameplay": {
+		"creationOfCustomBiomes": false,
+		"upcomingCreatorFeatures": false,
+		"experimentalCreatorCameraFeatures": false,
+		"enableGameTestFramework": false,
+		"dataDrivenJigsawStructures": false,
+		"renderDragonFeatures": false,
+		"educationEdition": false
+	},
+	"bdsProject": true,
+	"packs": {
+		"behaviorPack": "./BP",
+		"resourcePack": "./RP"
+	},
+	"worlds": [
+		"./worlds/*"
+	],
+	"compiler": {
+		"plugins": [
+			"generatorScripts",
+			"typeScript",
+			"entityIdentifierAlias",
+			"customEntityComponents",
+			"customItemComponents",
+			"customBlockComponents",
+			"customCommands",
+			"moLang",
+			"formatVersionCorrection",
+			[
+				"simpleRewrite",
+				{
+					"packName": "UtilityCraft Heavy Machinery"
+				}
+			]
+		]
+	}
+}
