@@ -1,23 +1,60 @@
 entity.utilitycraft:power_condenser.name=Power Condenser Matrix
 entity.utilitycraft:thermo_reactor.name=Thermal Reactor
 
-tile.utilitycraft:basic_power_condenser_unit.name=§eBasic Power Condenser Unit
-tile.utilitycraft:advanced_power_condenser_unit.name=§cAdvanced Power Condenser Unit
-tile.utilitycraft:expert_power_condenser_unit.name=§bExpert Power Condenser Unit
-tile.utilitycraft:ultimate_power_condenser_unit.name=§8Ultimate Power Condenser Unit
 
 tile.utilitycraft:processing_module.name=Processing Module
 tile.utilitycraft:speed_module.name=Speed Module
 tile.utilitycraft:efficiency_module.name=Efficiency Module
 tile.utilitycraft:energy_cell.name=Energy Cell
+tile.utilitycraft:fluid_cell.name=Fluid Cell
 
 tile.utilitycraft:crusher_controller.name=Crusher Controller
-tile.utilitycraft:power_condenser_controller.name=Power Condenser Controller
-tile.utilitycraft:thermo_reactor_controller.name=Thermal Reactor Controller
 
-tile.utilitycraft:reinforced_glass.name=Reinforced Glass
-tile.utilitycraft:steel_plate_block.name=Steel Plate Block
-tile.utilitycraft:energy_input.name=Energy Input Block
-tile.utilitycraft:fluid_input.name=Fluid Input Block
-tile.utilitycraft:item_input.name=Item Input Block
+tile.utilitycraft:power_condenser_controller.name=Power Condenser Controller
+tile.utilitycraft:basic_power_condenser_unit.name=§eBasic Power Condenser Unit
+tile.utilitycraft:advanced_power_condenser_unit.name=§cAdvanced Power Condenser Unit
+tile.utilitycraft:expert_power_condenser_unit.name=§bExpert Power Condenser Unit
+tile.utilitycraft:ultimate_power_condenser_unit.name=§8Ultimate Power Condenser Unit
+
+
+tile.utilitycraft:thermo_reactor_controller.name=Thermal Reactor Controller
+tile.utilitycraft:heat_conductor.name=Heat Conductor
+tile.utilitycraft:thermo_core.name=Thermo Core
+
 item.utilitycraft:bronze_ingot=Bronze Ingot
+
+tile.utilitycraft:block_of_bronze.name=Block of Bronze
+tile.utilitycraft:bronze_bricks.name=Bronze Bricks
+tile.utilitycraft:bronze_case.name=Bronze Casing
+tile.utilitycraft:bronze_energy_port.name=Bronze Energy Port
+tile.utilitycraft:bronze_fluid_port.name=Bronze Fluid Port
+tile.utilitycraft:bronze_hazard_block.name=Bronze Hazard Block
+tile.utilitycraft:bronze_item_port.name=Bronze Item Port
+tile.utilitycraft:bronze_plated_block.name=Bronze Plated Block
+tile.utilitycraft:bronze_steel_case.name=Bronze-Steel Casing
+tile.utilitycraft:bronze_vent_panel.name=Bronze Vent Panel
+tile.utilitycraft:reinforced_bronze_glass.name=Reinforced Bronze Glass
+tile.utilitycraft:tempered_bronze_glass.name=Tempered Bronze Glass
+
+tile.utilitycraft:reinforced_steel_glass.name=Reinforced Steel Glass
+tile.utilitycraft:steel_plate_block.name=Steel Plate Block
+tile.utilitycraft:steel_bricks.name=Steel Bricks
+tile.utilitycraft:steel_case.name=Steel Casing
+tile.utilitycraft:steel_energy_port.name=Steel Energy Port
+tile.utilitycraft:steel_fluid_port.name=Steel Fluid Port
+tile.utilitycraft:steel_hazard_block.name=Steel Hazard Block
+tile.utilitycraft:steel_item_port.name=Steel Item Port
+tile.utilitycraft:steel_plated_block.name=Steel Plated Block
+tile.utilitycraft:steel_vent_panel.name=Steel Vent Panel
+tile.utilitycraft:tempered_steel_glass.name=Tempered Steel Glass
+
+tile.utilitycraft:netherite_bricks.name=Netherite Bricks
+tile.utilitycraft:netherite_case.name=Netherite Casing
+tile.utilitycraft:netherite_energy_port.name=Netherite Energy Port
+tile.utilitycraft:netherite_fluid_port.name=Netherite Fluid Port
+tile.utilitycraft:netherite_hazard_block.name=Netherite Hazard Block
+tile.utilitycraft:netherite_item_port.name=Netherite Item Port
+tile.utilitycraft:netherite_plated_block.name=Netherite Plated Block
+tile.utilitycraft:tempered_netherite_glass.name=Tempered Netherite Glass
+tile.utilitycraft:netherite_vent_panel.name=Netherite Vent Panel
+tile.utilitycraft:reinforced_netherite_glass.name=Reinforced Netherite Glass

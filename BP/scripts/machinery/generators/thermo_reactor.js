@@ -254,23 +254,37 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
                 lava.consume(rate)
                 fireLoop(entity, f);
                 const waste = 1 - data.efficiency;
-                const energyProduced =
-                    rate * config.energyPerLavaUnit * data.efficiency;
-                let heatProduced =
-                    rate * config.heatPerLavaUnit * (1 + waste);
-                const capSpan = Math.max(1e-6, CORE_TCAP_K - tMin);
-                const tNormCap = Math.min(1, Math.max(0, (data.temperature - tMin) / capSpan));
-                const logFrac = Math.log1p(LOG_ALPHA * tNormCap) / Math.log1p(LOG_ALPHA);
 
-                const heatDamp = Math.max(MIN_FACTOR, 1 - MAX_REDUCT * logFrac);
-                heatProduced *= heatDamp;
+                // Energía producida sigue ligada a la eficiencia
+                const energyProduced = rate * config.energyPerLavaUnit * data.efficiency;
+
+                // Calor bruto generado por el combustible + “waste heat”
+                const rawHeat = rate * config.heatPerLavaUnit * (1 + waste);
+
+                // Rango de temperatura donde trabajamos “realmente”
+                const tMin = CORE_TMIN_K;
+                const tMax = config.maxCoreTemperatureK; // 1200 K
+                const span = Math.max(1e-6, tMax - tMin);
+
+                // Normalizamos temperatura a [0, 1]
+                const normT = Math.min(1, Math.max(0, (data.temperature - tMin) / span));
+
+                // Curva de desaceleración: 1 al estar frío, 0 al llegar a tMax
+                // exponencial suavizada (tipo “logarítmica” en efecto)
+                const TEMP_SLOWDOWN_EXP = 2; // puedes subir a 2.0 si quieres más agresivo
+                const slowdown = 1 - Math.pow(normT, TEMP_SLOWDOWN_EXP);
+
+                // Aseguramos que NUNCA se caliente más rápido al subir la T
+                let heatProduced = rawHeat * slowdown;
+
+                // Aplicamos energía y calor
                 energy.add(energyProduced);
-
                 data.producing = energyProduced / f;
                 data.temperature += heatProduced;
                 data.time += f;
                 working = true;
                 data.warning = undefined;
+
             }
 
         } else {
