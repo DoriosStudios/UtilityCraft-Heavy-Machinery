@@ -17,7 +17,7 @@ jobs:
 
       - name: Create ZIP (BP + RP)
         run: |
-          zip -r "${{ env.REPO_NAME }}.zip" BP RP
+          zip -r "$REPO_NAME.zip" BP RP
 
       - name: Create MCAddon
         run: |
@@ -25,7 +25,7 @@ jobs:
           cp -r BP temp_pack/BP
           cp -r RP temp_pack/RP
           cd temp_pack
-          zip -r "../${{ env.REPO_NAME }}.mcaddon" .
+          zip -r "../$REPO_NAME.mcaddon" .
           cd ..
           rm -rf temp_pack
 
