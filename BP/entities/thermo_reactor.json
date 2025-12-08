@@ -11,7 +11,7 @@
 			"despawn": {
 				"minecraft:instant_despawn": {}
 			},
-			"hide": {
+			"utilitycraft:hide": {
 				"minecraft:scale": {
 					"value": 0.1
 				}
@@ -51,7 +51,7 @@
 				"width": 1
 			},
 			"minecraft:inventory": {
-				"inventory_size": 12,
+				"inventory_size": 5,
 				"container_type": "container"
 			},
 			"minecraft:environment_sensor": {
@@ -76,17 +76,17 @@
 					}
 				]
 			},
-			"hide": {
+			"utilitycraft:hide": {
 				"add": {
 					"component_groups": [
-						"hide"
+						"utilitycraft:hide"
 					]
 				}
 			},
-			"show": {
+			"utilitycraft:show": {
 				"remove": {
 					"component_groups": [
-						"hide"
+						"utilitycraft:hide"
 					]
 				}
 			}

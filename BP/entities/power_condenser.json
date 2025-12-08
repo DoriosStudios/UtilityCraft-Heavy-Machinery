@@ -11,7 +11,7 @@
 			"despawn": {
 				"minecraft:instant_despawn": {}
 			},
-			"hide": {
+			"utilitycraft:hide": {
 				"minecraft:scale": {
 					"value": 0.1
 				}
@@ -78,17 +78,17 @@
 					}
 				]
 			},
-			"hide": {
+			"utilitycraft:hide": {
 				"add": {
 					"component_groups": [
-						"hide"
+						"utilitycraft:hide"
 					]
 				}
 			},
-			"show": {
+			"utilitycraft:show": {
 				"remove": {
 					"component_groups": [
-						"hide"
+						"utilitycraft:hide"
 					]
 				}
 			}

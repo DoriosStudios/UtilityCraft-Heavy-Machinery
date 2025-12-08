@@ -13,19 +13,10 @@
                     ],
                     "y_rotation_offset": 180
                 }
-            },
-            "states": {
-                "utilitycraft:refreshSpeed": [
-                    0,
-                    1,
-                    5,
-                    10,
-                    20,
-                    40
-                ]
             }
         },
         "components": {
+            "utilitycraft:fluid_container": {},
             "minecraft:geometry": "geometry.utilitycraft_block_2",
             "minecraft:material_instances": {
                 "*": {
@@ -35,75 +26,33 @@
             },
             "minecraft:tick": {
                 "interval_range": [
-                    1,
-                    1
+                    2,
+                    2
                 ]
+            },
+            "utilitycraft:thermo_reactor": {
+                "entity": {
+                    "name": "thermo_reactor",
+                    "type": "thermo_reactor"
+                },
+                "multiblock": {
+                    "transfer_rate_ratio": 1000
+                },
+                "required_case": "dorios:multiblock.case.bronze",
+                "required_components": {
+                    "energy_unit": 1
+                }
             },
             "minecraft:destructible_by_mining": {
                 "seconds_to_destroy": 1
             },
             "minecraft:destructible_by_explosion": false,
-            "utilitycraft:thermo_reactor": {},
             "tag:dorios:energy": {},
-            "tag:dorios:controller": {},
-            "tag:dorios:item": {}
+            "tag:dorios:fluid": {},
+            "tag:dorios:item": {},
+            "tag:dorios:controller": {}
         },
         "permutations": [
-            {
-                "condition": "q.block_state('utilitycraft:refreshSpeed') == 1 ",
-                "components": {
-                    "minecraft:tick": {
-                        "interval_range": [
-                            5,
-                            5
-                        ]
-                    }
-                }
-            },
-            {
-                "condition": "q.block_state('utilitycraft:refreshSpeed') == 5 ",
-                "components": {
-                    "minecraft:tick": {
-                        "interval_range": [
-                            25,
-                            25
-                        ]
-                    }
-                }
-            },
-            {
-                "condition": "q.block_state('utilitycraft:refreshSpeed') == 10 ",
-                "components": {
-                    "minecraft:tick": {
-                        "interval_range": [
-                            50,
-                            50
-                        ]
-                    }
-                }
-            },
-            {
-                "condition": "q.block_state('utilitycraft:refreshSpeed') == 20 ",
-                "components": {
-                    "minecraft:tick": {
-                        "interval_range": [
-                            100,
-                            100
-                        ]
-                    }
-                }
-            },
-            {
-                "condition": "q.block_state('utilitycraft:refreshSpeed') == 40 ",
-                "components": {
-                    "minecraft:tick": {
-                        "interval_range": [
-                            200,
-                            200
-                        ]
-                    }
-                }
-            },
             {
                 "condition": "q.block_state('minecraft:cardinal_direction') == 'north' ",
                 "components": {

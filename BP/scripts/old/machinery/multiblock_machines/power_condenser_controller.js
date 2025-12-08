@@ -44,7 +44,7 @@ system.beforeEvents.startup.subscribe(e => {
 
             let { x, y, z } = block.location;
             if (!entity) {
-                y += 0.25; x += 0.5; z += 0.5;
+                y -= 0.25; x += 0.5; z += 0.5;
                 entity = block.dimension.spawnEntity('utilitycraft:power_condenser', { x, y, z })
                 entity.nameTag = 'entity.utilitycraft:power_condenser.name'
                 entity.runCommand(`scoreboard players set @s energy ${0}`)

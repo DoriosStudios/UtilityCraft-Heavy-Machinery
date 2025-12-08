@@ -33,12 +33,10 @@
                 }
             },
             {
-                "liquid_bar_0@machineryCommon.vertical": {
+                "liquid_bar_0@machineryCommon.vertical_single": {
                     "$is_liquid": true,
                     "$has_bg": true,
-                    "$collection_index_first": 3,
-                    "$collection_index_second": 4,
-                    "$collection_index_third": 5,
+                    "$collection_index": 2,
                     "offset": [
                         -102,
                         0
@@ -46,12 +44,10 @@
                 }
             },
             {
-                "liquid_bar_1@machineryCommon.vertical": {
+                "liquid_bar_1@machineryCommon.vertical_single": {
                     "$is_liquid": true,
                     "$has_bg": true,
-                    "$collection_index_first": 6,
-                    "$collection_index_second": 7,
-                    "$collection_index_third": 8,
+                    "$collection_index": 3,
                     "offset": [
                         102,
                         0
@@ -77,19 +73,19 @@
             },
             {
                 "item_label@machineryCommon.item_label": {
-                    "collection_index": 9,
+                    "collection_index": 1,
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
-                    "$text_scale": 0.65,
+                    "$text_scale": 0.55,
                     "offset": [
                         67.5,
-                        12
+                        14
                     ]
                 }
             },
             {
                 "temperature_bar@machineryCommon.container_item_3": {
-                    "collection_index": 10,
+                    "collection_index": 4,
                     "anchor_from": "top_middle",
                     "anchor_to": "top_middle",
                     "offset": [

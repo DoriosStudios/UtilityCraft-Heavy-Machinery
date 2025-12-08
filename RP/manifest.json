@@ -6,8 +6,8 @@
 		]
 	},
 	"header": {
-		"name": "UtilityCraft Heavy Machinery",
-		"description": "",
+		"name": "UtilityCraft: Heavy Machinery",
+		"description": "Official UtilityCraft Extension",
 		"min_engine_version": [
 			1,
 			21,

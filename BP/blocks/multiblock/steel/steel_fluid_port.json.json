@@ -15,7 +15,7 @@
 		},
 		"components": {
 			"tag:dorios:port": {},
-			"tag:dorios:multiblock_case": {}
+			"tag:dorios:multiblock.case.steel": {}
 		},
 		"permutations": [
 			{
@@ -23,7 +23,7 @@
 				"components": {
 					"tag:dorios:fluid": {},
 					"tag:dorios:port": {},
-					"tag:dorios:multiblock_case": {}
+					"tag:dorios:multiblock.case.steel": {}
 				}
 			}
 		]
