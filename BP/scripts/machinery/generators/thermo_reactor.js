@@ -46,7 +46,7 @@ const config = {
     waterPerKelvin: 500,              // mB/K
     pressurePerSteam: 0.0001,            // PSI/mB
     heatPerLavaUnit: 0.008,              // K/mB
-    energyPerLavaUnit: 400,          // DE/mB
+    energyPerLavaUnit: 2000,          // DE/mB
 
     // Capacities
     waterCapacityPerEmptyBlock: 256_000, // mB
@@ -87,10 +87,6 @@ const EFF_MAX = 0.80;
 const EFF_GAMMA = 5.0;
 const EFF_ALPHA_COLD = 1.6;
 const EFF_ALPHA_HOT = 1.2;
-
-const LOG_ALPHA = 8.0;   // curvature (higher => stronger slowdown near cap)
-const MAX_REDUCT = 0.90;  // up to 90% heating reduction at cap
-const MIN_FACTOR = 0.06;  // never drop below 6% of base heating
 
 // #endregion
 
@@ -232,7 +228,7 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
         let working = false;
 
         const tMin = CORE_TMIN_K;
-        const tMax = config.maxCoreTemperatureK;
+        const tMax = CORE_TCAP_K;
         const tSpan = Math.max(1, tMax - tMin);
 
         data.temperature = Math.max(tMin, data.temperature ?? tMin);
@@ -263,7 +259,7 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
 
                 // Rango de temperatura donde trabajamos “realmente”
                 const tMin = CORE_TMIN_K;
-                const tMax = config.maxCoreTemperatureK; // 1200 K
+                const tMax = CORE_TCAP_K; // 1200 K
                 const span = Math.max(1e-6, tMax - tMin);
 
                 // Normalizamos temperatura a [0, 1]
