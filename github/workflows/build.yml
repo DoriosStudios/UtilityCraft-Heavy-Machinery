@@ -1,0 +1,40 @@
+name: Build Addon
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-addon:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+      -uses: actions/checkout@v3
+
+      - name: Get repo name
+        id: repo
+        run: echo "REPO_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_ENV
+
+      - name: Create ZIP (BP+RP)
+        run: |
+          zip -r "${REPO_NAME}.zip" BP RP
+
+      - name: Create MCADDON
+        run: |
+          mkdir temp_pack
+          cp -r BP temp_pack/BP
+          cp -r RP temp_pack/RP
+          cd temp_pack
+          zip -r "../${REPO_NAME}.mcaddon" .
+          cd ..
+          rm -rf temp_pack
+
+      - name: Upload assets to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ${REPO_NAME}.zip
+            ${REPO_NAME}.mcaddon
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
