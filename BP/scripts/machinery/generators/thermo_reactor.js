@@ -467,7 +467,7 @@ async function showBurnRateConfigForm(entity, player) {
  * @param {number} [ratio=0.5] Fraction of vents to use (0..1)
  * @param {boolean} [center=true] If true, spawns at block centers (+0.5)
  */
-function spawnRandomVentSmoke(entity, ratio = 0.25, center = true) {
+function spawnRandomVentSmoke(entity, ratio = 0.1, center = true) {
     const dim = entity.dimension;
 
     let vents = [];
