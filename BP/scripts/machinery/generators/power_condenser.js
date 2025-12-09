@@ -3,10 +3,14 @@ import { Multiblock, Generator, Energy } from '../DoriosMachinery/main.js'
 DoriosAPI.register.blockComponent('power_condenser', {
     async onPlayerInteract(e, { params: settings }) {
         const { block, player } = e
-        if (!player.getEquipment('Mainhand')?.typeId.includes('wrench')) return
 
         let { x, y, z } = block.center(); y -= 0.25;
         let entity = block.dimension.getEntitiesAtBlockLocation(block.location)[0]
+
+        if (!player.getEquipment('Mainhand')?.typeId.includes('wrench')) {
+            Generator.openGeneratorTransferModeMenu(entity, player)
+            return
+        }
 
         if (!entity) {
             entity = block.dimension.spawnEntity('utilitycraft:power_condenser', { x, y, z })
@@ -18,16 +22,14 @@ DoriosAPI.register.blockComponent('power_condenser', {
         const structure = await Multiblock.detectFromController(e, settings.required_case)
         if (!structure) return
 
-        const energyCap = Multiblock.calculateEnergyCapacity(structure.components)
+        const energyCap = Multiblock.activateMultiblock(entity, structure)
         const transferRate = energyCap / settings.multiblock.transfer_rate_ratio
         if (energyCap <= 0) {
             player.sendMessage("§c[Matrix] At least 1 energy container its required to operate.");
+            Multiblock.deactivateMultiblock(player, entity)
             return
         }
-        Multiblock.activateMultiblock(entity, structure.inputBlocks)
-        Energy.setCap(entity, energyCap)
 
-        entity.setDynamicProperty('dorios:caseBlocks', JSON.stringify(structure.caseBlocks))
         entity.setDynamicProperty('dorios:rateSpeed', transferRate)
 
         player.sendMessage("§a[Matrix] Power Condenser Matrix created successfully.");

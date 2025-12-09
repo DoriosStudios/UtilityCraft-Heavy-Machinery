@@ -36,7 +36,7 @@
                     "type": "thermo_reactor"
                 },
                 "multiblock": {
-                    "transfer_rate_ratio": 1000
+                    "transfer_rate_ratio": 100
                 },
                 "required_case": "dorios:multiblock.case.bronze",
                 "required_components": {

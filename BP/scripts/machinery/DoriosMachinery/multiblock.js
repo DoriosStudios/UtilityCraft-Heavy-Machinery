@@ -1,4 +1,5 @@
 import { world, system, ItemStack } from '@minecraft/server'
+import { Energy } from './core.js'
 
 /**
  * Maximum expansion distance allowed when scanning multiblock casing boundaries.
@@ -19,11 +20,11 @@ const MAX_SIZE = 99;
  * @private
  */
 const ENERGY_PER_UNIT = {
-    'energy_cell': 256e3,
-    'basic_power_condenser_unit': 25.6e6,
-    'advanced_power_condenser_unit': 1.6e8,
-    'expert_power_condenser_unit': 6.4e8,
-    'ultimate_power_condenser_unit': 5.12e9
+    'energy_cell': 4e6,
+    'basic_power_condenser_unit': 40e6,
+    'advanced_power_condenser_unit': 160e6,
+    'expert_power_condenser_unit': 640e6,
+    'ultimate_power_condenser_unit': 16e9
 };
 
 /**
@@ -305,13 +306,12 @@ export const Multiblock = {
     async scanStructure(min, max, dim, controller, caseTag) {
         const components = {};
         const inputBlocks = [];
-        const caseBlocks = [];
         const ventBlocks = [];
 
         for (let x = min.x; x <= max.x; x++) {
             for (let y = min.y; y <= max.y; y++) {
                 for (let z = min.z; z <= max.z; z++) {
-                    if (z % 8 == 0) await system.waitTicks(1)
+                    if (z % 32 == 0) await system.waitTicks(1)
                     const block = dim.getBlock({ x, y, z });
 
                     const isEdge =
@@ -329,7 +329,6 @@ export const Multiblock = {
                                 components['vent'] = (components['vent'] ?? 0) + 1;
                                 ventBlocks.push({ x, y, z })
                             }
-                            caseBlocks.push({ x, y, z })
                             continue
                         }
                         return `x: ${x}, y: ${y}, z: ${z}`;
@@ -351,7 +350,7 @@ export const Multiblock = {
             }
         }
 
-        return { components, inputBlocks, caseBlocks, ventBlocks };
+        return { components, inputBlocks, ventBlocks };
     },
 
     /**
@@ -451,8 +450,10 @@ export const Multiblock = {
                 const inputBlock = player.dimension.getBlock({ x, y, z })
                 if (inputBlock?.hasTag('dorios:port')) {
                     entity.removeTag(tag)
+                    if (inputBlock.hasTag('dorios:energy')) player.runCommand(`scriptevent dorios:updatePipes energy|[${x},${y},${z}]`);
+                    if (inputBlock.hasTag('dorios:fluid')) player.runCommand(`scriptevent dorios:updatePipes fluid|[${x},${y},${z}]`);
+                    if (inputBlock.hasTag('dorios:item')) player.runCommand(`scriptevent dorios:updatePipes item|[${x},${y},${z}]`);
                     inputBlock.setPermutation(inputBlock.permutation.withState('utilitycraft:active', 0));
-                    player.runCommand(`scriptevent dorios:updatePipes energy|[${x},${y},${z}]`)
                 }
             }
         })
@@ -461,28 +462,67 @@ export const Multiblock = {
     },
 
     /**
-     * Activates a validated multiblock structure by enabling its ports,
-     * applying tags, updating visual state, and notifying connected pipe systems.
+     * Activates a validated multiblock structure by:
+     * - enabling its detected input ports,
+     * - applying controller tags,
+     * - updating port visual state,
+     * - storing structural bounds and vent data,
+     * - calculating and applying energy capacity.
+     *
+     * This version stores only bounding corners (bounds) instead of all case blocks.
+     * Energy capacity is computed internally using the detected multiblock components.
      *
      * @function activateMultiblock
      * @memberof Multiblock
      *
-     * @param {Entity} entity Multiblock controller entity to activate.
-     * @param {string[]} inputBlocks List of input port tags to apply and enable.
+     * @param {Entity} entity The multiblock controller entity to activate.
+     * @param {{inputBlocks: string[], bounds: Object, ventBlocks?: Object[], components?: Object.<string,number>}} structure
+     * Structure data returned by detectFromController().
      *
-     * @returns {void}
+     * @returns {number} The total calculated energy capacity.
      */
-    activateMultiblock(entity, inputBlocks) {
-        entity.triggerEvent('utilitycraft:show')
-        inputBlocks.forEach(tag => {
-            entity.addTag(tag)
+    activateMultiblock(entity, structure) {
+        const { inputBlocks, bounds, ventBlocks, components } = structure;
+
+        // Show the controller entity
+        entity.triggerEvent('utilitycraft:show');
+
+        // Enable all input ports
+        for (const tag of inputBlocks) {
+            entity.addTag(tag);
+
             const [x, y, z] = tag.slice(7, -1).split(",").map(Number);
-            const inputBlock = entity.dimension.getBlock({ x, y, z })
-            if (inputBlock?.hasTag('dorios:port')) {
-                inputBlock.setPermutation(inputBlock.permutation.withState('utilitycraft:active', 1));
-                entity.runCommand(`scriptevent dorios:updatePipes energy|[${x},${y},${z}]`)
+            const block = entity.dimension.getBlock({ x, y, z });
+
+            if (block?.hasTag('dorios:port')) {
+                block.setPermutation(
+                    block.permutation.withState('utilitycraft:active', 1)
+                );
+                if (block.hasTag('dorios:energy')) entity.runCommand(`scriptevent dorios:updatePipes energy|[${x},${y},${z}]`);
+                if (block.hasTag('dorios:fluid')) entity.runCommand(`scriptevent dorios:updatePipes fluid|[${x},${y},${z}]`);
+                if (block.hasTag('dorios:item')) entity.runCommand(`scriptevent dorios:updatePipes item|[${x},${y},${z}]`);
             }
-        })
+        }
+
+        // Store only bounding corners
+        if (bounds) {
+            entity.setDynamicProperty("dorios:bounds", JSON.stringify(bounds));
+        }
+
+        // Store vent blocks if present
+        if (ventBlocks) {
+            entity.setDynamicProperty("ventBlocks", JSON.stringify(ventBlocks));
+        }
+
+        // Compute energy capacity internally
+        const energyCap = Multiblock.calculateEnergyCapacity(components ?? {});
+        if (energyCap > 0) {
+            Energy.setCap(entity, energyCap);
+            entity.setDynamicProperty("dorios:energyCap", energyCap);
+        }
+
+        // Return the computed energy capacity
+        return energyCap;
     },
 
     /**
@@ -523,6 +563,16 @@ export const Multiblock = {
     }
 }
 
+function isInsideBounds(pos, bounds) {
+    return (
+        pos.x >= bounds.min.x && pos.x <= bounds.max.x &&
+        pos.y >= bounds.min.y && pos.y <= bounds.max.y &&
+        pos.z >= bounds.min.z && pos.z <= bounds.max.z
+    );
+}
+
+
+
 /**
  * Handles the breaking of a multiblock casing block. When a casing block belonging
  * to a formed multiblock is destroyed, the function locates the corresponding
@@ -546,21 +596,18 @@ world.afterEvents.playerBreakBlock.subscribe(e => {
         location: block.location,
         maxDistance: MAX_SIZE,
         families: ['dorios:multiBlock']
-    }).filter(ent => {
-        const raw = ent.getDynamicProperty("dorios:caseBlocks");
-        if (!raw || raw === "empty") return false;
+    }).find(ent => {
+        const raw = ent.getDynamicProperty("dorios:bounds");
+        if (!raw) return false;
 
         try {
-            const parsed = JSON.parse(raw);
-            return parsed.some(pos =>
-                pos.x === x &&
-                pos.y === y &&
-                pos.z === z
-            );
+            const bounds = JSON.parse(raw);
+            return isInsideBounds(block.location, bounds);
         } catch {
             return false;
         }
-    })[0];
+    });
+
 
     if (!entity) return;
 

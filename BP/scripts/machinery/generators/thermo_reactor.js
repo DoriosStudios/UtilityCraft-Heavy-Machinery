@@ -122,22 +122,22 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
         const structure = await Multiblock.detectFromController(e, settings.required_case);
         if (!structure) return;
 
-        const { components, bounds, caseBlocks, ventBlocks, inputBlocks } = structure;
+        const { components, bounds } = structure;
 
-        const energyCap = Multiblock.calculateEnergyCapacity(components);
-        if (energyCap <= 0) return player.sendMessage("§c[Reactor] At least 1 energy unit is required.");
 
         if (!components["thermo_core"]) {
             player.sendMessage("§c[Reactor] Missing Thermo Core — reactor cannot operate.");
             return;
         }
 
-        Multiblock.activateMultiblock(entity, inputBlocks);
-        Multiblock.fillEmptyBlocks(bounds, dim, "minecraft:water");
-        Energy.setCap(entity, energyCap);
+        const energyCap = Multiblock.activateMultiblock(entity, structure);
+        if (energyCap <= 0) {
+            player.sendMessage("§c[Reactor] At least 1 energy unit is required.");
+            Multiblock.deactivateMultiblock(player, entity)
+            return
+        }
 
-        entity.setDynamicProperty("dorios:caseBlocks", JSON.stringify(caseBlocks));
-        entity.setDynamicProperty("ventBlocks", JSON.stringify(ventBlocks));
+        Multiblock.fillEmptyBlocks(bounds, dim, "minecraft:water");
 
         entity.setDynamicProperty(
             "dorios:rateSpeed",
@@ -488,7 +488,9 @@ function spawnRandomVentSmoke(entity, ratio = 0.25, center = true) {
     for (let i = n - k; i < n; i++) {
         const v = vents[i];
         const pos = center ? { x: v.x + 0.5, y: v.y + 0.5, z: v.z + 0.5 } : v;
-        dim.spawnParticle("minecraft:campfire_tall_smoke_particle", pos);
+        try {
+            dim.spawnParticle("minecraft:campfire_tall_smoke_particle", pos);
+        } catch { }
     }
 }
 
