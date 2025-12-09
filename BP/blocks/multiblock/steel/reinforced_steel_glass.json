@@ -9,7 +9,7 @@
         },
         "components": {
             "minecraft:geometry": {
-                "identifier": "geometry.utilitycraft_block",
+                "identifier": "geometry.utilitycraft_glass",
                 "culling": "utilitycraft:custom_glass"
             },
             "minecraft:material_instances": {

@@ -24,7 +24,7 @@
                 }
             },
             {
-                "energy_bar@machineryCommon.big_vertical": {
+                "energy_bar@machineryCommon.big_vertical_single": {
                     "$is_energy": true,
                     "offset": [
                         -54,
