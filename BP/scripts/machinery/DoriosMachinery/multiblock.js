@@ -322,7 +322,7 @@ export const Multiblock = {
                     if (isEdge) {
                         if (block.x === controller.x && block.y === controller.y && block.z === controller.z) continue
                         if (block?.hasTag(caseTag)) {
-                            if (block?.hasTag('dorios:port')) {
+                            if (block?.hasTag('dorios:multiblock.port')) {
                                 inputBlocks.push(`input:[${x},${y},${z}]`)
                             }
                             if (block?.hasTag("dorios:vent_block") && y === max.y) {
@@ -448,7 +448,7 @@ export const Multiblock = {
             if (tag.startsWith('input:')) {
                 const [x, y, z] = tag.slice(7, -1).split(",").map(Number);
                 const inputBlock = player.dimension.getBlock({ x, y, z })
-                if (inputBlock?.hasTag('dorios:port')) {
+                if (inputBlock?.hasTag('dorios:multiblock.port')) {
                     entity.removeTag(tag)
                     if (inputBlock.hasTag('dorios:energy')) player.runCommand(`scriptevent dorios:updatePipes energy|[${x},${y},${z}]`);
                     if (inputBlock.hasTag('dorios:fluid')) player.runCommand(`scriptevent dorios:updatePipes fluid|[${x},${y},${z}]`);
@@ -494,7 +494,7 @@ export const Multiblock = {
             const [x, y, z] = tag.slice(7, -1).split(",").map(Number);
             const block = entity.dimension.getBlock({ x, y, z });
 
-            if (block?.hasTag('dorios:port')) {
+            if (block?.hasTag('dorios:multiblock.port')) {
                 block.setPermutation(
                     block.permutation.withState('utilitycraft:active', 1)
                 );

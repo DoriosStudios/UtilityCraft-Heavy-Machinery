@@ -14,7 +14,7 @@
 			}
 		},
 		"components": {
-			"tag:dorios:port": {},
+			"tag:dorios:multiblock.port": {},
             "tag:dorios:multiblock.case.bronze": {}
 		},
 		"permutations": [
@@ -22,7 +22,7 @@
 				"condition": "q.block_state('utilitycraft:active') == 1 ",
 				"components": {
 					"tag:dorios:energy": {},
-					"tag:dorios:port": {},
+					"tag:dorios:multiblock.port": {},
             "tag:dorios:multiblock.case.bronze": {}
 				}
 			}
