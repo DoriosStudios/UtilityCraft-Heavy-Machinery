@@ -1,0 +1,35 @@
+{
+  "format_version": "1.20.80",
+  "minecraft:recipe_shaped": {
+    "description": {
+      "identifier": "utilitycraft:basic_power_condenser_unit"
+    },
+    "tags": [
+      "utilitycraft_workbench"
+    ],
+    "key": {
+      "C": {
+        "item": "utilitycraft:charged_darloonite_crystal"
+      },
+      "E": {
+        "item": "utilitycraft:energy_cell"
+      },
+      "U": {
+        "item": "utilitycraft:basic_chip"
+      }
+    },
+    "pattern": [
+      "CEC",
+      "EUE",
+      "UCU"
+    ],
+    "result": {
+      "item": "utilitycraft:basic_power_condenser_unit"
+    },
+    "unlock": [
+      {
+        "item": "utilitycraft:basic_chip"
+      }
+    ]
+  }
+}

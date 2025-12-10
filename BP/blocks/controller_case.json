@@ -1,0 +1,17 @@
+{
+	"format_version": "1.20.80",
+	"minecraft:block": {
+		"description": {
+			"identifier": "utilitycraft:controller_case"
+		},
+		"components": {
+			"minecraft:geometry": "geometry.utilitycraft_block_4",
+			"minecraft:material_instances": {
+				"*": {
+					"texture": "utilitycraft_controller_case",
+					"render_method": "alpha_test"
+				}
+			}
+		}
+	}
+}

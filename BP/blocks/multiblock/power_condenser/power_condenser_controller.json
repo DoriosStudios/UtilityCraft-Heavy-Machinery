@@ -16,7 +16,7 @@
             }
         },
         "components": {
-            "minecraft:geometry": "geometry.utilitycraft_block_2",
+            "minecraft:geometry": "geometry.utilitycraft_block_4",
             "minecraft:material_instances": {
                 "*": {
                     "texture": "utilitycraft_power_condenser_controller",

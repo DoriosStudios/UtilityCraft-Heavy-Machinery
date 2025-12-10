@@ -162,6 +162,9 @@
 		},
 		"utilitycraft_raw_tin_block": {
 			"textures": "textures/blocks/block_of_raw_tin"
+		},
+		"utilitycraft_controller_case": {
+			"textures": "textures/blocks/controller_case"
 		}
 	}
 }

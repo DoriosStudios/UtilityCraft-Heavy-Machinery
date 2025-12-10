@@ -1,0 +1,38 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "utilitycraft:controller_case"
+        },
+        "tags": [
+            "utilitycraft_workbench"
+        ],
+        "key": {
+            "I": {
+                "item": "utilitycraft:tin_ingot"
+            },
+            "P": {
+                "item": "utilitycraft:tin_plate"
+            },
+            "S": {
+                "item": "utilitycraft:steel_case"
+            },
+            "D": {
+                "item": "utilitycraft:diamond_dust"
+            }
+        },
+        "pattern": [
+            "IPI",
+            "PSP",
+            "IDI"
+        ],
+        "result": {
+            "item": "utilitycraft:controller_case"
+        },
+        "unlock": [
+            {
+                "item": "utilitycraft:tin_ingot"
+            }
+        ]
+    }
+}

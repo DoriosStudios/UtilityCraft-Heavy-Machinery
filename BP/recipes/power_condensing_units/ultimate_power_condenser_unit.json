@@ -1,0 +1,35 @@
+{
+  "format_version": "1.20.80",
+  "minecraft:recipe_shaped": {
+    "description": {
+      "identifier": "utilitycraft:ultimate_power_condenser_unit"
+    },
+    "tags": [
+      "utilitycraft_workbench"
+    ],
+    "key": {
+      "C": {
+        "item": "utilitycraft:charged_darloonite_crystal"
+      },
+      "E": {
+        "item": "utilitycraft:expert_power_condenser_unit"
+      },
+      "U": {
+        "item": "utilitycraft:ultimate_chip"
+      }
+    },
+    "pattern": [
+      "CEC",
+      "EUE",
+      "UCU"
+    ],
+    "result": {
+      "item": "utilitycraft:ultimate_power_condenser_unit"
+    },
+    "unlock": [
+      {
+        "item": "utilitycraft:ultimate_chip"
+      }
+    ]
+  }
+}

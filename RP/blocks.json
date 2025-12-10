@@ -149,5 +149,8 @@
 	"utilitycraft:raw_tin_block": {
 		"sound": "metal",
 		"textures": "utilitycraft_raw_tin_block"
+	},
+	"utilitycraft:controller_case": {
+		"sound": "stone"
 	}
 }
