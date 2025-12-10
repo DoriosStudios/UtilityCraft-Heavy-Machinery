@@ -13,16 +13,6 @@
                     ],
                     "y_rotation_offset": 180
                 }
-            },
-            "states": {
-                "utilitycraft:refreshSpeed": [
-                    0,
-                    1,
-                    5,
-                    10,
-                    20,
-                    40
-                ]
             }
         },
         "components": {
@@ -50,61 +40,6 @@
             "tag:dorios:item": {}
         },
         "permutations": [
-            {
-                "condition": "q.block_state('utilitycraft:refreshSpeed') == 1 ",
-                "components": {
-                    "minecraft:tick": {
-                        "interval_range": [
-                            5,
-                            5
-                        ]
-                    }
-                }
-            },
-            {
-                "condition": "q.block_state('utilitycraft:refreshSpeed') == 5 ",
-                "components": {
-                    "minecraft:tick": {
-                        "interval_range": [
-                            25,
-                            25
-                        ]
-                    }
-                }
-            },
-            {
-                "condition": "q.block_state('utilitycraft:refreshSpeed') == 10 ",
-                "components": {
-                    "minecraft:tick": {
-                        "interval_range": [
-                            50,
-                            50
-                        ]
-                    }
-                }
-            },
-            {
-                "condition": "q.block_state('utilitycraft:refreshSpeed') == 20 ",
-                "components": {
-                    "minecraft:tick": {
-                        "interval_range": [
-                            100,
-                            100
-                        ]
-                    }
-                }
-            },
-            {
-                "condition": "q.block_state('utilitycraft:refreshSpeed') == 40 ",
-                "components": {
-                    "minecraft:tick": {
-                        "interval_range": [
-                            200,
-                            200
-                        ]
-                    }
-                }
-            },
             {
                 "condition": "q.block_state('minecraft:cardinal_direction') == 'north' ",
                 "components": {
