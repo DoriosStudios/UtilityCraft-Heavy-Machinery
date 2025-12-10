@@ -26,9 +26,9 @@
 		"sound": "copper",
 		"textures": "utilitycraft_bronze_plated_block"
 	},
-	"utilitycraft:block_of_bronze": {
+	"utilitycraft:bronze_block": {
 		"sound": "copper",
-		"textures": "utilitycraft_block_of_bronze"
+		"textures": "utilitycraft_bronze_block"
 	},
 	"utilitycraft:bronze_case": {
 		"sound": "copper",
@@ -135,19 +135,19 @@
 		"textures": "utilitycraft_netherite_vent_panel"
 	},
 	"utilitycraft:tin_block": {
-		"sound": "stone",
+		"sound": "metal",
 		"textures": "utilitycraft_tin_block"
 	},
 	"utilitycraft:tin_plated_block": {
-		"sound": "stone",
+		"sound": "metal",
 		"textures": "utilitycraft_tin_plated_block"
 	},
-	"utilitycraft:": {
-		"sound": "stone",
-		"textures": "utilitycraft_"
-	},
 	"utilitycraft:brute_bronze_block": {
-		"sound": "stone",
+		"sound": "metal",
 		"textures": "utilitycraft_brute_bronze_block"
+	},
+	"utilitycraft:raw_tin_block": {
+		"sound": "metal",
+		"textures": "utilitycraft_raw_tin_block"
 	}
 }

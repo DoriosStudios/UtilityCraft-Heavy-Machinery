@@ -2,7 +2,7 @@
     "format_version": "1.20.80",
     "minecraft:block": {
         "description": {
-            "identifier": "utilitycraft:block_of_bronze",
+            "identifier": "utilitycraft:bronze_block",
             "menu_category": {
                 "category": "construction"
             }

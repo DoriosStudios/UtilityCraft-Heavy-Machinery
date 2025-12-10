@@ -1,0 +1,26 @@
+{
+  "format_version": "1.20.80",
+  "minecraft:recipe_shapeless": {
+    "description": {
+      "identifier": "utilitycraft:brute_bronze_to_block"
+    },
+    "tags": [
+      "crafting_table"
+    ],
+    "ingredients": [
+      {
+        "item": "utilitycraft:brute_bronze",
+        "count": 9
+      }
+    ],
+    "result": {
+      "item": "utilitycraft:brute_bronze_block",
+      "count": 1
+    },
+    "unlock": [
+      {
+        "item": "utilitycraft:brute_bronze"
+      }
+    ]
+  }
+}

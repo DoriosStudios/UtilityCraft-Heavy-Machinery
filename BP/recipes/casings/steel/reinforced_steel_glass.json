@@ -1,0 +1,36 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "utilitycraft:reinforced_steel_glass"
+        },
+        "tags": [
+            "utilitycraft_workbench"
+        ],
+        "key": {
+            "S": {
+                "item": "utilitycraft:steel_ingot"
+            },
+            "T": {
+                "item": "utilitycraft:tin_ingot"
+            },
+            "G": {
+                "item": "minecraft:glass"
+            }
+        },
+        "pattern": [
+            "STS",
+            "TGT",
+            "STS"
+        ],
+        "result": {
+            "item": "utilitycraft:reinforced_steel_glass",
+            "count": 1
+        },
+        "unlock": [
+            {
+                "item": "utilitycraft:steel_ingot"
+            }
+        ]
+    }
+}

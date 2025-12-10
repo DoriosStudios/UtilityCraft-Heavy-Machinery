@@ -64,8 +64,8 @@
 		"utilitycraft_bronze_bricks": {
 			"textures": "textures/blocks/multiblock/bronze/bronze_bricks"
 		},
-		"utilitycraft_block_of_bronze": {
-			"textures": "textures/blocks/multiblock/bronze/block_of_bronze"
+		"utilitycraft_bronze_block": {
+			"textures": "textures/blocks/multiblock/bronze/bronze_block"
 		},
 		"utilitycraft_bronze_plated_block": {
 			"textures": "textures/blocks/multiblock/bronze/bronze_plated_block"
@@ -157,11 +157,11 @@
 		"utilitycraft_tin_plated_block": {
 			"textures": "textures/blocks/block_of_tin_plate"
 		},
-		"utilitycraft_": {
-			"textures": "textures/blocks/"
-		},
 		"utilitycraft_brute_bronze_block": {
 			"textures": "textures/blocks/brute_bronze_block"
+		},
+		"utilitycraft_raw_tin_block": {
+			"textures": "textures/blocks/block_of_raw_tin"
 		}
 	}
 }

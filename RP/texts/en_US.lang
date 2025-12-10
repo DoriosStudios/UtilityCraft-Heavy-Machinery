@@ -23,7 +23,7 @@ tile.utilitycraft:thermo_core.name=Thermo Core
 
 item.utilitycraft:bronze_ingot=Bronze Ingot
 
-tile.utilitycraft:block_of_bronze.name=Block of Bronze
+tile.utilitycraft:bronze_block.name=Block of Bronze
 tile.utilitycraft:bronze_bricks.name=Bronze Bricks
 tile.utilitycraft:bronze_case.name=Bronze Casing
 tile.utilitycraft:bronze_energy_port.name=Bronze Energy Port
@@ -78,3 +78,4 @@ tile.utilitycraft:tin_plated_block.name=Tin Plated Block
 tile.utilitycraft:.name=
 tile.utilitycraft:.name=
 tile.utilitycraft:brute_bronze_block.name=Block of Brute Bronze
+tile.utilitycraft:raw_tin_block.name=Block of Raw Tin

@@ -1,0 +1,26 @@
+{
+  "format_version": "1.20.80",
+  "minecraft:recipe_shapeless": {
+    "description": {
+      "identifier": "utilitycraft:tin_nugget_to_ingot"
+    },
+    "tags": [
+      "crafting_table"
+    ],
+    "ingredients": [
+      {
+        "item": "utilitycraft:tin_nugget",
+        "count": 9
+      }
+    ],
+    "result": {
+      "item": "utilitycraft:tin_ingot",
+      "count": 1
+    },
+    "unlock": [
+      {
+        "item": "utilitycraft:tin_nugget"
+      }
+    ]
+  }
+}
