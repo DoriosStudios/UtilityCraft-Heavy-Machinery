@@ -46,7 +46,6 @@
 		"utilitycraft_burnt_thermo_core": {
 			"textures": "textures/blocks/multiblock/burnt_thermo_core"
 		},
-		// Bronze
 		"utilitycraft_thermal_reactor_controller": {
 			"textures": "textures/blocks/multiblock/bronze/thermal_reactor_controller"
 		},
@@ -86,7 +85,6 @@
 		"utilitycraft_bronze_item_port": {
 			"textures": "textures/blocks/multiblock/bronze/bronze_item_port"
 		},
-		// Steel
 		"utilitycraft_steel_vent_panel": {
 			"textures": "textures/blocks/multiblock/steel/steel_vent_panel"
 		},
@@ -120,7 +118,6 @@
 		"utilitycraft_steel_item_port": {
 			"textures": "textures/blocks/multiblock/steel/steel_item_port"
 		},
-		// Netherite
 		"utilitycraft_netherite_vent_panel": {
 			"textures": "textures/blocks/multiblock/netherite/netherite_vent_panel"
 		},
@@ -153,6 +150,18 @@
 		},
 		"utilitycraft_netherite_item_port": {
 			"textures": "textures/blocks/multiblock/netherite/netherite_item_port"
+		},
+		"utilitycraft_tin_block": {
+			"textures": "textures/blocks/block_of_tin"
+		},
+		"utilitycraft_tin_plated_block": {
+			"textures": "textures/blocks/block_of_tin_plate"
+		},
+		"utilitycraft_": {
+			"textures": "textures/blocks/"
+		},
+		"utilitycraft_brute_bronze_block": {
+			"textures": "textures/blocks/brute_bronze_block"
 		}
 	}
 }

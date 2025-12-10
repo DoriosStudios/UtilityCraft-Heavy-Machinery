@@ -247,7 +247,7 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
         if (fuel > 0 && data.state !== "off") {
             const rate = Math.min(fuel, data.rate * f);
             if (rate > 0) {
-                lava.consume(rate)
+                if (!reactor.entity.hasTag('test')) lava.consume(rate)
                 fireLoop(entity, f);
                 const waste = 1 - data.efficiency;
 
@@ -298,7 +298,7 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
             if (heatDissipated > 0) {
                 spawnRandomVentSmoke(entity);
                 const waterConsumed = heatDissipated * (config.waterPerKelvin ?? 0);
-                water.consume(waterConsumed);
+                if (!reactor.entity.hasTag('test')) water.consume(waterConsumed);
                 data.temperature -= heatDissipated;
             }
         } else {
@@ -403,7 +403,7 @@ function getReactorInfo(entity) {
             ventRate: 0,
             energyCap: 0
         };
-
+        if (entity.getDynamicProperty('dorios:state') == 'off') data.state = 'off'
         return { ...data, ...stats };
     } catch {
         return { ...config.initialReactorData, lavaCapacity: 0, waterCapacity: 0, steamCapacity: 0, heatDissipation: 0, ventRate: 0, energyCap: 0 };

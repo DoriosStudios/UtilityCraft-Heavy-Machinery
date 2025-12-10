@@ -100,6 +100,45 @@
 		},
 		"utilitycraft_bronze_ingot": {
 			"textures": "textures/items/bronze_ingot"
+		},
+		"utilitycraft_bronze_dust": {
+			"textures": "textures/items/bronze_dust"
+		},
+		"utilitycraft_bronze_nugget": {
+			"textures": "textures/items/bronze_nugget"
+		},
+		"utilitycraft_bronze_plate": {
+			"textures": "textures/items/bronze_plate"
+		},
+		"utilitycraft_brute_bronze": {
+			"textures": "textures/items/brute_bronze"
+		},
+		"utilitycraft_raw_tin": {
+			"textures": "textures/items/raw_tin"
+		},
+		"utilitycraft_tin_dust": {
+			"textures": "textures/items/raw_tin_dust"
+		},
+		"utilitycraft_tin_ingot": {
+			"textures": "textures/items/tin_ingot"
+		},
+		"utilitycraft_tin_plate": {
+			"textures": "textures/items/tin_plate"
+		},
+		"utilitycraft_tin_nugget": {
+			"textures": "textures/items/tin_nugget"
+		},
+		"utilitycraft_tin_chunk": {
+			"textures": "textures/items/tin_chunk"
+		},
+		"utilitycraft_deepslate_tin_chunk": {
+			"textures": "textures/items/deepslate_tin_chunk"
+		},
+		"utilitycraft_darloonite_crystal": {
+			"textures": "textures/items/darloonite_crystal"
+		},
+		"utilitycraft_charged_darloonite_crystal": {
+			"textures": "textures/items/charged_darloonite_crystal"
 		}
 	}
 }

@@ -458,7 +458,8 @@ export const Multiblock = {
             }
         })
         entity.setDynamicProperty('dorios:rateSpeed', 0)
-        entity.setDynamicProperty('dorios:caseBlocks', 'empty')
+        entity.setDynamicProperty('dorios:bounds', undefined)
+        entity.setDynamicProperty('dorios:state', 'off')
     },
 
     /**
@@ -521,6 +522,7 @@ export const Multiblock = {
             entity.setDynamicProperty("dorios:energyCap", energyCap);
         }
 
+        entity.setDynamicProperty('dorios:state', 'on')
         // Return the computed energy capacity
         return energyCap;
     },

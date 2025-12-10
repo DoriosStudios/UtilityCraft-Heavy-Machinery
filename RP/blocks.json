@@ -4,7 +4,6 @@
 		1,
 		0
 	],
-	// Bronze
 	"utilitycraft:reinforced_bronze_glass": {
 		"sound": "glass"
 	},
@@ -47,7 +46,6 @@
 		"sound": "copper",
 		"textures": "utilitycraft_bronze_vent_panel"
 	},
-	// Steel
 	"utilitycraft:reinforced_steel_glass": {
 		"sound": "glass"
 	},
@@ -90,7 +88,6 @@
 		"sound": "iron",
 		"textures": "utilitycraft_steel_vent_panel"
 	},
-	// Netherite
 	"utilitycraft:reinforced_netherite_glass": {
 		"sound": "glass"
 	},
@@ -136,5 +133,21 @@
 	"utilitycraft:netherite_vent_panel": {
 		"sound": "netherite",
 		"textures": "utilitycraft_netherite_vent_panel"
+	},
+	"utilitycraft:tin_block": {
+		"sound": "stone",
+		"textures": "utilitycraft_tin_block"
+	},
+	"utilitycraft:tin_plated_block": {
+		"sound": "stone",
+		"textures": "utilitycraft_tin_plated_block"
+	},
+	"utilitycraft:": {
+		"sound": "stone",
+		"textures": "utilitycraft_"
+	},
+	"utilitycraft:brute_bronze_block": {
+		"sound": "stone",
+		"textures": "utilitycraft_brute_bronze_block"
 	}
 }
