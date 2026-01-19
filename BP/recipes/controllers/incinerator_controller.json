@@ -1,0 +1,41 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "utilitycraft:incinerator_controller"
+        },
+        "tags": [
+            "utilitycraft_workbench"
+        ],
+        "key": {
+            "P": {
+                "item": "utilitycraft:steel_plate"
+            },
+            "T": {
+                "item": "utilitycraft:tin_ingot"
+            },
+            "S": {
+                "item": "utilitycraft:controller_case"
+            },
+            "X": {
+                "item": "utilitycraft:charged_darloonite_crystal"
+            },
+            "R": {
+                "item": "utilitycraft:incinerator"
+            }
+        },
+        "pattern": [
+            "PRP",
+            "TST",
+            "PXP"
+        ],
+        "result": {
+            "item": "utilitycraft:incinerator_controller"
+        },
+        "unlock": [
+            {
+                "item": "utilitycraft:controller_case"
+            }
+        ]
+    }
+}

@@ -1,6 +1,7 @@
 import './recipes/crusher.js'
 import './recipes/furnace.js'
 import './recipes/press.js'
+import './recipes/infuser.js'
 
 import './recipes_register/sieve.js'
 import './recipes_register/crusher.js'

@@ -56,49 +56,58 @@ DoriosAPI.register.blockComponent('electro_press_controller', {
     },
     onTick(e, { params: settings }) {
         if (!worldLoaded) return;
+
         const controller = new Machine(e.block, settings);
         if (!controller.valid) return;
-        const state = controller.entity.getDynamicProperty('dorios:state')
-        if (!state || state == 'off') return
 
-        const raw = controller.entity.getDynamicProperty('components')
+        const state = controller.entity.getDynamicProperty('dorios:state');
+        if (!state || state === 'off') return;
+
+        const raw = controller.entity.getDynamicProperty('components');
         /** @type {MachineStats} */
-        const data = raw ? JSON.parse(raw) : {}
-        controller.setRate(BASE_RATE * data.speed.multiplier)
+        const data = raw ? JSON.parse(raw) : {};
+
+        controller.setRate(BASE_RATE * data.speed.multiplier);
 
         const inv = controller.inv;
-
         const recipes = pressRecipes;
 
-        let inputSlotIndex = null;
-        let inputItem = null;
         let recipe = null;
+        let inputType = null;
+        let totalInput = 0;
 
         for (const slot of INPUT_SLOTS) {
             const item = inv.getItem(slot);
             if (!item) continue;
+
             const r = recipes[item.typeId];
             if (!r) continue;
 
-            inputSlotIndex = slot;
-            inputItem = item;
-            recipe = r;
-            break;
+            if (!recipe) {
+                recipe = r;
+                inputType = item.typeId;
+            }
+
+            // Solo sumar stacks del mismo item
+            if (item.typeId === inputType) {
+                totalInput += item.amount;
+            }
         }
 
         if (!recipe) {
-            updateUI(controller, data, '§eNo Input')
-            controller.setProgress(0, 3)
+            updateUI(controller, data, '§eNo Input');
+            controller.setProgress(0, 3);
             return;
         }
 
-        // OUTPUT SPACE
         let availableSpace = 0;
         for (const slot of OUTPUT_SLOTS) {
             const out = inv.getItem(slot);
-            if (!out) availableSpace += 64;
-            else if (out.typeId === recipe.output)
+            if (!out) {
+                availableSpace += 64;
+            } else if (out.typeId === recipe.output) {
                 availableSpace += out.maxAmount - out.amount;
+            }
         }
 
         const required = recipe.required ?? 1;
@@ -106,34 +115,45 @@ DoriosAPI.register.blockComponent('electro_press_controller', {
 
         const maxProcess = Math.min(
             data.processing.amount,
-            Math.floor(inputItem.amount / required),
+            Math.floor(totalInput / required),
             Math.floor(availableSpace / recipeAmount)
         );
 
         if (maxProcess <= 0) {
-            updateUI(controller, data, '§eOutput Full', recipe)
-            controller.setProgress(0, 3)
+            updateUI(controller, data, '§eOutput Full', recipe);
+            controller.setProgress(0, 3);
             return;
         }
 
         const cost = recipe.cost ?? DEFAULT_COST;
-        data.cost = cost
+        data.cost = cost;
         controller.setEnergyCost(cost);
 
         const progress = controller.getProgress();
 
         if (controller.energy.get() <= 0) {
-            updateUI(controller, data, '§eNo Energy', recipe)
-            controller.displayProgress(3)
+            updateUI(controller, data, '§eNo Energy', recipe);
+            controller.displayProgress(3);
             return;
         }
 
         if (progress >= cost) {
-            const craftCount = Math.min(maxProcess);
+            const craftCount = maxProcess;
 
             if (craftCount > 0) {
-                distributeOutput(controller, recipe.output, craftCount * recipeAmount);
-                controller.entity.changeItemAmount(inputSlotIndex, -craftCount * required);
+                // OUTPUT
+                distributeOutput(
+                    controller,
+                    recipe.output,
+                    craftCount * recipeAmount
+                );
+
+                // INPUT (GLOBAL REMOVAL)
+                controller.entity.removeItem(
+                    inputType,
+                    craftCount * required
+                );
+
                 controller.addProgress(-cost);
             }
         } else {
@@ -142,12 +162,15 @@ DoriosAPI.register.blockComponent('electro_press_controller', {
                 controller.rate,
                 cost * data.energyMultiplier
             );
+
             controller.energy.consume(energyToConsume);
-            controller.addProgress(energyToConsume / data.energyMultiplier);
+            controller.addProgress(
+                energyToConsume / data.energyMultiplier
+            );
         }
 
         controller.displayProgress(3);
-        updateUI(controller, data, '§aRunning', recipe)
+        updateUI(controller, data, '§aRunning', recipe);
     }
 })
 

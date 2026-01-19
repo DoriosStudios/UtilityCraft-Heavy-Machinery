@@ -57,17 +57,6 @@
                     10,
                     11,
                     12
-                ],
-                "Output Slots": [
-                    13,
-                    14,
-                    15,
-                    16,
-                    17,
-                    18,
-                    19,
-                    20,
-                    21
                 ]
             },
             "minecraft:destructible_by_mining": {

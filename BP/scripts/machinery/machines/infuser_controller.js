@@ -1,5 +1,5 @@
 import { Multiblock, Energy, Machine } from '../DoriosMachinery/main.js'
-import { crusherRecipes } from 'config/recipes/crusher.js'
+import { infuserRecipes } from 'config/recipes/infuser.js'
 
 const CATALYST_SLOTS = [5, 6, 7, 8]
 const INPUT_SLOTS = [9, 10, 11, 12, 13, 14, 15, 16, 17]
@@ -60,84 +60,137 @@ DoriosAPI.register.blockComponent('infuser_controller', {
     },
     onTick(e, { params: settings }) {
         if (!worldLoaded) return;
+
         const controller = new Machine(e.block, settings);
         if (!controller.valid) return;
-        const state = controller.entity.getDynamicProperty('dorios:state')
-        if (!state || state == 'off') return
 
-        const raw = controller.entity.getDynamicProperty('components')
+        const state = controller.entity.getDynamicProperty('dorios:state');
+        if (!state || state === 'off') return;
+
+        const raw = controller.entity.getDynamicProperty('components');
         /** @type {MachineStats} */
-        const data = raw ? JSON.parse(raw) : {}
-        controller.setRate(BASE_RATE * data.speed.multiplier)
+        const data = raw ? JSON.parse(raw) : {};
+
+        controller.setRate(BASE_RATE * data.speed.multiplier);
 
         const inv = controller.inv;
+        const recipes = infuserRecipes;
 
-        const recipes = crusherRecipes;
-
-        let inputSlotIndex = null;
-        let inputItem = null;
+        // ─────────────────────────────────────────────
+        // INPUT + CATALYST GLOBAL SCAN
+        // ─────────────────────────────────────────────
         let recipe = null;
 
+        let inputType = null;
+        let catalystType = null;
+
+        let totalInput = 0;
+        let totalCatalyst = 0;
+
+        // Scan INPUT
         for (const slot of INPUT_SLOTS) {
             const item = inv.getItem(slot);
             if (!item) continue;
-            const r = recipes[item.typeId];
-            if (!r) continue;
 
-            inputSlotIndex = slot;
-            inputItem = item;
-            recipe = r;
-            break;
+            if (!inputType) inputType = item.typeId;
+
+            if (item.typeId === inputType) {
+                totalInput += item.amount;
+            }
         }
 
-        if (!recipe) {
-            updateUI(controller, data, '§eNo Input')
-            controller.setProgress(0, 3)
+        // Scan CATALYST
+        for (const slot of CATALYST_SLOTS) {
+            const item = inv.getItem(slot);
+            if (!item) continue;
+
+            if (!catalystType) catalystType = item.typeId;
+
+            if (item.typeId === catalystType) {
+                totalCatalyst += item.amount;
+            }
+        }
+
+        if (!inputType || !catalystType) {
+            updateUI(controller, data, '§eMissing Input');
+            controller.setProgress(0, 3);
             return;
         }
 
+        recipe = recipes[catalystType + '|' + inputType];
+        if (!recipe) {
+            updateUI(controller, data, '§eInvalid Recipe');
+            controller.setProgress(0, 3);
+            return;
+        }
+
+        // ─────────────────────────────────────────────
         // OUTPUT SPACE
+        // ─────────────────────────────────────────────
         let availableSpace = 0;
         for (const slot of OUTPUT_SLOTS) {
             const out = inv.getItem(slot);
-            if (!out) availableSpace += 64;
-            else if (out.typeId === recipe.output)
+            if (!out) {
+                availableSpace += 64;
+            } else if (out.typeId === recipe.output) {
                 availableSpace += out.maxAmount - out.amount;
+            }
         }
 
-        const required = recipe.required ?? 1;
+        const requiredInput = recipe.required ?? 1;
+        const requiredCatalyst = recipe.catalyst_required ?? 1;
         const recipeAmount = recipe.amount ?? 1;
 
         const maxProcess = Math.min(
             data.processing.amount,
-            Math.floor(inputItem.amount / required),
+            Math.floor(totalInput / requiredInput),
+            Math.floor(totalCatalyst / requiredCatalyst),
             Math.floor(availableSpace / recipeAmount)
         );
 
         if (maxProcess <= 0) {
-            updateUI(controller, data, '§eOutput Full', recipe)
-            controller.setProgress(0, 3)
+            updateUI(controller, data, '§eOutput Full', recipe);
+            controller.setProgress(0, 3);
             return;
         }
 
+        // ─────────────────────────────────────────────
+        // ENERGY & PROGRESS
+        // ─────────────────────────────────────────────
         const cost = recipe.cost ?? DEFAULT_COST;
-        data.cost = cost
+        data.cost = cost;
         controller.setEnergyCost(cost);
 
         const progress = controller.getProgress();
 
         if (controller.energy.get() <= 0) {
-            updateUI(controller, data, '§eNo Energy', recipe)
-            controller.displayProgress(3)
+            updateUI(controller, data, '§eNo Energy', recipe);
+            controller.displayProgress(3);
             return;
         }
 
         if (progress >= cost) {
-            const craftCount = Math.min(maxProcess);
+            const craftCount = maxProcess;
 
             if (craftCount > 0) {
-                distributeOutput(controller, recipe.output, craftCount * recipeAmount);
-                controller.entity.changeItemAmount(inputSlotIndex, -craftCount * required);
+                // OUTPUT
+                distributeOutput(
+                    controller,
+                    recipe.output,
+                    craftCount * recipeAmount
+                );
+
+                // INPUTS (GLOBAL REMOVAL)
+                controller.entity.removeItem(
+                    inputType,
+                    craftCount * requiredInput
+                );
+
+                controller.entity.removeItem(
+                    catalystType,
+                    craftCount * requiredCatalyst
+                );
+
                 controller.addProgress(-cost);
             }
         } else {
@@ -146,13 +199,17 @@ DoriosAPI.register.blockComponent('infuser_controller', {
                 controller.rate,
                 cost * data.energyMultiplier
             );
+
             controller.energy.consume(energyToConsume);
-            controller.addProgress(energyToConsume / data.energyMultiplier);
+            controller.addProgress(
+                energyToConsume / data.energyMultiplier
+            );
         }
 
         controller.displayProgress(3);
-        updateUI(controller, data, '§aRunning', recipe)
+        updateUI(controller, data, '§aRunning', recipe);
     }
+
 })
 
 function distributeOutput(controller, itemId, amount) {
