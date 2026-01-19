@@ -395,6 +395,8 @@ world.afterEvents.worldLoad.subscribe(() => {
         world.setDynamicProperty("loaded", true);
         worldLoaded = true;
     }
+    const configuredTickSpeed = world.getDynamicProperty("utilitycraft:tickSpeed") ?? 10
+    globalThis.tickSpeed = configuredTickSpeed
 });
 
 // --- Al primer spawn del jugador ---
@@ -742,10 +744,25 @@ export class Machine {
         }
         this.inv = this.entity?.getComponent('inventory')?.container
         this.energy = new Energy(this.entity)
-        this.upgrades = this.getUpgradeLevels(settings.machine.upgrades)
-        this.boosts = this.calculateBoosts(this.upgrades)
-        this.baseRate = settings.machine.rate_speed_base * this.boosts.speed * this.boosts.consumption
+        this.baseRate = settings?.machine?.rate_speed_base ?? 0
         this.rate = this.baseRate * tickSpeed
+        if (settings?.machine?.upgrades) {
+            this.upgrades = this.getUpgradeLevels(settings.machine.upgrades)
+            this.boosts = this.calculateBoosts(this.upgrades)
+            this.baseRate *= this.boosts.speed * this.boosts.consumption
+        }
+    }
+
+    /**
+     * Sets a new base rate and updates the effective rate using tickSpeed.
+     *
+     * @param {number} baseRate New base processing rate
+     * @returns {number} Updated effective rate
+     */
+    setRate(baseRate) {
+        this.baseRate = baseRate;
+        this.rate = this.baseRate * tickSpeed;
+        return this.rate;
     }
 
     getTransferCooldown() {
@@ -789,7 +806,7 @@ export class Machine {
         const { entity } = data;
 
         let { x, y, z } = block.center(); y -= 0.25
-        const machineEntity = dim.spawnEntity("utilitycraft:machine", { x, y, z });
+        const machineEntity = dim.spawnEntity("utilitycraft:multiblock_machine", { x, y, z });
 
         let machineEvent;
         let inventorySize = 2
@@ -821,7 +838,7 @@ export class Machine {
         }
 
         if (entity.inventory_size) inventorySize = entity.inventory_size
-
+        world.sendMessage(`${inventorySize}`)
         const inventoryEvent = `utilitycraft:inventory_${inventorySize}`;
 
         // 3. Trigger machine type and inventory slot events
@@ -3278,6 +3295,7 @@ system.afterEvents.scriptEventReceive.subscribe(({ id, message }) => {
         }
 
         globalThis.tickSpeed = value;
+        world.setDynamicProperty("utilitycraft:tickSpeed", value);
     } catch {
         console.warn("[UtilityCraft] Failed to parse tickSpeed payload.");
     }

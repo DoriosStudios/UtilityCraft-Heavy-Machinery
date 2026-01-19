@@ -597,7 +597,7 @@ world.afterEvents.playerBreakBlock.subscribe(e => {
     const entity = block.dimension.getEntities({
         location: block.location,
         maxDistance: MAX_SIZE,
-        families: ['dorios:multiBlock']
+        families: ['dorios:multiblock']
     }).find(ent => {
         const raw = ent.getDynamicProperty("dorios:bounds");
         if (!raw) return false;

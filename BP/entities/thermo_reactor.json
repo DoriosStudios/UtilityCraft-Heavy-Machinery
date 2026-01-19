@@ -24,7 +24,7 @@
 			},
 			"minecraft:type_family": {
 				"family": [
-					"dorios:multiBlock",
+					"dorios:multiblock",
 					"dorios:energy_source"
 				]
 			},

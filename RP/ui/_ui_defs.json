@@ -2,7 +2,8 @@
     "ui_defs": [
         "ui/power_condenser.json",
         "ui/thermo_reactor.json",
-        "ui/9_slots_test.json",
+        "ui/crusher_controller.json",
+        "ui/infuser_controller.json",
         "ui/machineryCommon.json"
     ]
 }

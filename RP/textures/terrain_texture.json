@@ -7,6 +7,18 @@
 		"utilitycraft_crusher_controller": {
 			"textures": "textures/blocks/multiblock/crusher_controller"
 		},
+		"utilitycraft_infuser_controller": {
+			"textures": "textures/blocks/multiblock/infuser_controller"
+		},
+		"utilitycraft_incinerator_controller": {
+			"textures": "textures/blocks/multiblock/incinerator_controller"
+		},
+		"utilitycraft_electro_press_controller": {
+			"textures": "textures/blocks/multiblock/electro_press_controller"
+		},
+		"utilitycraft_matter_condenser_controller": {
+			"textures": "textures/blocks/multiblock/matter_condenser_controller"
+		},
 		"utilitycraft_efficiency_module": {
 			"textures": "textures/blocks/multiblock/efficiency_module"
 		},

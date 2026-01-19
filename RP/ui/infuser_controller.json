@@ -1,0 +1,434 @@
+{
+    "namespace": "infuser_controller",
+    "infuser_controller_top": {
+        "type": "collection_panel",
+        "anchor_from": "center",
+        "anchor_to": "center",
+        "size": [
+            162,
+            72
+        ],
+        "offset": [
+            -10,
+            -40
+        ],
+        "collection_name": "container_items",
+        "$item_collection_name": "container_items",
+        "controls": [
+            {
+                "exit_button_panel": {
+                    "type": "panel",
+                    "anchor_from": "top_right",
+                    "anchor_to": "top_right",
+                    "offset": [
+                        38,
+                        -10
+                    ],
+                    "controls": [
+                        {
+                            "close_button@common.close_button": {}
+                        }
+                    ]
+                }
+            },
+            {
+                "chest_label@chest.chest_label": {
+                    "offset": [
+                        10,
+                        0
+                    ]
+                }
+            },
+            {
+                "energy_bar@machineryCommon.vertical_single": {
+                    "$is_energy": true,
+                    "$has_bg": false,
+                    "offset": [
+                        94,
+                        65
+                    ]
+                }
+            },
+            {
+                "panel@machineryCommon.side_panel": {}
+            },
+            {
+                "screen": {
+                    "type": "image",
+                    "texture": "textures/ui/background_panel",
+                    "anchor_from": "center",
+                    "anchor_to": "center",
+                    "$cell_image_size": [
+                        200,
+                        166
+                    ],
+                    "size": [
+                        200,
+                        166
+                    ],
+                    "offset": [
+                        20,
+                        40
+                    ],
+                    "layer": -1
+                }
+            },
+            {
+                "item_label@machineryCommon.item_label": {
+                    "collection_index": 1,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "size": [
+                        74,
+                        140
+                    ],
+                    "$text_scale": 0.55,
+                    "offset": [
+                        -78,
+                        2
+                    ]
+                }
+            },
+            {
+                "item_label@machineryCommon.item_label": {
+                    "collection_index": 2,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "size": [
+                        74,
+                        140
+                    ],
+                    "$text_scale": 0.55,
+                    "offset": [
+                        -78,
+                        2
+                    ]
+                }
+            },
+            // Progress (slot 3)
+            {
+                "machinery@common_machines.machinery": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        43,
+                        31
+                    ],
+                    "collection_index": 3
+                }
+            },
+            // Extra UI slot (slot 4) – debajo esquina inferior derecha
+            {
+                "machinery@common_machines.machinery": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        -38,
+                        49
+                    ],
+                    "collection_index": 4
+                }
+            },
+            // Catalysts 2x2 (slots 5–8)
+            {
+                "item@common.container_item": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        -56,
+                        13
+                    ],
+                    "collection_index": 5
+                }
+            },
+            {
+                "item@common.container_item": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        -38,
+                        13
+                    ],
+                    "collection_index": 6
+                }
+            },
+            {
+                "item@common.container_item": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        -56,
+                        31
+                    ],
+                    "collection_index": 7
+                }
+            },
+            {
+                "item@common.container_item": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        -38,
+                        31
+                    ],
+                    "collection_index": 8
+                }
+            },
+            // Input 3x3 (slots 9–17)
+            {
+                "item@common.container_item": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        -15,
+                        13
+                    ],
+                    "collection_index": 9
+                }
+            },
+            {
+                "item@common.container_item": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        3,
+                        13
+                    ],
+                    "collection_index": 10
+                }
+            },
+            {
+                "item@common.container_item": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        21,
+                        13
+                    ],
+                    "collection_index": 11
+                }
+            },
+            {
+                "item@common.container_item": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        -15,
+                        31
+                    ],
+                    "collection_index": 12
+                }
+            },
+            {
+                "item@common.container_item": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        3,
+                        31
+                    ],
+                    "collection_index": 13
+                }
+            },
+            {
+                "item@common.container_item": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        21,
+                        31
+                    ],
+                    "collection_index": 14
+                }
+            },
+            {
+                "item@common.container_item": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        -15,
+                        49
+                    ],
+                    "collection_index": 15
+                }
+            },
+            {
+                "item@common.container_item": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        3,
+                        49
+                    ],
+                    "collection_index": 16
+                }
+            },
+            {
+                "item@common.container_item": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        21,
+                        49
+                    ],
+                    "collection_index": 17
+                }
+            },
+            // Output 3x3 (slots 18–26)
+            {
+                "item@common.container_item": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        65,
+                        13
+                    ],
+                    "collection_index": 18
+                }
+            },
+            {
+                "item@common.container_item": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        83,
+                        13
+                    ],
+                    "collection_index": 19
+                }
+            },
+            {
+                "item@common.container_item": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        101,
+                        13
+                    ],
+                    "collection_index": 20
+                }
+            },
+            {
+                "item@common.container_item": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        65,
+                        31
+                    ],
+                    "collection_index": 21
+                }
+            },
+            {
+                "item@common.container_item": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        83,
+                        31
+                    ],
+                    "collection_index": 22
+                }
+            },
+            {
+                "item@common.container_item": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        101,
+                        31
+                    ],
+                    "collection_index": 23
+                }
+            },
+            {
+                "item@common.container_item": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        65,
+                        49
+                    ],
+                    "collection_index": 24
+                }
+            },
+            {
+                "item@common.container_item": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        83,
+                        49
+                    ],
+                    "collection_index": 25
+                }
+            },
+            {
+                "item@common.container_item": {
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        101,
+                        49
+                    ],
+                    "collection_index": 26
+                }
+            }
+        ]
+    },
+    "utilitycraft_panel": {
+        "type": "panel",
+        "controls": [
+            {
+                "container_gamepad_helpers@common.container_gamepad_helpers": {}
+            },
+            {
+                "flying_item_renderer@common.flying_item_renderer": {
+                    "layer": 14
+                }
+            },
+            {
+                "selected_item_details_factory@common.selected_item_details_factory": {}
+            },
+            {
+                "item_lock_notification_factory@common.item_lock_notification_factory": {}
+            },
+            {
+                "root_panel@common.root_panel": {
+                    "layer": 1,
+                    "controls": [
+                        {
+                            "common_panel@common.common_panel": {}
+                        },
+                        {
+                            "chest_panel": {
+                                "type": "panel",
+                                "layer": 5,
+                                "controls": [
+                                    {
+                                        "infuser_controller_top@infuser_controller.infuser_controller_top": {}
+                                    },
+                                    {
+                                        "inventory_panel_bottom_half_with_label@common.inventory_panel_bottom_half_with_label": {}
+                                    },
+                                    {
+                                        "hotbar_grid@common.hotbar_grid_template": {}
+                                    },
+                                    {
+                                        "inventory_take_progress_icon_button@common.inventory_take_progress_icon_button": {}
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "inventory_selected_icon_button@common.inventory_selected_icon_button": {}
+                        },
+                        {
+                            "gamepad_cursor@common.gamepad_cursor_button": {}
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

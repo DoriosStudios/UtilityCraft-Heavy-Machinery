@@ -24,6 +24,50 @@
             "$screen_bg_content": "common.screen_background"
           }
         ]
+      },
+      {
+        "array_name": "variables",
+        "operation": "insert_back",
+        "value": [
+          {
+            "requires": "($temp_container_title = 'entity.utilitycraft:crusher_controller.name')",
+            "$screen_content": "crusher_controller.utilitycraft_panel",
+            "$screen_bg_content": "common.screen_background"
+          }
+        ]
+      },
+      {
+        "array_name": "variables",
+        "operation": "insert_back",
+        "value": [
+          {
+            "requires": "($temp_container_title = 'entity.utilitycraft:incinerator_controller.name')",
+            "$screen_content": "crusher_controller.utilitycraft_panel",
+            "$screen_bg_content": "common.screen_background"
+          }
+        ]
+      },
+      {
+        "array_name": "variables",
+        "operation": "insert_back",
+        "value": [
+          {
+            "requires": "($temp_container_title = 'entity.utilitycraft:electro_press_controller.name')",
+            "$screen_content": "crusher_controller.utilitycraft_panel",
+            "$screen_bg_content": "common.screen_background"
+          }
+        ]
+      },
+      {
+        "array_name": "variables",
+        "operation": "insert_back",
+        "value": [
+          {
+            "requires": "($temp_container_title = 'entity.utilitycraft:infuser_controller.name')",
+            "$screen_content": "infuser_controller.utilitycraft_panel",
+            "$screen_bg_content": "common.screen_background"
+          }
+        ]
       }
       // {
       //   "array_name": "variables",

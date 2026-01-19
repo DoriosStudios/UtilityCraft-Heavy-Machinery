@@ -2,7 +2,7 @@
     "format_version": "1.20.80",
     "minecraft:block": {
         "description": {
-            "identifier": "utilitycraft:crusher_controller",
+            "identifier": "utilitycraft:electro_press_controller",
             "menu_category": {
                 "category": "construction"
             },
@@ -19,7 +19,7 @@
             "minecraft:geometry": "geometry.utilitycraft_block_4",
             "minecraft:material_instances": {
                 "*": {
-                    "texture": "utilitycraft_crusher_controller",
+                    "texture": "utilitycraft_electro_press_controller",
                     "render_method": "alpha_test"
                 }
             },
@@ -29,7 +29,7 @@
                     2
                 ]
             },
-            "utilitycraft:crusher_controller": {
+            "utilitycraft:electro_press_controller": {
                 "entity": {
                     "input_type": "complex",
                     "output_type": "complex",

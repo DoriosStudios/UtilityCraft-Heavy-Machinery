@@ -1,5 +1,9 @@
 entity.utilitycraft:power_condenser.name=Power Condenser Matrix
 entity.utilitycraft:thermo_reactor.name=Thermal Reactor
+entity.utilitycraft:crusher_controller.name=Crusher Factory
+entity.utilitycraft:incinerator_controller.name=Incinerator Factory
+entity.utilitycraft:electro_press_controller.name=Electro Press Factory
+entity.utilitycraft:infuser_controller.name=Infuser Factory
 
 
 tile.utilitycraft:processing_module.name=Processing Module
@@ -9,6 +13,10 @@ tile.utilitycraft:energy_cell.name=Energy Cell
 tile.utilitycraft:fluid_cell.name=Fluid Cell
 
 tile.utilitycraft:crusher_controller.name=Crusher Controller
+tile.utilitycraft:incinerator_controller.name=Incinerator Controller
+tile.utilitycraft:infuser_controller.name=Infuser Controller
+tile.utilitycraft:electro_press_controller.name=Electro Press Controller
+tile.utilitycraft:alloy_forge_controller.name=Alloy Forge Controller
 
 tile.utilitycraft:power_condenser_controller.name=Power Condenser Controller
 tile.utilitycraft:basic_power_condenser_unit.name=§eBasic Power Condenser Unit
