@@ -290,15 +290,15 @@ function computeMachineStats(components) {
     // =========================
     // Speed (curva con diminishing returns)
     // =========================
-    const MAX_SPEED_BONUS = 9;     // hasta +10x rate
-    const SPEED_K = 32;
+    const MAX_SPEED_BONUS = 999;     // hasta +10x rate
+    const SPEED_K = 3200;
 
     const speedMultiplier =
         1 + (MAX_SPEED_BONUS * speed) / (SPEED_K + speed);
 
     // Penalización por speed (más agresiva)
-    const MAX_SPEED_PENALTY = 9;   // hasta +4x costo
-    const SPEED_PENALTY_K = 64;
+    const MAX_SPEED_PENALTY = 99;   // hasta +4x costo
+    const SPEED_PENALTY_K = 640;
 
     const speedPenalty =
         1 + (MAX_SPEED_PENALTY * speed) / (SPEED_PENALTY_K + speed);
@@ -306,8 +306,8 @@ function computeMachineStats(components) {
     // =========================
     // Efficiency (reduce el costo final)
     // =========================
-    const MIN_EFFICIENCY = 0.05;  // límite inferior
-    const EFFICIENCY_RATE = 0.12;
+    const MIN_EFFICIENCY = 0.01;  // límite inferior
+    const EFFICIENCY_RATE = 0.15;
 
     const efficiencyMultiplier =
         MIN_EFFICIENCY +
@@ -346,6 +346,7 @@ function computeMachineStats(components) {
             efficiencyMultiplier
     };
 }
+
 
 
 
