@@ -33,7 +33,8 @@
                 "entity": {
                     "input_type": "complex",
                     "output_type": "complex",
-                    "inventory_size": 22
+                    "inventory_size": 22,
+                    "identifier": "utilitycraft:multiblock_machine"
                 },
                 "required_case": "dorios:multiblock.case.steel",
                 "required_components": {
