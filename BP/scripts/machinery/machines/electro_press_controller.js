@@ -43,7 +43,7 @@ DoriosAPI.register.blockComponent('electro_press_controller', {
             return
         }
 
-        const factoryData = computeMachineStats(structure.components)
+        const factoryData = Multiblock.computeMachineStats(structure.components)
         entity.setDynamicProperty('components', JSON.stringify(factoryData))
 
         player.sendMessage("§a[Controller] Electro Press Factory created successfully.");
@@ -197,43 +197,10 @@ function distributeOutput(controller, itemId, amount) {
 
 function updateUI(controller, data, status = '§aRunning', recipe) {
     controller.displayEnergy()
-    const offsetLines = setMachineInfoLabel(controller, data, status);
+    const offsetLines = Multiblock.setMachineInfoLabel(controller, data, status);
     setEnergyAndRecipeLabel(controller, offsetLines, recipe);
 
 }
-/**
- * Updates the main machine information label (slot 1).
- *
- * This label displays:
- * - Core machine statistics (processing, speed, efficiency effects)
- * - Current machine status
- *
- * The function also returns the required line offset so that
- * secondary labels can be aligned directly below this one.
- *
- * @param {Machine} controller Machine instance controlling the block entity.
- * @param {MachineStats} data Fully computed machine statistics.
- * @param {string} [status='§aRunning'] Current machine status text (formatted).
- *
- * @returns {string} Line offset string (`'\n'.repeat(n)`) used to align subsequent labels.
- */
-function setMachineInfoLabel(controller, data, status = '§aRunning') {
-    const infoText = `§r§eMachine Information
-
-§r§7Status: ${status}
-
-§r§7Input Capacity §fx${data.processing.amount}
-§r§7Cost §f${data.cost ? Energy.formatEnergyToText(data.cost * data.processing.amount) : "---"}
-§r§7Speed §fx${data.speed.multiplier.toFixed(2)}
-§r§7Efficiency §f${((data.processing.amount / data.energyMultiplier) * 100).toFixed(2)}%%
-`;
-
-    controller.setLabel(infoText, 1);
-
-    const offsetLines = '\n'.repeat(infoText.split('\n').length - 1);
-    return offsetLines;
-}
-
 
 function setEnergyAndRecipeLabel(controller, offsetLines, recipe) {
     const energy = controller.energy
@@ -261,135 +228,3 @@ function setEnergyAndRecipeLabel(controller, offsetLines, recipe) {
 
     controller.setLabel(text, 2);
 }
-
-/**
- * Computes all effective machine statistics from installed components.
- *
- * This function centralizes machine balance logic:
- * - Processing increases batch size but heavily penalizes energy cost.
- * - Speed increases processing rate with diminishing returns and adds energy pressure.
- * - Efficiency reduces total energy cost with diminishing returns.
- *
- * All calculations are deterministic and scale safely to very large component values.
- *
- * @param {MachineComponents} components Installed machine components.
- * @returns {MachineStats} Fully computed machine statistics.
- */
-function computeMachineStats(components) {
-    const processing = Math.max(1, components.processing_module | 0);
-    const speed = Math.max(0, components.speed_module | 0);
-    const efficiency = Math.max(0, components.efficiency_module | 0);
-
-    // =========================
-    // Processing
-    // =========================
-    const processAmount = 2 * processing;
-
-    // Penalización fuerte por processing
-    const processingPenalty = 1 + 2.25 * (processing - 1);
-
-    // =========================
-    // Speed (curva con diminishing returns)
-    // =========================
-    const MAX_SPEED_BONUS = 999;     // hasta +10x rate
-    const SPEED_K = 3200;
-
-    const speedMultiplier =
-        1 + (MAX_SPEED_BONUS * speed) / (SPEED_K + speed);
-
-    // Penalización por speed (más agresiva)
-    const MAX_SPEED_PENALTY = 99;   // hasta +4x costo
-    const SPEED_PENALTY_K = 640;
-
-    const speedPenalty =
-        1 + (MAX_SPEED_PENALTY * speed) / (SPEED_PENALTY_K + speed);
-
-    // =========================
-    // Efficiency (reduce el costo final)
-    // =========================
-    const MIN_EFFICIENCY = 0.01;  // límite inferior
-    const EFFICIENCY_RATE = 0.15;
-
-    const efficiencyMultiplier =
-        MIN_EFFICIENCY +
-        (1 - MIN_EFFICIENCY) *
-        Math.exp(-EFFICIENCY_RATE * efficiency);
-
-
-    // =========================
-    // Resultado final
-    // =========================
-    return {
-        raw: {
-            processing,
-            speed,
-            efficiency
-        },
-
-        processing: {
-            amount: Math.floor(processAmount),
-            penalty: processingPenalty
-        },
-
-        speed: {
-            multiplier: speedMultiplier,
-            penalty: speedPenalty
-        },
-
-        efficiency: {
-            multiplier: efficiencyMultiplier
-        },
-
-        // Multiplicador energético TOTAL (antes de baseCost)
-        energyMultiplier:
-            processingPenalty *
-            speedPenalty *
-            efficiencyMultiplier
-    };
-}
-
-
-
-
-/**
- * Raw machine components coming from multiblock / entity data.
- *
- * @typedef {Object} MachineComponents
- * @property {number} processing_module Amount of processing modules installed.
- * @property {number} speed_module Amount of speed modules installed.
- * @property {number} efficiency_module Amount of efficiency modules installed.
- */
-
-/**
- * Processing-related computed stats.
- *
- * @typedef {Object} ProcessingStats
- * @property {number} amount Items processed per batch.
- * @property {number} penalty Energy multiplier caused by processing pressure.
- */
-
-/**
- * Speed-related computed stats.
- *
- * @typedef {Object} SpeedStats
- * @property {number} multiplier Speed multiplier applied to machine rate.
- * @property {number} penalty Energy multiplier caused by speed pressure.
- */
-
-/**
- * Efficiency-related computed stats.
- *
- * @typedef {Object} EfficiencyStats
- * @property {number} multiplier Energy reduction multiplier (0–1 range).
- */
-
-/**
- * Full computed statistics for a machine.
- *
- * @typedef {Object} MachineStats
- * @property {{processing:number, speed:number, efficiency:number}} raw Raw component values.
- * @property {ProcessingStats} processing Processing stats.
- * @property {SpeedStats} speed Speed stats.
- * @property {EfficiencyStats} efficiency Efficiency stats.
- * @property {number} energyMultiplier Final energy multiplier to apply over base cost.
- */
