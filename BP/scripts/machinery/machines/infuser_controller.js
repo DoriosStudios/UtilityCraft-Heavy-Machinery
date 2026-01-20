@@ -4,7 +4,8 @@ import { infuserRecipes } from 'config/recipes/infuser.js'
 const CATALYST_SLOTS = [5, 6, 7, 8]
 const INPUT_SLOTS = [9, 10, 11, 12, 13, 14, 15, 16, 17]
 const OUTPUT_SLOTS = [18, 19, 20, 21, 22, 23, 24, 25, 26]
-const DEFAULT_COST = 4000
+const DEFAULT_COST = 1600
+const MULTI_PENALTY = 4
 const BASE_RATE = 100
 
 // slots energy, label, label, progress, 9 input 9 output
@@ -137,8 +138,8 @@ DoriosAPI.register.blockComponent('infuser_controller', {
             }
         }
 
-        const requiredInput = recipe.required ?? 1;
-        const requiredCatalyst = recipe.catalyst_required ?? 1;
+        const requiredInput = recipe.input_required ?? 1;
+        const requiredCatalyst = recipe.required ?? 1;
         const recipeAmount = recipe.amount ?? 1;
 
         const maxProcess = Math.min(
@@ -157,7 +158,7 @@ DoriosAPI.register.blockComponent('infuser_controller', {
         // ─────────────────────────────────────────────
         // ENERGY & PROGRESS
         // ─────────────────────────────────────────────
-        const cost = recipe.cost ?? DEFAULT_COST;
+        const cost = (recipe.cost ?? DEFAULT_COST) * MULTI_PENALTY;
         data.cost = cost;
         controller.setEnergyCost(cost);
 

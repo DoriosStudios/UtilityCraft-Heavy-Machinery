@@ -3,7 +3,8 @@ import { crusherRecipes } from 'config/recipes/crusher.js'
 
 const INPUT_SLOTS = [4, 5, 6, 7, 8, 9, 10, 11, 12]
 const OUTPUT_SLOTS = [13, 14, 15, 16, 17, 18, 19, 20, 21]
-const DEFAULT_COST = 4000
+const DEFAULT_COST = 800
+const MULTI_PENALTY = 4
 const BASE_RATE = 100
 
 // slots energy, label, label, progress, 9 input 9 output
@@ -125,7 +126,7 @@ DoriosAPI.register.blockComponent('crusher_controller', {
             return;
         }
 
-        const cost = recipe.cost ?? DEFAULT_COST;
+        const cost = (recipe.cost ?? DEFAULT_COST) * MULTI_PENALTY;
         data.cost = cost;
         controller.setEnergyCost(cost);
 

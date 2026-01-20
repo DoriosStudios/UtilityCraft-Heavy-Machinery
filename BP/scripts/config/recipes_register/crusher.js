@@ -8,6 +8,11 @@ const newRecipes = {
     "utilitycraft:tin_ingot": { output: "utilitycraft:tin_dust", amount: 1 },
     "utilitycraft:tin_plate": { output: "utilitycraft:tin_dust", amount: 1 },
     "utilitycraft:raw_tin_block": { output: "utilitycraft:tin_dust", amount: 12 },
+    // Bronze
+    "utilitycraft:brute_bronze": { output: "utilitycraft:bronze_dust", amount: 2 },
+    "utilitycraft:bronze_ingot": { output: "utilitycraft:bronze_dust", amount: 1 },
+    "utilitycraft:bronze_plate": { output: "utilitycraft:bronze_dust", amount: 1 },
+    "utilitycraft:brute_bronze_block": { output: "utilitycraft:bronze_dust", amount: 12 },
 };
 
 world.afterEvents.worldLoad.subscribe(() => {
