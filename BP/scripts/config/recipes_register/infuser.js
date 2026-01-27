@@ -9,6 +9,7 @@ const newRecipes = {
 
     "utilitycraft:tin_dust|minecraft:copper_ingot": { output: "utilitycraft:brute_bronze", required: 5, input_required: 2, cost: 6400 },
     "utilitycraft:tin_dust|utilitycraft:copper_dust": { output: "utilitycraft:brute_bronze", required: 5, input_required: 2, cost: 6400 },
+    "utilitycraft:bronze_dust|minecraft:glass": { output: "utilitycraft:tempered_bronze_glass", required: 8 },
 };
 
 world.afterEvents.worldLoad.subscribe(() => {

@@ -2,7 +2,7 @@
     "format_version": "1.20.80",
     "minecraft:recipe_shaped": {
         "description": {
-            "identifier": "utilitycraft:incinerator_controller"
+            "identifier": "utilitycraft:reaction_chamber_controller"
         },
         "tags": [
             "utilitycraft_workbench"
@@ -12,25 +12,25 @@
                 "item": "utilitycraft:steel_plate"
             },
             "T": {
-                "item": "utilitycraft:charged_darloonite_crystal"
+                "item": "utilitycraft:refined_obsidian_dust"
             },
             "S": {
                 "item": "utilitycraft:controller_case"
             },
             "X": {
-                "item": "utilitycraft:control_panel"
+                "item": "utilitycraft:charged_darloonite_crystal"
             },
             "R": {
-                "item": "utilitycraft:incinerator"
+                "item": "utilitycraft:control_panel"
             }
         },
         "pattern": [
-            "PXP",
+            "PRP",
             "TST",
-            "PRP"
+            "PXP"
         ],
         "result": {
-            "item": "utilitycraft:incinerator_controller"
+            "item": "utilitycraft:reaction_chamber_controller"
         },
         "unlock": [
             {

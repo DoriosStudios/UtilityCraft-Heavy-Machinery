@@ -2,7 +2,7 @@
     "format_version": "1.20.80",
     "minecraft:block": {
         "description": {
-            "identifier": "utilitycraft:bronze_steel_case",
+            "identifier": "utilitycraft:bronze_controller_case",
             "menu_category": {
                 "category": "construction"
             }
@@ -11,7 +11,7 @@
             "minecraft:geometry": "geometry.utilitycraft_block_2",
             "minecraft:material_instances": {
                 "*": {
-                    "texture": "utilitycraft_bronze_steel_case",
+                    "texture": "utilitycraft_bronze_controller_case",
                     "render_method": "alpha_test"
                 }
             },

@@ -67,7 +67,7 @@
 		"utilitycraft_bronze_vent_panel": {
 			"textures": "textures/blocks/multiblock/bronze/bronze_vent_panel"
 		},
-		"utilitycraft_bronze_steel_case": {
+		"utilitycraft_bronze_controller_case": {
 			"textures": "textures/blocks/multiblock/bronze/bronze_steel_case"
 		},
 		"utilitycraft_bronze_case": {

@@ -12,22 +12,22 @@
                 "item": "utilitycraft:steel_plate"
             },
             "T": {
-                "item": "utilitycraft:tin_ingot"
+                "item": "utilitycraft:charged_darloonite_crystal"
             },
             "S": {
                 "item": "utilitycraft:controller_case"
             },
             "X": {
-                "item": "utilitycraft:charged_darloonite_crystal"
+                "item": "utilitycraft:control_panel"
             },
             "R": {
                 "item": "utilitycraft:crusher"
             }
         },
         "pattern": [
-            "PRP",
+            "PXP",
             "TST",
-            "PXP"
+            "PRP"
         ],
         "result": {
             "item": "utilitycraft:crusher_controller"

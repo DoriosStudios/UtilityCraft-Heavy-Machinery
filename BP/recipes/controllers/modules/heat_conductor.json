@@ -1,0 +1,35 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "utilitycraft:heat_conductor"
+        },
+        "tags": [
+            "utilitycraft_workbench"
+        ],
+        "key": {
+            "I": {
+                "item": "utilitycraft:tin_ingot"
+            },
+            "T": {
+                "item": "utilitycraft:netherite_plate"
+            },
+            "S": {
+                "item": "utilitycraft:steel_case"
+            }
+        },
+        "pattern": [
+            "TIT",
+            "TST",
+            "TIT"
+        ],
+        "result": {
+            "item": "utilitycraft:heat_conductor"
+        },
+        "unlock": [
+            {
+                "item": "utilitycraft:steel_case"
+            }
+        ]
+    }
+}

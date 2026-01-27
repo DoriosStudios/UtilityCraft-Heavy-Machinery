@@ -7,7 +7,7 @@
 	},
 	"header": {
 		"name": "UtilityCraft: Heavy Machinery",
-		"description": "Official UtilityCraft Extension",
+		"description": "0.3.0 §6Dorios Studios",
 		"min_engine_version": [
 			1,
 			21,
@@ -15,8 +15,8 @@
 		],
 		"uuid": "6b73e899-731b-4fc6-a3e9-45da4f00efa0",
 		"version": [
-			1,
 			0,
+			3,
 			0
 		]
 	},
@@ -35,8 +35,8 @@
 		{
 			"uuid": "f99ab81c-e320-4e3e-aae3-2f7f5ac11775",
 			"version": [
-				1,
 				0,
+				3,
 				0
 			]
 		}

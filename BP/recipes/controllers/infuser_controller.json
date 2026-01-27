@@ -2,7 +2,7 @@
     "format_version": "1.20.80",
     "minecraft:recipe_shaped": {
         "description": {
-            "identifier": "utilitycraft:incinerator_controller"
+            "identifier": "utilitycraft:infuser_controller"
         },
         "tags": [
             "utilitycraft_workbench"
@@ -21,7 +21,7 @@
                 "item": "utilitycraft:control_panel"
             },
             "R": {
-                "item": "utilitycraft:incinerator"
+                "item": "utilitycraft:infuser"
             }
         },
         "pattern": [
@@ -30,7 +30,7 @@
             "PRP"
         ],
         "result": {
-            "item": "utilitycraft:incinerator_controller"
+            "item": "utilitycraft:infuser_controller"
         },
         "unlock": [
             {

@@ -1,0 +1,38 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "utilitycraft:control_panel"
+        },
+        "tags": [
+            "utilitycraft_workbench"
+        ],
+        "key": {
+            "P": {
+                "item": "utilitycraft:steel_plate"
+            },
+            "C": {
+                "item": "utilitycraft:basic_chip"
+            },
+            "G": {
+                "item": "gold_ingot"
+            },
+            "R": {
+                "item": "redstone"
+            }
+        },
+        "pattern": [
+            "GRG",
+            "PCP",
+            "RGR"
+        ],
+        "result": {
+            "item": "utilitycraft:control_panel"
+        },
+        "unlock": [
+            {
+                "item": "utilitycraft:basic_chip"
+            }
+        ]
+    }
+}

@@ -301,6 +301,9 @@
 		},
 		"utilitycraft_saline_coolant_bucket": {
 			"textures": "textures/items/saline_coolant_bucket"
+		},
+		"utilitycraft_control_panel": {
+			"textures": "textures/items/control_panel"
 		}
 	}
 }

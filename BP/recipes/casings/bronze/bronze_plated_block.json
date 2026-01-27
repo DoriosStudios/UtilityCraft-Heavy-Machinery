@@ -1,0 +1,32 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "utilitycraft:bronze_plated_block"
+        },
+        "tags": [
+            "utilitycraft_workbench"
+        ],
+        "key": {
+            "T": {
+                "item": "utilitycraft:tin_ingot"
+            },
+            "P": {
+                "item": "utilitycraft:bronze_plate"
+            }
+        },
+        "pattern": [
+            "PTP",
+            "TPT",
+            "PTP"
+        ],
+        "result": {
+            "item": "utilitycraft:bronze_plated_block"
+        },
+        "unlock": [
+            {
+                "item": "utilitycraft:bronze_plate"
+            }
+        ]
+    }
+}
