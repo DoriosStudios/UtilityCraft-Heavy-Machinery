@@ -1,4 +1,4 @@
-import { Multiblock, Energy, Machine } from '../DoriosMachinery/main.js'
+	import { Multiblock, Energy, Machine } from '../DoriosMachinery/main.js'
 import { pressRecipes } from 'config/recipes/press.js'
 
 const INPUT_SLOTS = [4, 5, 6, 7, 8, 9, 10, 11, 12]
@@ -221,9 +221,9 @@ function setEnergyAndRecipeLabel(controller, offsetLines, recipe) {
 
 §r§eRecipe Information
 
-§r§7Output §f${output}
-§r§7Yield §f${yieldAmt}
-§r§7Input Required §f${inputReq}
+§r§aOutput §f${output}
+§r§aYield §f${yieldAmt}
+§r§aInput Required §f${inputReq}
 `;
 
     controller.setLabel(text, 2);

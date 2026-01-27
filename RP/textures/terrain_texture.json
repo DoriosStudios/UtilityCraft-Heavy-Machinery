@@ -13,6 +13,9 @@
 		"utilitycraft_incinerator_controller": {
 			"textures": "textures/blocks/multiblock/incinerator_controller"
 		},
+		"utilitycraft_autosieve_controller": {
+			"textures": "textures/blocks/multiblock/autosieve_controller"
+		},
 		"utilitycraft_electro_press_controller": {
 			"textures": "textures/blocks/multiblock/electro_press_controller"
 		},

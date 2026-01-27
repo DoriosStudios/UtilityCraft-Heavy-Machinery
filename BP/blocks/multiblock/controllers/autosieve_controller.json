@@ -1,0 +1,127 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:block": {
+        "description": {
+            "identifier": "utilitycraft:autosieve_controller",
+            "menu_category": {
+                "category": "construction"
+            },
+            "traits": {
+                "minecraft:placement_direction": {
+                    "enabled_states": [
+                        "minecraft:cardinal_direction"
+                    ],
+                    "y_rotation_offset": 180
+                }
+            }
+        },
+        "components": {
+            "minecraft:geometry": "geometry.utilitycraft_block_4",
+            "minecraft:material_instances": {
+                "*": {
+                    "texture": "utilitycraft_autosieve_controller",
+                    "render_method": "alpha_test"
+                }
+            },
+            "minecraft:tick": {
+                "interval_range": [
+                    2,
+                    2
+                ]
+            },
+            "utilitycraft:autosieve_controller": {
+                "entity": {
+                    "input_slots": [
+                        5,
+                        13
+                    ],
+                    "output_slots": [
+                        14,
+                        28
+                    ],
+                    "inventory_size": 29,
+                    "identifier": "utilitycraft:multiblock_machine"
+                },
+                "required_case": "dorios:multiblock.case.steel",
+                "required_components": {
+                    "energy_unit": 1,
+                    "processing_module": 1
+                }
+            },
+            "utilitycraft:special_container": {
+                // Energy 0
+                // Info Label 1
+                // Energy Label 2
+                // Progress 3
+                "Mesh Slot": 4,
+                "Input Slots": [
+                    5,
+                    6,
+                    7,
+                    8,
+                    9,
+                    10,
+                    11,
+                    12,
+                    13
+                ]
+            },
+            "minecraft:destructible_by_mining": {
+                "seconds_to_destroy": 1
+            },
+            "minecraft:destructible_by_explosion": false,
+            "tag:dorios:energy": {},
+            "tag:dorios:item": {}
+        },
+        "permutations": [
+            {
+                "condition": "q.block_state('minecraft:cardinal_direction') == 'north' ",
+                "components": {
+                    "minecraft:transformation": {
+                        "rotation": [
+                            0,
+                            0,
+                            0
+                        ]
+                    }
+                }
+            },
+            {
+                "condition": "q.block_state('minecraft:cardinal_direction') == 'south' ",
+                "components": {
+                    "minecraft:transformation": {
+                        "rotation": [
+                            0,
+                            180,
+                            0
+                        ]
+                    }
+                }
+            },
+            {
+                "condition": "q.block_state('minecraft:cardinal_direction') == 'east' ",
+                "components": {
+                    "minecraft:transformation": {
+                        "rotation": [
+                            0,
+                            -90,
+                            0
+                        ]
+                    }
+                }
+            },
+            {
+                "condition": "q.block_state('minecraft:cardinal_direction') == 'west' ",
+                "components": {
+                    "minecraft:transformation": {
+                        "rotation": [
+                            0,
+                            90,
+                            0
+                        ]
+                    }
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,41 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.utility_exo_helmet",
+				"texture_width": 128,
+				"texture_height": 128,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
+			},
+			"bones": [
+				{
+					"name": "head",
+					"pivot": [0, 24, 0]
+				},
+				{
+					"name": "XHelmet",
+					"parent": "head",
+					"pivot": [0, 24, 0],
+					"cubes": [
+						{"origin": [-4, 24, -4], "size": [8, 8, 8], "inflate": 0.75, "uv": [0, 0]},
+						{"origin": [-4, 24, -4], "size": [8, 8, 8], "inflate": 1, "uv": [83, 0]}
+					]
+				},
+				{
+					"name": "Helmet_Parts",
+					"parent": "XHelmet",
+					"pivot": [0, 24, 0]
+				},
+				{
+					"name": "Helmet_Visor",
+					"parent": "Helmet_Parts",
+					"pivot": [0, 29.5, -8],
+					"rotation": [17.5, 0, 0]
+				}
+			]
+		}
+	]
+}

@@ -43,14 +43,14 @@ const config = {
     conductorHeatDissipation: 0.05,     // K/tick per conductor block
 
     // Conversion factors
-    waterPerKelvin: 500,              // mB/K
+    waterPerKelvin: 50,              // mB/K
     pressurePerSteam: 0.0001,            // PSI/mB
     heatPerLavaUnit: 0.008,              // K/mB
     energyPerLavaUnit: 2000,          // DE/mB
 
     // Capacities
-    waterCapacityPerEmptyBlock: 256_000, // mB
-    steamCapacityPerEmptyBlock: 256_000, // mB
+    waterCapacityPerEmptyBlock: 64_000, // mB
+    steamCapacityPerEmptyBlock: 64_000, // mB
     lavaCapacityPerFluidCell: 256_000,   // mB
 
     initialReactorData: {
@@ -219,8 +219,8 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
         if (lava) lava.setCap(data.lavaCapacity)
 
         const water =
-            fluids[0]?.type === "water" ? fluids[0] :
-                fluids[1]?.type === "water" ? fluids[1] : null;
+            fluids[0]?.type === "saline_coolant" ? fluids[0] :
+                fluids[1]?.type === "saline_coolant" ? fluids[1] : null;
         const coolant = water ? water.get() : 0;
         if (water) water.setCap(data.waterCapacity)
 

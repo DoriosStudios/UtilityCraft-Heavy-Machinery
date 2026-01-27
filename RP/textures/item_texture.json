@@ -98,6 +98,153 @@
 		"utilitycraft:temperature_31": {
 			"textures": "textures/ui/temperature_br/temperature_31"
 		},
+		"utilitycraft:saline_coolant_00": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_00"
+		},
+		"utilitycraft:saline_coolant_01": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_01"
+		},
+		"utilitycraft:saline_coolant_02": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_02"
+		},
+		"utilitycraft:saline_coolant_03": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_03"
+		},
+		"utilitycraft:saline_coolant_04": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_04"
+		},
+		"utilitycraft:saline_coolant_05": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_05"
+		},
+		"utilitycraft:saline_coolant_06": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_06"
+		},
+		"utilitycraft:saline_coolant_07": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_07"
+		},
+		"utilitycraft:saline_coolant_08": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_08"
+		},
+		"utilitycraft:saline_coolant_09": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_09"
+		},
+		"utilitycraft:saline_coolant_10": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_10"
+		},
+		"utilitycraft:saline_coolant_11": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_11"
+		},
+		"utilitycraft:saline_coolant_12": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_12"
+		},
+		"utilitycraft:saline_coolant_13": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_13"
+		},
+		"utilitycraft:saline_coolant_14": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_14"
+		},
+		"utilitycraft:saline_coolant_15": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_15"
+		},
+		"utilitycraft:saline_coolant_16": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_16"
+		},
+		"utilitycraft:saline_coolant_17": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_17"
+		},
+		"utilitycraft:saline_coolant_18": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_18"
+		},
+		"utilitycraft:saline_coolant_19": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_19"
+		},
+		"utilitycraft:saline_coolant_20": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_20"
+		},
+		"utilitycraft:saline_coolant_21": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_21"
+		},
+		"utilitycraft:saline_coolant_22": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_22"
+		},
+		"utilitycraft:saline_coolant_23": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_23"
+		},
+		"utilitycraft:saline_coolant_24": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_24"
+		},
+		"utilitycraft:saline_coolant_25": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_25"
+		},
+		"utilitycraft:saline_coolant_26": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_26"
+		},
+		"utilitycraft:saline_coolant_27": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_27"
+		},
+		"utilitycraft:saline_coolant_28": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_28"
+		},
+		"utilitycraft:saline_coolant_29": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_29"
+		},
+		"utilitycraft:saline_coolant_30": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_30"
+		},
+		"utilitycraft:saline_coolant_31": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_31"
+		},
+		"utilitycraft:saline_coolant_32": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_32"
+		},
+		"utilitycraft:saline_coolant_33": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_33"
+		},
+		"utilitycraft:saline_coolant_34": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_34"
+		},
+		"utilitycraft:saline_coolant_35": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_35"
+		},
+		"utilitycraft:saline_coolant_36": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_36"
+		},
+		"utilitycraft:saline_coolant_37": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_37"
+		},
+		"utilitycraft:saline_coolant_38": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_38"
+		},
+		"utilitycraft:saline_coolant_39": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_39"
+		},
+		"utilitycraft:saline_coolant_40": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_40"
+		},
+		"utilitycraft:saline_coolant_41": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_41"
+		},
+		"utilitycraft:saline_coolant_42": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_42"
+		},
+		"utilitycraft:saline_coolant_43": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_43"
+		},
+		"utilitycraft:saline_coolant_44": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_44"
+		},
+		"utilitycraft:saline_coolant_45": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_45"
+		},
+		"utilitycraft:saline_coolant_46": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_46"
+		},
+		"utilitycraft:saline_coolant_47": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_47"
+		},
+		"utilitycraft:saline_coolant_48": {
+			"textures": "textures/ui/saline_coolant_bar/saline_coolant_48"
+		},
 		"utilitycraft_bronze_ingot": {
 			"textures": "textures/items/bronze_ingot"
 		},
@@ -139,6 +286,21 @@
 		},
 		"utilitycraft_charged_darloonite_crystal": {
 			"textures": "textures/items/charged_darloonite_crystal"
+		},
+		"utilitycraft_utility_exo_helmet": {
+			"textures": "textures/equipment/utility_exo_helmet"
+		},
+		"utilitycraft_utility_exo_chestplate": {
+			"textures": "textures/equipment/utility_exo_chestplate"
+		},
+		"utilitycraft_utility_exo_leggings": {
+			"textures": "textures/equipment/utility_exo_leggings"
+		},
+		"utilitycraft_utility_exo_boots": {
+			"textures": "textures/equipment/utility_exo_boots"
+		},
+		"utilitycraft_saline_coolant_bucket": {
+			"textures": "textures/items/saline_coolant_bucket"
 		}
 	}
 }

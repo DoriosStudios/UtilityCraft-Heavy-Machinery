@@ -1,0 +1,82 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.utility_exo_leggings",
+				"texture_width": 128,
+				"texture_height": 128,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
+			},
+			"bones": [
+				{
+					"name": "waist",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "body",
+					"parent": "waist",
+					"pivot": [0, 24, 0]
+				},
+				{
+					"name": "Legging_Body",
+					"parent": "body",
+					"pivot": [0, 12, 0],
+					"cubes": [
+						{"origin": [-4, 12, -2], "size": [8, 12, 4], "inflate": 0.255, "uv": [24, 34]}
+					]
+				},
+				{
+					"name": "Legging_Body_Parts",
+					"parent": "Legging_Body",
+					"pivot": [0, 12, 0]
+				},
+				{
+					"name": "Legging_Body_Tassets",
+					"parent": "Legging_Body_Parts",
+					"pivot": [0, 12, 0]
+				},
+				{
+					"name": "leftLeg",
+					"parent": "waist",
+					"pivot": [2, 12, 0]
+				},
+				{
+					"name": "Legging_RightLeg",
+					"parent": "leftLeg",
+					"pivot": [2, 12, 0],
+					"cubes": [
+						{"origin": [0, 0, -2], "size": [4, 12, 4], "inflate": 0.255, "uv": [0, 50]},
+						{"origin": [0, 0, -2], "size": [4, 12, 4], "inflate": 0.6, "uv": [0, 66]}
+					]
+				},
+				{
+					"name": "Legging_RightLeg_Parts",
+					"parent": "Legging_RightLeg",
+					"pivot": [2, 12, 0]
+				},
+				{
+					"name": "rightLeg",
+					"parent": "waist",
+					"pivot": [-2, 12, 0]
+				},
+				{
+					"name": "Legging_LeftLeg",
+					"parent": "rightLeg",
+					"pivot": [-2, 12, 0],
+					"cubes": [
+						{"origin": [-4, 0, -2], "size": [4, 12, 4], "inflate": 0.255, "uv": [48, 34]},
+						{"origin": [-4, 0, -2], "size": [4, 12, 4], "inflate": 0.6, "uv": [17, 66]}
+					]
+				},
+				{
+					"name": "Legging_LeftLeg_Parts",
+					"parent": "Legging_LeftLeg",
+					"pivot": [-2, 12, 0]
+				}
+			]
+		}
+	]
+}

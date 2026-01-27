@@ -19,6 +19,7 @@
             "utilitycraft:simple_container": {
                 "minecraft:type_family": {
                     "family": [
+                        "dorios:machine",
                         "dorios:multiblock",
                         "dorios:container"
                     ]
@@ -27,6 +28,7 @@
             "utilitycraft:basic_machine": {
                 "minecraft:type_family": {
                     "family": [
+                        "dorios:machine",
                         "dorios:multiblock",
                         "dorios:energy_container"
                     ]
@@ -36,6 +38,7 @@
             "utilitycraft:battery": {
                 "minecraft:type_family": {
                     "family": [
+                        "dorios:machine",
                         "dorios:multiblock",
                         "dorios:battery",
                         "dorios:energy_source",
@@ -46,6 +49,7 @@
             "utilitycraft:simple_generator": {
                 "minecraft:type_family": {
                     "family": [
+                        "dorios:machine",
                         "dorios:multiblock",
                         "dorios:energy_source",
                         "dorios:container",
@@ -56,6 +60,7 @@
             "utilitycraft:fluid_generator": {
                 "minecraft:type_family": {
                     "family": [
+                        "dorios:machine",
                         "dorios:multiblock",
                         "dorios:energy_source",
                         "dorios:fluid_container"
@@ -65,15 +70,28 @@
             "utilitycraft:passive_generator": {
                 "minecraft:type_family": {
                     "family": [
+                        "dorios:machine",
                         "dorios:multiblock",
                         "dorios:energy_source"
                     ]
                 }
             },
             // Normal Machines
+            "utilitycraft:special_machine": {
+                "minecraft:type_family": {
+                    "family": [
+                        "dorios:machine",
+                        "dorios:multiblock",
+                        "dorios:energy_container",
+                        "dorios:container",
+                        "dorios:special_container"
+                    ]
+                }
+            },
             "utilitycraft:simple_input_machine": {
                 "minecraft:type_family": {
                     "family": [
+                        "dorios:machine",
                         "dorios:multiblock",
                         "dorios:energy_container",
                         "dorios:container",
@@ -84,6 +102,7 @@
             "utilitycraft:simple_machine": {
                 "minecraft:type_family": {
                     "family": [
+                        "dorios:machine",
                         "dorios:multiblock",
                         "dorios:energy_container",
                         "dorios:container",
@@ -95,6 +114,7 @@
             "utilitycraft:complex_in_machine": {
                 "minecraft:type_family": {
                     "family": [
+                        "dorios:machine",
                         "dorios:multiblock",
                         "dorios:energy_container",
                         "dorios:container",
@@ -106,6 +126,7 @@
             "utilitycraft:complex_out_machine": {
                 "minecraft:type_family": {
                     "family": [
+                        "dorios:machine",
                         "dorios:multiblock",
                         "dorios:energy_container",
                         "dorios:container",
@@ -117,6 +138,7 @@
             "utilitycraft:complex_machine": {
                 "minecraft:type_family": {
                     "family": [
+                        "dorios:machine",
                         "dorios:multiblock",
                         "dorios:energy_container",
                         "dorios:container",
@@ -129,6 +151,7 @@
             "utilitycraft:simple_machine_fluid": {
                 "minecraft:type_family": {
                     "family": [
+                        "dorios:machine",
                         "dorios:multiblock",
                         "dorios:energy_container",
                         "dorios:container",
@@ -140,6 +163,7 @@
             "utilitycraft:complex_machine_fluid": {
                 "minecraft:type_family": {
                     "family": [
+                        "dorios:machine",
                         "dorios:multiblock",
                         "dorios:energy_container",
                         "dorios:container",
@@ -309,6 +333,168 @@
                     "inventory_size": 27,
                     "container_type": "container"
                 }
+            },
+            "utilitycraft:inventory_28": {
+                "minecraft:inventory": {
+                    "inventory_size": 28,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_29": {
+                "minecraft:inventory": {
+                    "inventory_size": 29,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_30": {
+                "minecraft:inventory": {
+                    "inventory_size": 30,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_31": {
+                "minecraft:inventory": {
+                    "inventory_size": 31,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_32": {
+                "minecraft:inventory": {
+                    "inventory_size": 32,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_33": {
+                "minecraft:inventory": {
+                    "inventory_size": 33,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_34": {
+                "minecraft:inventory": {
+                    "inventory_size": 34,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_35": {
+                "minecraft:inventory": {
+                    "inventory_size": 35,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_36": {
+                "minecraft:inventory": {
+                    "inventory_size": 36,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_37": {
+                "minecraft:inventory": {
+                    "inventory_size": 37,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_38": {
+                "minecraft:inventory": {
+                    "inventory_size": 38,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_39": {
+                "minecraft:inventory": {
+                    "inventory_size": 39,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_40": {
+                "minecraft:inventory": {
+                    "inventory_size": 40,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_41": {
+                "minecraft:inventory": {
+                    "inventory_size": 41,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_42": {
+                "minecraft:inventory": {
+                    "inventory_size": 42,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_43": {
+                "minecraft:inventory": {
+                    "inventory_size": 43,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_44": {
+                "minecraft:inventory": {
+                    "inventory_size": 44,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_45": {
+                "minecraft:inventory": {
+                    "inventory_size": 45,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_46": {
+                "minecraft:inventory": {
+                    "inventory_size": 46,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_47": {
+                "minecraft:inventory": {
+                    "inventory_size": 47,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_48": {
+                "minecraft:inventory": {
+                    "inventory_size": 48,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_49": {
+                "minecraft:inventory": {
+                    "inventory_size": 49,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_50": {
+                "minecraft:inventory": {
+                    "inventory_size": 50,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_51": {
+                "minecraft:inventory": {
+                    "inventory_size": 51,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_52": {
+                "minecraft:inventory": {
+                    "inventory_size": 52,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_53": {
+                "minecraft:inventory": {
+                    "inventory_size": 53,
+                    "container_type": "container"
+                }
+            },
+            "utilitycraft:inventory_54": {
+                "minecraft:inventory": {
+                    "inventory_size": 54,
+                    "container_type": "container"
+                }
             }
         },
         "components": {
@@ -318,6 +504,7 @@
             },
             "minecraft:type_family": {
                 "family": [
+                    "dorios:machine",
                     "dorios:multiblock",
                     "dorios:energy_container",
                     "dorios:container"
@@ -400,6 +587,13 @@
                 }
             },
             // Normal Machines
+            "utilitycraft:special_machine": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:special_machine"
+                    ]
+                }
+            },
             "utilitycraft:simple_input_machine": {
                 "add": {
                     "component_groups": [
@@ -629,6 +823,195 @@
                 "add": {
                     "component_groups": [
                         "utilitycraft:inventory_27"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_28": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_28"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_29": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_29"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_30": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_30"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_31": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_31"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_32": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_32"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_33": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_33"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_34": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_34"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_35": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_35"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_36": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_36"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_37": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_37"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_38": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_38"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_39": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_39"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_40": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_40"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_41": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_41"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_42": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_42"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_43": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_43"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_44": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_44"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_45": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_45"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_46": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_46"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_47": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_47"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_48": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_48"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_49": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_49"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_50": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_50"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_51": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_51"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_52": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_52"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_53": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_53"
+                    ]
+                }
+            },
+            "utilitycraft:inventory_54": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_54"
                     ]
                 }
             },

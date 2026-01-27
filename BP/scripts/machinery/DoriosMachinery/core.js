@@ -282,7 +282,7 @@ export class Rotation {
         );
         return;
       }
-    } catch {}
+    } catch { }
 
     // --- Handle cardinal_direction rotation ---
     try {
@@ -300,7 +300,7 @@ export class Rotation {
         );
         return;
       }
-    } catch {}
+    } catch { }
   }
 
   /**
@@ -446,7 +446,7 @@ world.afterEvents.playerSpawn.subscribe(({ initialSpawn }) => {
 system.beforeEvents.shutdown.subscribe(() => {
   try {
     world.setDynamicProperty("loaded", false);
-  } catch {}
+  } catch { }
 });
 
 //#endregion
@@ -816,10 +816,11 @@ export class Machine {
     this.energy = new Energy(this.entity);
     this.baseRate = settings?.machine?.rate_speed_base ?? 0;
     this.rate = this.baseRate * tickSpeed;
-    if (settings?.machine?.upgrades) {
+    if (settings.machine && settings.machine.upgrades) {
       this.upgrades = this.getUpgradeLevels(settings.machine.upgrades);
       this.boosts = this.calculateBoosts(this.upgrades);
       this.baseRate *= this.boosts.speed * this.boosts.consumption;
+      this.rate = this.baseRate * tickSpeed;
     }
   }
 
@@ -883,7 +884,7 @@ export class Machine {
 
     let { x, y, z } = block.center();
     y -= 0.25;
-    let entityId = entity.identifier ?? "utilitycraft:machine";
+    let entityId = entity.identifier ?? "utilitycraft:machine"
     const machineEntity = dim.spawnEntity(entityId, { x, y, z });
 
     let machineEvent;
@@ -925,6 +926,18 @@ export class Machine {
     }
 
     if (entity.inventory_size) inventorySize = entity.inventory_size;
+    if (entity.input_slots || entity.output_slots) {
+      const slotRegister = {};
+      if (entity.input_slots) {
+        slotRegister.input = entity.input_slots;
+      }
+
+      if (entity.output_slots) {
+        slotRegister.output = entity.output_slots;
+      }
+      machineEvent = "utilitycraft:special_machine"
+      machineEntity.runCommand(`scriptevent dorios:special_container ${JSON.stringify(slotRegister)}`)
+    }
 
     const inventoryEvent = `utilitycraft:inventory_${inventorySize}`;
 
@@ -1217,10 +1230,11 @@ export class Machine {
    * Adds progress to the machine.
    *
    * @param {number} amount Value to add to the current progress.
+   * @param {number} [index=0] Progress index.
    */
-  addProgress(amount) {
-    const key = "dorios:progress";
-    let current = this.entity.getDynamicProperty(key) ?? 0;
+  addProgress(amount, index = 0) {
+    const key = `dorios:progress_${index}`;
+    const current = this.entity.getDynamicProperty(key) ?? 0;
     this.entity.setDynamicProperty(key, current + amount);
   }
 
@@ -1229,39 +1243,24 @@ export class Machine {
    *
    * @param {number} value New progress value.
    * @param {number} [slot=2] Inventory slot to place the progress item.
-   * @param {string} [type='arrow_right_'] Item type suffix.
+   * @param {string} [type='arrow_right'] Item type suffix.
    * @param {boolean} [display=true] Display the progress.
+   * @param {number} [index=0] Progress index.
    */
-  setProgress(value, slot = 2, type = "arrow_right", display = true) {
-    this.entity.setDynamicProperty("dorios:progress", Math.max(0, value));
-    if (display) this.displayProgress(slot, type);
+  setProgress(value, slot = 2, type = "arrow_right", display = true, index = 0) {
+    const key = `dorios:progress_${index}`;
+    this.entity.setDynamicProperty(key, Math.max(0, value));
+    if (display) this.displayProgress(slot, type, index);
   }
 
   /**
-   * Gets the current progress of the machine.
-   *
-   * @returns {number} Current progress value.
-   */
-  getProgress() {
-    return this.entity.getDynamicProperty("dorios:progress") ?? 0;
-  }
-
-  /**
-   * Sets the machine's energy cost (maximum progress).
-   *
-   * @param {number} value Energy cost representing 100% progress.
-   */
-  setEnergyCost(value) {
-    this.entity.setDynamicProperty("dorios:energy_cost", Math.max(1, value));
-  }
-
-  /**
-   * Gets the energy cost (maximum progress).
-   *
-   * @returns {number} Energy cost value.
-   */
-  getEnergyCost() {
-    return this.entity.getDynamicProperty("dorios:energy_cost") ?? 800;
+ * Gets the current progress of the machine.
+ *
+ * @param {number} [index=0] Progress index.
+ * @returns {number} Current progress value.
+ */
+  getProgress(index = 0) {
+    return this.entity.getDynamicProperty(`dorios:progress_${index}`) ?? 0;
   }
 
   /**
@@ -1269,21 +1268,47 @@ export class Machine {
    * Progress is scaled between 0–16, where 16 = 100% (energy_cost).
    *
    * @param {number} [slot=2] Inventory slot to place the progress item.
-   * @param {string} [type='arrow_right_'] Item type suffix.
-   * Always assumes the `utilitycraft:` namespace, so pass only the suffix.
+   * @param {string} [type='arrow_right'] Item type suffix.
+   * @param {number} [index=0] Progress index.
    */
-  displayProgress(slot = 2, type = "arrow_right") {
+  displayProgress(slot = 2, type = "arrow_right", index = 0) {
     const inv = this.entity.getComponent("minecraft:inventory")?.container;
     if (!inv) return;
 
-    const progress = this.getProgress();
-    const max = this.getEnergyCost();
-    const normalized = Math.min(16, Math.floor((progress / max) * 16));
+    const progress = this.getProgress(index);
+    const max = this.getEnergyCost(index);
+    if (max <= 0) return;
 
+    const normalized = Math.min(16, Math.floor((progress / max) * 16));
     const itemId = `utilitycraft:${type}_${normalized}`;
+
     inv.setItem(slot, new ItemStack(itemId, 1));
   }
+
   //#endregion
+
+  /**
+   * Sets the machine's energy cost (maximum progress).
+   *
+   * @param {number} value Energy cost representing 100% progress.
+   * @param {number} [index=0] Cost index.
+   */
+  setEnergyCost(value, index = 0) {
+    this.entity.setDynamicProperty(
+      `dorios:energy_cost_${index}`,
+      Math.max(1, value)
+    );
+  }
+
+  /**
+   * Gets the energy cost (maximum progress).
+   *
+   * @param {number} [index=0] Cost index.
+   * @returns {number} Energy cost value.
+   */
+  getEnergyCost(index = 0) {
+    return this.entity.getDynamicProperty(`dorios:energy_cost_${index}`) ?? 800;
+  }
 
   /**
    * Displays the current energy of the machine in the specified inventory slot.
@@ -3057,7 +3082,7 @@ export class FluidManager {
     const frameName = frame.toString().padStart(2, "0");
 
     const item = new ItemStack(`utilitycraft:${type}_${frameName}`, 1);
-    item.nameTag = `§r${DoriosAPI.utils.capitalizeFirst(type)}
+    item.nameTag = `§r${DoriosAPI.utils.formatIdToText(type)}
 §r§7  Stored: ${FluidManager.formatFluid(fluid)} / ${FluidManager.formatFluid(cap)}
 §r§7  Percentage: ${((fluid / cap) * 100).toFixed(2)}%`;
 
@@ -3119,14 +3144,13 @@ export class FluidManager {
   }
 }
 
-/**
- * ScriptEvent handler to destroy a machine at given coordinates.
- * Removes the machine entity, drops stored items, and replaces the block with air.
- */
-system.afterEvents.scriptEventReceive.subscribe((e) => {
-  const { id, message, sourceEntity } = e;
 
-  if (id === "dorios:destroyMachine") {
+const scriptEventHandler = {
+  /**
+   * ScriptEvent handler to destroy a machine at given coordinates.
+   * Removes the machine entity, drops stored items, and replaces the block with air.
+   */
+  "dorios:destroyMachine": ({ message, sourceEntity }) => {
     try {
       const [x, y, z] = message.split(",").map(Number);
       const dim = sourceEntity.dimension;
@@ -3153,17 +3177,24 @@ system.afterEvents.scriptEventReceive.subscribe((e) => {
     } catch (err) {
       console.warn(`[destroyMachine] Error: ${err}`);
     }
-  }
-});
-
-/**
- * ScriptEvent handler to destroy a generator at given coordinates.
- * Removes the generator entity, drops stored items, and replaces the block with air.
- */
-system.afterEvents.scriptEventReceive.subscribe((e) => {
-  const { id, message, sourceEntity } = e;
-
-  if (id === "dorios:destroyGenerator") {
+  },
+  /**
+   * Registers input and output slots for special containers
+   */
+  "dorios:special_container": ({ message, sourceEntity }) => {
+    let slots;
+    try {
+      slots = JSON.parse(message)
+    } catch { return }
+    if (!slots) return
+    if (!slots.input && !slots.output) return
+    sourceEntity.setDynamicProperty("dorios:special_container", JSON.stringify(slots))
+  },
+  /**
+   * ScriptEvent handler to destroy a generator at given coordinates.
+   * Removes the generator entity, drops stored items, and replaces the block with air.
+   */
+  "dorios:destroyGenerator": ({ message, sourceEntity }) => {
     try {
       const [x, y, z] = message.split(",").map(Number);
       const dim = sourceEntity.dimension;
@@ -3190,17 +3221,12 @@ system.afterEvents.scriptEventReceive.subscribe((e) => {
     } catch (err) {
       console.warn(`[destroyGenerator] Error: ${err}`);
     }
-  }
-});
-
-/**
- * ScriptEvent handler to destroy a fluid tank at given coordinates.
- * Builds the tank item with fluid lore, removes the entity, sets the block to air, and drops the item.
- */
-system.afterEvents.scriptEventReceive.subscribe((e) => {
-  const { id, message, sourceEntity } = e;
-
-  if (id === "dorios:destroyTank") {
+  },
+  /**
+   * ScriptEvent handler to destroy a fluid tank at given coordinates.
+   * Builds the tank item with fluid lore, removes the entity, sets the block to air, and drops the item.
+   */
+  "dorios:destroyTank": ({ message, sourceEntity }) => {
     try {
       const [x, y, z] = message.split(",").map(Number);
       const dim = sourceEntity.dimension;
@@ -3240,57 +3266,138 @@ system.afterEvents.scriptEventReceive.subscribe((e) => {
     } catch (err) {
       console.warn(`[destroyTank] Error: ${err}`);
     }
-  }
-});
+  },
+  /**
+   * ScriptEvent receiver: "utilitycraft:register_fluid_item"
+   *
+   * Allows other addons or scripts to dynamically add or replace
+   * fluid-item mappings used by LiquidManager.liquidItem().
+   *
+   * Expected payload format (JSON):
+   * ```json
+   * {
+   *   "minecraft:lava_bucket": { "amount": 1000, "type": "lava", "output": "minecraft:bucket" },
+   *   "custom:water_cell": { "amount": 4000, "type": "water", "output": "custom:empty_cell" }
+   * }
+   * ```
+   *
+   * Behavior:
+   * - New items are created automatically if missing.
+   * - Existing items are replaced and logged individually.
+   * - Only a summary log is printed when finished.
+   */
+  "utilitycraft:register_fluid_item": ({ message }) => {
+    try {
+      const payload = JSON.parse(message);
+      if (!payload || typeof payload !== "object") return;
 
-/**
- * ScriptEvent receiver: "utilitycraft:register_fluid_item"
- *
- * Allows other addons or scripts to dynamically add or replace
- * fluid-item mappings used by LiquidManager.liquidItem().
- *
- * Expected payload format (JSON):
- * ```json
- * {
- *   "minecraft:lava_bucket": { "amount": 1000, "type": "lava", "output": "minecraft:bucket" },
- *   "custom:water_cell": { "amount": 4000, "type": "water", "output": "custom:empty_cell" }
- * }
- * ```
- *
- * Behavior:
- * - New items are created automatically if missing.
- * - Existing items are replaced and logged individually.
- * - Only a summary log is printed when finished.
- */
-system.afterEvents.scriptEventReceive.subscribe(({ id, message }) => {
-  if (id !== "utilitycraft:register_fluid_item") return;
+      let added = 0;
+      let replaced = 0;
 
-  try {
-    const payload = JSON.parse(message);
-    if (!payload || typeof payload !== "object") return;
+      for (const [itemId, data] of Object.entries(payload)) {
+        if (typeof data.amount !== "number" || typeof data.type !== "string")
+          continue;
 
-    let added = 0;
-    let replaced = 0;
+        if (FluidManager.itemFluidContainers[itemId]) {
+          replaced++;
+        } else {
+          added++;
+        }
 
-    for (const [itemId, data] of Object.entries(payload)) {
-      if (typeof data.amount !== "number" || typeof data.type !== "string")
-        continue;
+        // Direct assignment; LiquidManager uses this data
+        FluidManager.itemFluidContainers[itemId] = data;
+      }
+    } catch (err) {
+      console.warn(
+        "[UtilityCraft] Failed to parse fluid-item registration payload:",
+        err,
+      );
+    }
+  },
+  /**
+   * ScriptEvent handler: "utilitycraft:register_fluid_holder"
+   *
+   * Allows addons or scripts to register or extend fluid extraction holders.
+   *
+   * Behavior:
+   * - If the holder does not exist, it is created.
+   * - If the holder already exists, its `types` map is merged.
+   * - Existing types are preserved.
+   * - `required` is only overwritten if explicitly provided.
+   *
+   * Expected payload format:
+   * {
+   *   "item:id": {
+   *     types: { fluidType: outputItemId, ... },
+   *     required?: number
+   *   }
+   * }
+   */
+  "utilitycraft:register_fluid_holder": ({ message }) => {
+    try {
+      const payload = JSON.parse(message);
+      if (!payload || typeof payload !== "object") return;
 
-      if (FluidManager.itemFluidContainers[itemId]) {
-        replaced++;
-      } else {
-        added++;
+      for (const [itemId, data] of Object.entries(payload)) {
+        if (!data.types || typeof data.types !== "object") continue;
+
+        const existing = FluidManager.itemFluidHolders[itemId];
+
+        if (existing) {
+          existing.types = {
+            ...existing.types,
+            ...data.types
+          };
+
+          if (typeof data.required === "number") {
+            existing.required = data.required;
+          }
+        } else {
+          if (typeof data.required !== "number") continue;
+
+          FluidManager.itemFluidHolders[itemId] = {
+            types: { ...data.types },
+            required: data.required
+          };
+        }
+      }
+    } catch (err) {
+      console.warn(
+        "[UtilityCraft] Failed to parse fluid-holder registration payload:",
+        err
+      );
+    }
+  },
+  /**
+   * ScriptEvent: "utilitycraft:set_tick_speed"
+   *
+   * Updates the global tickSpeed value used by UtilityCraft machinery.
+   * The payload must be a JSON number (e.g., 1, 5, 10, 20).
+   *
+   * Behavior:
+   * - Replaces the tickSpeed value immediately.
+   * - Ignores invalid or non-numeric payloads.
+   */
+  "utilitycraft:set_tick_speed": ({ message }) => {
+    try {
+      const value = JSON.parse(message);
+
+      if (typeof value !== "number" || value <= 0) {
+        console.warn(`[UtilityCraft] Invalid tickSpeed received: ${message}`);
+        return;
       }
 
-      // Direct assignment; LiquidManager uses this data
-      FluidManager.itemFluidContainers[itemId] = data;
+      world.setDynamicProperty("utilitycraft:tickSpeed", value);
+      globalThis.tickSpeed = value;
+    } catch {
+      console.warn("[UtilityCraft] Failed to parse tickSpeed payload.");
     }
-  } catch (err) {
-    console.warn(
-      "[UtilityCraft] Failed to parse fluid-item registration payload:",
-      err,
-    );
   }
+}
+
+system.afterEvents.scriptEventReceive.subscribe((e) => {
+  const event = scriptEventHandler[e.id]
+  if (event) event(e)
 });
 
 // ==================================================
@@ -3318,64 +3425,6 @@ world.afterEvents.worldLoad.subscribe(() => {
 Command:
 /scriptevent utilitycraft:register_fluid_item {"custom:holy_water":{"amount":1500,"type":"water","output":"minecraft:glass_bottle"}}
 */
-
-/**
- * ScriptEvent receiver: "utilitycraft:register_fluid_holder"
- *
- * Allows other addons or scripts to dynamically add or replace
- * item → fluid-extraction mappings used by LiquidManager.
- *
- * Expected payload format (JSON):
- * ```json
- * {
- *   "minecraft:bucket": {
- *        "types": {
- *            "water": "minecraft:water_bucket",
- *            "lava": "minecraft:lava_bucket"
- *        },
- *        "required": 1000
- *   },
- *   "custom:empty_cell": {
- *        "types": { "lava": "custom:lava_cell" },
- *        "required": 250
- *   }
- * }
- * ```
- *
- * Behavior:
- * - New items are created automatically if missing.
- * - Existing items are replaced and logged individually.
- * - Only a summary log is printed when finished.
- */
-system.afterEvents.scriptEventReceive.subscribe(({ id, message }) => {
-  if (id !== "utilitycraft:register_fluid_holder") return;
-
-  try {
-    const payload = JSON.parse(message);
-    if (!payload || typeof payload !== "object") return;
-
-    let added = 0;
-    let replaced = 0;
-
-    for (const [itemId, data] of Object.entries(payload)) {
-      if (!data.types || typeof data.required !== "number") continue;
-
-      if (FluidManager.itemFluidHolders[itemId]) {
-        replaced++;
-      } else {
-        added++;
-      }
-
-      // Assign holder definition
-      FluidManager.itemFluidHolders[itemId] = data;
-    }
-  } catch (err) {
-    console.warn(
-      "[UtilityCraft] Failed to parse fluid-holder registration payload:",
-      err,
-    );
-  }
-});
 
 // ==================================================
 // EXAMPLES – How to register custom fluid holders
@@ -3409,31 +3458,3 @@ world.afterEvents.worldLoad.subscribe(() => {
 // Command example:
 /scriptevent utilitycraft:register_fluid_holder {"custom:glass_bottle":{"types":{"xp":"custom:xp_bottle"},"required":250}}
 */
-
-/**
- * ScriptEvent: "utilitycraft:set_tick_speed"
- *
- * Updates the global tickSpeed value used by UtilityCraft machinery.
- * The payload must be a JSON number (e.g., 1, 5, 10, 20).
- *
- * Behavior:
- * - Replaces the tickSpeed value immediately.
- * - Ignores invalid or non-numeric payloads.
- */
-system.afterEvents.scriptEventReceive.subscribe(({ id, message }) => {
-  if (id !== "utilitycraft:set_tick_speed") return;
-
-  try {
-    const value = JSON.parse(message);
-
-    if (typeof value !== "number" || value <= 0) {
-      console.warn(`[UtilityCraft] Invalid tickSpeed received: ${message}`);
-      return;
-    }
-
-    world.setDynamicProperty("utilitycraft:tickSpeed", value);
-    globalThis.tickSpeed = value;
-  } catch {
-    console.warn("[UtilityCraft] Failed to parse tickSpeed payload.");
-  }
-});

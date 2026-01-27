@@ -1,6 +1,7 @@
 {
 	"format_version": 2,
 	"metadata": {
+		"product_type": "addon",
 		"authors": [
 			"Dorios Studios"
 		]

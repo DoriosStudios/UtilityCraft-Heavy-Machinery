@@ -113,7 +113,7 @@ DoriosAPI.register.blockComponent('infuser_controller', {
         }
 
         if (!inputType || !catalystType) {
-            updateUI(controller, data, '§eMissing Input');
+            updateUI(controller, data, '§eEmpty');
             controller.setProgress(0, 3);
             return;
         }
@@ -141,6 +141,18 @@ DoriosAPI.register.blockComponent('infuser_controller', {
         const requiredInput = recipe.input_required ?? 1;
         const requiredCatalyst = recipe.required ?? 1;
         const recipeAmount = recipe.amount ?? 1;
+
+        if (requiredInput > totalInput) {
+            updateUI(controller, data, '§eMissing Input', recipe);
+            controller.setProgress(0, 3);
+            return;
+        }
+        if (requiredCatalyst > totalCatalyst) {
+            updateUI(controller, data, '§eMissing Catalyst', recipe);
+            controller.setProgress(0, 3);
+            return;
+        }
+
 
         const maxProcess = Math.min(
             data.processing.amount,

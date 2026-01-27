@@ -2,7 +2,7 @@
     "format_version": "1.20.80",
     "minecraft:block": {
         "description": {
-            "identifier": "utilitycraft:alloy_forge_controller",
+            "identifier": "utilitycraft:reaction_chamber_controller",
             "menu_category": {
                 "category": "construction"
             },
@@ -16,6 +16,7 @@
             }
         },
         "components": {
+            "utilitycraft:fluid_container": {},
             "minecraft:geometry": "geometry.utilitycraft_block_4",
             "minecraft:material_instances": {
                 "*": {
@@ -25,19 +26,45 @@
             },
             "minecraft:tick": {
                 "interval_range": [
-                    1,
-                    1
+                    2,
+                    2
                 ]
             },
-            "minecraft:custom_components": [
-                "dorios:alloy_forge_controller"
-            ],
+            "utilitycraft:reaction_chamber_controller": {
+                "entity": {
+                    "input_slots": [
+                        6,
+                        9
+                    ],
+                    "output_slots": [
+                        10,
+                        13
+                    ],
+                    "inventory_size": 14,
+                    "identifier": "utilitycraft:multiblock_machine"
+                },
+                "required_case": "dorios:multiblock.case.steel",
+                "required_components": {
+                    "energy_unit": 1,
+                    "processing_module": 1
+                }
+            },
+            "utilitycraft:special_container": {
+                "Input Slots": [
+                    6,
+                    7,
+                    8,
+                    9
+                ]
+            },
             "minecraft:destructible_by_mining": {
                 "seconds_to_destroy": 1
             },
             "minecraft:destructible_by_explosion": false,
             "tag:dorios:energy": {},
-            "tag:dorios:item": {}
+            "tag:dorios:fluid": {},
+            "tag:dorios:item": {},
+            "tag:dorios:controller": {}
         },
         "permutations": [
             {
