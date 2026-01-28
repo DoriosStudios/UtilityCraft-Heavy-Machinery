@@ -11,6 +11,8 @@ import { Energy } from './core.js'
  */
 const MAX_SIZE = 99;
 
+let SCAN_SPEED = 64
+
 /**
  * Energy capacity contributed by each type of multiblock component.
  * Keys represent block identifiers, and values represent energy units contributed.
@@ -22,9 +24,9 @@ const MAX_SIZE = 99;
 const ENERGY_PER_UNIT = {
     'energy_cell': 4e6,
     'basic_power_condenser_unit': 40e6,
-    'advanced_power_condenser_unit': 160e6,
-    'expert_power_condenser_unit': 640e6,
-    'ultimate_power_condenser_unit': 16e9
+    'advanced_power_condenser_unit': 320e6,
+    'expert_power_condenser_unit': 2.56e9,
+    'ultimate_power_condenser_unit': 64e9
 };
 
 /**
@@ -311,7 +313,7 @@ export const Multiblock = {
         for (let x = min.x; x <= max.x; x++) {
             for (let y = min.y; y <= max.y; y++) {
                 for (let z = min.z; z <= max.z; z++) {
-                    if (z % 64 == 0) await system.waitTicks(1)
+                    if (z % SCAN_SPEED == 0) await system.waitTicks(1)
                     const block = dim.getBlock({ x, y, z });
 
                     const isEdge =
