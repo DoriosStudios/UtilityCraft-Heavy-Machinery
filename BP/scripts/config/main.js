@@ -11,3 +11,4 @@ import './recipes_register/press.js'
 import './recipes_register/infuser.js'
 
 import './fluids.js'
+import './coolants.js'
