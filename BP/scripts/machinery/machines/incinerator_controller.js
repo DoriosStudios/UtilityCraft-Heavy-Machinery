@@ -24,7 +24,7 @@ DoriosAPI.register.blockComponent('incinerator_controller', {
             entity.setItem(1, 'utilitycraft:arrow_right_0', 1, "")
             Energy.initialize(entity)
         }
-        Multiblock.deactivateMultiblock(player, entity)
+        Multiblock.deactivateMultiblock(entity, player)
 
         const structure = await Multiblock.detectFromController(e, settings.required_case)
         if (!structure) return
@@ -32,14 +32,14 @@ DoriosAPI.register.blockComponent('incinerator_controller', {
         const energyCap = Multiblock.activateMultiblock(entity, structure)
         if (energyCap <= 0) {
             player.sendMessage("§c[Controller] At least 1 energy container its required to operate.");
-            Multiblock.deactivateMultiblock(player, entity)
+            Multiblock.deactivateMultiblock(entity, player)
             return
         }
 
         const processing = structure.components["processing_module"] ?? 0
         if (processing == 0) {
             player.sendMessage("§c[Controller] At least 1 processing module its required to operate.");
-            Multiblock.deactivateMultiblock(player, entity)
+            Multiblock.deactivateMultiblock(entity, player)
             return
         }
 
@@ -52,7 +52,7 @@ DoriosAPI.register.blockComponent('incinerator_controller', {
     onPlayerBreak({ block, player }) {
         const entity = block.dimension.getEntitiesAtBlockLocation(block.location)[0]
         if (!entity) return
-        Multiblock.deactivateMultiblock(player, entity)
+        Multiblock.deactivateMultiblock(entity, player)
         entity.remove()
     },
     onTick(e, { params: settings }) {

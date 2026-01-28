@@ -17,7 +17,7 @@ DoriosAPI.register.blockComponent('power_condenser', {
             entity.nameTag = `entity.utilitycraft:${settings.entity.name}.name`
             Energy.initialize(entity)
         }
-        Multiblock.deactivateMultiblock(player, entity)
+        Multiblock.deactivateMultiblock(entity, player)
 
         const structure = await Multiblock.detectFromController(e, settings.required_case)
         if (!structure) return
@@ -26,7 +26,7 @@ DoriosAPI.register.blockComponent('power_condenser', {
         const transferRate = energyCap / settings.multiblock.transfer_rate_ratio
         if (energyCap <= 0) {
             player.sendMessage("§c[Matrix] At least 1 energy container its required to operate.");
-            Multiblock.deactivateMultiblock(player, entity)
+            Multiblock.deactivateMultiblock(entity, player)
             return
         }
 
@@ -39,7 +39,7 @@ DoriosAPI.register.blockComponent('power_condenser', {
     onPlayerBreak({ block, player }) {
         const entity = block.dimension.getEntitiesAtBlockLocation(block.location)[0]
         if (!entity) return
-        Multiblock.deactivateMultiblock(player, entity)
+        Multiblock.deactivateMultiblock(entity, player)
         entity.remove()
     },
     onTick({ block }, { params: settings }) {

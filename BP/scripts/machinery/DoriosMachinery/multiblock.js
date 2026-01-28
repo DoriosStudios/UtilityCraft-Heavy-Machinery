@@ -311,7 +311,7 @@ export const Multiblock = {
         for (let x = min.x; x <= max.x; x++) {
             for (let y = min.y; y <= max.y; y++) {
                 for (let z = min.z; z <= max.z; z++) {
-                    if (z % 32 == 0) await system.waitTicks(1)
+                    if (z % 64 == 0) await system.waitTicks(1)
                     const block = dim.getBlock({ x, y, z });
 
                     const isEdge =
@@ -436,23 +436,24 @@ export const Multiblock = {
      * @function deactivateMultiblock
      * @memberof Multiblock
      *
-     * @param {Player} player Player responsible for triggering the deactivation.
      * @param {Entity} entity Multiblock controller entity holding structure data.
+     * @param {Player} [player] Player responsible for triggering the deactivation.
      *
      * @returns {void}
      */
-    deactivateMultiblock(player, entity) {
-        player.sendMessage("§c[Scan] Multiblock structure deactivated.");
+    deactivateMultiblock(entity, player) {
+        if (player) player.sendMessage("§c[Scan] Multiblock structure deactivated.");
+        if (!entity) return
         entity?.triggerEvent('utilitycraft:hide')
         entity.getTags().forEach(tag => {
             if (tag.startsWith('input:')) {
                 const [x, y, z] = tag.slice(7, -1).split(",").map(Number);
-                const inputBlock = player.dimension.getBlock({ x, y, z })
+                const inputBlock = entity.dimension.getBlock({ x, y, z })
                 if (inputBlock?.hasTag('dorios:multiblock.port')) {
                     entity.removeTag(tag)
-                    if (inputBlock.hasTag('dorios:energy')) player.runCommand(`scriptevent dorios:updatePipes energy|[${x},${y},${z}]`);
-                    if (inputBlock.hasTag('dorios:fluid')) player.runCommand(`scriptevent dorios:updatePipes fluid|[${x},${y},${z}]`);
-                    if (inputBlock.hasTag('dorios:item')) player.runCommand(`scriptevent dorios:updatePipes item|[${x},${y},${z}]`);
+                    if (inputBlock.hasTag('dorios:energy')) entity.runCommand(`scriptevent dorios:updatePipes energy|[${x},${y},${z}]`);
+                    if (inputBlock.hasTag('dorios:fluid')) entity.runCommand(`scriptevent dorios:updatePipes fluid|[${x},${y},${z}]`);
+                    if (inputBlock.hasTag('dorios:item')) entity.runCommand(`scriptevent dorios:updatePipes item|[${x},${y},${z}]`);
                     inputBlock.setPermutation(inputBlock.permutation.withState('utilitycraft:active', 0));
                 }
             }
@@ -734,10 +735,40 @@ world.afterEvents.playerBreakBlock.subscribe(e => {
 
     if (!entity) return;
 
-    Multiblock.deactivateMultiblock(player, entity);
+    Multiblock.deactivateMultiblock(entity, player);
     Multiblock.emptyBlocks(entity, 'minecraft:water');
 });
 
+world.afterEvents.blockExplode.subscribe(e => {
+    const { explodedBlockPermutation, block } = e
+    const { x, y, z } = block.location;
+
+    const tags = explodedBlockPermutation.getTags();
+    const isCase = tags.some(t => t.startsWith("dorios:multiblock.case"));
+    if (!isCase) return;
+
+    const entity = block.dimension.getEntities({
+        location: block.location,
+        maxDistance: MAX_SIZE,
+        families: ['dorios:multiblock']
+    }).find(ent => {
+        const raw = ent.getDynamicProperty("dorios:bounds");
+        if (!raw) return false;
+
+        try {
+            const bounds = JSON.parse(raw);
+            return isInsideBounds(block.location, bounds);
+        } catch {
+            return false;
+        }
+    });
+
+
+    if (!entity) return;
+
+    Multiblock.deactivateMultiblock(entity);
+    Multiblock.emptyBlocks(entity, 'minecraft:water');
+})
 
 
 /**

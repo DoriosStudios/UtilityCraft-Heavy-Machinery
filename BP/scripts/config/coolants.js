@@ -21,12 +21,14 @@ system.afterEvents.scriptEventReceive.subscribe(({ id, message }) => {
         if (!payload || typeof payload !== "object") return;
 
         for (const [inputId, data] of Object.entries(payload)) {
-            if (!data.output || typeof data.output !== "string") continue;
+            if (!data.efficiency) continue;
 
             // Directly assign; machine will handle defaults
-            coolants[inputId] = data;
+            coolants[inputId] = {
+                efficiency: data.efficiency ?? 1,
+                tier: data.tier ?? 0
+            };
         }
     } catch (err) {
-        console.warn("[UtilityCraft] Failed to parse furnace registration payload:", err);
     }
 });

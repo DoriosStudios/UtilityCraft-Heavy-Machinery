@@ -65,7 +65,6 @@ const config = {
     }
 }
 
-
 /**
  * Core temperature constants.
  * - CORE_TMIN_K: logic floor (K)
@@ -89,8 +88,9 @@ const EFF_GAMMA = 5.0;
 const EFF_ALPHA_COLD = 1.6;
 const EFF_ALPHA_HOT = 1.2;
 
-// #endregion
+const COOLANT_TIER = 0
 
+// #endregion
 DoriosAPI.register.blockComponent('thermo_reactor', {
     async onPlayerInteract(e, { params: settings }) {
         const { block, player } = e;
@@ -117,7 +117,7 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
             Energy.initialize(entity)
         }
 
-        Multiblock.deactivateMultiblock(player, entity);
+        Multiblock.deactivateMultiblock(entity, player);
         Multiblock.emptyBlocks(entity, "minecraft:water");
 
         const structure = await Multiblock.detectFromController(e, settings.required_case);
@@ -134,7 +134,7 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
         const energyCap = Multiblock.activateMultiblock(entity, structure);
         if (energyCap <= 0) {
             player.sendMessage("§c[Reactor] At least 1 energy unit is required.");
-            Multiblock.deactivateMultiblock(player, entity)
+            Multiblock.deactivateMultiblock(entity, player)
             return
         }
 
@@ -194,7 +194,7 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
     onPlayerBreak({ block, player }) {
         const entity = block.dimension.getEntitiesAtBlockLocation(block.location)[0]
         if (!entity) return
-        Multiblock.deactivateMultiblock(player, entity)
+        Multiblock.deactivateMultiblock(entity, player)
         Multiblock.emptyBlocks(entity, 'minecraft:water')
         entity.remove()
     },
@@ -213,20 +213,26 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
         const fluids = FluidManager.initializeMultiple(entity, 2);
         fluids.forEach(fluid => fluid.display(fluid.index + 2))
 
-        const lava =
-            fluids[0]?.type === "lava" ? fluids[0] :
-                fluids[1]?.type === "lava" ? fluids[1] : null;
-        const fuel = lava ? lava.get() : 0;
-        if (lava) lava.setCap(data.lavaCapacity)
+        let lava = null; let coolant = null; let coolantData = null;
 
-        const coolant =
-            coolants[fluids[0]?.type] ? fluids[0] :
-                coolants[fluids[1]?.type] ? fluids[1] : null;
-        // const coolant =
-        //     fluids[0]?.type === "saline_coolant" ? fluids[0] :
-        //         fluids[1]?.type === "saline_coolant" ? fluids[1] : null;
-        const coolant = coolant ? coolant.get() : 0;
-        if (coolant) coolant.setCap(data.coolantCapacity)
+        let coolantAmount = 0; let fuel = 0;
+        fluids.forEach(f => {
+            if (!f) return;
+
+            if (f.type === "lava") {
+                fuel = f.get();
+                lava = f;
+                f.setCap(data.lavaCapacity)
+                return;
+            }
+
+            if (f.type in coolants && f.get() > 0) {
+                coolant = f;
+                coolantAmount = f.get()
+                coolantData = coolants[f.type];
+                f.setCap(data.coolantCapacity)
+            }
+        });
 
         const f = tickSpeed;
         let working = false;
@@ -251,73 +257,77 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
         if (fuel > 0 && data.state !== "off") {
             const rate = Math.min(fuel, data.rate * f);
             if (rate > 0) {
-                if (!reactor.entity.hasTag('test')) lava.consume(rate)
+                lava.consume(rate)
                 fireLoop(entity, f);
                 const waste = 1 - data.efficiency;
-
-                // Energía producida sigue ligada a la eficiencia
                 const energyProduced = rate * config.energyPerLavaUnit * data.efficiency;
-
-                // Calor bruto generado por el combustible + “waste heat”
                 const rawHeat = rate * config.heatPerLavaUnit * (1 + waste);
-
-                // Rango de temperatura donde trabajamos “realmente”
                 const tMin = CORE_TMIN_K;
                 const tMax = CORE_TCAP_K; // 1200 K
                 const span = Math.max(1e-6, tMax - tMin);
-
-                // Normalizamos temperatura a [0, 1]
                 const normT = Math.min(1, Math.max(0, (data.temperature - tMin) / span));
-
-                // Curva de desaceleración: 1 al estar frío, 0 al llegar a tMax
-                // exponencial suavizada (tipo “logarítmica” en efecto)
-                const TEMP_SLOWDOWN_EXP = 2; // puedes subir a 2.0 si quieres más agresivo
+                const TEMP_SLOWDOWN_EXP = 2;
                 const slowdown = 1 - Math.pow(normT, TEMP_SLOWDOWN_EXP);
-
-                // Aseguramos que NUNCA se caliente más rápido al subir la T
                 let heatProduced = rawHeat * slowdown;
 
-                // Aplicamos energía y calor
                 energy.add(energyProduced);
                 data.producing = energyProduced / f;
                 data.temperature += heatProduced;
                 data.time += f;
                 working = true;
                 data.warning = undefined;
-
             }
-
         } else {
             if (data.state !== "off") data.warning = "§eMissing Fuel!";
             data.time = 0;
             data.producing = 0;
         }
 
-        if (coolant > 0 && coolant) {
+        if (coolant && coolantData.tier >= COOLANT_TIER) {
             const maxByDiss = (data.heatDissipation ?? 0) * f;
-            const maxByCoolant = coolant / (config.coolantPerKelvin ?? 1);
+            const maxByCoolant = coolantAmount / config.coolantPerKelvin;
             const maxByTMin = Math.max(0, data.temperature - tMin);
 
-            const heatDissipated = Math.min(maxByDiss, maxByCoolant, maxByTMin);
+            const heatDissipated = Math.min(maxByDiss, maxByCoolant * coolantData.efficiency, maxByTMin);
             if (heatDissipated > 0) {
                 spawnRandomVentSmoke(entity);
-                const coolantConsumed = heatDissipated * (config.coolantPerKelvin ?? 0);
-                if (!reactor.entity.hasTag('test')) coolant.consume(coolantConsumed);
+                const coolantConsumed = heatDissipated * config.coolantPerKelvin;
+                coolant.consume(coolantConsumed / coolantData.efficiency);
                 data.temperature -= heatDissipated;
             }
         } else {
+            data.temperature -= data.heatDissipation * ((data.temperature) ** 2) / 100_000_000
+            data.temperature = Math.max(CORE_TMIN_K, data.temperature)
             if (working) data.warning = "§cMissing Coolant!";
         }
 
         data.temperature = Math.min(CORE_TCAP_K, Math.max(CORE_TMIN_K, data.temperature));
 
-        if (data.temperature >= WARN_DANGER_K) {
+        if (data.temperature >= WARN_DANGER_K - 100) {
             data.warning = "§cCore overheating!";
+            if (data.temperature >= WARN_DANGER_K) {
+                data.state = "off"
+                data.temperature = 1000
+                Multiblock.deactivateMultiblock(entity)
+                Multiblock.emptyBlocks(entity, 'minecraft:water')
+                DoriosAPI.utils.waitSeconds(4, () => {
+                    if (!entity) return
+                    const bounds = data.bounds
+                    if (bounds) {
+                        const center = Multiblock.getCenter(bounds.min, bounds.max)
+                        const radius = (Multiblock.getVolume(bounds) ** (1 / 3)) * 0.4
+                        reactor.dim.createExplosion({ x: center.x + 0.5, y: center.y + 0.5, z: center.z + 0.5, }, radius, { causesFire: true, breaksBlocks: true, allowUnderwater: true })
+                    } else {
+                        reactor.dim.createExplosion(entity.location, 4, { causesFire: true, breaksBlocks: true, allowUnderwater: true })
+                    }
+                })
+            }
+
         } else if (data.temperature >= WARN_OVERHEAT_K) {
             data.warning ??= "§6Overheating!";
         }
 
-        if (working && (coolant?.get?.() ?? 0) > 0 && (data.warning ?? "") === "") {
+        if (working && (coolant?.get() ?? 0) > 0 && (data.warning ?? "") === "") {
             data.warning = "§2Active";
         }
 
