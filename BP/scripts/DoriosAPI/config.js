@@ -1,4 +1,3 @@
-
 /**
  * DoriosAPI - Setup Instructions
  *
@@ -47,17 +46,17 @@
  * ```
  */
 export const addonData = {
-    name: "UtilityCraft: Heavy Machinery",
-    author: "Dorios Studios",
-    identifier: "utilitycraft_heavy_machinery",
-    version: "0.3.0",
-    dependencies: {
-        "utilitycraft": {
-            name: "UtilityCraft",
-            version: "3.3.5"
-        }
-    }
-}
+  name: "UtilityCraft: Heavy Machinery",
+  author: "Dorios Studios",
+  identifier: "uc_heavy_machinery",
+  version: "0.3.0",
+  dependencies: {
+    utilitycraft: {
+      name: "UtilityCraft",
+      version: "3.3.5",
+    },
+  },
+};
 
 /**
  * Module Imports
@@ -78,9 +77,9 @@ export const addonData = {
  * import './itemStackClass.js'; // Item stack handling
  * ```
  */
-import './API.js'
-import './dependencyChecker.js'
-import './modules/blockClass.js'
-import './modules/playerClass.js'
-import './modules/itemStackClass.js'
-import './modules/entityClass.js'
+import "./API.js";
+import "./dependencyChecker.js";
+import "./modules/blockClass.js";
+import "./modules/playerClass.js";
+import "./modules/itemStackClass.js";
+import "./modules/entityClass.js";
