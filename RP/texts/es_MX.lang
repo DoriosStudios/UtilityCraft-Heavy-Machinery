@@ -1,3 +1,99 @@
+entity.utilitycraft:power_condenser.name=Matriz de Condensador de Energía
+entity.utilitycraft:thermo_reactor.name=Reactor Térmico
+entity.utilitycraft:crusher_controller.name=Fábrica de Trituradora
+entity.utilitycraft:incinerator_controller.name=Fábrica de Incinerador
+entity.utilitycraft:electro_press_controller.name=Fábrica de Prensa Electro
+entity.utilitycraft:infuser_controller.name=Fábrica de Infusor
+entity.utilitycraft:autosieve_controller.name=Fábrica de Auto Tamiz
+entity.utilitycraft:reaction_chamber_controller.name=Cámara de Reacción
+
+item.utilitycraft:utility_exo_helmet=Casco Exo Utilitario
+item.utilitycraft:utility_exo_chestplate=Pechera Exo Utilitaria
+item.utilitycraft:utility_exo_leggings=Grebas Exo Utilitarias
+item.utilitycraft:utility_exo_boots=Botas Exo Utilitarias
+
+tile.utilitycraft:processing_module.name=Módulo de Procesamiento
+tile.utilitycraft:speed_module.name=Módulo de Velocidad
+tile.utilitycraft:efficiency_module.name=Módulo de Eficiencia
+tile.utilitycraft:energy_cell.name=Célula de Energía
+tile.utilitycraft:fluid_cell.name=Célula de Fluido
+
+tile.utilitycraft:crusher_controller.name=Controlador de Trituradora
+tile.utilitycraft:incinerator_controller.name=Controlador de Incinerador
+tile.utilitycraft:infuser_controller.name=Controlador de Infusor
+tile.utilitycraft:autosieve_controller.name=Controlador de Auto Tamiz
+tile.utilitycraft:electro_press_controller.name=Controlador de Prensa Electro
+tile.utilitycraft:reaction_chamber_controller.name=Controlador de Cámara de Reacción
+
+tile.utilitycraft:power_condenser_controller.name=Controlador de Condensador de Energía
+tile.utilitycraft:basic_power_condenser_unit.name=§eUnidad Básica de Condensador de Energía
+tile.utilitycraft:advanced_power_condenser_unit.name=§cUnidad Avanzada de Condensador de Energía
+tile.utilitycraft:expert_power_condenser_unit.name=§bUnidad Experta de Condensador de Energía
+tile.utilitycraft:ultimate_power_condenser_unit.name=§8Unidad Suprema de Condensador de Energía
+
+tile.utilitycraft:thermo_reactor_controller.name=Controlador de Reactor Térmico
+tile.utilitycraft:heat_conductor.name=Conductor de Calor
+tile.utilitycraft:thermo_core.name=Núcleo Térmico
+
+item.utilitycraft:bronze_ingot=Lingote de Bronce
+
+tile.utilitycraft:bronze_block.name=Bloque de Bronce
+tile.utilitycraft:bronze_bricks.name=Ladrillos de Bronce
+tile.utilitycraft:bronze_case.name=Carcasa de Bronce
+tile.utilitycraft:bronze_energy_port.name=Puerto de Energía de Bronce
+tile.utilitycraft:bronze_fluid_port.name=Puerto de Fluido de Bronce
+tile.utilitycraft:bronze_hazard_block.name=Bloque de Riesgo de Bronce
+tile.utilitycraft:bronze_item_port.name=Puerto de Ítems de Bronce
+tile.utilitycraft:bronze_plated_block.name=Bloque Revestido de Bronce
+tile.utilitycraft:bronze_controller_case.name=Carcasa de Controlador de Bronce
+tile.utilitycraft:bronze_vent_panel.name=Panel de Ventilación de Bronce
+tile.utilitycraft:reinforced_bronze_glass.name=Vidrio Reforzado de Bronce
+tile.utilitycraft:tempered_bronze_glass.name=Vidrio Templado de Bronce
+
+tile.utilitycraft:reinforced_steel_glass.name=Vidrio Reforzado de Acero
+tile.utilitycraft:steel_plate_block.name=Bloque de Placa de Acero
+tile.utilitycraft:steel_bricks.name=Ladrillos de Acero
+tile.utilitycraft:steel_case.name=Carcasa de Acero
+tile.utilitycraft:steel_energy_port.name=Puerto de Energía de Acero
+tile.utilitycraft:steel_fluid_port.name=Puerto de Fluido de Acero
+tile.utilitycraft:steel_hazard_block.name=Bloque de Riesgo de Acero
+tile.utilitycraft:steel_item_port.name=Puerto de Ítems de Acero
+tile.utilitycraft:steel_plated_block.name=Bloque Revestido de Acero
+tile.utilitycraft:steel_vent_panel.name=Panel de Ventilación de Acero
+tile.utilitycraft:tempered_steel_glass.name=Vidrio Templado de Acero
+
+tile.utilitycraft:netherite_bricks.name=Ladrillos de Netherita
+tile.utilitycraft:netherite_case.name=Carcasa de Netherita
+tile.utilitycraft:netherite_energy_port.name=Puerto de Energía de Netherita
+tile.utilitycraft:netherite_fluid_port.name=Puerto de Fluido de Netherita
+tile.utilitycraft:netherite_hazard_block.name=Bloque de Riesgo de Netherita
+tile.utilitycraft:netherite_item_port.name=Puerto de Ítems de Netherita
+tile.utilitycraft:netherite_plated_block.name=Bloque Revestido de Netherita
+tile.utilitycraft:tempered_netherite_glass.name=Vidrio Templado de Netherita
+tile.utilitycraft:netherite_vent_panel.name=Panel de Ventilación de Netherita
+tile.utilitycraft:reinforced_netherite_glass.name=Vidrio Reforzado de Netherita
+
+item.utilitycraft:bronze_dust=Polvo de Bronce
+item.utilitycraft:bronze_nugget=Pepita de Bronce
+item.utilitycraft:bronze_plate=Placa de Bronce
+item.utilitycraft:brute_bronze=Bronce Bruto
+item.utilitycraft:raw_tin=Estaño en Bruto
+item.utilitycraft:tin_dust=Polvo de Estaño
+item.utilitycraft:tin_ingot=Lingote de Estaño
+item.utilitycraft:tin_plate=Placa de Estaño
+item.utilitycraft:tin_nugget=Pepita de Estaño
+item.utilitycraft:tin_chunk=Trozo de Estaño
+item.utilitycraft:deepslate_tin_chunk=Trozo de Estaño de Pizarra Profunda
+item.utilitycraft:darloonite_crystal=Cristal de Darloonite
+item.utilitycraft:charged_darloonite_crystal=Cristal de Darloonite Cargado
+tile.utilitycraft:tin_block.name=Bloque de Estaño
+tile.utilitycraft:tin_plated_block.name=Bloque Revestido de Estaño
+tile.utilitycraft:brute_bronze_block.name=Bloque de Bronce Bruto
+tile.utilitycraft:raw_tin_block.name=Bloque de Estaño en Bruto
+tile.utilitycraft:controller_case.name=Carcasa de Controlador
+item.utilitycraft:saline_coolant_bucket=Cubo de Refrigerante Salino
+item.utilitycraft:control_panel=Panel de Control
+
 utilitycraft:itemGroup.controllers=Controladores
 utilitycraft:itemGroup.bronze_casing=Carcasas y Puertos de Bronce
 utilitycraft:itemGroup.steel_casing=Carcasas y Puertos de Acero
