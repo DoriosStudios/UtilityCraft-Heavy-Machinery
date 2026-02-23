@@ -1,0 +1,172 @@
+{
+    "format_version": "1.21.60",
+    "minecraft:crafting_items_catalog": {
+        "categories": [
+            {
+                "category_name": "construction",
+                "groups": [
+                    {
+                        "group_identifier": {
+                            "icon": "utilitycraft:autosieve_controller",
+                            "name": "utilitycraft:itemGroup.controllers"
+                        },
+                        "items": [
+                            "utilitycraft:autosieve_controller",
+                            "utilitycraft:crusher_controller",
+                            "utilitycraft:electro_press_controller",
+                            "utilitycraft:incinerator_controller",
+                            "utilitycraft:infuser_controller",
+                            "utilitycraft:reaction_chamber_controller",
+                            "utilitycraft:power_condenser_controller",
+                            "utilitycraft:thermo_reactor_controller"
+
+
+                        ]
+                    },
+                    {
+                        "group_identifier": {
+                            "icon": "utilitycraft:bronze_case",
+                            "name": "utilitycraft:itemGroup.bronze_casing"
+                        },
+                        "items": [
+                            "utilitycraft:bronze_case",
+                            "utilitycraft:bronze_controller_case",
+                            "utilitycraft:bronze_bricks",
+                            "utilitycraft:bronze_plated_block",
+                            "utilitycraft:bronze_hazard_block",
+                            "utilitycraft:bronze_vent_panel",
+                            "utilitycraft:bronze_item_port",
+                            "utilitycraft:bronze_fluid_port",
+                            "utilitycraft:bronze_energy_port",
+                            "utilitycraft:tempered_bronze_glass",
+                            "utilitycraft:reinforced_bronze_glass"
+                        ]
+                    },
+                    {
+                        "group_identifier": {
+                            "icon": "utilitycraft:steel_case",
+                            "name": "utilitycraft:itemGroup.steel_casing"
+                        },
+                        "items": [
+                            "utilitycraft:steel_case",
+                            "utilitycraft:controller_case",
+                            "utilitycraft:steel_bricks",
+                            "utilitycraft:steel_plated_block",
+                            "utilitycraft:steel_hazard_block",
+                            "utilitycraft:steel_vent_panel",
+                            "utilitycraft:steel_item_port",
+                            "utilitycraft:steel_fluid_port",
+                            "utilitycraft:steel_energy_port",
+                            "utilitycraft:tempered_steel_glass",
+                            "utilitycraft:reinforced_steel_glass"
+                        ]
+                    },
+                    {
+                        "group_identifier": {
+                            "icon": "utilitycraft:netherite_case",
+                            "name": "utilitycraft:itemGroup.netherite_casing"
+                        },
+                        "items": [
+                            "utilitycraft:netherite_case",
+                            "utilitycraft:netherite_bricks",
+                            "utilitycraft:netherite_plated_block",
+                            "utilitycraft:netherite_hazard_block",
+                            "utilitycraft:netherite_vent_panel",
+                            "utilitycraft:netherite_item_port",
+                            "utilitycraft:netherite_fluid_port",
+                            "utilitycraft:netherite_energy_port",
+                            "utilitycraft:tempered_netherite_glass",
+                            "utilitycraft:reinforced_netherite_glass"
+                        ]
+                    },
+                    {
+                        "group_identifier": {
+                            "icon": "utilitycraft:energy_cell",
+                            "name": "utilitycraft:itemGroup.components_modules"
+                        },
+                        "items": [
+                            "utilitycraft:energy_cell",
+                            "utilitycraft:fluid_cell",
+                            "utilitycraft:processing_module",
+                            "utilitycraft:efficiency_module",
+                            "utilitycraft:speed_module",
+                            "utilitycraft:heat_conductor",
+                            "utilitycraft:thermo_core"
+                        ]
+                    },
+                    {
+                        "group_identifier": {
+                            "icon": "utilitycraft:basic_power_condenser_unit",
+                            "name": "utilitycraft:itemGroup.power_condenser_units"
+                        },
+                        "items": [
+                            "utilitycraft:basic_power_condenser_unit",
+                            "utilitycraft:advanced_power_condenser_unit",
+                            "utilitycraft:expert_power_condenser_unit",
+                            "utilitycraft:ultimate_power_condenser_unit"
+                        ]
+                    }
+                ]
+            },
+            {
+                "category_name": "items",
+                "groups": [
+                    {
+                        "group_identifier": {
+                            "icon": "utilitycraft:tin_ingot",
+                            "name": "utilitycraft:itemGroup.materials_resources"
+                        },
+                        "items": [
+                            "utilitycraft:raw_tin",
+                            "utilitycraft:raw_tin_block",
+                            "utilitycraft:tin_chunk",
+                            "utilitycraft:deepslate_tin_chunk",
+                            "utilitycraft:tin_dust",
+                            "utilitycraft:tin_ingot",
+                            "utilitycraft:tin_nugget",
+                            "utilitycraft:tin_plate",
+                            "utilitycraft:tin_block",
+                            "utilitycraft:tin_plated_block",
+                            "utilitycraft:bronze_dust",
+                            "utilitycraft:bronze_ingot",
+                            "utilitycraft:bronze_nugget",
+                            "utilitycraft:bronze_plate",
+                            "utilitycraft:bronze_block",
+                            "utilitycraft:brute_bronze",
+                            "utilitycraft:brute_bronze_block",
+                            "utilitycraft:darloonite_crystal",
+                            "utilitycraft:charged_darloonite_crystal",
+                            "utilitycraft:saline_coolant_bucket"
+                        ]
+                    },
+                    {
+                        "group_identifier": {
+                            "icon": "utilitycraft:control_panel",
+                            "name": "utilitycraft:itemGroup.utility_tools"
+                        },
+                        "items": [
+                            "utilitycraft:control_panel"
+                        ]
+                    }
+                ]
+            },
+            {
+                "category_name": "equipment",
+                "groups": [
+                    {
+                        "group_identifier": {
+                            "icon": "utilitycraft:utility_exo_helmet",
+                            "name": "utilitycraft:itemGroup.utility_exo"
+                        },
+                        "items": [
+                            "utilitycraft:utility_exo_helmet",
+                            "utilitycraft:utility_exo_chestplate",
+                            "utilitycraft:utility_exo_leggings",
+                            "utilitycraft:utility_exo_boots"
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
