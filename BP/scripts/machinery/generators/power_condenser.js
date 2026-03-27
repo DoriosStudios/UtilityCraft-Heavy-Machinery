@@ -1,5 +1,4 @@
-import { EnergyStorage, Generator } from "DoriosCore/index.js"
-import { Multiblock } from '../DoriosMachinery/multiblock.js'
+import { EnergyStorage, Generator, MultiblockManager } from "DoriosCore/index.js"
 
 DoriosAPI.register.blockComponent('power_condenser', {
     async onPlayerInteract(e, { params: settings }) {
@@ -22,7 +21,7 @@ DoriosAPI.register.blockComponent('power_condenser', {
         await activatePowerCondenser(e, settings, entity)
     },
     onPlayerBreak({ block, player }) {
-        Multiblock.handleBreakController(block, player)
+        MultiblockManager.handleBreakController(block, player)
     },
     onTick({ block }, { params: settings }) {
         const matrix = new Generator(block, settings)
@@ -51,16 +50,16 @@ DoriosAPI.register.blockComponent('power_condenser', {
 async function activatePowerCondenser(e, settings, entity) {
     const { block, player } = e
 
-    Multiblock.deactivateMultiblock(block, player)
+    MultiblockManager.deactivateMultiblock(block, player)
 
-    const structure = await Multiblock.detectFromController(e, settings.required_case)
+    const structure = await MultiblockManager.detectFromController(e, settings.required_case)
     if (!structure) return
 
-    const energyCap = Multiblock.activateMultiblock(entity, structure)
+    const energyCap = MultiblockManager.activateMultiblock(entity, structure)
     const transferRate = energyCap / settings.multiblock.transfer_rate_ratio
     if (energyCap <= 0) {
         player.sendMessage('§c[Matrix] At least 1 energy container its required to operate.')
-        Multiblock.deactivateMultiblock(block, player)
+        MultiblockManager.deactivateMultiblock(block, player)
         return
     }
 

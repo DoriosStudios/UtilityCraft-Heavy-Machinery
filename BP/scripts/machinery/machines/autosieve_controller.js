@@ -1,6 +1,4 @@
-import { EnergyStorage } from "DoriosCore/index.js"
-import { Multiblock } from '../DoriosMachinery/multiblock.js'
-import { MultiblockMachine } from '../multiblockMachine.js'
+import { EnergyStorage, MultiblockManager, MultiblockMachine } from "DoriosCore/index.js"
 import { sieveRecipes } from 'config/recipes/sieve.js'
 
 const MESH_SLOT = 4
@@ -10,6 +8,16 @@ const OUTPUT_SLOTS = [14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
 const DEFAULT_COST = 6400
 const MULTI_PENALTY = 4
 const BASE_RATE = 800
+const CONTROLLER_REQUIREMENTS = {
+    energy_cell: {
+        amount: 1,
+        warning: '§c[Controller] At least 1 energy container is required.',
+    },
+    processing_module: {
+        amount: 1,
+        warning: '§c[Controller] At least 1 processing module is required.',
+    },
+}
 
 DoriosAPI.register.blockComponent('autosieve_controller', {
 
@@ -31,7 +39,7 @@ DoriosAPI.register.blockComponent('autosieve_controller', {
     },
 
     onPlayerBreak({ block, player }) {
-        Multiblock.handleBreakController(block, player)
+        MultiblockManager.handleBreakController(block, player)
     },
 
     onTick(e, { params: settings }) {
@@ -157,32 +165,13 @@ function initializeControllerEntity(entity) {
 }
 
 async function activateAutosieveController(e, settings, entity) {
-    const { block, player } = e
-
-    Multiblock.deactivateMultiblock(block, player)
-
-    const structure = await Multiblock.detectFromController(e, settings.required_case)
-    if (!structure) return
-
-    const energyCap = Multiblock.activateMultiblock(entity, structure)
-    if (energyCap <= 0) {
-        player.sendMessage('§c[Controller] At least 1 energy container is required.')
-        Multiblock.deactivateMultiblock(block, player)
-        return
-    }
-
-    const processing = structure.components.processing_module ?? 0
-    if (processing <= 0) {
-        player.sendMessage('§c[Controller] At least 1 processing module is required.')
-        Multiblock.deactivateMultiblock(block, player)
-        return
-    }
-
-    const factoryData = MultiblockMachine.computeMachineStats(structure.components)
-    entity.setDynamicProperty('components', JSON.stringify(factoryData))
-
-    player.sendMessage('§a[Controller] Autosieve Factory created successfully.')
-    player.sendMessage(`§7Energy Capacity: §b${EnergyStorage.formatEnergyToText(energyCap)}`)
+    await MultiblockMachine.activateMachineController(e, settings, entity, {
+        requirements: CONTROLLER_REQUIREMENTS,
+        successMessages: ({ energyCap }) => [
+            '§a[Controller] Autosieve Factory created successfully.',
+            `§7Energy Capacity: §b${EnergyStorage.formatEnergyToText(energyCap)}`,
+        ],
+    })
 }
 
 function processAutosieveDrops(
@@ -205,32 +194,11 @@ function processAutosieveDrops(
             if (amountMultiplier) qty *= amountMultiplier
 
             const total = processCount * Math.ceil(Math.random() * qty)
-            distributeOutput(controller, loot.item, total)
+            MultiblockMachine.distributeOutput(controller, OUTPUT_SLOTS, loot.item, total, {
+                suppressErrors: true,
+            })
         }
     })
-}
-
-function distributeOutput(controller, itemId, amount) {
-    let remaining = amount
-    const inv = controller.container
-    const entity = controller.entity
-
-    for (const slot of OUTPUT_SLOTS) {
-        if (remaining <= 0) break
-
-        const out = inv.getItem(slot)
-        try {
-            if (!out) {
-                const add = Math.min(64, remaining)
-                entity.setItem(slot, itemId, add)
-                remaining -= add
-            } else if (out.typeId === itemId && out.amount < out.maxAmount) {
-                const add = Math.min(out.maxAmount - out.amount, remaining)
-                entity.changeItemAmount(slot, add)
-                remaining -= add
-            }
-        } catch { }
-    }
 }
 
 function updateUI(controller, data, status = '§aRunning', recipe) {

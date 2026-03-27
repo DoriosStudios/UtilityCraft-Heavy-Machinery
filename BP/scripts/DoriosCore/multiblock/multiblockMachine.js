@@ -1,34 +1,17 @@
 import { ItemStack, system } from "@minecraft/server";
-import { BasicMachine, EnergyStorage, FluidStorage } from "DoriosCore/index.js";
-import * as Utils from "../DoriosCore/utils/entity.js";
+import { BasicMachine } from "../machinery/basicMachine.js";
+import { EnergyStorage } from "../machinery/energyStorage.js";
+import { FluidStorage } from "../machinery/fluidStorage.js";
+import { MultiblockManager } from "./multiblock.js";
+import * as Utils from "../utils/entity.js";
 
 export class MultiblockMachine extends BasicMachine {
-  /**
-   * Creates a new multiblock machine wrapper over DoriosCore's BasicMachine.
-   *
-   * This keeps the old multiblock-controller API surface without pulling in the
-   * upgrade and transfer helpers from the full Machine class.
-   *
-   * @param {Block} block
-   * @param {MachineSettings} settings
-   */
   constructor(block, settings) {
     super(block, settings?.machine?.rate_speed_base ?? 0);
     if (!this.valid) return;
     this.settings = settings;
   }
 
-  /**
-   * Spawns a multiblock machine entity and restores stored block data.
-   *
-   * @param {{
-   *   block: import("@minecraft/server").Block,
-   *   player: import("@minecraft/server").Player,
-   *   permutationToPlace: import("@minecraft/server").BlockPermutation,
-   * }} e
-   * @param {MachineSettings} config
-   * @param {(entity: import("@minecraft/server").Entity) => void} [callback]
-   */
   static spawnEntity(e, config, callback) {
     const { block, player, permutationToPlace } = e;
     const mainHand = player.getComponent("equippable").getEquipment("Mainhand");
@@ -64,12 +47,6 @@ export class MultiblockMachine extends BasicMachine {
     Utils.updateAdjacentNetwork(block, permutationToPlace);
   }
 
-  /**
-   * Handles multiblock-machine destruction using the same lore/drop flow as the
-   * DoriosCore Machine class, without depending on that class directly.
-   *
-   * @param {{ block: Block, brokenBlockPermutation: BlockPermutation, player: Player, dimension: Dimension }} e
-   */
   static onDestroy(e) {
     const { block, brokenBlockPermutation, player, dimension: dim } = e;
     const entity = dim.getEntitiesAtBlockLocation(block.location)[0];
@@ -118,26 +95,106 @@ export class MultiblockMachine extends BasicMachine {
     return true;
   }
 
-  /**
-   * Old multiblock-machine compatibility signature.
-   *
-   * @param {number} value
-   * @param {number} [slot=2]
-   * @param {string} [type="arrow_right"]
-   * @param {boolean} [display=true]
-   * @param {number} [index=0]
-   */
+  static async activateMachineController(e, settings, entity, config = {}) {
+    const {
+      requirements = {},
+      onActivate,
+      successMessages = [],
+    } = config;
+    const { block, player } = e;
+
+    MultiblockManager.deactivateMultiblock(block, player);
+
+    const structure = await MultiblockManager.detectFromController(e, settings.required_case);
+    if (!structure) return;
+
+    const failure = this.validateRequirements(structure.components, requirements);
+    if (failure) {
+      player.sendMessage(failure.warning);
+      MultiblockManager.deactivateMultiblock(block, player);
+      return;
+    }
+
+    const energyCap = MultiblockManager.activateMultiblock(entity, structure);
+    const factoryData = this.computeMachineStats(structure.components);
+    entity.setDynamicProperty("components", JSON.stringify(factoryData));
+
+    const context = {
+      block,
+      components: structure.components,
+      energyCap,
+      entity,
+      factoryData,
+      player,
+      settings,
+      structure,
+    };
+
+    if (onActivate) {
+      const result = await onActivate(context);
+      if (result === false) {
+        MultiblockManager.deactivateMultiblock(block, player);
+        return;
+      }
+    }
+
+    const messages =
+      typeof successMessages === "function" ? successMessages(context) : successMessages;
+    for (const message of messages) {
+      if (message) player.sendMessage(message);
+    }
+
+    return context;
+  }
+
+  static validateRequirements(components, requirements) {
+    for (const [componentId, requirement] of Object.entries(requirements)) {
+      const amount = components[componentId] ?? 0;
+      if (amount < requirement.amount) {
+        return requirement;
+      }
+    }
+  }
+
+  static distributeOutput(controller, outputSlots, itemId, amount, options = {}) {
+    const { suppressErrors = false } = options;
+    let remaining = amount;
+    const entity = controller.entity;
+
+    for (const slot of outputSlots) {
+      if (remaining <= 0) break;
+
+      const writeOutput = () => {
+        const out = controller.container.getItem(slot);
+
+        if (!out) {
+          const add = Math.min(64, remaining);
+          entity.setItem(slot, itemId, add);
+          remaining -= add;
+          return;
+        }
+
+        if (out.typeId === itemId && out.amount < out.maxAmount) {
+          const add = Math.min(out.maxAmount - out.amount, remaining);
+          entity.changeItemAmount(slot, add);
+          remaining -= add;
+        }
+      };
+
+      if (suppressErrors) {
+        try {
+          writeOutput();
+        } catch {}
+      } else {
+        writeOutput();
+      }
+    }
+  }
+
   setProgress(value, slot = 2, type = "arrow_right", display = true, index = 0) {
     super.setProgress(value, { slot, type, display, index });
   }
 
-  /**
-   * Old multiblock-machine compatibility signature.
-   *
-   * @param {number} [slot=2]
-   * @param {string} [type="arrow_right"]
-   * @param {number} [index=0]
-   */
   displayProgress(slot = 2, type = "arrow_right", index = 0) {
     const energyCost = this.getEnergyCost(index);
     if (!energyCost || energyCost <= 0) return;
@@ -145,31 +202,14 @@ export class MultiblockMachine extends BasicMachine {
     super.displayProgress(energyCost, { slot, type, index, scale: 16 });
   }
 
-  /**
-   * Sets the machine's energy cost (maximum progress).
-   *
-   * @param {number} value
-   * @param {number} [index=0]
-   */
   setEnergyCost(value, index = 0) {
     this.entity.setDynamicProperty(`dorios:energy_cost_${index}`, Math.max(1, value));
   }
 
-  /**
-   * Gets the machine's energy cost (maximum progress).
-   *
-   * @param {number} [index=0]
-   */
   getEnergyCost(index = 0) {
     return this.entity.getDynamicProperty(`dorios:energy_cost_${index}`) ?? 800;
   }
 
-  /**
-   * Computes all effective machine statistics from installed components.
-   *
-   * @param {MachineComponents} components
-   * @returns {MachineStats}
-   */
   static computeMachineStats(components) {
     const processing = Math.max(1, components.processing_module | 0);
     const speed = Math.max(0, components.speed_module | 0);
@@ -178,18 +218,18 @@ export class MultiblockMachine extends BasicMachine {
     const processAmount = 2 * processing;
     const processingPenalty = 1 + 2.25 * (processing - 1);
 
-    const MAX_SPEED_BONUS = 999;
-    const SPEED_K = 3200;
-    const speedMultiplier = 1 + (MAX_SPEED_BONUS * speed) / (SPEED_K + speed);
+    const maxSpeedBonus = 999;
+    const speedK = 3200;
+    const speedMultiplier = 1 + (maxSpeedBonus * speed) / (speedK + speed);
 
-    const MAX_SPEED_PENALTY = 99;
-    const SPEED_PENALTY_K = 640;
-    const speedPenalty = 1 + (MAX_SPEED_PENALTY * speed) / (SPEED_PENALTY_K + speed);
+    const maxSpeedPenalty = 99;
+    const speedPenaltyK = 640;
+    const speedPenalty = 1 + (maxSpeedPenalty * speed) / (speedPenaltyK + speed);
 
-    const MIN_EFFICIENCY = 0.01;
-    const EFFICIENCY_RATE = 0.15;
+    const minEfficiency = 0.01;
+    const efficiencyRate = 0.15;
     const efficiencyMultiplier =
-      MIN_EFFICIENCY + (1 - MIN_EFFICIENCY) * Math.exp(-EFFICIENCY_RATE * efficiency);
+      minEfficiency + (1 - minEfficiency) * Math.exp(-efficiencyRate * efficiency);
 
     return {
       raw: {
@@ -197,33 +237,21 @@ export class MultiblockMachine extends BasicMachine {
         speed,
         efficiency,
       },
-
       processing: {
         amount: Math.floor(processAmount),
         penalty: processingPenalty,
       },
-
       speed: {
         multiplier: speedMultiplier,
         penalty: speedPenalty,
       },
-
       efficiency: {
         multiplier: efficiencyMultiplier,
       },
-
       energyMultiplier: processingPenalty * speedPenalty * efficiencyMultiplier,
     };
   }
 
-  /**
-   * Updates the main machine information label (slot 1).
-   *
-   * @param {MultiblockMachine} controller
-   * @param {MachineStats} data
-   * @param {string} [status="§aRunning"]
-   * @returns {string}
-   */
   static setMachineInfoLabel(controller, data, status = "§aRunning") {
     const infoText = `§r§7Status: ${status}
 

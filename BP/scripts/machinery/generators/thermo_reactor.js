@@ -1,5 +1,4 @@
-import { EnergyStorage, FluidStorage, Generator } from "DoriosCore/index.js"
-import { Multiblock } from '../DoriosMachinery/multiblock.js'
+import { EnergyStorage, FluidStorage, Generator, MultiblockManager } from "DoriosCore/index.js"
 import { ModalFormData } from '@minecraft/server-ui'
 import { ItemStack } from '@minecraft/server'
 import { coolants } from 'config/coolants.js'
@@ -120,7 +119,7 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
         await activateThermoReactor(e, settings, entity)
     },
     onPlayerBreak({ block, player }) {
-        Multiblock.handleBreakController(block, player, { blockId: 'minecraft:water' })
+        MultiblockManager.handleBreakController(block, player, { blockId: 'minecraft:water' })
     },
     onTick({ block }, { params: settings }) {
         if (!worldLoaded) return;
@@ -232,13 +231,13 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
             if (data.temperature >= WARN_DANGER_K) {
                 data.state = "off"
                 data.temperature = 1000
-                Multiblock.deactivateMultiblock(block, undefined, { blockId: 'minecraft:water' })
+                MultiblockManager.deactivateMultiblock(block, undefined, { blockId: 'minecraft:water' })
                 DoriosAPI.utils.waitSeconds(4, () => {
                     if (!entity) return
                     const bounds = data.bounds
                     if (bounds) {
-                        const center = Multiblock.getCenter(bounds.min, bounds.max)
-                        const radius = (Multiblock.getVolume(bounds) ** (1 / 3)) * 0.4
+                        const center = MultiblockManager.getCenter(bounds.min, bounds.max)
+                        const radius = (MultiblockManager.getVolume(bounds) ** (1 / 3)) * 0.4
                         reactor.dimension.createExplosion({ x: center.x + 0.5, y: center.y + 0.5, z: center.z + 0.5 }, radius, { causesFire: true, breaksBlocks: true, allowUnderwater: true })
                     } else {
                         reactor.dimension.createExplosion(entity.location, 4, { causesFire: true, breaksBlocks: true, allowUnderwater: true })
@@ -413,9 +412,9 @@ async function activateThermoReactor(e, settings, entity) {
     const { block, player } = e;
     const dim = block.dimension;
 
-    Multiblock.deactivateMultiblock(block, player, { blockId: "minecraft:water" });
+    MultiblockManager.deactivateMultiblock(block, player, { blockId: "minecraft:water" });
 
-    const structure = await Multiblock.detectFromController(e, settings.required_case);
+    const structure = await MultiblockManager.detectFromController(e, settings.required_case);
     if (!structure) return;
 
     const { components, bounds } = structure;
@@ -425,14 +424,14 @@ async function activateThermoReactor(e, settings, entity) {
         return;
     }
 
-    const energyCap = Multiblock.activateMultiblock(entity, structure);
+    const energyCap = MultiblockManager.activateMultiblock(entity, structure);
     if (energyCap <= 0) {
         player.sendMessage("§c[Reactor] At least 1 energy unit is required.");
-        Multiblock.deactivateMultiblock(block, player)
+        MultiblockManager.deactivateMultiblock(block, player)
         return
     }
 
-    Multiblock.fillEmptyBlocks(bounds, dim, "minecraft:water");
+    MultiblockManager.fillEmptyBlocks(bounds, dim, "minecraft:water");
 
     entity.setDynamicProperty(
         "dorios:rateSpeed",

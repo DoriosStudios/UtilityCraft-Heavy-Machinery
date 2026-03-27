@@ -1,6 +1,4 @@
-import { EnergyStorage, FluidStorage } from "DoriosCore/index.js"
-import { Multiblock } from '../DoriosMachinery/multiblock.js'
-import { MultiblockMachine } from '../multiblockMachine.js'
+import { EnergyStorage, FluidStorage, MultiblockManager, MultiblockMachine } from "DoriosCore/index.js"
 import { reactionRecipes } from 'config/recipes/reaction_chamber.js'
 
 const INPUT_LIQUID_SLOT = 4
@@ -11,6 +9,20 @@ const DEFAULT_COST = 12800
 const BASE_RATE = 1600
 
 const FLUID_CAPACITY_CELL = 256_000
+const CONTROLLER_REQUIREMENTS = {
+    energy_cell: {
+        amount: 1,
+        warning: '§c[Controller] At least 1 energy container its required to operate.',
+    },
+    processing_module: {
+        amount: 1,
+        warning: '§c[Controller] At least 1 processing module its required to operate.',
+    },
+    fluid_cell: {
+        amount: 1,
+        warning: '§c[Controller] At least 1 fluid cell its required to operate.',
+    },
+}
 
 DoriosAPI.register.blockComponent('reaction_chamber_controller', {
     async onPlayerInteract(e, { params: settings }) {
@@ -33,7 +45,7 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
         await activateReactionChamberController(e, settings, entity)
     },
     onPlayerBreak({ block, player }) {
-        Multiblock.handleBreakController(block, player)
+        MultiblockManager.handleBreakController(block, player)
     },
     onTick(e, { params: settings }) {
         if (!worldLoaded) return;
@@ -165,8 +177,9 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
             const craftCount = maxProcess;
 
             if (recipe.output_item) {
-                distributeOutput(
+                MultiblockMachine.distributeOutput(
                     controller,
+                    OUTPUT_SLOTS,
                     recipe.output_item.id,
                     craftCount * outItemAmt
                 );
@@ -216,63 +229,19 @@ function initializeControllerEntity(entity) {
 }
 
 async function activateReactionChamberController(e, settings, entity) {
-    const { block, player } = e
-
-    const [inputFluid, outputFluid] = FluidStorage.initializeMultiple(entity, 2)
-
-    Multiblock.deactivateMultiblock(block, player)
-
-    const structure = await Multiblock.detectFromController(e, settings.required_case)
-    if (!structure) return
-
-    const energyCap = Multiblock.activateMultiblock(entity, structure)
-    if (energyCap <= 0) {
-        player.sendMessage('§c[Controller] At least 1 energy container its required to operate.')
-        Multiblock.deactivateMultiblock(block, player)
-        return
-    }
-
-    const processing = structure.components.processing_module ?? 0
-    if (processing === 0) {
-        player.sendMessage('§c[Controller] At least 1 processing module its required to operate.')
-        Multiblock.deactivateMultiblock(block, player)
-        return
-    }
-
-    const fluidCapacity = (structure.components.fluid_cell ?? 0) * FLUID_CAPACITY_CELL
-    if (fluidCapacity === 0) {
-        player.sendMessage('§c[Controller] At least 1 fluid cell its required to operate.')
-        Multiblock.deactivateMultiblock(block, player)
-        return
-    }
-    inputFluid.setCap(fluidCapacity / 2)
-    outputFluid.setCap(fluidCapacity / 2)
-
-    const factoryData = MultiblockMachine.computeMachineStats(structure.components)
-    entity.setDynamicProperty('components', JSON.stringify(factoryData))
-
-    player.sendMessage('§a[Controller] Crusher Factory created successfully.')
-    player.sendMessage(`§7[Controller] Energy Capacity: §b${EnergyStorage.formatEnergyToText(energyCap)}`)
-}
-
-function distributeOutput(controller, itemId, amount) {
-    let remaining = amount;
-    const entity = controller.entity
-    for (const slot of OUTPUT_SLOTS) {
-        if (remaining <= 0) break;
-
-        const out = controller.container.getItem(slot);
-
-        if (!out) {
-            const add = Math.min(64, remaining);
-            entity.setItem(slot, itemId, add);
-            remaining -= add;
-        } else if (out.typeId === itemId && out.amount < out.maxAmount) {
-            const add = Math.min(out.maxAmount - out.amount, remaining);
-            entity.changeItemAmount(slot, add);
-            remaining -= add;
-        }
-    }
+    await MultiblockMachine.activateMachineController(e, settings, entity, {
+        requirements: CONTROLLER_REQUIREMENTS,
+        onActivate: ({ structure }) => {
+            const [inputFluid, outputFluid] = FluidStorage.initializeMultiple(entity, 2)
+            const fluidCapacity = (structure.components.fluid_cell ?? 0) * FLUID_CAPACITY_CELL
+            inputFluid.setCap(fluidCapacity / 2)
+            outputFluid.setCap(fluidCapacity / 2)
+        },
+        successMessages: ({ energyCap }) => [
+            '§a[Controller] Crusher Factory created successfully.',
+            `§7[Controller] Energy Capacity: §b${EnergyStorage.formatEnergyToText(energyCap)}`,
+        ],
+    })
 }
 
 function updateUI(controller, [inputFluid, outputFluid], data, status = '§aRunning', recipe) {

@@ -1,6 +1,4 @@
-import { EnergyStorage } from "DoriosCore/index.js"
-import { Multiblock } from '../DoriosMachinery/multiblock.js'
-import { MultiblockMachine } from '../multiblockMachine.js'
+import { EnergyStorage, MultiblockManager, MultiblockMachine } from "DoriosCore/index.js"
 import { pressRecipes } from 'config/recipes/press.js'
 
 const INPUT_SLOTS = [4, 5, 6, 7, 8, 9, 10, 11, 12]
@@ -8,6 +6,16 @@ const OUTPUT_SLOTS = [13, 14, 15, 16, 17, 18, 19, 20, 21]
 const DEFAULT_COST = 800
 const MULTI_PENALTY = 4
 const BASE_RATE = 100
+const CONTROLLER_REQUIREMENTS = {
+    energy_cell: {
+        amount: 1,
+        warning: '§c[Controller] At least 1 energy container its required to operate.',
+    },
+    processing_module: {
+        amount: 1,
+        warning: '§c[Controller] At least 1 processing module its required to operate.',
+    },
+}
 
 DoriosAPI.register.blockComponent('electro_press_controller', {
     async onPlayerInteract(e, { params: settings }) {
@@ -29,7 +37,7 @@ DoriosAPI.register.blockComponent('electro_press_controller', {
         await activateElectroPressController(e, settings, entity)
     },
     onPlayerBreak({ block, player }) {
-        Multiblock.handleBreakController(block, player)
+        MultiblockManager.handleBreakController(block, player)
     },
     onTick(e, { params: settings }) {
         if (!worldLoaded) return;
@@ -117,8 +125,9 @@ DoriosAPI.register.blockComponent('electro_press_controller', {
             const craftCount = maxProcess;
 
             if (craftCount > 0) {
-                distributeOutput(
+                MultiblockMachine.distributeOutput(
                     controller,
+                    OUTPUT_SLOTS,
                     recipe.output,
                     craftCount * recipeAmount
                 );
@@ -155,52 +164,13 @@ function initializeControllerEntity(entity) {
 }
 
 async function activateElectroPressController(e, settings, entity) {
-    const { block, player } = e
-
-    Multiblock.deactivateMultiblock(block, player)
-
-    const structure = await Multiblock.detectFromController(e, settings.required_case)
-    if (!structure) return
-
-    const energyCap = Multiblock.activateMultiblock(entity, structure)
-    if (energyCap <= 0) {
-        player.sendMessage('§c[Controller] At least 1 energy container its required to operate.')
-        Multiblock.deactivateMultiblock(block, player)
-        return
-    }
-
-    const processing = structure.components.processing_module ?? 0
-    if (processing === 0) {
-        player.sendMessage('§c[Controller] At least 1 processing module its required to operate.')
-        Multiblock.deactivateMultiblock(block, player)
-        return
-    }
-
-    const factoryData = MultiblockMachine.computeMachineStats(structure.components)
-    entity.setDynamicProperty('components', JSON.stringify(factoryData))
-
-    player.sendMessage('§a[Controller] Electro Press Factory created successfully.')
-    player.sendMessage(`§7[Controller] Energy Capacity: §b${EnergyStorage.formatEnergyToText(energyCap)}`)
-}
-
-function distributeOutput(controller, itemId, amount) {
-    let remaining = amount;
-    const entity = controller.entity
-    for (const slot of OUTPUT_SLOTS) {
-        if (remaining <= 0) break;
-
-        const out = controller.container.getItem(slot);
-
-        if (!out) {
-            const add = Math.min(64, remaining);
-            entity.setItem(slot, itemId, add);
-            remaining -= add;
-        } else if (out.typeId === itemId && out.amount < out.maxAmount) {
-            const add = Math.min(out.maxAmount - out.amount, remaining);
-            entity.changeItemAmount(slot, add);
-            remaining -= add;
-        }
-    }
+    await MultiblockMachine.activateMachineController(e, settings, entity, {
+        requirements: CONTROLLER_REQUIREMENTS,
+        successMessages: ({ energyCap }) => [
+            '§a[Controller] Electro Press Factory created successfully.',
+            `§7[Controller] Energy Capacity: §b${EnergyStorage.formatEnergyToText(energyCap)}`,
+        ],
+    })
 }
 
 function updateUI(controller, data, status = '§aRunning', recipe) {
