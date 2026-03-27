@@ -31,10 +31,17 @@
             },
             "utilitycraft:infuser_controller": {
                 "entity": {
-                    "input_type": "complex",
-                    "output_type": "complex",
+                    "type": "complex_machine",
                     "inventory_size": 27,
-                    "identifier": "utilitycraft:multiblock_machine"
+                    "identifier": "utilitycraft:multiblock_machine",
+                    "input_range": [
+                        5,
+                        17
+                    ],
+                    "output_range": [
+                        18,
+                        26
+                    ]
                 },
                 "required_case": "dorios:multiblock.case.steel",
                 "required_components": {

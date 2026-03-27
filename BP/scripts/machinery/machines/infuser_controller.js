@@ -1,4 +1,6 @@
-import { Multiblock, Energy, Machine } from '../DoriosMachinery/main.js'
+import { EnergyStorage } from "DoriosCore/index.js"
+import { Multiblock } from '../DoriosMachinery/multiblock.js'
+import { MultiblockMachine } from '../multiblockMachine.js'
 import { infuserRecipes } from 'config/recipes/infuser.js'
 
 const CATALYST_SLOTS = [5, 6, 7, 8]
@@ -8,7 +10,6 @@ const DEFAULT_COST = 1600
 const MULTI_PENALTY = 4
 const BASE_RATE = 400
 
-// slots energy, label, label, progress, 9 input 9 output
 DoriosAPI.register.blockComponent('infuser_controller', {
     async onPlayerInteract(e, { params: settings }) {
         const { block, player } = e
@@ -19,50 +20,22 @@ DoriosAPI.register.blockComponent('infuser_controller', {
         }
 
         if (!entity) {
-            entity = Machine.spawn(block, settings, block.permutation)
-            DoriosAPI.utils.waitTicks(1, () => {
-                entity.setItem(1, 'utilitycraft:arrow_right_0', 1, " ")
-                entity.setItem(2, 'utilitycraft:arrow_right_0', 1, " ")
-                entity.setItem(3, 'utilitycraft:arrow_right_0', 1, "")
-                entity.setItem(4, 'utilitycraft:arrow_indicator_90', 1, "")
-                Energy.initialize(entity)
+            MultiblockMachine.spawnEntity(e, settings, (spawnedEntity) => {
+                initializeControllerEntity(spawnedEntity)
+                void activateInfuserController(e, settings, spawnedEntity)
             })
-        }
-        Multiblock.deactivateMultiblock(entity, player)
-
-        const structure = await Multiblock.detectFromController(e, settings.required_case)
-        if (!structure) return
-
-        const energyCap = Multiblock.activateMultiblock(entity, structure)
-        if (energyCap <= 0) {
-            player.sendMessage("§c[Controller] At least 1 energy container its required to operate.");
-            Multiblock.deactivateMultiblock(entity, player)
             return
         }
 
-        const processing = structure.components["processing_module"] ?? 0
-        if (processing == 0) {
-            player.sendMessage("§c[Controller] At least 1 processing module its required to operate.");
-            Multiblock.deactivateMultiblock(entity, player)
-            return
-        }
-
-        const factoryData = Multiblock.computeMachineStats(structure.components)
-        entity.setDynamicProperty('components', JSON.stringify(factoryData))
-
-        player.sendMessage("§a[Controller] Crusher Factory created successfully.");
-        player.sendMessage(`§7[Controller] Energy Capacity: §b${Energy.formatEnergyToText(energyCap)}`);
+        await activateInfuserController(e, settings, entity)
     },
     onPlayerBreak({ block, player }) {
-        const entity = block.dimension.getEntitiesAtBlockLocation(block.location)[0]
-        if (!entity) return
-        Multiblock.deactivateMultiblock(entity, player)
-        entity.remove()
+        Multiblock.handleBreakController(block, player)
     },
     onTick(e, { params: settings }) {
         if (!worldLoaded) return;
 
-        const controller = new Machine(e.block, settings);
+        const controller = new MultiblockMachine(e.block, settings);
         if (!controller.valid) return;
 
         const state = controller.entity.getDynamicProperty('dorios:state');
@@ -74,12 +47,9 @@ DoriosAPI.register.blockComponent('infuser_controller', {
 
         controller.setRate(BASE_RATE * data.speed.multiplier);
 
-        const inv = controller.inv;
+        const inv = controller.container;
         const recipes = infuserRecipes;
 
-        // ─────────────────────────────────────────────
-        // INPUT + CATALYST GLOBAL SCAN
-        // ─────────────────────────────────────────────
         let recipe = null;
 
         let inputType = null;
@@ -88,7 +58,6 @@ DoriosAPI.register.blockComponent('infuser_controller', {
         let totalInput = 0;
         let totalCatalyst = 0;
 
-        // Scan INPUT
         for (const slot of INPUT_SLOTS) {
             const item = inv.getItem(slot);
             if (!item) continue;
@@ -100,7 +69,6 @@ DoriosAPI.register.blockComponent('infuser_controller', {
             }
         }
 
-        // Scan CATALYST
         for (const slot of CATALYST_SLOTS) {
             const item = inv.getItem(slot);
             if (!item) continue;
@@ -125,9 +93,6 @@ DoriosAPI.register.blockComponent('infuser_controller', {
             return;
         }
 
-        // ─────────────────────────────────────────────
-        // OUTPUT SPACE
-        // ─────────────────────────────────────────────
         let availableSpace = 0;
         for (const slot of OUTPUT_SLOTS) {
             const out = inv.getItem(slot);
@@ -167,9 +132,6 @@ DoriosAPI.register.blockComponent('infuser_controller', {
             return;
         }
 
-        // ─────────────────────────────────────────────
-        // ENERGY & PROGRESS
-        // ─────────────────────────────────────────────
         const cost = (recipe.cost ?? DEFAULT_COST) * MULTI_PENALTY;
         data.cost = cost;
         controller.setEnergyCost(cost);
@@ -186,14 +148,12 @@ DoriosAPI.register.blockComponent('infuser_controller', {
             const craftCount = maxProcess;
 
             if (craftCount > 0) {
-                // OUTPUT
                 distributeOutput(
                     controller,
                     recipe.output,
                     craftCount * recipeAmount
                 );
 
-                // INPUTS (GLOBAL REMOVAL)
                 controller.entity.removeItem(
                     inputType,
                     craftCount * requiredInput
@@ -222,8 +182,43 @@ DoriosAPI.register.blockComponent('infuser_controller', {
         controller.displayProgress(3);
         updateUI(controller, data, '§aRunning', recipe);
     }
-
 })
+
+function initializeControllerEntity(entity) {
+    entity.setItem(1, 'utilitycraft:arrow_right_0', 1, ' ')
+    entity.setItem(2, 'utilitycraft:arrow_right_0', 1, ' ')
+    entity.setItem(3, 'utilitycraft:arrow_right_0', 1, '')
+    entity.setItem(4, 'utilitycraft:arrow_indicator_90', 1, '')
+}
+
+async function activateInfuserController(e, settings, entity) {
+    const { block, player } = e
+
+    Multiblock.deactivateMultiblock(block, player)
+
+    const structure = await Multiblock.detectFromController(e, settings.required_case)
+    if (!structure) return
+
+    const energyCap = Multiblock.activateMultiblock(entity, structure)
+    if (energyCap <= 0) {
+        player.sendMessage('§c[Controller] At least 1 energy container its required to operate.')
+        Multiblock.deactivateMultiblock(block, player)
+        return
+    }
+
+    const processing = structure.components.processing_module ?? 0
+    if (processing === 0) {
+        player.sendMessage('§c[Controller] At least 1 processing module its required to operate.')
+        Multiblock.deactivateMultiblock(block, player)
+        return
+    }
+
+    const factoryData = MultiblockMachine.computeMachineStats(structure.components)
+    entity.setDynamicProperty('components', JSON.stringify(factoryData))
+
+    player.sendMessage('§a[Controller] Infuser Factory created successfully.')
+    player.sendMessage(`§7[Controller] Energy Capacity: §b${EnergyStorage.formatEnergyToText(energyCap)}`)
+}
 
 function distributeOutput(controller, itemId, amount) {
     let remaining = amount;
@@ -231,7 +226,7 @@ function distributeOutput(controller, itemId, amount) {
     for (const slot of OUTPUT_SLOTS) {
         if (remaining <= 0) break;
 
-        const out = controller.inv.getItem(slot);
+        const out = controller.container.getItem(slot);
 
         if (!out) {
             const add = Math.min(64, remaining);
@@ -247,37 +242,36 @@ function distributeOutput(controller, itemId, amount) {
 
 function updateUI(controller, data, status = '§aRunning', recipe) {
     controller.displayEnergy()
-    const offsetLines = Multiblock.setMachineInfoLabel(controller, data, status);
+    const offsetLines = MultiblockMachine.setMachineInfoLabel(controller, data, status);
     setEnergyAndRecipeLabel(controller, offsetLines, recipe);
 
 }
 
 function setEnergyAndRecipeLabel(controller, offsetLines, recipe) {
-    const energy = controller.energy
-    const rate = controller.baseRate
+    const energy = controller.energy;
+    const rate = controller.baseRate;
 
     const hasRecipe = !!recipe;
 
-    const output = hasRecipe ? DoriosAPI.utils.formatIdToText(recipe.output) ?? "---" : "---";
-    const yieldAmt = hasRecipe ? (recipe.amount ?? 1) : "---";
-    const inputReq = hasRecipe ? (recipe.input_required ?? 1) : "---";
-    const catReq = hasRecipe ? (recipe.required ?? 1) : "---";
+    const output = hasRecipe ? DoriosAPI.utils.formatIdToText(recipe.output) ?? '---' : '---';
+    const yieldAmt = hasRecipe ? (recipe.amount ?? 1) : '---';
+    const catalystReq = hasRecipe ? (recipe.required ?? 1) : '---';
+    const inputReq = hasRecipe ? (recipe.input_required ?? 1) : '---';
 
     const text = `${offsetLines}
 §r§eEnergy Information
 
 §r§bCapacity §f${Math.floor(energy.getPercent())}%%
-§r§bStored §f${Energy.formatEnergyToText(energy.get())} / ${Energy.formatEnergyToText(energy.cap)}
-§r§bRate §f${Energy.formatEnergyToText(rate)}/t
+§r§bStored §f${EnergyStorage.formatEnergyToText(energy.get())} / ${EnergyStorage.formatEnergyToText(energy.cap)}
+§r§bRate §f${EnergyStorage.formatEnergyToText(rate)}/t
 
 §r§eRecipe Information
 
-§r§aCatalyst Required §f${catReq}
-§r§aInput Required §f${inputReq}
 §r§aOutput §f${output}
 §r§aYield §f${yieldAmt}
+§r§aCatalyst Required §f${catalystReq}
+§r§aInput Required §f${inputReq}
 `;
 
     controller.setLabel(text, 2);
 }
-

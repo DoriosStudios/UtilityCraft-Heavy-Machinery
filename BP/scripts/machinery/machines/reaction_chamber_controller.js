@@ -1,4 +1,6 @@
-import { Multiblock, Energy, Machine, FluidManager } from '../DoriosMachinery/main.js'
+import { EnergyStorage, FluidStorage } from "DoriosCore/index.js"
+import { Multiblock } from '../DoriosMachinery/multiblock.js'
+import { MultiblockMachine } from '../multiblockMachine.js'
 import { reactionRecipes } from 'config/recipes/reaction_chamber.js'
 
 const INPUT_LIQUID_SLOT = 4
@@ -10,7 +12,6 @@ const BASE_RATE = 1600
 
 const FLUID_CAPACITY_CELL = 256_000
 
-// slots energy, label, label, progress, 9 input 9 output
 DoriosAPI.register.blockComponent('reaction_chamber_controller', {
     async onPlayerInteract(e, { params: settings }) {
         const { block, player } = e
@@ -21,60 +22,23 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
         }
 
         if (!entity) {
-            entity = Machine.spawn(block, settings, block.permutation)
-            entity.setItem(1, 'utilitycraft:arrow_right_0', 1, " ")
-            entity.setItem(2, 'utilitycraft:arrow_right_0', 1, " ")
-            entity.setItem(3, 'utilitycraft:arrow_right_0', 1, "")
-            Energy.initialize(entity)
-        }
-
-        const [inputFluid, outputFluid] =
-            FluidManager.initializeMultiple(entity, 2);
-
-        Multiblock.deactivateMultiblock(entity, player)
-
-        const structure = await Multiblock.detectFromController(e, settings.required_case)
-        if (!structure) return
-
-        const energyCap = Multiblock.activateMultiblock(entity, structure)
-        if (energyCap <= 0) {
-            player.sendMessage("§c[Controller] At least 1 energy container its required to operate.");
-            Multiblock.deactivateMultiblock(entity, player)
+            MultiblockMachine.spawnEntity(e, settings, (spawnedEntity) => {
+                initializeControllerEntity(spawnedEntity)
+                FluidStorage.initializeMultiple(spawnedEntity, 2)
+                void activateReactionChamberController(e, settings, spawnedEntity)
+            })
             return
         }
 
-        const processing = structure.components["processing_module"] ?? 0
-        if (processing == 0) {
-            player.sendMessage("§c[Controller] At least 1 processing module its required to operate.");
-            Multiblock.deactivateMultiblock(entity, player)
-            return
-        }
-
-        const fluidCapacity = (structure.components["fluid_cell"] ?? 0) * FLUID_CAPACITY_CELL;
-        if (fluidCapacity == 0) {
-            player.sendMessage("§c[Controller] At least 1 fluid cell its required to operate.");
-            Multiblock.deactivateMultiblock(entity, player)
-            return
-        }
-        inputFluid.setCap(fluidCapacity / 2)
-        outputFluid.setCap(fluidCapacity / 2)
-
-        const factoryData = Multiblock.computeMachineStats(structure.components)
-        entity.setDynamicProperty('components', JSON.stringify(factoryData))
-
-        player.sendMessage("§a[Controller] Crusher Factory created successfully.");
-        player.sendMessage(`§7[Controller] Energy Capacity: §b${Energy.formatEnergyToText(energyCap)}`);
+        await activateReactionChamberController(e, settings, entity)
     },
     onPlayerBreak({ block, player }) {
-        const entity = block.dimension.getEntitiesAtBlockLocation(block.location)[0]
-        if (!entity) return
-        Multiblock.deactivateMultiblock(entity, player)
-        entity.remove()
+        Multiblock.handleBreakController(block, player)
     },
     onTick(e, { params: settings }) {
         if (!worldLoaded) return;
 
-        const controller = new Machine(e.block, settings);
+        const controller = new MultiblockMachine(e.block, settings);
         if (!controller.valid) return;
 
         const state = controller.entity.getDynamicProperty("dorios:state");
@@ -86,22 +50,15 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
 
         controller.setRate(BASE_RATE * data.speed.multiplier);
 
-        const inv = controller.inv;
+        const inv = controller.container;
         const recipes = reactionRecipes;
 
-        // ──────────────────────────────
-        // Fluids
-        // [0] input / [1] output
-        // ──────────────────────────────
         const [inputFluid, outputFluid] =
-            FluidManager.initializeMultiple(controller.entity, 2);
+            FluidStorage.initializeMultiple(controller.entity, 2);
 
         let inputItemId = "empty";
         let totalItems = 0;
 
-        // ──────────────────────────────
-        // Detect input item
-        // ──────────────────────────────
         for (const slot of INPUT_SLOTS) {
             const item = inv.getItem(slot);
             if (!item) continue;
@@ -126,9 +83,6 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
             return;
         }
 
-        // ──────────────────────────────
-        // Resolve requirements
-        // ──────────────────────────────
         const reqItems = recipe.required_items ?? 1;
         const reqFluid = recipe.required_liquid ?? 0;
 
@@ -144,9 +98,6 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
             return;
         }
 
-        // ──────────────────────────────
-        // Output space checks
-        // ──────────────────────────────
         let itemSpace = Infinity;
         let fluidSpace = Infinity;
 
@@ -198,9 +149,6 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
             return;
         }
 
-        // ──────────────────────────────
-        // Energy
-        // ──────────────────────────────
         const cost = recipe.cost ?? DEFAULT_COST;
         data.cost = cost;
         controller.setEnergyCost(cost);
@@ -213,13 +161,9 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
             return;
         }
 
-        // ──────────────────────────────
-        // Process
-        // ──────────────────────────────
         if (progress >= cost) {
             const craftCount = maxProcess;
 
-            // OUTPUT ITEM
             if (recipe.output_item) {
                 distributeOutput(
                     controller,
@@ -228,7 +172,6 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
                 );
             }
 
-            // OUTPUT FLUID
             if (recipe.output_liquid) {
                 if (outputFluid.getType() === "empty") {
                     outputFluid.setType(recipe.output_liquid.type);
@@ -236,7 +179,6 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
                 outputFluid.add(craftCount * outFluidAmt);
             }
 
-            // INPUT ITEM
             if (inputItemId !== "empty") {
                 controller.entity.removeItem(
                     inputItemId,
@@ -244,7 +186,6 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
                 );
             }
 
-            // INPUT FLUID
             if (reqFluid > 0) {
                 inputFluid.consume(craftCount * reqFluid);
             }
@@ -268,13 +209,59 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
     }
 })
 
+function initializeControllerEntity(entity) {
+    entity.setItem(1, 'utilitycraft:arrow_right_0', 1, ' ')
+    entity.setItem(2, 'utilitycraft:arrow_right_0', 1, ' ')
+    entity.setItem(3, 'utilitycraft:arrow_right_0', 1, '')
+}
+
+async function activateReactionChamberController(e, settings, entity) {
+    const { block, player } = e
+
+    const [inputFluid, outputFluid] = FluidStorage.initializeMultiple(entity, 2)
+
+    Multiblock.deactivateMultiblock(block, player)
+
+    const structure = await Multiblock.detectFromController(e, settings.required_case)
+    if (!structure) return
+
+    const energyCap = Multiblock.activateMultiblock(entity, structure)
+    if (energyCap <= 0) {
+        player.sendMessage('§c[Controller] At least 1 energy container its required to operate.')
+        Multiblock.deactivateMultiblock(block, player)
+        return
+    }
+
+    const processing = structure.components.processing_module ?? 0
+    if (processing === 0) {
+        player.sendMessage('§c[Controller] At least 1 processing module its required to operate.')
+        Multiblock.deactivateMultiblock(block, player)
+        return
+    }
+
+    const fluidCapacity = (structure.components.fluid_cell ?? 0) * FLUID_CAPACITY_CELL
+    if (fluidCapacity === 0) {
+        player.sendMessage('§c[Controller] At least 1 fluid cell its required to operate.')
+        Multiblock.deactivateMultiblock(block, player)
+        return
+    }
+    inputFluid.setCap(fluidCapacity / 2)
+    outputFluid.setCap(fluidCapacity / 2)
+
+    const factoryData = MultiblockMachine.computeMachineStats(structure.components)
+    entity.setDynamicProperty('components', JSON.stringify(factoryData))
+
+    player.sendMessage('§a[Controller] Crusher Factory created successfully.')
+    player.sendMessage(`§7[Controller] Energy Capacity: §b${EnergyStorage.formatEnergyToText(energyCap)}`)
+}
+
 function distributeOutput(controller, itemId, amount) {
     let remaining = amount;
     const entity = controller.entity
     for (const slot of OUTPUT_SLOTS) {
         if (remaining <= 0) break;
 
-        const out = controller.inv.getItem(slot);
+        const out = controller.container.getItem(slot);
 
         if (!out) {
             const add = Math.min(64, remaining);
@@ -292,7 +279,7 @@ function updateUI(controller, [inputFluid, outputFluid], data, status = '§aRunn
     inputFluid.display(INPUT_LIQUID_SLOT)
     outputFluid.display(OUTPUT_LIQUID_SLOT)
     controller.displayEnergy()
-    const offsetLines = Multiblock.setMachineInfoLabel(controller, data, status);
+    const offsetLines = MultiblockMachine.setMachineInfoLabel(controller, data, status);
     setEnergyAndRecipeLabel(controller, offsetLines, recipe);
 
 }
@@ -305,26 +292,26 @@ function setEnergyAndRecipeLabel(controller, offsetLines, recipe) {
 
     const outItem = hasRecipe && recipe.output_item
         ? DoriosAPI.utils.formatIdToText(recipe.output_item.id)
-        : "None";
+        : 'None';
 
     const outItemAmt = hasRecipe && recipe.output_item
         ? (recipe.output_item.amount ?? 1)
-        : "-";
+        : '-';
 
     const outFluid = hasRecipe && recipe.output_liquid
         ? DoriosAPI.utils.formatIdToText(recipe.output_liquid.type)
-        : "None";
+        : 'None';
 
     const outFluidAmt = hasRecipe && recipe.output_liquid
-        ? FluidManager.formatFluid(recipe.output_liquid.amount)
-        : "-";
+        ? FluidStorage.formatFluid(recipe.output_liquid.amount)
+        : '-';
 
     const text = `${offsetLines}
 §r§eEnergy
 
 §r§bCapacity §f${Math.floor(energy.getPercent())}%%
-§r§bStored §f${Energy.formatEnergyToText(energy.get())} / ${Energy.formatEnergyToText(energy.cap)}
-§r§bRate §f${Energy.formatEnergyToText(rate)}/t
+§r§bStored §f${EnergyStorage.formatEnergyToText(energy.get())} / ${EnergyStorage.formatEnergyToText(energy.cap)}
+§r§bRate §f${EnergyStorage.formatEnergyToText(rate)}/t
 
 §r§eRecipe
 

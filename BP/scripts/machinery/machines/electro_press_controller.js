@@ -1,4 +1,6 @@
-	import { Multiblock, Energy, Machine } from '../DoriosMachinery/main.js'
+import { EnergyStorage } from "DoriosCore/index.js"
+import { Multiblock } from '../DoriosMachinery/multiblock.js'
+import { MultiblockMachine } from '../multiblockMachine.js'
 import { pressRecipes } from 'config/recipes/press.js'
 
 const INPUT_SLOTS = [4, 5, 6, 7, 8, 9, 10, 11, 12]
@@ -7,7 +9,6 @@ const DEFAULT_COST = 800
 const MULTI_PENALTY = 4
 const BASE_RATE = 100
 
-// slots energy, label, label, progress, 9 input 9 output
 DoriosAPI.register.blockComponent('electro_press_controller', {
     async onPlayerInteract(e, { params: settings }) {
         const { block, player } = e
@@ -18,47 +19,22 @@ DoriosAPI.register.blockComponent('electro_press_controller', {
         }
 
         if (!entity) {
-            entity = Machine.spawn(block, settings, block.permutation)
-            entity.setItem(1, 'utilitycraft:arrow_right_0', 1, " ")
-            entity.setItem(2, 'utilitycraft:arrow_right_0', 1, " ")
-            entity.setItem(3, 'utilitycraft:arrow_right_0', 1, "")
-            Energy.initialize(entity)
-        }
-        Multiblock.deactivateMultiblock(entity, player)
-
-        const structure = await Multiblock.detectFromController(e, settings.required_case)
-        if (!structure) return
-
-        const energyCap = Multiblock.activateMultiblock(entity, structure)
-        if (energyCap <= 0) {
-            player.sendMessage("§c[Controller] At least 1 energy container its required to operate.");
-            Multiblock.deactivateMultiblock(entity, player)
+            MultiblockMachine.spawnEntity(e, settings, (spawnedEntity) => {
+                initializeControllerEntity(spawnedEntity)
+                void activateElectroPressController(e, settings, spawnedEntity)
+            })
             return
         }
 
-        const processing = structure.components["processing_module"] ?? 0
-        if (processing == 0) {
-            player.sendMessage("§c[Controller] At least 1 processing module its required to operate.");
-            Multiblock.deactivateMultiblock(entity, player)
-            return
-        }
-
-        const factoryData = Multiblock.computeMachineStats(structure.components)
-        entity.setDynamicProperty('components', JSON.stringify(factoryData))
-
-        player.sendMessage("§a[Controller] Electro Press Factory created successfully.");
-        player.sendMessage(`§7[Controller] Energy Capacity: §b${Energy.formatEnergyToText(energyCap)}`);
+        await activateElectroPressController(e, settings, entity)
     },
     onPlayerBreak({ block, player }) {
-        const entity = block.dimension.getEntitiesAtBlockLocation(block.location)[0]
-        if (!entity) return
-        Multiblock.deactivateMultiblock(entity, player)
-        entity.remove()
+        Multiblock.handleBreakController(block, player)
     },
     onTick(e, { params: settings }) {
         if (!worldLoaded) return;
 
-        const controller = new Machine(e.block, settings);
+        const controller = new MultiblockMachine(e.block, settings);
         if (!controller.valid) return;
 
         const state = controller.entity.getDynamicProperty('dorios:state');
@@ -70,7 +46,7 @@ DoriosAPI.register.blockComponent('electro_press_controller', {
 
         controller.setRate(BASE_RATE * data.speed.multiplier);
 
-        const inv = controller.inv;
+        const inv = controller.container;
         const recipes = pressRecipes;
 
         let recipe = null;
@@ -89,7 +65,6 @@ DoriosAPI.register.blockComponent('electro_press_controller', {
                 inputType = item.typeId;
             }
 
-            // Solo sumar stacks del mismo item
             if (item.typeId === inputType) {
                 totalInput += item.amount;
             }
@@ -142,14 +117,12 @@ DoriosAPI.register.blockComponent('electro_press_controller', {
             const craftCount = maxProcess;
 
             if (craftCount > 0) {
-                // OUTPUT
                 distributeOutput(
                     controller,
                     recipe.output,
                     craftCount * recipeAmount
                 );
 
-                // INPUT (GLOBAL REMOVAL)
                 controller.entity.removeItem(
                     inputType,
                     craftCount * required
@@ -175,13 +148,48 @@ DoriosAPI.register.blockComponent('electro_press_controller', {
     }
 })
 
+function initializeControllerEntity(entity) {
+    entity.setItem(1, 'utilitycraft:arrow_right_0', 1, ' ')
+    entity.setItem(2, 'utilitycraft:arrow_right_0', 1, ' ')
+    entity.setItem(3, 'utilitycraft:arrow_right_0', 1, '')
+}
+
+async function activateElectroPressController(e, settings, entity) {
+    const { block, player } = e
+
+    Multiblock.deactivateMultiblock(block, player)
+
+    const structure = await Multiblock.detectFromController(e, settings.required_case)
+    if (!structure) return
+
+    const energyCap = Multiblock.activateMultiblock(entity, structure)
+    if (energyCap <= 0) {
+        player.sendMessage('§c[Controller] At least 1 energy container its required to operate.')
+        Multiblock.deactivateMultiblock(block, player)
+        return
+    }
+
+    const processing = structure.components.processing_module ?? 0
+    if (processing === 0) {
+        player.sendMessage('§c[Controller] At least 1 processing module its required to operate.')
+        Multiblock.deactivateMultiblock(block, player)
+        return
+    }
+
+    const factoryData = MultiblockMachine.computeMachineStats(structure.components)
+    entity.setDynamicProperty('components', JSON.stringify(factoryData))
+
+    player.sendMessage('§a[Controller] Electro Press Factory created successfully.')
+    player.sendMessage(`§7[Controller] Energy Capacity: §b${EnergyStorage.formatEnergyToText(energyCap)}`)
+}
+
 function distributeOutput(controller, itemId, amount) {
     let remaining = amount;
     const entity = controller.entity
     for (const slot of OUTPUT_SLOTS) {
         if (remaining <= 0) break;
 
-        const out = controller.inv.getItem(slot);
+        const out = controller.container.getItem(slot);
 
         if (!out) {
             const add = Math.min(64, remaining);
@@ -197,7 +205,7 @@ function distributeOutput(controller, itemId, amount) {
 
 function updateUI(controller, data, status = '§aRunning', recipe) {
     controller.displayEnergy()
-    const offsetLines = Multiblock.setMachineInfoLabel(controller, data, status);
+    const offsetLines = MultiblockMachine.setMachineInfoLabel(controller, data, status);
     setEnergyAndRecipeLabel(controller, offsetLines, recipe);
 
 }
@@ -208,16 +216,16 @@ function setEnergyAndRecipeLabel(controller, offsetLines, recipe) {
 
     const hasRecipe = !!recipe;
 
-    const output = hasRecipe ? DoriosAPI.utils.formatIdToText(recipe.output) ?? "---" : "---";
-    const yieldAmt = hasRecipe ? (recipe.amount ?? 1) : "---";
-    const inputReq = hasRecipe ? (recipe.required ?? 1) : "---";
+    const output = hasRecipe ? DoriosAPI.utils.formatIdToText(recipe.output) ?? '---' : '---';
+    const yieldAmt = hasRecipe ? (recipe.amount ?? 1) : '---';
+    const inputReq = hasRecipe ? (recipe.required ?? 1) : '---';
 
     const text = `${offsetLines}
 §r§eEnergy Information
 
 §r§bCapacity §f${Math.floor(energy.getPercent())}%%
-§r§bStored §f${Energy.formatEnergyToText(energy.get())} / ${Energy.formatEnergyToText(energy.cap)}
-§r§bRate §f${Energy.formatEnergyToText(rate)}/t
+§r§bStored §f${EnergyStorage.formatEnergyToText(energy.get())} / ${EnergyStorage.formatEnergyToText(energy.cap)}
+§r§bRate §f${EnergyStorage.formatEnergyToText(rate)}/t
 
 §r§eRecipe Information
 

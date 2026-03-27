@@ -31,11 +31,12 @@
             },
             "utilitycraft:autosieve_controller": {
                 "entity": {
-                    "input_slots": [
+                    "type": "complex_machine",
+                    "input_range": [
                         5,
                         13
                     ],
-                    "output_slots": [
+                    "output_range": [
                         14,
                         28
                     ],

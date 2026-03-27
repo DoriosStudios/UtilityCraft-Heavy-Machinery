@@ -1,5 +1,5 @@
-import { system, world } from "@minecraft/server";
-import { FluidStorage, Generator } from "DoriosCore/index.js"
+import { ItemStack, system, world } from "@minecraft/server";
+import { FluidStorage, Generator, Machine } from "DoriosCore/index.js"
 
 export const scriptEventHandler = {
     /**

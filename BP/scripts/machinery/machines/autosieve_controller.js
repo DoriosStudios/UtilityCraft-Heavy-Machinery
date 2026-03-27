@@ -1,4 +1,6 @@
-import { Multiblock, Energy, Machine } from '../DoriosMachinery/main.js'
+import { EnergyStorage } from "DoriosCore/index.js"
+import { Multiblock } from '../DoriosMachinery/multiblock.js'
+import { MultiblockMachine } from '../multiblockMachine.js'
 import { sieveRecipes } from 'config/recipes/sieve.js'
 
 const MESH_SLOT = 4
@@ -18,49 +20,24 @@ DoriosAPI.register.blockComponent('autosieve_controller', {
         if (!player.getEquipment('Mainhand')?.typeId.includes('wrench')) return
 
         if (!entity) {
-            entity = Machine.spawn(block, settings, block.permutation)
-            entity.setItem(1, 'utilitycraft:arrow_right_0', 1, '')
-            entity.setItem(2, 'utilitycraft:arrow_right_0', 1, '')
-            Energy.initialize(entity)
-        }
-
-        Multiblock.deactivateMultiblock(entity, player)
-
-        const structure = await Multiblock.detectFromController(e, settings.required_case)
-        if (!structure) return
-
-        const energyCap = Multiblock.activateMultiblock(entity, structure)
-        if (energyCap <= 0) {
-            player.sendMessage('§c[Controller] At least 1 energy container is required.')
-            Multiblock.deactivateMultiblock(entity, player)
+            MultiblockMachine.spawnEntity(e, settings, (spawnedEntity) => {
+                initializeControllerEntity(spawnedEntity)
+                void activateAutosieveController(e, settings, spawnedEntity)
+            })
             return
         }
 
-        const processing = structure.components.processing_module ?? 0
-        if (processing <= 0) {
-            player.sendMessage('§c[Controller] At least 1 processing module is required.')
-            Multiblock.deactivateMultiblock(entity, player)
-            return
-        }
-
-        const factoryData = Multiblock.computeMachineStats(structure.components)
-        entity.setDynamicProperty('components', JSON.stringify(factoryData))
-
-        player.sendMessage('§a[Controller] Autosieve Factory created successfully.')
-        player.sendMessage(`§7Energy Capacity: §b${Energy.formatEnergyToText(energyCap)}`)
+        await activateAutosieveController(e, settings, entity)
     },
 
     onPlayerBreak({ block, player }) {
-        const entity = block.dimension.getEntitiesAtBlockLocation(block.location)[0]
-        if (!entity) return
-        Multiblock.deactivateMultiblock(entity, player)
-        entity.remove()
+        Multiblock.handleBreakController(block, player)
     },
 
     onTick(e, { params: settings }) {
         if (!worldLoaded) return
 
-        const controller = new Machine(e.block, settings)
+        const controller = new MultiblockMachine(e.block, settings)
         if (!controller.valid) return
 
         const state = controller.entity.getDynamicProperty('dorios:state')
@@ -71,7 +48,7 @@ DoriosAPI.register.blockComponent('autosieve_controller', {
 
         controller.setRate(BASE_RATE * data.speed.multiplier)
 
-        const inv = controller.inv
+        const inv = controller.container
 
         const meshSlot = inv.getItem(MESH_SLOT)
         if (!meshSlot) {
@@ -99,7 +76,6 @@ DoriosAPI.register.blockComponent('autosieve_controller', {
 
         for (const slot of INPUT_SLOTS) {
             const item = inv.getItem(slot)
-            // controller.entity.runCommand(`say ${slot} ${item?.typeId}`)
             if (!item) continue
 
             if (!inputType) inputType = item.typeId
@@ -175,6 +151,40 @@ DoriosAPI.register.blockComponent('autosieve_controller', {
     }
 })
 
+function initializeControllerEntity(entity) {
+    entity.setItem(1, 'utilitycraft:arrow_right_0', 1, '')
+    entity.setItem(2, 'utilitycraft:arrow_right_0', 1, '')
+}
+
+async function activateAutosieveController(e, settings, entity) {
+    const { block, player } = e
+
+    Multiblock.deactivateMultiblock(block, player)
+
+    const structure = await Multiblock.detectFromController(e, settings.required_case)
+    if (!structure) return
+
+    const energyCap = Multiblock.activateMultiblock(entity, structure)
+    if (energyCap <= 0) {
+        player.sendMessage('§c[Controller] At least 1 energy container is required.')
+        Multiblock.deactivateMultiblock(block, player)
+        return
+    }
+
+    const processing = structure.components.processing_module ?? 0
+    if (processing <= 0) {
+        player.sendMessage('§c[Controller] At least 1 processing module is required.')
+        Multiblock.deactivateMultiblock(block, player)
+        return
+    }
+
+    const factoryData = MultiblockMachine.computeMachineStats(structure.components)
+    entity.setDynamicProperty('components', JSON.stringify(factoryData))
+
+    player.sendMessage('§a[Controller] Autosieve Factory created successfully.')
+    player.sendMessage(`§7Energy Capacity: §b${EnergyStorage.formatEnergyToText(energyCap)}`)
+}
+
 function processAutosieveDrops(
     controller,
     recipe,
@@ -202,7 +212,7 @@ function processAutosieveDrops(
 
 function distributeOutput(controller, itemId, amount) {
     let remaining = amount
-    const inv = controller.inv
+    const inv = controller.container
     const entity = controller.entity
 
     for (const slot of OUTPUT_SLOTS) {
@@ -225,7 +235,7 @@ function distributeOutput(controller, itemId, amount) {
 
 function updateUI(controller, data, status = '§aRunning', recipe) {
     controller.displayEnergy()
-    const offsetLines = Multiblock.setMachineInfoLabel(controller, data, status);
+    const offsetLines = MultiblockMachine.setMachineInfoLabel(controller, data, status);
     setEnergyAndRecipeLabel(controller, offsetLines, recipe);
 
 }
@@ -236,16 +246,16 @@ function setEnergyAndRecipeLabel(controller, offsetLines, recipe) {
 
     const hasRecipe = !!recipe;
 
-    const output = hasRecipe ? DoriosAPI.utils.formatIdToText(recipe.output) ?? "---" : "---";
-    const yieldAmt = hasRecipe ? (recipe.amount ?? 1) : "---";
-    const inputReq = hasRecipe ? (recipe.required ?? 1) : "---";
+    const output = hasRecipe ? DoriosAPI.utils.formatIdToText(recipe.output) ?? '---' : '---';
+    const yieldAmt = hasRecipe ? (recipe.amount ?? 1) : '---';
+    const inputReq = hasRecipe ? (recipe.required ?? 1) : '---';
 
     const text = `${offsetLines}
 §r§eEnergy Information
 
 §r§bCapacity §f${Math.floor(energy.getPercent())}%%
-§r§bStored §f${Energy.formatEnergyToText(energy.get())} / ${Energy.formatEnergyToText(energy.cap)}
-§r§bRate §f${Energy.formatEnergyToText(rate)}/t
+§r§bStored §f${EnergyStorage.formatEnergyToText(energy.get())} / ${EnergyStorage.formatEnergyToText(energy.cap)}
+§r§bRate §f${EnergyStorage.formatEnergyToText(rate)}/t
 
 §r§eRecipe Information
 

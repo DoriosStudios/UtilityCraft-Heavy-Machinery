@@ -98,8 +98,10 @@ export function spawnEntity(block, config) {
   const identifier = entityData.identifier ?? Constants.DEFAULT_ENTITY_ID;
   const entity = dimension.spawnEntity(identifier, location);
 
-  const inventorySize = entityData.inventory_size ?? 1;
-  entity.triggerEvent(`utilitycraft:inventory_${inventorySize}`);
+  const inventorySize = entityData.inventory_size
+  if (inventorySize) {
+    entity.triggerEvent(`utilitycraft:inventory_${inventorySize}`);
+  }
 
   const name = entityData.name ?? block.typeId.split(":")[1];
   entity.nameTag = `entity.utilitycraft:${name}.name`;

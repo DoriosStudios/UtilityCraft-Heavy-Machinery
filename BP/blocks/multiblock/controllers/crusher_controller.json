@@ -31,10 +31,17 @@
             },
             "utilitycraft:crusher_controller": {
                 "entity": {
-                    "input_type": "complex",
-                    "output_type": "complex",
+                    "type": "complex_machine",
                     "inventory_size": 22,
-                    "identifier": "utilitycraft:multiblock_machine"
+                    "identifier": "utilitycraft:multiblock_machine",
+                    "input_range": [
+                        4,
+                        12
+                    ],
+                    "output_range": [
+                        13,
+                        21
+                    ]
                 },
                 "required_case": "dorios:multiblock.case.steel",
                 "required_components": {

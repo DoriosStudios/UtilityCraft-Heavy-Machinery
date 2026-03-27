@@ -32,11 +32,12 @@
             },
             "utilitycraft:reaction_chamber_controller": {
                 "entity": {
-                    "input_slots": [
+                    "type": "complex_machine_fluid",
+                    "input_range": [
                         6,
                         9
                     ],
-                    "output_slots": [
+                    "output_range": [
                         10,
                         13
                     ],

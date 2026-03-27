@@ -1,10 +1,10 @@
-import { Multiblock, Generator, Energy } from '../DoriosMachinery/main.js'
+import { EnergyStorage, Generator } from "DoriosCore/index.js"
+import { Multiblock } from '../DoriosMachinery/multiblock.js'
 
 DoriosAPI.register.blockComponent('power_condenser', {
     async onPlayerInteract(e, { params: settings }) {
         const { block, player } = e
 
-        let { x, y, z } = block.center(); y -= 0.25;
         let entity = block.dimension.getEntitiesAtBlockLocation(block.location)[0]
 
         if (!player.getEquipment('Mainhand')?.typeId.includes('wrench')) {
@@ -13,37 +13,18 @@ DoriosAPI.register.blockComponent('power_condenser', {
         }
 
         if (!entity) {
-            entity = block.dimension.spawnEntity('utilitycraft:power_condenser', { x, y, z })
-            entity.nameTag = `entity.utilitycraft:${settings.entity.name}.name`
-            Energy.initialize(entity)
-        }
-        Multiblock.deactivateMultiblock(entity, player)
-
-        const structure = await Multiblock.detectFromController(e, settings.required_case)
-        if (!structure) return
-
-        const energyCap = Multiblock.activateMultiblock(entity, structure)
-        const transferRate = energyCap / settings.multiblock.transfer_rate_ratio
-        if (energyCap <= 0) {
-            player.sendMessage("§c[Matrix] At least 1 energy container its required to operate.");
-            Multiblock.deactivateMultiblock(entity, player)
+            Generator.spawnEntity(e, settings, (spawnedEntity) => {
+                void activatePowerCondenser(e, settings, spawnedEntity)
+            })
             return
         }
 
-        entity.setDynamicProperty('dorios:rateSpeed', transferRate)
-
-        player.sendMessage("§a[Matrix] Power Condenser Matrix created successfully.");
-        player.sendMessage(`§7[Matrix] Energy Capacity: §b${Energy.formatEnergyToText(energyCap)}`);
-        player.sendMessage(`§7[Matrix] Transfer Rate: §b${Energy.formatEnergyToText(transferRate)}/t`);
+        await activatePowerCondenser(e, settings, entity)
     },
     onPlayerBreak({ block, player }) {
-        const entity = block.dimension.getEntitiesAtBlockLocation(block.location)[0]
-        if (!entity) return
-        Multiblock.deactivateMultiblock(entity, player)
-        entity.remove()
+        Multiblock.handleBreakController(block, player)
     },
     onTick({ block }, { params: settings }) {
-        if (!worldLoaded) return;
         const matrix = new Generator(block, settings)
         if (!matrix.valid) return
 
@@ -58,11 +39,34 @@ DoriosAPI.register.blockComponent('power_condenser', {
 §r§eEnergy Information
 
 §r§bCapacity §f${Math.floor(energy.getPercent())}%%
-§r§bStored §f${Energy.formatEnergyToText(energy.get())} / ${Energy.formatEnergyToText(energy.cap)}
-§r§bTransfer Rate: §f${Energy.formatEnergyToText(matrix.baseRate)}/t
+§r§bStored §f${EnergyStorage.formatEnergyToText(energy.get())} / ${EnergyStorage.formatEnergyToText(energy.cap)}
+§r§bTransfer Rate: §f${EnergyStorage.formatEnergyToText(matrix.baseRate ?? 0)}/t
 
-§r§cTransferring §f${Energy.formatEnergyToText(transfered)}/t
+§r§cTransferring §f${EnergyStorage.formatEnergyToText(transfered)}/t
 `)
         matrix.displayEnergy()
     }
 })
+
+async function activatePowerCondenser(e, settings, entity) {
+    const { block, player } = e
+
+    Multiblock.deactivateMultiblock(block, player)
+
+    const structure = await Multiblock.detectFromController(e, settings.required_case)
+    if (!structure) return
+
+    const energyCap = Multiblock.activateMultiblock(entity, structure)
+    const transferRate = energyCap / settings.multiblock.transfer_rate_ratio
+    if (energyCap <= 0) {
+        player.sendMessage('§c[Matrix] At least 1 energy container its required to operate.')
+        Multiblock.deactivateMultiblock(block, player)
+        return
+    }
+
+    entity.setDynamicProperty('dorios:rateSpeed', transferRate)
+
+    player.sendMessage('§a[Matrix] Power Condenser Matrix created successfully.')
+    player.sendMessage(`§7[Matrix] Energy Capacity: §b${EnergyStorage.formatEnergyToText(energyCap)}`)
+    player.sendMessage(`§7[Matrix] Transfer Rate: §b${EnergyStorage.formatEnergyToText(transferRate)}/t`)
+}

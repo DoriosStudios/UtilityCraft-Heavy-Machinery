@@ -1,4 +1,5 @@
-import { Multiblock, Generator, Energy, FluidManager } from '../DoriosMachinery/main.js'
+import { EnergyStorage, FluidStorage, Generator } from "DoriosCore/index.js"
+import { Multiblock } from '../DoriosMachinery/multiblock.js'
 import { ModalFormData } from '@minecraft/server-ui'
 import { ItemStack } from '@minecraft/server'
 import { coolants } from 'config/coolants.js'
@@ -96,15 +97,13 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
         const { block, player } = e;
         const dim = block.dimension;
 
-        let { x, y, z } = block.center(); y -= 0.25;
-
         const main = player.getEquipment('Mainhand');
         const isWrench = main?.typeId.includes("wrench");
 
         let entity = dim.getEntitiesAtBlockLocation(block.location)[0];
 
         if (!isWrench && entity) {
-            if (!FluidManager.handleFluidItemInteraction(player, entity, main)) {
+            if (!FluidStorage.handleFluidItemInteraction(player, entity, main)) {
                 showBurnRateConfigForm(entity, player);
                 return
             }
@@ -112,91 +111,16 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
         }
 
         if (!entity) {
-            entity = dim.spawnEntity("utilitycraft:thermo_reactor", { x, y, z });
-            entity.nameTag = `entity.utilitycraft:${settings.entity.name}.name`;
-            Energy.initialize(entity)
-        }
-
-        Multiblock.deactivateMultiblock(entity, player);
-        Multiblock.emptyBlocks(entity, "minecraft:water");
-
-        const structure = await Multiblock.detectFromController(e, settings.required_case);
-        if (!structure) return;
-
-        const { components, bounds } = structure;
-
-
-        if (!components["thermo_core"]) {
-            player.sendMessage("§c[Reactor] Missing Thermo Core — reactor cannot operate.");
-            return;
-        }
-
-        const energyCap = Multiblock.activateMultiblock(entity, structure);
-        if (energyCap <= 0) {
-            player.sendMessage("§c[Reactor] At least 1 energy unit is required.");
-            Multiblock.deactivateMultiblock(entity, player)
+            Generator.spawnEntity(e, settings, (spawnedEntity) => {
+                void activateThermoReactor(e, settings, spawnedEntity)
+            })
             return
         }
 
-        Multiblock.fillEmptyBlocks(bounds, dim, "minecraft:water");
-
-        entity.setDynamicProperty(
-            "dorios:rateSpeed",
-            energyCap / settings.multiblock.transfer_rate_ratio
-        );
-
-        const lavaCapacity =
-            (components["fluid_cell"] ?? 0) * config.lavaCapacityPerFluidCell;
-
-        const internalVolume = (components["air"] ?? 0);
-
-        const coolantCapacity = internalVolume * config.coolantCapacityPerEmptyBlock;
-        const steamCapacity = internalVolume * config.steamCapacityPerEmptyBlock;
-
-        const heatDissipation =
-            (components["heat_conductor"] ?? 0) * config.conductorHeatDissipation;
-
-        const ventRate =
-            (components["vent"] ?? 0) * config.ventReleaseRate;
-
-        if (lavaCapacity <= 0) player.sendMessage("§e[Warning] No Lava Cells detected.");
-        if (coolantCapacity <= 0) player.sendMessage("§e[Warning] No volume for coolant cooling.");
-        if (steamCapacity <= 0) player.sendMessage("§e[Warning] No internal steam volume.");
-        if (heatDissipation <= 0) player.sendMessage("§e[Warning] No Heat Conductors found.");
-        if (ventRate <= 0) player.sendMessage("§e[Warning] No vents detected — pressure cannot be released.");
-
-        const reactorStats = {
-            lavaCapacity,
-            coolantCapacity,
-            steamCapacity,
-            heatDissipation,
-            ventRate,
-            energyCap,
-            bounds
-        };
-
-        entity.setDynamicProperty("reactorStats", JSON.stringify(reactorStats));
-
-        const fluids = FluidManager.initializeMultiple(entity, 2);
-        fluids[0].setCap(1000)
-        fluids[1].setCap(1000)
-
-        player.sendMessage("§a[Reactor] Thermo Reactor structure validated.");
-        player.sendMessage(`§7Energy Capacity: §b${Energy.formatEnergyToText(energyCap)}`);
-        player.sendMessage(`§7Lava Capacity: §b${FluidManager.formatFluid(lavaCapacity)}`);
-        player.sendMessage(`§7Coolant Capacity: §b${FluidManager.formatFluid(coolantCapacity)}`);
-        player.sendMessage(`§7Steam Capacity: §b${FluidManager.formatFluid(steamCapacity)}`);
-        player.sendMessage(`§7Heat Dissipation: §b${heatDissipation.toFixed(2)} K°/t`);
-        player.sendMessage(`§7Steam Venting: §b${FluidManager.formatFluid(ventRate)}/t`);
-        player.sendMessage(`§7Max Pressure: §b${config.maxPressurePSI} PSI`);
-        player.sendMessage(`§7Max Heat: §b${config.maxCoreTemperatureK} K°`);
+        await activateThermoReactor(e, settings, entity)
     },
     onPlayerBreak({ block, player }) {
-        const entity = block.dimension.getEntitiesAtBlockLocation(block.location)[0]
-        if (!entity) return
-        Multiblock.deactivateMultiblock(entity, player)
-        Multiblock.emptyBlocks(entity, 'minecraft:water')
-        entity.remove()
+        Multiblock.handleBreakController(block, player, { blockId: 'minecraft:water' })
     },
     onTick({ block }, { params: settings }) {
         if (!worldLoaded) return;
@@ -210,7 +134,7 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
         energy.transferToNetwork(reactor.rate);
         const data = getReactorInfo(entity);
 
-        const fluids = FluidManager.initializeMultiple(entity, 2);
+        const fluids = FluidStorage.initializeMultiple(entity, 2);
         fluids.forEach(fluid => fluid.display(fluid.index + 2))
 
         let lava = null; let coolant = null; let coolantData = null;
@@ -263,7 +187,7 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
                 const energyProduced = rate * config.energyPerLavaUnit * data.efficiency;
                 const rawHeat = rate * config.heatPerLavaUnit * (1 + waste);
                 const tMin = CORE_TMIN_K;
-                const tMax = CORE_TCAP_K; // 1200 K
+                const tMax = CORE_TCAP_K;
                 const span = Math.max(1e-6, tMax - tMin);
                 const normT = Math.min(1, Math.max(0, (data.temperature - tMin) / span));
                 const TEMP_SLOWDOWN_EXP = 2;
@@ -308,17 +232,16 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
             if (data.temperature >= WARN_DANGER_K) {
                 data.state = "off"
                 data.temperature = 1000
-                Multiblock.deactivateMultiblock(entity)
-                Multiblock.emptyBlocks(entity, 'minecraft:water')
+                Multiblock.deactivateMultiblock(block, undefined, { blockId: 'minecraft:water' })
                 DoriosAPI.utils.waitSeconds(4, () => {
                     if (!entity) return
                     const bounds = data.bounds
                     if (bounds) {
                         const center = Multiblock.getCenter(bounds.min, bounds.max)
                         const radius = (Multiblock.getVolume(bounds) ** (1 / 3)) * 0.4
-                        reactor.dim.createExplosion({ x: center.x + 0.5, y: center.y + 0.5, z: center.z + 0.5, }, radius, { causesFire: true, breaksBlocks: true, allowUnderwater: true })
+                        reactor.dimension.createExplosion({ x: center.x + 0.5, y: center.y + 0.5, z: center.z + 0.5 }, radius, { causesFire: true, breaksBlocks: true, allowUnderwater: true })
                     } else {
-                        reactor.dim.createExplosion(entity.location, 4, { causesFire: true, breaksBlocks: true, allowUnderwater: true })
+                        reactor.dimension.createExplosion(entity.location, 4, { causesFire: true, breaksBlocks: true, allowUnderwater: true })
                     }
                 })
             }
@@ -337,7 +260,6 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
         reactor.displayEnergy();
     }
 })
-
 /**
  * Updates the reactor status label and temperature bar.
  *
@@ -346,18 +268,16 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
  */
 function updateReactorInfoItem(data, reactor) {
 
-    // ----- LABEL -----
     reactor.setLabel(`
-§r§3Producing: §f${Energy.formatEnergyToText(data.producing ?? 0)}/t
+§r§3Producing: §f${EnergyStorage.formatEnergyToText(data.producing ?? 0)}/t
 §r§3Burn Rate: §f${(data.rate ?? 0).toFixed(2)} mB/t
 §r§3Temperature: §f${(data.temperature ?? 0).toFixed(2)} K
 §r§3Efficiency: §f${((data.efficiency ?? 0) * 100).toFixed(2)}%%
 §r${data.warning ?? ""}
     `);
 
-    // ----- TEMPERATURE BAR -----
-    const inv = reactor.inv;
-    if (inv) {
+    const container = reactor.container;
+    if (container) {
         const temp = data.temperature ?? CORE_TMIN_K;
         const segment = Math.floor(
             (temp - CORE_TMIN_K) / (CORE_TCAP_K - CORE_TMIN_K) * 31
@@ -370,39 +290,11 @@ function updateReactorInfoItem(data, reactor) {
         const bar = new ItemStack(name);
         bar.nameTag = `§r§f${temp.toFixed(2)} K`;
 
-        inv.setItem(4, bar);
+        container.setItem(4, bar);
     }
 
     reactor.entity.setDynamicProperty("reactorData", JSON.stringify(data));
 }
-
-
-
-/**
- * Reactor state and statistics object.
- * 
- * @typedef {Object} ReactorInfo
- * @property {number} rate Reactor base processing rate (mB/t).
- * @property {number} pressure Current pressure of the reactor (PSI).
- * @property {number} temperature Current temperature of the reactor (K).
- * @property {number} efficiency Reactor efficiency percentage (0–100).
- * @property {number} time Elapsed time in seconds.
- * @property {string} warning Warning message if reactor is unstable, empty otherwise.
- * 
- * @property {number} lavaCapacity Maximum lava capacity (mB).
- * @property {number} coolantCapacity Maximum coolant capacity (mB).
- * @property {number} steamCapacity Maximum steam capacity (mB).
- * @property {number} heatDissipation Heat dissipated per tick (K/t).
- * @property {number} ventRate Steam vented per tick (mB/t).
- * @property {number} energyCap Maximum internal energy capacity (DE).
- */
-
-/**
- * Get full reactor info (data + stats) from entity.
- *
- * @param {any} entity Target entity with dynamic properties.
- * @returns {ReactorInfo}
- */
 function getReactorInfo(entity) {
     try {
         const rawData = entity.getDynamicProperty('reactorData');
@@ -516,3 +408,80 @@ function fireLoop(e, f) {
     e.setDynamicProperty('fs_t', t);
 }
 
+
+async function activateThermoReactor(e, settings, entity) {
+    const { block, player } = e;
+    const dim = block.dimension;
+
+    Multiblock.deactivateMultiblock(block, player, { blockId: "minecraft:water" });
+
+    const structure = await Multiblock.detectFromController(e, settings.required_case);
+    if (!structure) return;
+
+    const { components, bounds } = structure;
+
+    if (!components["thermo_core"]) {
+        player.sendMessage("§c[Reactor] Missing Thermo Core - reactor cannot operate.");
+        return;
+    }
+
+    const energyCap = Multiblock.activateMultiblock(entity, structure);
+    if (energyCap <= 0) {
+        player.sendMessage("§c[Reactor] At least 1 energy unit is required.");
+        Multiblock.deactivateMultiblock(block, player)
+        return
+    }
+
+    Multiblock.fillEmptyBlocks(bounds, dim, "minecraft:water");
+
+    entity.setDynamicProperty(
+        "dorios:rateSpeed",
+        energyCap / settings.multiblock.transfer_rate_ratio
+    );
+
+    const lavaCapacity =
+        (components["fluid_cell"] ?? 0) * config.lavaCapacityPerFluidCell;
+
+    const internalVolume = (components["air"] ?? 0);
+
+    const coolantCapacity = internalVolume * config.coolantCapacityPerEmptyBlock;
+    const steamCapacity = internalVolume * config.steamCapacityPerEmptyBlock;
+
+    const heatDissipation =
+        (components["heat_conductor"] ?? 0) * config.conductorHeatDissipation;
+
+    const ventRate =
+        (components["vent"] ?? 0) * config.ventReleaseRate;
+
+    if (lavaCapacity <= 0) player.sendMessage("§e[Warning] No Lava Cells detected.");
+    if (coolantCapacity <= 0) player.sendMessage("§e[Warning] No volume for coolant cooling.");
+    if (steamCapacity <= 0) player.sendMessage("§e[Warning] No internal steam volume.");
+    if (heatDissipation <= 0) player.sendMessage("§e[Warning] No Heat Conductors found.");
+    if (ventRate <= 0) player.sendMessage("§e[Warning] No vents detected - pressure cannot be released.");
+
+    const reactorStats = {
+        lavaCapacity,
+        coolantCapacity,
+        steamCapacity,
+        heatDissipation,
+        ventRate,
+        energyCap,
+        bounds
+    };
+
+    entity.setDynamicProperty("reactorStats", JSON.stringify(reactorStats));
+
+    const fluids = FluidStorage.initializeMultiple(entity, 2);
+    fluids[0].setCap(1000)
+    fluids[1].setCap(1000)
+
+    player.sendMessage("§a[Reactor] Thermo Reactor structure validated.");
+    player.sendMessage(`§7Energy Capacity: §b${EnergyStorage.formatEnergyToText(energyCap)}`);
+    player.sendMessage(`§7Lava Capacity: §b${FluidStorage.formatFluid(lavaCapacity)}`);
+    player.sendMessage(`§7Coolant Capacity: §b${FluidStorage.formatFluid(coolantCapacity)}`);
+    player.sendMessage(`§7Steam Capacity: §b${FluidStorage.formatFluid(steamCapacity)}`);
+    player.sendMessage(`§7Heat Dissipation: §b${heatDissipation.toFixed(2)} K°/t`);
+    player.sendMessage(`§7Steam Venting: §b${FluidStorage.formatFluid(ventRate)}/t`);
+    player.sendMessage(`§7Max Pressure: §b${config.maxPressurePSI} PSI`);
+    player.sendMessage(`§7Max Heat: §b${config.maxCoreTemperatureK} K°`);
+}

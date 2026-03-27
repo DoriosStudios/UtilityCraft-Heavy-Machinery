@@ -1,5 +1,5 @@
-import { world, system, ItemStack } from '@minecraft/server'
-import { Energy } from './core.js'
+import { world, system } from '@minecraft/server'
+import { EnergyStorage } from "DoriosCore/index.js"
 
 /**
  * Maximum expansion distance allowed when scanning multiblock casing boundaries.
@@ -30,7 +30,7 @@ const ENERGY_PER_UNIT = {
 };
 
 /**
- *  DoriosMachinery – Multiblock Extension
+ *  DoriosMachinery €“ Multiblock Extension
  *
  * The Multiblock module provides optional support for
  * detecting, validating and interacting with multiblock machines.
@@ -56,7 +56,7 @@ const ENERGY_PER_UNIT = {
  *   - It behaves as a structural helper used by the core
  *
  * Dependencies:
- *   - DoriosMachinery/core.js (for machinery behavior)
+ *   - DoriosCore (for machinery behavior)
  *   - DoriosAPI (global, for additional helpers or integration)
  *
  * Usage:
@@ -141,7 +141,7 @@ export const Multiblock = {
      *
      * The effect:
      *  - Draws redstone particles on the four vertical sides.
-     *  - Animates bottom → top, layer by layer.
+     *  - Animates bottom to top, layer by layer.
      *  - Adds a brief delay per layer for smoother visuals.
      *
      * @async
@@ -159,7 +159,7 @@ export const Multiblock = {
         for (let y = min.y; y <= max.y; y++) {
             const yOffset = y + 0.5;
 
-            // Cara norte (Z mín)
+            // Cara norte (Z mÃ­n)
             for (let x = min.x; x <= max.x; x++) {
                 dim.spawnParticle("minecraft:redstone_ore_dust_particle", {
                     x: x + 0.5,
@@ -168,7 +168,7 @@ export const Multiblock = {
                 });
             }
 
-            // Cara sur (Z máx)
+            // Cara sur (Z mÃ¡x)
             for (let x = min.x; x <= max.x; x++) {
                 dim.spawnParticle("minecraft:redstone_ore_dust_particle", {
                     x: x + 0.5,
@@ -177,7 +177,7 @@ export const Multiblock = {
                 });
             }
 
-            // Cara oeste (X mín)
+            // Cara oeste (X mÃ­n)
             for (let z = min.z; z <= max.z; z++) {
                 dim.spawnParticle("minecraft:redstone_ore_dust_particle", {
                     x: min.x - 0.1,
@@ -186,7 +186,7 @@ export const Multiblock = {
                 });
             }
 
-            // Cara este (X máx)
+            // Cara este (X mÃ¡x)
             for (let z = min.z; z <= max.z; z++) {
                 dim.spawnParticle("minecraft:redstone_ore_dust_particle", {
                     x: max.x + 1.1,
@@ -206,8 +206,8 @@ export const Multiblock = {
      * containing the specified casing tag.
      *
      * Axis expansion order:
-     *  1. Horizontal priority — east/west, then north/south.
-     *  2. Vertical scan — expands upward and downward last.
+     *  1. Horizontal priority €” east/west, then north/south.
+     *  2. Vertical scan €” expands upward and downward last.
      *
      * Expansion stops when:
      *  - A block without the casing tag is encountered, or
@@ -356,7 +356,7 @@ export const Multiblock = {
     },
 
     /**
-     * Fills every AIR block inside the multiblock bounds using a layer-by-layer `/fill` from bottom → top.
+     * Fills every AIR block inside the multiblock bounds using a layer-by-layer `/fill` from bottom †’ top.
      *
      * @async
      * @function fillEmptyBlocks
@@ -377,12 +377,12 @@ export const Multiblock = {
 
         for (let y = yBottom; y <= yTop; y++) {
             dim.runCommand(`fill ${xA} ${y} ${zA} ${xB} ${y} ${zB} ${blockId} replace air`);
-            await system.waitTicks(4); // bottom → top pacing
+            await system.waitTicks(4); // bottom †’ top pacing
         }
     },
 
     /**
-     * Replaces all instances of the specified block inside a multiblock's stored bounds with AIR, clearing the interior layer by layer from top → bottom.
+     * Replaces all instances of the specified block inside a multiblock's stored bounds with AIR, clearing the interior layer by layer from top †’ bottom.
      *
      * @async
      * @function emptyBlocks
@@ -407,7 +407,7 @@ export const Multiblock = {
 
         for (let y = yTop; y >= yBottom; y--) {
             dim.runCommand(`fill ${xA} ${y} ${zA} ${xB} ${y} ${zB} air replace ${blockId}`);
-            await system.waitTicks(2); // top → bottom pacing
+            await system.waitTicks(2); // top †’ bottom pacing
         }
     },
 
@@ -430,6 +430,29 @@ export const Multiblock = {
         };
     },
 
+    getEntityFromBlock(block) {
+        if (!block) return;
+
+        const directEntity = block.dimension.getEntitiesAtBlockLocation(block.location)[0];
+        if (directEntity) return directEntity;
+
+        return block.dimension.getEntities({
+            location: block.location,
+            maxDistance: MAX_SIZE,
+            families: ['dorios:multiblock']
+        }).find(ent => {
+            const raw = ent.getDynamicProperty("dorios:bounds");
+            if (!raw) return false;
+
+            try {
+                const bounds = JSON.parse(raw);
+                return isInsideBounds(block.location, bounds);
+            } catch {
+                return false;
+            }
+        });
+    },
+
     /**
      * Deactivates a multiblock machine by removing active port tags, resetting
      * casing metadata, disabling visuals, and updating nearby pipe networks.
@@ -438,12 +461,14 @@ export const Multiblock = {
      * @function deactivateMultiblock
      * @memberof Multiblock
      *
-     * @param {Entity} entity Multiblock controller entity holding structure data.
+     * @param {Block} block Block belonging to the multiblock structure.
      * @param {Player} [player] Player responsible for triggering the deactivation.
+     * @param {{ blockId?: string }} [emptyBlocksConfig] Optional empty-block cleanup config.
      *
-     * @returns {void}
+     * @returns {Entity | undefined}
      */
-    deactivateMultiblock(entity, player) {
+    deactivateMultiblock(block, player, emptyBlocksConfig) {
+        const entity = Multiblock.getEntityFromBlock(block);
         if (player) player.sendMessage("§c[Scan] Multiblock structure deactivated.");
         if (!entity) return
         entity?.triggerEvent('utilitycraft:hide')
@@ -463,6 +488,18 @@ export const Multiblock = {
         entity.setDynamicProperty('dorios:rateSpeed', 0)
         entity.setDynamicProperty('dorios:bounds', undefined)
         entity.setDynamicProperty('dorios:state', 'off')
+        if (emptyBlocksConfig) {
+            Multiblock.emptyBlocks(entity, emptyBlocksConfig.blockId);
+        }
+        return entity;
+    },
+
+    handleBreakController(block, player, emptyBlocksConfig) {
+        const entity = Multiblock.deactivateMultiblock(block, player, emptyBlocksConfig);
+        if (!entity) return;
+
+        system.runTimeout(() => entity.remove(), 2);
+        return entity;
     },
 
     /**
@@ -521,7 +558,7 @@ export const Multiblock = {
         // Compute energy capacity internally
         const energyCap = Multiblock.calculateEnergyCapacity(components ?? {});
         if (energyCap > 0) {
-            Energy.setCap(entity, energyCap);
+            EnergyStorage.setCap(entity, energyCap);
             entity.setDynamicProperty("dorios:energyCap", energyCap);
         }
 
@@ -565,128 +602,7 @@ export const Multiblock = {
      */
     getVolume(bounds) {
         return (bounds.max.x - bounds.min.x + 1) * (bounds.max.y - bounds.min.y + 1) * (bounds.max.z - bounds.min.z + 1);
-    },
-
-    /**
-     * Updates the main machine information label (slot 1).
-     *
-     * This label displays:
-     * - Core machine statistics (processing, speed, efficiency effects)
-     * - Current machine status
-     *
-     * The function also returns the required line offset so that
-     * secondary labels can be aligned directly below this one.
-     *
-     * @param {Machine} controller Machine instance controlling the block entity.
-     * @param {MachineStats} data Fully computed machine statistics.
-     * @param {string} [status='§aRunning'] Current machine status text (formatted).
-     *
-     * @returns {string} Line offset string (`'\n'.repeat(n)`) used to align subsequent labels.
-     */
-    setMachineInfoLabel(controller, data, status = '§aRunning') {
-        const infoText = `§r§7Status: ${status}
-
-§r§eMachine Information
-
-§r§aInput Capacity §fx${data.processing.amount}
-§r§aCost §f${data.cost ? Energy.formatEnergyToText(data.cost * data.processing.amount) : "---"}
-§r§aSpeed §fx${data.speed.multiplier.toFixed(2)}
-§r§aEfficiency §f${((data.processing.amount / data.energyMultiplier) * 100).toFixed(2)}%%
-`;
-
-        controller.setLabel(infoText, 1);
-
-        const offsetLines = '\n'.repeat(infoText.split('\n').length - 1);
-        return offsetLines;
-    },
-
-    /**
-     * Computes all effective machine statistics from installed components.
-     *
-     * This function centralizes machine balance logic:
-     * - Processing increases batch size but heavily penalizes energy cost.
-     * - Speed increases processing rate with diminishing returns and adds energy pressure.
-     * - Efficiency reduces total energy cost with diminishing returns.
-     *
-     * All calculations are deterministic and scale safely to very large component values.
-     *
-     * @param {MachineComponents} components Installed machine components.
-     * @returns {MachineStats} Fully computed machine statistics.
-     */
-    computeMachineStats(components) {
-        const processing = Math.max(1, components.processing_module | 0);
-        const speed = Math.max(0, components.speed_module | 0);
-        const efficiency = Math.max(0, components.efficiency_module | 0);
-
-        // =========================
-        // Processing
-        // =========================
-        const processAmount = 2 * processing;
-
-        // Penalización fuerte por processing
-        const processingPenalty = 1 + 2.25 * (processing - 1);
-
-        // =========================
-        // Speed (curva con diminishing returns)
-        // =========================
-        const MAX_SPEED_BONUS = 999;     // hasta +10x rate
-        const SPEED_K = 3200;
-
-        const speedMultiplier =
-            1 + (MAX_SPEED_BONUS * speed) / (SPEED_K + speed);
-
-        // Penalización por speed (más agresiva)
-        const MAX_SPEED_PENALTY = 99;   // hasta +4x costo
-        const SPEED_PENALTY_K = 640;
-
-        const speedPenalty =
-            1 + (MAX_SPEED_PENALTY * speed) / (SPEED_PENALTY_K + speed);
-
-        // =========================
-        // Efficiency (reduce el costo final)
-        // =========================
-        const MIN_EFFICIENCY = 0.01;  // límite inferior
-        const EFFICIENCY_RATE = 0.15;
-
-        const efficiencyMultiplier =
-            MIN_EFFICIENCY +
-            (1 - MIN_EFFICIENCY) *
-            Math.exp(-EFFICIENCY_RATE * efficiency);
-
-
-        // =========================
-        // Resultado final
-        // =========================
-        return {
-            raw: {
-                processing,
-                speed,
-                efficiency
-            },
-
-            processing: {
-                amount: Math.floor(processAmount),
-                penalty: processingPenalty
-            },
-
-            speed: {
-                multiplier: speedMultiplier,
-                penalty: speedPenalty
-            },
-
-            efficiency: {
-                multiplier: efficiencyMultiplier
-            },
-
-            // Multiplicador energético TOTAL (antes de baseCost)
-            energyMultiplier:
-                processingPenalty *
-                speedPenalty *
-                efficiencyMultiplier
-        };
     }
-
-
 }
 
 function isInsideBounds(pos, bounds) {
@@ -718,27 +634,10 @@ world.afterEvents.playerBreakBlock.subscribe(e => {
     const isCase = tags.some(t => t.startsWith("dorios:multiblock.case"));
     if (!isCase) return;
 
-    const entity = block.dimension.getEntities({
-        location: block.location,
-        maxDistance: MAX_SIZE,
-        families: ['dorios:multiblock']
-    }).find(ent => {
-        const raw = ent.getDynamicProperty("dorios:bounds");
-        if (!raw) return false;
-
-        try {
-            const bounds = JSON.parse(raw);
-            return isInsideBounds(block.location, bounds);
-        } catch {
-            return false;
-        }
-    });
-
-
+    const entity = Multiblock.getEntityFromBlock(block);
     if (!entity) return;
 
-    Multiblock.deactivateMultiblock(entity, player);
-    Multiblock.emptyBlocks(entity, 'minecraft:water');
+    Multiblock.deactivateMultiblock(block, player, { blockId: 'minecraft:water' });
 });
 
 world.afterEvents.blockExplode.subscribe(e => {
@@ -749,27 +648,10 @@ world.afterEvents.blockExplode.subscribe(e => {
     const isCase = tags.some(t => t.startsWith("dorios:multiblock.case"));
     if (!isCase) return;
 
-    const entity = block.dimension.getEntities({
-        location: block.location,
-        maxDistance: MAX_SIZE,
-        families: ['dorios:multiblock']
-    }).find(ent => {
-        const raw = ent.getDynamicProperty("dorios:bounds");
-        if (!raw) return false;
-
-        try {
-            const bounds = JSON.parse(raw);
-            return isInsideBounds(block.location, bounds);
-        } catch {
-            return false;
-        }
-    });
-
-
+    const entity = Multiblock.getEntityFromBlock(block);
     if (!entity) return;
 
-    Multiblock.deactivateMultiblock(entity);
-    Multiblock.emptyBlocks(entity, 'minecraft:water');
+    Multiblock.deactivateMultiblock(block, undefined, { blockId: 'minecraft:water' });
 })
 
 
@@ -802,7 +684,7 @@ world.afterEvents.blockExplode.subscribe(e => {
  * Efficiency-related computed stats.
  *
  * @typedef {Object} EfficiencyStats
- * @property {number} multiplier Energy reduction multiplier (0–1 range).
+ * @property {number} multiplier Energy reduction multiplier (0€“1 range).
  */
 
 /**
