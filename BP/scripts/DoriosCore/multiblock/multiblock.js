@@ -1,4 +1,4 @@
-import { activateMultiblock, calculateEnergyCapacity } from "./activationManager.js";
+import { activateMultiblock, calculateEnergyCapacity, fillBlocks } from "./activationManager.js";
 import { deactivateMultiblock, emptyBlocks, handleBreakController } from "./deactivationManager.js";
 import { getCenter, getEntityFromBlock, getVolume } from "./entityManager.js";
 import {
@@ -14,6 +14,7 @@ export const MultiblockManager = {
   deactivateMultiblock,
   detectFromController,
   emptyBlocks,
+  fillBlocks,
   findMultiblockBounds,
   getCenter,
   getEntityFromBlock,

@@ -1,7 +1,27 @@
+import { system } from "@minecraft/server";
 import { EnergyStorage } from "../machinery/energyStorage.js";
 import { ENERGY_PER_UNIT } from "./constants.js";
 
-export function activateMultiblock(entity, structure) {
+export function fillBlocks(bounds, dim, blockId = "minecraft:water") {
+  const xA = bounds.min.x;
+  const yA = bounds.min.y;
+  const zA = bounds.min.z;
+  const xB = bounds.max.x;
+  const yB = bounds.max.y;
+  const zB = bounds.max.z;
+
+  const yBottom = yA <= yB ? yA : yB;
+  const yTop = yA <= yB ? yB : yA;
+
+  system.run(async () => {
+    for (let y = yBottom; y <= yTop; y++) {
+      dim.runCommand(`fill ${xA} ${y} ${zA} ${xB} ${y} ${zB} ${blockId} replace air`);
+      await system.waitTicks(4);
+    }
+  });
+}
+
+export function activateMultiblock(entity, structure, fillBlocksConfig) {
   const { inputBlocks, bounds, ventBlocks, components } = structure;
 
   entity.triggerEvent("utilitycraft:show");
@@ -26,6 +46,10 @@ export function activateMultiblock(entity, structure) {
 
   if (ventBlocks) {
     entity.setDynamicProperty("ventBlocks", JSON.stringify(ventBlocks));
+  }
+
+  if (fillBlocksConfig && bounds) {
+    fillBlocks(bounds, entity.dimension, fillBlocksConfig.blockId);
   }
 
   const energyCap = calculateEnergyCapacity(components ?? {});

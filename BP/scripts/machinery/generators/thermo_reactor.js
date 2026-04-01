@@ -424,14 +424,12 @@ async function activateThermoReactor(e, settings, entity) {
         return;
     }
 
-    const energyCap = MultiblockManager.activateMultiblock(entity, structure);
+    const energyCap = MultiblockManager.activateMultiblock(entity, structure, { blockId: "minecraft:water" });
     if (energyCap <= 0) {
         player.sendMessage("§c[Reactor] At least 1 energy unit is required.");
         MultiblockManager.deactivateMultiblock(block, player)
         return
     }
-
-    MultiblockManager.fillEmptyBlocks(bounds, dim, "minecraft:water");
 
     entity.setDynamicProperty(
         "dorios:rateSpeed",
