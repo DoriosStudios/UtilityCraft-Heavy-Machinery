@@ -2,6 +2,28 @@ import { system } from "@minecraft/server";
 import { MAX_SIZE, SCAN_SPEED } from "./constants.js";
 import { getCenter } from "./entityManager.js";
 
+/**
+ * Detects and validates a multiblock structure starting from its controller.
+ *
+ * The process:
+ * 1. Finds the outer casing bounds around the controller.
+ * 2. Scans the full structure contents and validates every block.
+ * 3. Plays a formation effect around the resulting bounds.
+ * 4. Returns the component summary and metadata needed for activation.
+ *
+ * Player-facing scan messages are emitted during the process.
+ *
+ * @param {{ block: Block, player: Player }} e Interaction event used as scan origin.
+ * @param {string} caseTag Block tag that identifies valid casing blocks.
+ * @returns {Promise<false | {
+ *   bounds: { min: Vector3, max: Vector3 },
+ *   components: Record<string, number>,
+ *   inputBlocks: string[],
+ *   caseBlocks?: Vector3[],
+ *   ventBlocks: Vector3[],
+ *   center: Vector3,
+ * }>} Detected structure data or `false` when validation fails.
+ */
 export async function detectFromController(e, caseTag) {
   const controllerBlock = e.block;
   const sendMessage = e.player.sendMessage.bind(e.player);
@@ -35,6 +57,15 @@ export async function detectFromController(e, caseTag) {
   };
 }
 
+/**
+ * Plays a vertical outline effect around the multiblock bounds.
+ *
+ * This gives players visual feedback that the structure was recognized.
+ *
+ * @param {{ min: Vector3, max: Vector3 }} bounds Bounding box to outline.
+ * @param {Dimension} dim Dimension where particles should spawn.
+ * @returns {Promise<void>}
+ */
 export async function showFormationEffect(bounds, dim) {
   const { min, max } = bounds;
 
@@ -77,6 +108,18 @@ export async function showFormationEffect(bounds, dim) {
   }
 }
 
+/**
+ * Expands outward from the controller to find the full casing bounds.
+ *
+ * The scan first determines whether the structure extends primarily along X or Z,
+ * then expands across the remaining axes up to {@link MAX_SIZE}.
+ *
+ * @param {Vector3} start Controller block position.
+ * @param {Dimension} dim Dimension where the structure exists.
+ * @param {string} caseTag Block tag that marks valid casing blocks.
+ * @returns {Promise<{ min: Vector3, max: Vector3 } | null>}
+ * Inclusive bounds of the multiblock casing, or `null` if none are found.
+ */
 export async function findMultiblockBounds(start, dim, caseTag) {
   const isCasing = (pos) => dim.getBlock(pos)?.hasTag(caseTag);
 
@@ -142,6 +185,28 @@ export async function findMultiblockBounds(start, dim, caseTag) {
   };
 }
 
+/**
+ * Validates every block inside the detected multiblock bounds.
+ *
+ * Rules:
+ * - Outer shell must be casing blocks, except for the controller itself.
+ * - Ports are collected as input block tags.
+ * - Vent blocks are counted only on the top layer.
+ * - Interior blocks may be air, liquids, or tagged multiblock components.
+ * - Any other block aborts the scan and returns its coordinates as a string.
+ *
+ * @param {Vector3} min Minimum bounds corner.
+ * @param {Vector3} max Maximum bounds corner.
+ * @param {Dimension} dim Dimension to scan.
+ * @param {Vector3} controller Controller block location.
+ * @param {string} caseTag Block tag that identifies valid casing blocks.
+ * @returns {Promise<{
+ *   components: Record<string, number>,
+ *   inputBlocks: string[],
+ *   ventBlocks: Vector3[],
+ * } | string>}
+ * Structure summary on success, or invalid coordinates on failure.
+ */
 export async function scanStructure(min, max, dim, controller, caseTag) {
   const components = {};
   const inputBlocks = [];

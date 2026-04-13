@@ -19,8 +19,6 @@
                             "utilitycraft:reaction_chamber_controller",
                             "utilitycraft:power_condenser_controller",
                             "utilitycraft:thermo_reactor_controller"
-
-
                         ]
                     },
                     {
@@ -137,32 +135,6 @@
                             "utilitycraft:darloonite_crystal",
                             "utilitycraft:charged_darloonite_crystal",
                             "utilitycraft:saline_coolant_bucket"
-                        ]
-                    },
-                    {
-                        "group_identifier": {
-                            "icon": "utilitycraft:control_panel",
-                            "name": "utilitycraft:itemGroup.utility_tools"
-                        },
-                        "items": [
-                            "utilitycraft:control_panel"
-                        ]
-                    }
-                ]
-            },
-            {
-                "category_name": "equipment",
-                "groups": [
-                    {
-                        "group_identifier": {
-                            "icon": "utilitycraft:utility_exo_helmet",
-                            "name": "utilitycraft:itemGroup.utility_exo"
-                        },
-                        "items": [
-                            "utilitycraft:utility_exo_helmet",
-                            "utilitycraft:utility_exo_chestplate",
-                            "utilitycraft:utility_exo_leggings",
-                            "utilitycraft:utility_exo_boots"
                         ]
                     }
                 ]

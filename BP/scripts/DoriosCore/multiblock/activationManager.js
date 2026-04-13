@@ -2,6 +2,18 @@ import { system } from "@minecraft/server";
 import { EnergyStorage } from "../machinery/energyStorage.js";
 import { ENERGY_PER_UNIT } from "./constants.js";
 
+/**
+ * Fills the detected multiblock bounds layer by layer with the specified block.
+ *
+ * This is mainly used by structures that need their internal volume to be
+ * replaced with water or another helper block once the multiblock activates.
+ * The fill is performed over several ticks to reduce the cost of a single
+ * large `fill` command burst.
+ *
+ * @param {{ min: Vector3, max: Vector3 }} bounds Bounding box to fill.
+ * @param {Dimension} dim Dimension where the fill commands should run.
+ * @param {string} [blockId="minecraft:water"] Block identifier used to fill air.
+ */
 export function fillBlocks(bounds, dim, blockId = "minecraft:water") {
   const xA = bounds.min.x;
   const yA = bounds.min.y;
@@ -21,6 +33,28 @@ export function fillBlocks(bounds, dim, blockId = "minecraft:water") {
   });
 }
 
+/**
+ * Applies the activation state of a fully detected multiblock structure.
+ *
+ * Responsibilities:
+ * - Shows the controller entity.
+ * - Tags and activates all detected multiblock ports.
+ * - Stores structure metadata such as bounds and vents.
+ * - Optionally fills the internal bounds with a block.
+ * - Calculates and applies the resulting energy capacity.
+ * - Marks the controller state as `on`.
+ *
+ * @param {Entity} entity Controller entity representing the multiblock.
+ * @param {{
+ *   inputBlocks?: string[],
+ *   bounds?: { min: Vector3, max: Vector3 },
+ *   ventBlocks?: Vector3[],
+ *   components?: Record<string, number>,
+ * }} structure Structure data returned by detection helpers.
+ * @param {{ blockId?: string }} [fillBlocksConfig]
+ * Optional fill configuration used for reactor-like structures.
+ * @returns {number} Final calculated energy capacity for the structure.
+ */
 export function activateMultiblock(entity, structure, fillBlocksConfig) {
   const { inputBlocks, bounds, ventBlocks, components } = structure;
 
@@ -62,6 +96,14 @@ export function activateMultiblock(entity, structure, fillBlocksConfig) {
   return energyCap;
 }
 
+/**
+ * Calculates the total energy capacity provided by multiblock components.
+ *
+ * Only components listed in {@link ENERGY_PER_UNIT} contribute to the total.
+ *
+ * @param {Record<string, number>} components Component counts keyed by component id.
+ * @returns {number} Total energy capacity represented by the structure.
+ */
 export function calculateEnergyCapacity(components) {
   let total = 0;
 

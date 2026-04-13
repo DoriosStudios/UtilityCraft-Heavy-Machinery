@@ -1,6 +1,15 @@
 import { system } from "@minecraft/server";
 import { getEntityFromBlock } from "./entityManager.js";
 
+/**
+ * Empties previously filled multiblock bounds layer by layer.
+ *
+ * The bounds are currently read from the legacy `reactorStats` property, which
+ * is kept for structures that serialize their activation data there.
+ *
+ * @param {Entity} entity Controller entity that stores the old fill bounds.
+ * @param {string} [blockId="minecraft:water"] Block identifier to replace with air.
+ */
 export function emptyBlocks(entity, blockId = "minecraft:water") {
   const oldDataRaw = entity.getDynamicProperty("reactorStats");
   if (!oldDataRaw) return;
@@ -25,6 +34,22 @@ export function emptyBlocks(entity, blockId = "minecraft:water") {
   });
 }
 
+/**
+ * Deactivates a multiblock structure associated with the given controller block.
+ *
+ * Responsibilities:
+ * - Finds the controller entity.
+ * - Hides the entity visual state.
+ * - Clears active tags from connected multiblock ports.
+ * - Resets controller dynamic properties used by the machine runtime.
+ * - Optionally removes filled helper blocks such as water.
+ *
+ * @param {Block} block Controller block or any block inside the structure bounds.
+ * @param {Player} [player] Optional player to notify about the deactivation.
+ * @param {{ blockId?: string }} [emptyBlocksConfig]
+ * Optional config describing which block should be removed from the bounds.
+ * @returns {Entity | undefined} The deactivated controller entity, if found.
+ */
 export function deactivateMultiblock(block, player, emptyBlocksConfig) {
   const entity = getEntityFromBlock(block);
   if (player) player.sendMessage("§c[Scan] Multiblock structure deactivated.");
@@ -56,6 +81,17 @@ export function deactivateMultiblock(block, player, emptyBlocksConfig) {
   return entity;
 }
 
+/**
+ * Deactivates a multiblock and removes its controller entity shortly after.
+ *
+ * This is typically used when the controller block itself is broken.
+ *
+ * @param {Block} block Controller block being broken.
+ * @param {Player} [player] Player responsible for the break event.
+ * @param {{ blockId?: string }} [emptyBlocksConfig]
+ * Optional config describing which filled block should be removed first.
+ * @returns {Entity | undefined} Removed controller entity, if one was found.
+ */
 export function handleBreakController(block, player, emptyBlocksConfig) {
   const entity = deactivateMultiblock(block, player, emptyBlocksConfig);
   if (!entity) return;

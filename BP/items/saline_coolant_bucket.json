@@ -2,10 +2,7 @@
 	"format_version": "1.20.80",
 	"minecraft:item": {
 		"description": {
-			"identifier": "utilitycraft:saline_coolant_bucket",
-			"menu_category": {
-				"category": "nature"
-			}
+			"identifier": "utilitycraft:saline_coolant_bucket"
 		},
 		"components": {
 			"minecraft:icon": "utilitycraft_saline_coolant_bucket",

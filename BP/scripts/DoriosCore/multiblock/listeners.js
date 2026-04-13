@@ -2,6 +2,12 @@ import { world } from "@minecraft/server";
 import { getEntityFromBlock } from "./entityManager.js";
 import { deactivateMultiblock } from "./deactivationManager.js";
 
+/**
+ * Global multiblock listeners.
+ *
+ * Any time a casing block is broken or exploded, the owning multiblock is
+ * resolved and deactivated to keep controller state consistent with the world.
+ */
 world.afterEvents.playerBreakBlock.subscribe((e) => {
   const { brokenBlockPermutation, block, player } = e;
   const tags = brokenBlockPermutation.getTags();

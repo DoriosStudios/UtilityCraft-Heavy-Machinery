@@ -2,10 +2,7 @@
 	"format_version": "1.20.80",
 	"minecraft:item": {
 		"description": {
-			"identifier": "utilitycraft:darloonite_crystal",
-			"menu_category": {
-				"category": "nature"
-			}
+			"identifier": "utilitycraft:darloonite_crystal"
 		},
 		"components": {
 			"minecraft:icon": "utilitycraft_darloonite_crystal"

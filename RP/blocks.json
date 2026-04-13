@@ -34,6 +34,9 @@
 		"sound": "copper",
 		"textures": "utilitycraft_bronze_case"
 	},
+	"utilitycraft:bronze_controller_case": {
+		"sound": "copper"
+	},
 	"utilitycraft:bronze_hazard_block": {
 		"sound": "copper",
 		"textures": "utilitycraft_bronze_hazard_block"
@@ -53,31 +56,31 @@
 		"sound": "glass"
 	},
 	"utilitycraft:steel_energy_port": {
-		"sound": "iron",
+		"sound": "metal",
 		"textures": "utilitycraft_steel_energy_port"
 	},
 	"utilitycraft:steel_fluid_port": {
-		"sound": "iron",
+		"sound": "metal",
 		"textures": "utilitycraft_steel_fluid_port"
 	},
 	"utilitycraft:steel_item_port": {
-		"sound": "iron",
+		"sound": "metal",
 		"textures": "utilitycraft_steel_item_port"
 	},
 	"utilitycraft:steel_plated_block": {
-		"sound": "iron",
+		"sound": "metal",
 		"textures": "utilitycraft_steel_plated_block"
 	},
 	"utilitycraft:steel_case": {
-		"sound": "iron",
+		"sound": "metal",
 		"textures": "utilitycraft_steel_case"
 	},
 	"utilitycraft:steel_bricks": {
-		"sound": "iron",
+		"sound": "metal",
 		"textures": "utilitycraft_steel_bricks"
 	},
 	"utilitycraft:steel_hazard_block": {
-		"sound": "iron",
+		"sound": "metal",
 		"textures": {
 			"up": "utilitycraft_steel_plated_block",
 			"down": "utilitycraft_steel_plated_block",
@@ -85,7 +88,7 @@
 		}
 	},
 	"utilitycraft:steel_vent_panel": {
-		"sound": "iron",
+		"sound": "metal",
 		"textures": "utilitycraft_steel_vent_panel"
 	},
 	"utilitycraft:reinforced_netherite_glass": {
@@ -143,14 +146,71 @@
 		"textures": "utilitycraft_tin_plated_block"
 	},
 	"utilitycraft:brute_bronze_block": {
-		"sound": "metal",
+		"sound": "copper",
 		"textures": "utilitycraft_brute_bronze_block"
 	},
 	"utilitycraft:raw_tin_block": {
 		"sound": "metal",
 		"textures": "utilitycraft_raw_tin_block"
 	},
+	"utilitycraft:autosieve_controller": {
+		"sound": "metal"
+	},
+	"utilitycraft:basic_power_condenser_unit": {
+		"sound": "metal"
+	},
+	"utilitycraft:crusher_controller": {
+		"sound": "metal"
+	},
+	"utilitycraft:efficiency_module": {
+		"sound": "metal"
+	},
+	"utilitycraft:electro_press_controller": {
+		"sound": "metal"
+	},
+	"utilitycraft:energy_cell": {
+		"sound": "metal"
+	},
+	"utilitycraft:expert_power_condenser_unit": {
+		"sound": "metal"
+	},
+	"utilitycraft:fluid_cell": {
+		"sound": "metal"
+	},
+	"utilitycraft:heat_conductor": {
+		"sound": "metal"
+	},
+	"utilitycraft:incinerator_controller": {
+		"sound": "metal"
+	},
+	"utilitycraft:infuser_controller": {
+		"sound": "metal"
+	},
+	"utilitycraft:power_condenser_controller": {
+		"sound": "metal"
+	},
+	"utilitycraft:processing_module": {
+		"sound": "metal"
+	},
+	"utilitycraft:reaction_chamber_controller": {
+		"sound": "metal"
+	},
+	"utilitycraft:speed_module": {
+		"sound": "metal"
+	},
+	"utilitycraft:thermo_core": {
+		"sound": "metal"
+	},
+	"utilitycraft:thermo_reactor_controller": {
+		"sound": "copper"
+	},
+	"utilitycraft:advanced_power_condenser_unit": {
+		"sound": "metal"
+	},
+	"utilitycraft:ultimate_power_condenser_unit": {
+		"sound": "metal"
+	},
 	"utilitycraft:controller_case": {
-		"sound": "stone"
+		"sound": "metal"
 	}
 }

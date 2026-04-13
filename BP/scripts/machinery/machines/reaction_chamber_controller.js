@@ -25,24 +25,26 @@ const CONTROLLER_REQUIREMENTS = {
 }
 
 DoriosAPI.register.blockComponent('reaction_chamber_controller', {
-    async onPlayerInteract(e, { params: settings }) {
-        const { block, player } = e
-        let entity = block.dimension.getEntitiesAtBlockLocation(block.location)[0]
-
-        if (!player.getEquipment('Mainhand')?.typeId.includes('wrench')) {
-            return
-        }
-
-        if (!entity) {
-            MultiblockMachine.spawnEntity(e, settings, (spawnedEntity) => {
-                initializeControllerEntity(spawnedEntity)
-                FluidStorage.initializeMultiple(spawnedEntity, 2)
-                void activateReactionChamberController(e, settings, spawnedEntity)
-            })
-            return
-        }
-
-        await activateReactionChamberController(e, settings, entity)
+    onPlayerInteract(e, { params: settings }) {
+        return MultiblockMachine.handlePlayerInteract(e, settings, {
+            initializeEntity(entity) {
+                entity.setItem(1, 'utilitycraft:arrow_right_0', 1, ' ')
+                entity.setItem(2, 'utilitycraft:arrow_right_0', 1, ' ')
+                entity.setItem(3, 'utilitycraft:arrow_right_0', 1, '')
+                FluidStorage.initializeMultiple(entity, 2)
+            },
+            requirements: CONTROLLER_REQUIREMENTS,
+            onActivate: ({ entity, structure }) => {
+                const [inputFluid, outputFluid] = FluidStorage.initializeMultiple(entity, 2)
+                const fluidCapacity = (structure.components.fluid_cell ?? 0) * FLUID_CAPACITY_CELL
+                inputFluid.setCap(fluidCapacity / 2)
+                outputFluid.setCap(fluidCapacity / 2)
+            },
+            successMessages: ({ energyCap }) => [
+                '\u00A7a[Controller] Reaction Chamber Factory created successfully.',
+                `\u00A77[Controller] Energy Capacity: \u00A7b${EnergyStorage.formatEnergyToText(energyCap)}`,
+            ],
+        })
     },
     onPlayerBreak({ block, player }) {
         MultiblockManager.handleBreakController(block, player)
@@ -52,9 +54,6 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
 
         const controller = new MultiblockMachine(e.block, settings);
         if (!controller.valid) return;
-
-        const state = controller.entity.getDynamicProperty("dorios:state");
-        if (!state || state === "off") return;
 
         const raw = controller.entity.getDynamicProperty("components");
         /** @type {MachineStats} */
@@ -91,7 +90,7 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
 
         if (!recipe) {
             updateUI(controller, [inputFluid, outputFluid], data, "§eNo Recipe");
-            controller.setProgress(0, 3);
+            controller.setProgress(0, { slot: 3 });
             return;
         }
 
@@ -100,13 +99,13 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
 
         if (inputItemId !== "empty" && totalItems < reqItems) {
             updateUI(controller, [inputFluid, outputFluid], data, "§eNot Enough Items", recipe);
-            controller.setProgress(0, 3);
+            controller.setProgress(0, { slot: 3 });
             return;
         }
 
         if (inputFluidType !== "empty" && inputFluid.get() < reqFluid) {
             updateUI(controller, [inputFluid, outputFluid], data, "§eNot Enough Fluid", recipe);
-            controller.setProgress(0, 3);
+            controller.setProgress(0, { slot: 3 });
             return;
         }
 
@@ -133,7 +132,7 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
                 outputFluid.getType() !== outType
             ) {
                 updateUI(controller, [inputFluid, outputFluid], data, "§eWrong Output Fluid", recipe);
-                controller.setProgress(0, 3);
+                controller.setProgress(0, { slot: 3 });
                 return;
             }
             fluidSpace = outputFluid.getFreeSpace();
@@ -157,7 +156,7 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
 
         if (maxProcess <= 0) {
             updateUI(controller, [inputFluid, outputFluid], data, "§eOutput Full", recipe);
-            controller.setProgress(0, 3);
+            controller.setProgress(0, { slot: 3 });
             return;
         }
 
@@ -169,7 +168,7 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
 
         if (controller.energy.get() <= 0) {
             updateUI(controller, [inputFluid, outputFluid], data, "§eNo Energy", recipe);
-            controller.displayProgress(3);
+            controller.displayProgress({ slot: 3 });
             return;
         }
 
@@ -217,33 +216,23 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
             );
         }
 
-        controller.displayProgress(3);
+        controller.displayProgress({ slot: 3 });
         updateUI(controller, [inputFluid, outputFluid], data, "§aRunning", recipe);
     }
 })
 
-function initializeControllerEntity(entity) {
-    entity.setItem(1, 'utilitycraft:arrow_right_0', 1, ' ')
-    entity.setItem(2, 'utilitycraft:arrow_right_0', 1, ' ')
-    entity.setItem(3, 'utilitycraft:arrow_right_0', 1, '')
-}
-
-async function activateReactionChamberController(e, settings, entity) {
-    await MultiblockMachine.activateMachineController(e, settings, entity, {
-        requirements: CONTROLLER_REQUIREMENTS,
-        onActivate: ({ structure }) => {
-            const [inputFluid, outputFluid] = FluidStorage.initializeMultiple(entity, 2)
-            const fluidCapacity = (structure.components.fluid_cell ?? 0) * FLUID_CAPACITY_CELL
-            inputFluid.setCap(fluidCapacity / 2)
-            outputFluid.setCap(fluidCapacity / 2)
-        },
-        successMessages: ({ energyCap }) => [
-            '§a[Controller] Crusher Factory created successfully.',
-            `§7[Controller] Energy Capacity: §b${EnergyStorage.formatEnergyToText(energyCap)}`,
-        ],
-    })
-}
-
+/**
+ * Refreshes the reaction chamber controller UI for the current machine state.
+ *
+ * @param {MultiblockMachine} controller Active reaction chamber controller runtime.
+ * @param {[FluidStorage, FluidStorage]} storages Input and output fluid storages.
+ * @param {MachineStats & { cost?: number }} data Computed multiblock machine stats.
+ * @param {string} [status='§aRunning'] Status text shown in the machine label.
+ * @param {{
+ *   output_item?: { id: string, amount?: number },
+ *   output_liquid?: { type: string, amount?: number }
+ * }} [recipe] Current reaction recipe, if one is active.
+ */
 function updateUI(controller, [inputFluid, outputFluid], data, status = '§aRunning', recipe) {
     inputFluid.display(INPUT_LIQUID_SLOT)
     outputFluid.display(OUTPUT_LIQUID_SLOT)
@@ -253,6 +242,16 @@ function updateUI(controller, [inputFluid, outputFluid], data, status = '§aRunn
 
 }
 
+/**
+ * Writes the reaction chamber-specific energy and output information section.
+ *
+ * @param {MultiblockMachine} controller Active reaction chamber controller runtime.
+ * @param {string} offsetLines Padding returned by `setMachineInfoLabel`.
+ * @param {{
+ *   output_item?: { id: string, amount?: number },
+ *   output_liquid?: { type: string, amount?: number }
+ * }} [recipe] Current reaction recipe, if one is active.
+ */
 function setEnergyAndRecipeLabel(controller, offsetLines, recipe) {
     const energy = controller.energy;
     const rate = controller.baseRate;

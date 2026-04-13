@@ -1,5 +1,12 @@
 import { MAX_SIZE } from "./constants.js";
 
+/**
+ * Returns the geometric center of a bounding box.
+ *
+ * @param {Vector3} min Minimum corner of the bounds.
+ * @param {Vector3} max Maximum corner of the bounds.
+ * @returns {Vector3} Center point between the two corners.
+ */
 export function getCenter(min, max) {
   return {
     x: (min.x + max.x) / 2,
@@ -8,6 +15,12 @@ export function getCenter(min, max) {
   };
 }
 
+/**
+ * Calculates the inclusive volume of a bounding box.
+ *
+ * @param {{ min: Vector3, max: Vector3 }} bounds Bounding box to measure.
+ * @returns {number} Total amount of block positions contained in the bounds.
+ */
 export function getVolume(bounds) {
   return (
     (bounds.max.x - bounds.min.x + 1) *
@@ -16,6 +29,13 @@ export function getVolume(bounds) {
   );
 }
 
+/**
+ * Checks whether a position lies inside inclusive multiblock bounds.
+ *
+ * @param {Vector3} pos Position to test.
+ * @param {{ min: Vector3, max: Vector3 }} bounds Bounding box to test against.
+ * @returns {boolean} `true` if the position lies within the bounds.
+ */
 export function isInsideBounds(pos, bounds) {
   return (
     pos.x >= bounds.min.x &&
@@ -27,6 +47,17 @@ export function isInsideBounds(pos, bounds) {
   );
 }
 
+/**
+ * Resolves the controller entity associated with a block.
+ *
+ * Resolution strategy:
+ * - First tries the entity directly stored at the exact block location.
+ * - Falls back to nearby entities in the `dorios:multiblock` family.
+ * - Uses serialized multiblock bounds to determine ownership.
+ *
+ * @param {Block} block Block belonging to or representing a multiblock.
+ * @returns {Entity | undefined} Matching controller entity if one is found.
+ */
 export function getEntityFromBlock(block) {
   if (!block) return;
 

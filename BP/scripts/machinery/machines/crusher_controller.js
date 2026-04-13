@@ -18,23 +18,19 @@ const CONTROLLER_REQUIREMENTS = {
 }
 
 DoriosAPI.register.blockComponent('crusher_controller', {
-    async onPlayerInteract(e, { params: settings }) {
-        const { block, player } = e
-        let entity = block.dimension.getEntitiesAtBlockLocation(block.location)[0]
-
-        if (!player.getEquipment('Mainhand')?.typeId.includes('wrench')) {
-            return
-        }
-
-        if (!entity) {
-            MultiblockMachine.spawnEntity(e, settings, (spawnedEntity) => {
-                initializeControllerEntity(spawnedEntity)
-                void activateCrusherController(e, settings, spawnedEntity)
-            })
-            return
-        }
-
-        await activateCrusherController(e, settings, entity)
+    onPlayerInteract(e, { params: settings }) {
+        return MultiblockMachine.handlePlayerInteract(e, settings, {
+            initializeEntity(entity) {
+                entity.setItem(1, 'utilitycraft:arrow_right_0', 1, ' ')
+                entity.setItem(2, 'utilitycraft:arrow_right_0', 1, ' ')
+                entity.setItem(3, 'utilitycraft:arrow_right_0', 1, '')
+            },
+            requirements: CONTROLLER_REQUIREMENTS,
+            successMessages: ({ energyCap }) => [
+                '\u00A7a[Controller] Crusher Factory created successfully.',
+                `\u00A77[Controller] Energy Capacity: \u00A7b${EnergyStorage.formatEnergyToText(energyCap)}`,
+            ],
+        })
     },
     onPlayerBreak({ block, player }) {
         MultiblockManager.handleBreakController(block, player)
@@ -44,9 +40,6 @@ DoriosAPI.register.blockComponent('crusher_controller', {
 
         const controller = new MultiblockMachine(e.block, settings);
         if (!controller.valid) return;
-
-        const state = controller.entity.getDynamicProperty('dorios:state');
-        if (!state || state === 'off') return;
 
         const raw = controller.entity.getDynamicProperty('components');
         /** @type {MachineStats} */
@@ -80,7 +73,7 @@ DoriosAPI.register.blockComponent('crusher_controller', {
 
         if (!recipe) {
             updateUI(controller, data, '§eNo Input');
-            controller.setProgress(0, 3);
+            controller.setProgress(0, { slot: 3 });
             return;
         }
 
@@ -105,7 +98,7 @@ DoriosAPI.register.blockComponent('crusher_controller', {
 
         if (maxProcess <= 0) {
             updateUI(controller, data, '§eOutput Full', recipe);
-            controller.setProgress(0, 3);
+            controller.setProgress(0, { slot: 3 });
             return;
         }
 
@@ -117,7 +110,7 @@ DoriosAPI.register.blockComponent('crusher_controller', {
 
         if (controller.energy.get() <= 0) {
             updateUI(controller, data, '§eNo Energy', recipe);
-            controller.displayProgress(3);
+            controller.displayProgress({ slot: 3 });
             return;
         }
 
@@ -152,27 +145,20 @@ DoriosAPI.register.blockComponent('crusher_controller', {
             );
         }
 
-        controller.displayProgress(3);
+        controller.displayProgress({ slot: 3 });
         updateUI(controller, data, '§aRunning', recipe);
     }
 })
 
-function initializeControllerEntity(entity) {
-    entity.setItem(1, 'utilitycraft:arrow_right_0', 1, ' ')
-    entity.setItem(2, 'utilitycraft:arrow_right_0', 1, ' ')
-    entity.setItem(3, 'utilitycraft:arrow_right_0', 1, '')
-}
-
-async function activateCrusherController(e, settings, entity) {
-    await MultiblockMachine.activateMachineController(e, settings, entity, {
-        requirements: CONTROLLER_REQUIREMENTS,
-        successMessages: ({ energyCap }) => [
-            '§a[Controller] Crusher Factory created successfully.',
-            `§7[Controller] Energy Capacity: §b${EnergyStorage.formatEnergyToText(energyCap)}`,
-        ],
-    })
-}
-
+/**
+ * Refreshes the crusher controller UI for the current machine state.
+ *
+ * @param {MultiblockMachine} controller Active crusher controller runtime.
+ * @param {MachineStats & { cost?: number }} data Computed multiblock machine stats.
+ * @param {string} [status='§aRunning'] Status text shown in the machine label.
+ * @param {{ output?: string, amount?: number, required?: number }} [recipe]
+ * Current crusher recipe, if one is active.
+ */
 function updateUI(controller, data, status = '§aRunning', recipe) {
     controller.displayEnergy()
     const offsetLines = MultiblockMachine.setMachineInfoLabel(controller, data, status);
@@ -180,6 +166,14 @@ function updateUI(controller, data, status = '§aRunning', recipe) {
 
 }
 
+/**
+ * Writes the crusher-specific energy and recipe information section.
+ *
+ * @param {MultiblockMachine} controller Active crusher controller runtime.
+ * @param {string} offsetLines Padding returned by `setMachineInfoLabel`.
+ * @param {{ output?: string, amount?: number, required?: number }} [recipe]
+ * Current crusher recipe, if one is active.
+ */
 function setEnergyAndRecipeLabel(controller, offsetLines, recipe) {
     const energy = controller.energy
     const rate = controller.baseRate

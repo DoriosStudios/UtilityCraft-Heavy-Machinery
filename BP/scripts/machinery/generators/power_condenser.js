@@ -1,30 +1,31 @@
-import { EnergyStorage, Generator, MultiblockManager } from "DoriosCore/index.js"
+import { EnergyStorage, MultiblockGenerator, MultiblockManager } from "DoriosCore/index.js"
 
 DoriosAPI.register.blockComponent('power_condenser', {
-    async onPlayerInteract(e, { params: settings }) {
-        const { block, player } = e
-
-        let entity = block.dimension.getEntitiesAtBlockLocation(block.location)[0]
-
-        if (!player.getEquipment('Mainhand')?.typeId.includes('wrench')) {
-            Generator.openGeneratorTransferModeMenu(entity, player)
-            return
-        }
-
-        if (!entity) {
-            Generator.spawnEntity(e, settings, (spawnedEntity) => {
-                void activatePowerCondenser(e, settings, spawnedEntity)
-            })
-            return
-        }
-
-        await activatePowerCondenser(e, settings, entity)
+    onPlayerInteract(e, { params: settings }) {
+        return MultiblockGenerator.handlePlayerInteract(e, settings, {
+            onInteractWithoutWrench({ entity, player }) {
+                MultiblockGenerator.openGeneratorTransferModeMenu(entity, player)
+            },
+            missingEnergyWarning: '\u00A7c[Matrix] At least 1 energy container its required to operate.',
+            onActivate: ({ entity, energyCap, settings }) => {
+                const transferRate = energyCap / settings.multiblock.transfer_rate_ratio
+                entity.setDynamicProperty('dorios:rateSpeed', transferRate)
+            },
+            successMessages: ({ energyCap, settings }) => {
+                const transferRate = energyCap / settings.multiblock.transfer_rate_ratio
+                return [
+                    '\u00A7a[Matrix] Power Condenser Matrix created successfully.',
+                    `\u00A77[Matrix] Energy Capacity: \u00A7b${EnergyStorage.formatEnergyToText(energyCap)}`,
+                    `\u00A77[Matrix] Transfer Rate: \u00A7b${EnergyStorage.formatEnergyToText(transferRate)}/t`,
+                ]
+            },
+        })
     },
     onPlayerBreak({ block, player }) {
         MultiblockManager.handleBreakController(block, player)
     },
     onTick({ block }, { params: settings }) {
-        const matrix = new Generator(block, settings)
+        const matrix = new MultiblockGenerator(block, settings)
         if (!matrix.valid) return
 
         const newRate = matrix.entity.getDynamicProperty("dorios:rateSpeed");
@@ -46,26 +47,3 @@ DoriosAPI.register.blockComponent('power_condenser', {
         matrix.displayEnergy()
     }
 })
-
-async function activatePowerCondenser(e, settings, entity) {
-    const { block, player } = e
-
-    MultiblockManager.deactivateMultiblock(block, player)
-
-    const structure = await MultiblockManager.detectFromController(e, settings.required_case)
-    if (!structure) return
-
-    const energyCap = MultiblockManager.activateMultiblock(entity, structure)
-    const transferRate = energyCap / settings.multiblock.transfer_rate_ratio
-    if (energyCap <= 0) {
-        player.sendMessage('§c[Matrix] At least 1 energy container its required to operate.')
-        MultiblockManager.deactivateMultiblock(block, player)
-        return
-    }
-
-    entity.setDynamicProperty('dorios:rateSpeed', transferRate)
-
-    player.sendMessage('§a[Matrix] Power Condenser Matrix created successfully.')
-    player.sendMessage(`§7[Matrix] Energy Capacity: §b${EnergyStorage.formatEnergyToText(energyCap)}`)
-    player.sendMessage(`§7[Matrix] Transfer Rate: §b${EnergyStorage.formatEnergyToText(transferRate)}/t`)
-}

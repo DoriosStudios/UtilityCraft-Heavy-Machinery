@@ -2,18 +2,18 @@
 	"format_version": "1.20.80",
 	"minecraft:block": {
 		"description": {
-			"identifier": "utilitycraft:bronze_item_port",
-			"menu_category": {
-				"category": "construction"
-			},
-			"states": {
+            "identifier": "utilitycraft:bronze_item_port",
+            "menu_category": {
+                "category": "construction"
+            },
+            "states": {
 				"utilitycraft:active": [
 					0,
 					1
 				]
 			}
-		},
-		"components": {
+        },
+        "components": {
 			"tag:dorios:multiblock.port": {},
 			"tag:dorios:multiblock.case.bronze": {}
 		},

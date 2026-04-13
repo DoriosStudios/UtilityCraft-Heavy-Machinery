@@ -21,21 +21,18 @@ const CONTROLLER_REQUIREMENTS = {
 
 DoriosAPI.register.blockComponent('autosieve_controller', {
 
-    async onPlayerInteract(e, { params: settings }) {
-        const { block, player } = e
-        let entity = block.dimension.getEntitiesAtBlockLocation(block.location)[0]
-
-        if (!player.getEquipment('Mainhand')?.typeId.includes('wrench')) return
-
-        if (!entity) {
-            MultiblockMachine.spawnEntity(e, settings, (spawnedEntity) => {
-                initializeControllerEntity(spawnedEntity)
-                void activateAutosieveController(e, settings, spawnedEntity)
-            })
-            return
-        }
-
-        await activateAutosieveController(e, settings, entity)
+    onPlayerInteract(e, { params: settings }) {
+        return MultiblockMachine.handlePlayerInteract(e, settings, {
+            initializeEntity(entity) {
+                entity.setItem(1, 'utilitycraft:arrow_right_0', 1, '')
+                entity.setItem(2, 'utilitycraft:arrow_right_0', 1, '')
+            },
+            requirements: CONTROLLER_REQUIREMENTS,
+            successMessages: ({ energyCap }) => [
+                '\u00A7a[Controller] Autosieve Factory created successfully.',
+                `\u00A77Energy Capacity: \u00A7b${EnergyStorage.formatEnergyToText(energyCap)}`,
+            ],
+        })
     },
 
     onPlayerBreak({ block, player }) {
@@ -48,9 +45,6 @@ DoriosAPI.register.blockComponent('autosieve_controller', {
         const controller = new MultiblockMachine(e.block, settings)
         if (!controller.valid) return
 
-        const state = controller.entity.getDynamicProperty('dorios:state')
-        if (!state || state === 'off') return
-
         const raw = controller.entity.getDynamicProperty('components')
         const data = raw ? JSON.parse(raw) : {}
 
@@ -61,14 +55,14 @@ DoriosAPI.register.blockComponent('autosieve_controller', {
         const meshSlot = inv.getItem(MESH_SLOT)
         if (!meshSlot) {
             updateUI(controller, data, '§eNo Mesh')
-            controller.setProgress(0, 3)
+            controller.setProgress(0, { slot: 3 })
             return
         }
 
         const meshComp = meshSlot.getComponent('utilitycraft:mesh')
         if (!meshComp) {
             updateUI(controller, data, '§eInvalid Mesh')
-            controller.setProgress(0, 3)
+            controller.setProgress(0, { slot: 3 })
             return
         }
 
@@ -94,14 +88,14 @@ DoriosAPI.register.blockComponent('autosieve_controller', {
 
         if (!inputType || totalInput <= 0) {
             updateUI(controller, data, '§eNo Input')
-            controller.setProgress(0, 3)
+            controller.setProgress(0, { slot: 3 })
             return
         }
 
         const recipe = sieveRecipes[inputType]
         if (!recipe) {
             updateUI(controller, data, '§eInvalid Input')
-            controller.setProgress(0, 3)
+            controller.setProgress(0, { slot: 3 })
             return
         }
 
@@ -113,7 +107,7 @@ DoriosAPI.register.blockComponent('autosieve_controller', {
 
         if (processCount <= 0) {
             updateUI(controller, data, '§eCapacity Limit')
-            controller.setProgress(0, 3)
+            controller.setProgress(0, { slot: 3 })
             return
         }
 
@@ -125,7 +119,7 @@ DoriosAPI.register.blockComponent('autosieve_controller', {
 
         if (controller.energy.get() <= 0) {
             updateUI(controller, data, '§eNo Energy')
-            controller.displayProgress(3)
+            controller.displayProgress({ slot: 3 })
             return
         }
 
@@ -154,26 +148,22 @@ DoriosAPI.register.blockComponent('autosieve_controller', {
             )
         }
 
-        controller.displayProgress(3)
+        controller.displayProgress({ slot: 3 })
         updateUI(controller, data, '§aRunning')
     }
 })
 
-function initializeControllerEntity(entity) {
-    entity.setItem(1, 'utilitycraft:arrow_right_0', 1, '')
-    entity.setItem(2, 'utilitycraft:arrow_right_0', 1, '')
-}
-
-async function activateAutosieveController(e, settings, entity) {
-    await MultiblockMachine.activateMachineController(e, settings, entity, {
-        requirements: CONTROLLER_REQUIREMENTS,
-        successMessages: ({ energyCap }) => [
-            '§a[Controller] Autosieve Factory created successfully.',
-            `§7Energy Capacity: §b${EnergyStorage.formatEnergyToText(energyCap)}`,
-        ],
-    })
-}
-
+/**
+ * Rolls and distributes autosieve drops for the current mesh and recipe setup.
+ *
+ * @param {MultiblockMachine} controller Active autosieve controller runtime.
+ * @param {Array<{ item: string, chance: number, amount: number | [number, number], tier?: number }>} recipe
+ * Loot table entries for the current autosieve input.
+ * @param {number} processCount Amount of parallel input items being processed.
+ * @param {number} tier Current mesh tier.
+ * @param {number} multi Drop chance multiplier provided by the mesh.
+ * @param {number} amountMultiplier Output amount multiplier provided by the mesh.
+ */
 function processAutosieveDrops(
     controller,
     recipe,
@@ -201,6 +191,14 @@ function processAutosieveDrops(
     })
 }
 
+/**
+ * Refreshes the autosieve controller UI for the current machine state.
+ *
+ * @param {MultiblockMachine} controller Active autosieve controller runtime.
+ * @param {MachineStats & { cost?: number }} data Computed multiblock machine stats.
+ * @param {string} [status='§aRunning'] Status text shown in the machine label.
+ * @param {object} [recipe] Optional recipe data used for display.
+ */
 function updateUI(controller, data, status = '§aRunning', recipe) {
     controller.displayEnergy()
     const offsetLines = MultiblockMachine.setMachineInfoLabel(controller, data, status);
@@ -208,6 +206,13 @@ function updateUI(controller, data, status = '§aRunning', recipe) {
 
 }
 
+/**
+ * Writes the autosieve-specific energy and recipe information section.
+ *
+ * @param {MultiblockMachine} controller Active autosieve controller runtime.
+ * @param {string} offsetLines Padding returned by `setMachineInfoLabel`.
+ * @param {object} [recipe] Optional recipe data used for display.
+ */
 function setEnergyAndRecipeLabel(controller, offsetLines, recipe) {
     const energy = controller.energy
     const rate = controller.baseRate

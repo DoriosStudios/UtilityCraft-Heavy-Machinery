@@ -2,12 +2,12 @@
 	"format_version": "1.20.80",
 	"minecraft:block": {
 		"description": {
-			"identifier": "utilitycraft:controller_case",
+            "identifier": "utilitycraft:controller_case",
             "menu_category": {
                 "category": "construction"
             }
-		},
-		"components": {
+        },
+        "components": {
 			"minecraft:geometry": "geometry.utilitycraft_block_4",
 			"minecraft:material_instances": {
 				"*": {

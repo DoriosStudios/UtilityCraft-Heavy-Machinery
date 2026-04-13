@@ -1,0 +1,32 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "utilitycraft:tin_plated_block"
+        },
+        "tags": [
+            "utilitycraft_workbench"
+        ],
+        "key": {
+            "T": {
+                "item": "utilitycraft:tin_ingot"
+            },
+            "P": {
+                "item": "utilitycraft:tin_plate"
+            }
+        },
+        "pattern": [
+            "PTP",
+            "TPT",
+            "PTP"
+        ],
+        "result": {
+            "item": "utilitycraft:tin_plated_block"
+        },
+        "unlock": [
+            {
+                "item": "utilitycraft:tin_plate"
+            }
+        ]
+    }
+}
