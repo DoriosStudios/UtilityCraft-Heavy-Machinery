@@ -2,7 +2,9 @@ import { ItemStack, system } from "@minecraft/server";
 import { BasicMachine } from "../machinery/basicMachine.js";
 import { EnergyStorage } from "../machinery/energyStorage.js";
 import { FluidStorage } from "../machinery/fluidStorage.js";
-import { MultiblockManager } from "./multiblock.js";
+import { ActivationManager } from "./activationManager.js";
+import { DeactivationManager } from "./deactivationManager.js";
+import { StructureDetector } from "./structureDetection.js";
 import * as Utils from "../utils/entity.js";
 
 export class MultiblockMachine extends BasicMachine {
@@ -228,19 +230,19 @@ export class MultiblockMachine extends BasicMachine {
     } = config;
     const { block, player } = e;
 
-    MultiblockManager.deactivateMultiblock(block, player);
+    DeactivationManager.deactivateMultiblock(block, player);
 
-    const structure = await MultiblockManager.detectFromController(e, settings.required_case);
+    const structure = await StructureDetector.detectFromController(e, settings.required_case);
     if (!structure) return;
 
     const failure = this.validateRequirements(structure.components, requirements);
     if (failure) {
       player.sendMessage(failure.warning);
-      MultiblockManager.deactivateMultiblock(block, player);
+      DeactivationManager.deactivateMultiblock(block, player);
       return;
     }
 
-    const energyCap = MultiblockManager.activateMultiblock(entity, structure);
+    const energyCap = ActivationManager.activateMultiblock(entity, structure);
     const factoryData = this.computeMachineStats(structure.components);
     entity.setDynamicProperty("components", JSON.stringify(factoryData));
 
@@ -258,7 +260,7 @@ export class MultiblockMachine extends BasicMachine {
     if (onActivate) {
       const result = await onActivate(context);
       if (result === false) {
-        MultiblockManager.deactivateMultiblock(block, player);
+        DeactivationManager.deactivateMultiblock(block, player);
         return;
       }
     }

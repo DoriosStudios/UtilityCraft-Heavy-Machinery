@@ -1,4 +1,4 @@
-import { EnergyStorage, MultiblockManager, MultiblockMachine } from "DoriosCore/index.js"
+import { EnergyStorage, Multiblock, MultiblockMachine } from "DoriosCore/index.js"
 import { infuserRecipes } from 'config/recipes/infuser.js'
 
 const CATALYST_SLOTS = [5, 6, 7, 8]
@@ -35,7 +35,7 @@ DoriosAPI.register.blockComponent('infuser_controller', {
         })
     },
     onPlayerBreak({ block, player }) {
-        MultiblockManager.handleBreakController(block, player)
+        Multiblock.DeactivationManager.handleBreakController(block, player)
     },
     onTick(e, { params: settings }) {
         if (!worldLoaded) return;

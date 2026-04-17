@@ -1,4 +1,4 @@
-import { EnergyStorage, FluidStorage, MultiblockGenerator, MultiblockManager, ButtonManager } from "DoriosCore/index.js"
+import { EnergyStorage, FluidStorage, Multiblock, MultiblockGenerator, ButtonManager } from "DoriosCore/index.js"
 import { ModalFormData } from '@minecraft/server-ui'
 import { ItemStack } from '@minecraft/server'
 import { coolants } from 'config/coolants.js'
@@ -82,7 +82,7 @@ const THERMO_REACTOR_DELETE_SLOT = 20;
 
 // #endregion
 
-
+// Power button - Turns on/off the Reactor
 ButtonManager.registerMachineButton("thermo_reactor", 5, (({ entity }) => {
     if (!entity) return;
 
@@ -91,6 +91,7 @@ ButtonManager.registerMachineButton("thermo_reactor", 5, (({ entity }) => {
     entity.setDynamicProperty("reactorData", JSON.stringify(data));
 }))
 
+// Numpad
 ButtonManager.registerMachineButton(
     "thermo_reactor",
     Object.keys(THERMO_REACTOR_KEYPAD_BY_SLOT).map(Number),
@@ -99,14 +100,17 @@ ButtonManager.registerMachineButton(
     }
 );
 
+// Accept Button - Sets the current number as the burn rate
 ButtonManager.registerMachineButton("thermo_reactor", THERMO_REACTOR_ACCEPT_SLOT, ({ entity }) => {
     applyThermoReactorBurnRate(entity);
 });
 
+// Cancel Button - Deletes all characters
 ButtonManager.registerMachineButton("thermo_reactor", THERMO_REACTOR_CANCEL_SLOT, ({ entity }) => {
     resetThermoReactorInput(entity);
 });
 
+// Delete Button - Deletes 1 character
 ButtonManager.registerMachineButton("thermo_reactor", THERMO_REACTOR_DELETE_SLOT, ({ entity }) => {
     deleteThermoReactorInput(entity);
 });
@@ -197,7 +201,7 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
         })
     },
     onPlayerBreak({ block, player }) {
-        MultiblockManager.handleBreakController(block, player, { blockId: 'minecraft:water' })
+        Multiblock.DeactivationManager.handleBreakController(block, player, { blockId: 'minecraft:water' })
     },
     onTick({ block }, { params: settings }) {
         if (!worldLoaded) return;
@@ -310,13 +314,13 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
             if (data.temperature >= WARN_DANGER_K) {
                 data.state = "off"
                 data.temperature = 1000
-                MultiblockManager.deactivateMultiblock(block, undefined, { blockId: 'minecraft:water' })
+                Multiblock.DeactivationManager.deactivateMultiblock(block, undefined, { blockId: 'minecraft:water' })
                 DoriosAPI.utils.waitSeconds(4, () => {
                     if (!entity) return
                     const bounds = data.bounds
                     if (bounds) {
-                        const center = MultiblockManager.getCenter(bounds.min, bounds.max)
-                        const radius = (MultiblockManager.getVolume(bounds) ** (1 / 3)) * 0.4
+                        const center = Multiblock.EntityManager.getCenter(bounds.min, bounds.max)
+                        const radius = (Multiblock.EntityManager.getVolume(bounds) ** (1 / 3)) * 0.4
                         reactor.dimension.createExplosion({ x: center.x + 0.5, y: center.y + 0.5, z: center.z + 0.5 }, radius, { causesFire: true, breaksBlocks: true, allowUnderwater: true })
                     } else {
                         reactor.dimension.createExplosion(entity.location, 4, { causesFire: true, breaksBlocks: true, allowUnderwater: true })

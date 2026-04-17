@@ -1,4 +1,4 @@
-import { EnergyStorage, MultiblockGenerator, MultiblockManager } from "DoriosCore/index.js"
+import { EnergyStorage, Multiblock, MultiblockGenerator } from "DoriosCore/index.js"
 
 DoriosAPI.register.blockComponent('power_condenser', {
     onPlayerInteract(e, { params: settings }) {
@@ -22,7 +22,7 @@ DoriosAPI.register.blockComponent('power_condenser', {
         })
     },
     onPlayerBreak({ block, player }) {
-        MultiblockManager.handleBreakController(block, player)
+        Multiblock.DeactivationManager.handleBreakController(block, player)
     },
     onTick({ block }, { params: settings }) {
         const matrix = new MultiblockGenerator(block, settings)

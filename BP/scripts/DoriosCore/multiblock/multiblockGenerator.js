@@ -1,8 +1,11 @@
 import { ItemStack, system } from "@minecraft/server";
 import { Generator } from "../machinery/generator.js";
-import { EnergyStorage } from "../machinery/energyStorage";
-import { MultiblockManager } from "./multiblock.js";
-import * as Utils from "../utils/entity";
+import { EnergyStorage } from "../machinery/energyStorage.js";
+import { FluidStorage } from "../machinery/fluidStorage.js";
+import { ActivationManager } from "./activationManager.js";
+import { DeactivationManager } from "./deactivationManager.js";
+import { StructureDetector } from "./structureDetection.js";
+import * as Utils from "../utils/entity.js";
 
 export class MultiblockGenerator extends Generator {
   /**
@@ -149,22 +152,22 @@ export class MultiblockGenerator extends Generator {
     } = config;
     const { block, player } = e;
 
-    MultiblockManager.deactivateMultiblock(block, player, deactivateConfig);
+    DeactivationManager.deactivateMultiblock(block, player, deactivateConfig);
 
-    const structure = await MultiblockManager.detectFromController(e, settings.required_case);
+    const structure = await StructureDetector.detectFromController(e, settings.required_case);
     if (!structure) return;
 
     const failure = this.validateRequirements(structure.components ?? {}, requirements);
     if (failure) {
       player.sendMessage(failure.warning);
-      MultiblockManager.deactivateMultiblock(block, player, deactivateConfig);
+      DeactivationManager.deactivateMultiblock(block, player, deactivateConfig);
       return;
     }
 
-    const energyCap = MultiblockManager.activateMultiblock(entity, structure, fillBlocksConfig);
+    const energyCap = ActivationManager.activateMultiblock(entity, structure, fillBlocksConfig);
     if (missingEnergyWarning && energyCap <= 0) {
       player.sendMessage(missingEnergyWarning);
-      MultiblockManager.deactivateMultiblock(block, player, deactivateConfig);
+      DeactivationManager.deactivateMultiblock(block, player, deactivateConfig);
       return;
     }
 
@@ -181,7 +184,7 @@ export class MultiblockGenerator extends Generator {
     if (onActivate) {
       const result = await onActivate(context);
       if (result === false) {
-        MultiblockManager.deactivateMultiblock(block, player, deactivateConfig);
+        DeactivationManager.deactivateMultiblock(block, player, deactivateConfig);
         return;
       }
     }

@@ -1,6 +1,6 @@
 import { world } from "@minecraft/server";
-import { getEntityFromBlock } from "./entityManager.js";
-import { deactivateMultiblock } from "./deactivationManager.js";
+import { DeactivationManager } from "./deactivationManager.js";
+import { EntityManager } from "./entityManager.js";
 
 /**
  * Global multiblock listeners.
@@ -14,10 +14,10 @@ world.afterEvents.playerBreakBlock.subscribe((e) => {
   const isCase = tags.some((tag) => tag.startsWith("dorios:multiblock.case"));
   if (!isCase) return;
 
-  const entity = getEntityFromBlock(block);
+  const entity = EntityManager.getEntityFromBlock(block);
   if (!entity) return;
 
-  deactivateMultiblock(block, player, { blockId: "minecraft:water" });
+  DeactivationManager.deactivateMultiblock(block, player, { blockId: "minecraft:water" });
 });
 
 world.afterEvents.blockExplode.subscribe((e) => {
@@ -26,8 +26,8 @@ world.afterEvents.blockExplode.subscribe((e) => {
   const isCase = tags.some((tag) => tag.startsWith("dorios:multiblock.case"));
   if (!isCase) return;
 
-  const entity = getEntityFromBlock(block);
+  const entity = EntityManager.getEntityFromBlock(block);
   if (!entity) return;
 
-  deactivateMultiblock(block, undefined, { blockId: "minecraft:water" });
+  DeactivationManager.deactivateMultiblock(block, undefined, { blockId: "minecraft:water" });
 });

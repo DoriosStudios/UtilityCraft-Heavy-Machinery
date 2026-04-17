@@ -1,4 +1,4 @@
-import { EnergyStorage, FluidStorage, MultiblockManager, MultiblockMachine } from "DoriosCore/index.js"
+import { EnergyStorage, FluidStorage, Multiblock, MultiblockMachine } from "DoriosCore/index.js"
 import { reactionRecipes } from 'config/recipes/reaction_chamber.js'
 
 const INPUT_LIQUID_SLOT = 4
@@ -47,7 +47,7 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
         })
     },
     onPlayerBreak({ block, player }) {
-        MultiblockManager.handleBreakController(block, player)
+        Multiblock.DeactivationManager.handleBreakController(block, player)
     },
     onTick(e, { params: settings }) {
         if (!worldLoaded) return;

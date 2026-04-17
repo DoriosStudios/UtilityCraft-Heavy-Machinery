@@ -1,4 +1,4 @@
-import { EnergyStorage, MultiblockManager, MultiblockMachine } from "DoriosCore/index.js"
+import { EnergyStorage, Multiblock, MultiblockMachine } from "DoriosCore/index.js"
 import { crusherRecipes } from 'config/recipes/crusher.js'
 
 const INPUT_SLOTS = [4, 5, 6, 7, 8, 9, 10, 11, 12]
@@ -33,7 +33,7 @@ DoriosAPI.register.blockComponent('crusher_controller', {
         })
     },
     onPlayerBreak({ block, player }) {
-        MultiblockManager.handleBreakController(block, player)
+        Multiblock.DeactivationManager.handleBreakController(block, player)
     },
     onTick(e, { params: settings }) {
         if (!worldLoaded) return;
