@@ -1,5 +1,5 @@
 import { system } from "@minecraft/server";
-import { MAX_SIZE, SCAN_SPEED } from "./constants.js";
+import * as Constants from "./constants.js";
 import { EntityManager } from "./entityManager.js";
 
 export class StructureDetector {
@@ -128,14 +128,14 @@ export class StructureDetector {
       let min = origin[axis];
       let max = origin[axis];
 
-      for (let i = 1; i <= MAX_SIZE; i++) {
+      for (let i = 1; i <= Constants.MAX_SIZE; i++) {
         if (i % 2 === 0) await system.waitTicks(1);
         const pos = { ...origin, [axis]: origin[axis] + i };
         if (!isCasing(pos)) break;
         max = pos[axis];
       }
 
-      for (let i = 1; i <= MAX_SIZE; i++) {
+      for (let i = 1; i <= Constants.MAX_SIZE; i++) {
         if (i % 2 === 0) await system.waitTicks(1);
         const pos = { ...origin, [axis]: origin[axis] - i };
         if (!isCasing(pos)) break;
@@ -216,7 +216,7 @@ export class StructureDetector {
     for (let x = min.x; x <= max.x; x++) {
       for (let y = min.y; y <= max.y; y++) {
         for (let z = min.z; z <= max.z; z++) {
-          if (z % SCAN_SPEED === 0) await system.waitTicks(1);
+          if (z % Constants.SCAN_SPEED === 0) await system.waitTicks(1);
           const block = dim.getBlock({ x, y, z });
 
           const isEdge =
@@ -230,10 +230,10 @@ export class StructureDetector {
           if (isEdge) {
             if (block.x === controller.x && block.y === controller.y && block.z === controller.z) continue;
             if (block?.hasTag(caseTag)) {
-              if (block?.hasTag("dorios:multiblock.port")) {
-                inputBlocks.push(`input:[${x},${y},${z}]`);
+              if (block?.hasTag(Constants.MULTIBLOCK_PORT_TAG)) {
+                inputBlocks.push(`${Constants.INPUT_TAG_PREFIX}${x},${y},${z}]`);
               }
-              if (block?.hasTag("dorios:vent_block") && y === max.y) {
+              if (block?.hasTag(Constants.VENT_BLOCK_TAG) && y === max.y) {
                 components.vent = (components.vent ?? 0) + 1;
                 ventBlocks.push({ x, y, z });
               }
@@ -247,7 +247,7 @@ export class StructureDetector {
             continue;
           }
 
-          if (block?.hasTag("dorios:multiblock_component")) {
+          if (block?.hasTag(Constants.MULTIBLOCK_COMPONENT_TAG)) {
             const id = block.typeId.split(":")[1];
             components[id] = (components[id] ?? 0) + 1;
             continue;

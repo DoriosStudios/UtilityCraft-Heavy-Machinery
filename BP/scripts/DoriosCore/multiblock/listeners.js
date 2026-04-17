@@ -1,4 +1,5 @@
 import { world } from "@minecraft/server";
+import * as Constants from "./constants.js";
 import { DeactivationManager } from "./deactivationManager.js";
 import { EntityManager } from "./entityManager.js";
 
@@ -11,7 +12,7 @@ import { EntityManager } from "./entityManager.js";
 world.afterEvents.playerBreakBlock.subscribe((e) => {
   const { brokenBlockPermutation, block, player } = e;
   const tags = brokenBlockPermutation.getTags();
-  const isCase = tags.some((tag) => tag.startsWith("dorios:multiblock.case"));
+  const isCase = tags.some((tag) => tag.startsWith(Constants.MULTIBLOCK_CASE_TAG_PREFIX));
   if (!isCase) return;
 
   const entity = EntityManager.getEntityFromBlock(block);
@@ -23,7 +24,7 @@ world.afterEvents.playerBreakBlock.subscribe((e) => {
 world.afterEvents.blockExplode.subscribe((e) => {
   const { explodedBlockPermutation, block } = e;
   const tags = explodedBlockPermutation.getTags();
-  const isCase = tags.some((tag) => tag.startsWith("dorios:multiblock.case"));
+  const isCase = tags.some((tag) => tag.startsWith(Constants.MULTIBLOCK_CASE_TAG_PREFIX));
   if (!isCase) return;
 
   const entity = EntityManager.getEntityFromBlock(block);

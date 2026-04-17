@@ -1,6 +1,6 @@
 import { system } from "@minecraft/server";
 import { EnergyStorage } from "../machinery/energyStorage.js";
-import { ENERGY_PER_UNIT } from "./constants.js";
+import * as Constants from "./constants.js";
 
 export class ActivationManager {
   /**
@@ -59,28 +59,28 @@ export class ActivationManager {
   static activateMultiblock(entity, structure, fillBlocksConfig) {
     const { inputBlocks, bounds, ventBlocks, components } = structure;
 
-    entity.triggerEvent("utilitycraft:show");
+    entity.triggerEvent(Constants.SHOW_EVENT_ID);
 
     for (const tag of inputBlocks) {
       entity.addTag(tag);
 
-      const [x, y, z] = tag.slice(7, -1).split(",").map(Number);
+      const [x, y, z] = tag.slice(Constants.INPUT_TAG_PREFIX.length, -1).split(",").map(Number);
       const block = entity.dimension.getBlock({ x, y, z });
 
-      if (block?.hasTag("dorios:multiblock.port")) {
-        block.setPermutation(block.permutation.withState("utilitycraft:active", 1));
-        if (block.hasTag("dorios:energy")) entity.runCommand(`scriptevent dorios:updatePipes energy|[${x},${y},${z}]`);
-        if (block.hasTag("dorios:fluid")) entity.runCommand(`scriptevent dorios:updatePipes fluid|[${x},${y},${z}]`);
-        if (block.hasTag("dorios:item")) entity.runCommand(`scriptevent dorios:updatePipes item|[${x},${y},${z}]`);
+      if (block?.hasTag(Constants.MULTIBLOCK_PORT_TAG)) {
+        block.setPermutation(block.permutation.withState(Constants.ACTIVE_STATE_ID, 1));
+        if (block.hasTag(Constants.ENERGY_BLOCK_TAG)) entity.runCommand(`scriptevent ${Constants.UPDATE_PIPES_EVENT_ID} energy|[${x},${y},${z}]`);
+        if (block.hasTag(Constants.FLUID_BLOCK_TAG)) entity.runCommand(`scriptevent ${Constants.UPDATE_PIPES_EVENT_ID} fluid|[${x},${y},${z}]`);
+        if (block.hasTag(Constants.ITEM_BLOCK_TAG)) entity.runCommand(`scriptevent ${Constants.UPDATE_PIPES_EVENT_ID} item|[${x},${y},${z}]`);
       }
     }
 
     if (bounds) {
-      entity.setDynamicProperty("dorios:bounds", JSON.stringify(bounds));
+      entity.setDynamicProperty(Constants.BOUNDS_PROPERTY_ID, JSON.stringify(bounds));
     }
 
     if (ventBlocks) {
-      entity.setDynamicProperty("ventBlocks", JSON.stringify(ventBlocks));
+      entity.setDynamicProperty(Constants.VENT_BLOCKS_PROPERTY_ID, JSON.stringify(ventBlocks));
     }
 
     if (fillBlocksConfig && bounds) {
@@ -90,10 +90,10 @@ export class ActivationManager {
     const energyCap = ActivationManager.calculateEnergyCapacity(components ?? {});
     if (energyCap > 0) {
       EnergyStorage.setCap(entity, energyCap);
-      entity.setDynamicProperty("dorios:energyCap", energyCap);
+      entity.setDynamicProperty(Constants.ENERGY_CAP_PROPERTY_ID, energyCap);
     }
 
-    entity.setDynamicProperty("dorios:state", "on");
+    entity.setDynamicProperty(Constants.STATE_PROPERTY_ID, Constants.ACTIVE_STATE_VALUE);
     return energyCap;
   }
 
@@ -109,7 +109,7 @@ export class ActivationManager {
     let total = 0;
 
     for (const [id, count] of Object.entries(components)) {
-      const amount = ENERGY_PER_UNIT[id];
+      const amount = Constants.ENERGY_PER_UNIT[id];
       if (!amount) continue;
       total += count * amount;
     }

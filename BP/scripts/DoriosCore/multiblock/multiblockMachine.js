@@ -1,4 +1,5 @@
 import { ItemStack, system } from "@minecraft/server";
+import * as MachineryConstants from "../machinery/constants.js";
 import { BasicMachine } from "../machinery/basicMachine.js";
 import { EnergyStorage } from "../machinery/energyStorage.js";
 import { FluidStorage } from "../machinery/fluidStorage.js";
@@ -6,13 +7,14 @@ import { ActivationManager } from "./activationManager.js";
 import { DeactivationManager } from "./deactivationManager.js";
 import { StructureDetector } from "./structureDetection.js";
 import * as Utils from "../utils/entity.js";
+import * as Constants from "./constants.js";
 
 export class MultiblockMachine extends BasicMachine {
   /**
    * Creates a multiblock machine runtime bound to a controller block.
    *
    * A multiblock machine is only considered valid when the backing controller
-   * entity exists and its `dorios:state` property is currently active.
+   * entity exists and its serialized multiblock state is currently active.
    *
    * @param {Block} block Controller block representing the machine.
    * @param {MachineSettings} settings Multiblock machine configuration.
@@ -21,8 +23,8 @@ export class MultiblockMachine extends BasicMachine {
     super(block, settings?.machine?.rate_speed_base ?? 0);
     if (!this.valid) return;
 
-    const state = this.entity.getDynamicProperty("dorios:state");
-    if (!state || state === "off") {
+    const state = this.entity.getDynamicProperty(Constants.STATE_PROPERTY_ID);
+    if (!state || state === Constants.INACTIVE_STATE_VALUE) {
       this.valid = false;
       return;
     }
@@ -161,7 +163,7 @@ export class MultiblockMachine extends BasicMachine {
       );
     }
 
-    if (fluid.type != "empty") {
+    if (fluid.type != MachineryConstants.EMPTY_FLUID_TYPE) {
       const liquidName = DoriosAPI.utils.capitalizeFirst(fluid.type);
       lore.push(
         `§r§7  ${liquidName}: ${FluidStorage.formatFluid(fluid.get())}/${FluidStorage.formatFluid(fluid.cap)}`,
@@ -386,7 +388,7 @@ export class MultiblockMachine extends BasicMachine {
    * @param {number} [index=0] Cost index for multi-process machines.
    */
   setEnergyCost(value, index = 0) {
-    this.entity.setDynamicProperty(`dorios:energy_cost_${index}`, Math.max(1, value));
+    this.entity.setDynamicProperty(`${MachineryConstants.MACHINE_ENERGY_COST_PROPERTY_PREFIX}${index}`, Math.max(1, value));
   }
 
   /**
@@ -396,7 +398,7 @@ export class MultiblockMachine extends BasicMachine {
    * @returns {number} Current energy cost for the requested process.
    */
   getEnergyCost(index = 0) {
-    return this.entity.getDynamicProperty(`dorios:energy_cost_${index}`) ?? 800;
+    return this.entity.getDynamicProperty(`${MachineryConstants.MACHINE_ENERGY_COST_PROPERTY_PREFIX}${index}`) ?? MachineryConstants.DEFAULT_PROGRESS_MAX;
   }
 
   /**

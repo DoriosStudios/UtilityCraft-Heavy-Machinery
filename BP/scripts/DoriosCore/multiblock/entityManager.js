@@ -1,4 +1,4 @@
-import { MAX_SIZE } from "./constants.js";
+import * as Constants from "./constants.js";
 
 export class EntityManager {
   /**
@@ -68,11 +68,11 @@ export class EntityManager {
     return block.dimension
       .getEntities({
         location: block.location,
-        maxDistance: MAX_SIZE,
-        families: ["dorios:multiblock"],
+        maxDistance: Constants.MAX_SIZE,
+        families: [Constants.MULTIBLOCK_FAMILY],
       })
       .find((entity) => {
-        const raw = entity.getDynamicProperty("dorios:bounds");
+        const raw = entity.getDynamicProperty(Constants.BOUNDS_PROPERTY_ID);
         if (!raw) return false;
 
         try {

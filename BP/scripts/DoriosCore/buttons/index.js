@@ -1,4 +1,5 @@
 import { system } from "@minecraft/server";
+import * as Constants from "./constants.js";
 
 /**
  * Shared item used to restore button slots after a press is detected.
@@ -14,15 +15,15 @@ export let ButtonItemStack = null;
  *
  * This should be called once during startup or world load.
  *
- * @param {string} [itemId="utilitycraft:ui_filler"] Item identifier used as visual button.
+ * @param {string} [itemId=Constants.DEFAULT_BUTTON_ITEM_ID] Item identifier used as visual button.
  * @param {typeof import("@minecraft/server").ItemStack} ItemStackClass ItemStack constructor from the Minecraft API.
  * @returns {import("@minecraft/server").ItemStack | null}
  */
-export function loadButtonItemStack(itemId = "utilitycraft:ui_filler", ItemStackClass) {
+export function loadButtonItemStack(itemId = Constants.DEFAULT_BUTTON_ITEM_ID, ItemStackClass) {
   if (!ItemStackClass) return null;
 
   ButtonItemStack = new ItemStackClass(itemId, 1);
-  ButtonItemStack.nameTag = " ";
+  ButtonItemStack.nameTag = Constants.DEFAULT_BUTTON_NAME_TAG;
   return ButtonItemStack;
 }
 
@@ -71,7 +72,7 @@ function getEntityBlock(entity) {
  * @returns {string}
  */
 function getSlotState(item) {
-  return item?.typeId ?? "empty";
+  return item?.typeId ?? Constants.EMPTY_SLOT_STATE;
 }
 
 /**
@@ -321,7 +322,7 @@ export class ButtonManager {
 
     this.intervalId = system.runInterval(() => {
       this.tick();
-    }, 1);
+    }, Constants.BUTTON_WATCH_INTERVAL);
   }
 
   /**
@@ -374,7 +375,7 @@ export class ButtonManager {
 
         for (const { slot, onPressEvent } of buttons) {
           const currentState = getSlotState(readSlotItem(container, slot));
-          const previousState = watcher.cacheBySlot.get(slot) ?? "empty";
+          const previousState = watcher.cacheBySlot.get(slot) ?? Constants.EMPTY_SLOT_STATE;
 
           if (currentState === previousState) continue;
 

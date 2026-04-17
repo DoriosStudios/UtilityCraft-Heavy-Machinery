@@ -1,4 +1,5 @@
 import { system } from "@minecraft/server";
+import * as Constants from "./constants.js";
 import { EntityManager } from "./entityManager.js";
 
 export class DeactivationManager {
@@ -12,7 +13,7 @@ export class DeactivationManager {
    * @param {string} [blockId="minecraft:water"] Block identifier to replace with air.
    */
   static emptyBlocks(entity, blockId = "minecraft:water") {
-    const oldDataRaw = entity.getDynamicProperty("reactorStats");
+    const oldDataRaw = entity.getDynamicProperty(Constants.LEGACY_REACTOR_STATS_PROPERTY_ID);
     if (!oldDataRaw) return;
     const oldData = JSON.parse(oldDataRaw);
     const bounds = oldData.bounds;
@@ -56,24 +57,24 @@ export class DeactivationManager {
     if (player) player.sendMessage("\u00A7c[Scan] Multiblock structure deactivated.");
     if (!entity) return;
 
-    entity.triggerEvent("utilitycraft:hide");
+    entity.triggerEvent(Constants.HIDE_EVENT_ID);
     entity.getTags().forEach((tag) => {
-      if (!tag.startsWith("input:")) return;
+      if (!tag.startsWith(Constants.INPUT_TAG_PREFIX)) return;
 
-      const [x, y, z] = tag.slice(7, -1).split(",").map(Number);
+      const [x, y, z] = tag.slice(Constants.INPUT_TAG_PREFIX.length, -1).split(",").map(Number);
       const inputBlock = entity.dimension.getBlock({ x, y, z });
-      if (!inputBlock?.hasTag("dorios:multiblock.port")) return;
+      if (!inputBlock?.hasTag(Constants.MULTIBLOCK_PORT_TAG)) return;
 
       entity.removeTag(tag);
-      if (inputBlock.hasTag("dorios:energy")) entity.runCommand(`scriptevent dorios:updatePipes energy|[${x},${y},${z}]`);
-      if (inputBlock.hasTag("dorios:fluid")) entity.runCommand(`scriptevent dorios:updatePipes fluid|[${x},${y},${z}]`);
-      if (inputBlock.hasTag("dorios:item")) entity.runCommand(`scriptevent dorios:updatePipes item|[${x},${y},${z}]`);
-      inputBlock.setPermutation(inputBlock.permutation.withState("utilitycraft:active", 0));
+      if (inputBlock.hasTag(Constants.ENERGY_BLOCK_TAG)) entity.runCommand(`scriptevent ${Constants.UPDATE_PIPES_EVENT_ID} energy|[${x},${y},${z}]`);
+      if (inputBlock.hasTag(Constants.FLUID_BLOCK_TAG)) entity.runCommand(`scriptevent ${Constants.UPDATE_PIPES_EVENT_ID} fluid|[${x},${y},${z}]`);
+      if (inputBlock.hasTag(Constants.ITEM_BLOCK_TAG)) entity.runCommand(`scriptevent ${Constants.UPDATE_PIPES_EVENT_ID} item|[${x},${y},${z}]`);
+      inputBlock.setPermutation(inputBlock.permutation.withState(Constants.ACTIVE_STATE_ID, 0));
     });
 
-    entity.setDynamicProperty("dorios:rateSpeed", 0);
-    entity.setDynamicProperty("dorios:bounds", undefined);
-    entity.setDynamicProperty("dorios:state", "off");
+    entity.setDynamicProperty(Constants.RATE_SPEED_PROPERTY_ID, 0);
+    entity.setDynamicProperty(Constants.BOUNDS_PROPERTY_ID, undefined);
+    entity.setDynamicProperty(Constants.STATE_PROPERTY_ID, Constants.INACTIVE_STATE_VALUE);
 
     if (emptyBlocksConfig) {
       DeactivationManager.emptyBlocks(entity, emptyBlocksConfig.blockId);
