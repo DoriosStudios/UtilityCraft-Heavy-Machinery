@@ -121,7 +121,7 @@ export class ButtonManager {
    * The callback is shared by every entity using the same machine id.
    *
    * @param {string} machineId
-   * @param {number} slot
+   * @param {number | number[]} slot
    * @param {(event: {
    *   entity: import("@minecraft/server").Entity,
    *   block: import("@minecraft/server").Block | undefined,
@@ -132,20 +132,29 @@ export class ButtonManager {
    */
   static registerMachineButton(machineId, slot, onPressEvent = () => { }) {
     if (typeof machineId !== "string" || machineId.length === 0) return false;
-    if (!Number.isInteger(slot) || slot < 0) return false;
+    const slots = Array.isArray(slot) ? slot : [slot];
+    if (slots.length === 0) return false;
 
-    const buttons = this.machineDefinitions.get(machineId) ?? [];
     const callback = typeof onPressEvent === "function" ? onPressEvent : () => { };
-    const existingIndex = buttons.findIndex((button) => button.slot === slot);
-    const definition = { slot, onPressEvent: callback };
-
-    if (existingIndex >= 0) {
-      buttons[existingIndex] = definition;
-    } else {
-      buttons.push(definition);
-      buttons.sort((a, b) => a.slot - b.slot);
+    const normalizedSlots = [...new Set(slots)];
+    if (normalizedSlots.some((currentSlot) => !Number.isInteger(currentSlot) || currentSlot < 0)) {
+      return false;
     }
 
+    const buttons = this.machineDefinitions.get(machineId) ?? [];
+
+    for (const currentSlot of normalizedSlots) {
+      const existingIndex = buttons.findIndex((button) => button.slot === currentSlot);
+      const definition = { slot: currentSlot, onPressEvent: callback };
+
+      if (existingIndex >= 0) {
+        buttons[existingIndex] = definition;
+      } else {
+        buttons.push(definition);
+      }
+    }
+
+    buttons.sort((a, b) => a.slot - b.slot);
     this.machineDefinitions.set(machineId, buttons);
     return true;
   }
@@ -154,14 +163,23 @@ export class ButtonManager {
    * Removes a registered button definition from a machine id.
    *
    * @param {string} machineId
-   * @param {number} slot
+   * @param {number | number[]} slot
    * @returns {boolean}
    */
   static unregisterMachineButton(machineId, slot) {
+    const slots = Array.isArray(slot) ? slot : [slot];
+    if (slots.length === 0) return false;
+
+    const normalizedSlots = [...new Set(slots)];
+    if (normalizedSlots.some((currentSlot) => !Number.isInteger(currentSlot) || currentSlot < 0)) {
+      return false;
+    }
+
     const buttons = this.machineDefinitions.get(machineId);
     if (!buttons?.length) return false;
 
-    const filtered = buttons.filter((button) => button.slot !== slot);
+    const slotSet = new Set(normalizedSlots);
+    const filtered = buttons.filter((button) => !slotSet.has(button.slot));
     if (filtered.length === buttons.length) return false;
 
     if (filtered.length === 0) {

@@ -51,7 +51,7 @@
 				"width": 1
 			},
 			"minecraft:inventory": {
-				"inventory_size": 5,
+				"inventory_size": 21,
 				"container_type": "container"
 			},
 			"minecraft:environment_sensor": {

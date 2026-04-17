@@ -16,16 +16,10 @@
         "$item_collection_name": "container_items",
         "controls": [
             {
-                "chest_label@chest.chest_label": {
-                    "offset": [
-                        10,
-                        0
-                    ]
-                }
+                "machine_name@uc.machine_name": {}
             },
             {
-                "energy_bar@machineryCommon.vertical_single": {
-                    "$is_energy": true,
+                "energy_bar@uc.energy_bar": {
                     "$has_bg": true,
                     "offset": [
                         102,
@@ -34,10 +28,10 @@
                 }
             },
             {
-                "panel@machineryCommon.side_panel": {}
+                "panel@uc.machine_side_panel": {}
             },
             {
-                "item_label@machineryCommon.item_label": {
+                "item_label@uc.text_label": {
                     "collection_index": 1,
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
@@ -53,7 +47,7 @@
                 }
             },
             {
-                "item_label@machineryCommon.item_label": {
+                "item_label@uc.text_label": {
                     "collection_index": 2,
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
@@ -69,20 +63,20 @@
                 }
             },
             {
-                "machinery@common_machines.machinery": {
+                "machinery@uc.progress_display": {
                     "anchor_from": "top_middle",
                     "anchor_to": "top_middle",
                     "offset": [
-                        11,
-                        31
+                        10,
+                        23
                     ],
                     "collection_index": 3
                 }
             },
             {
-                "liquid_bar_input@machineryCommon.vertical_single": {
+                "liquid_bar_input@uc.fluid_bar": {
                     "$collection_index": 4,
-                    "$is_liquid": true,
+                    "$has_bg": false,
                     "offset": [
                         -63,
                         0
@@ -90,103 +84,41 @@
                 }
             },
             {
-                "liquid_bar_output@machineryCommon.vertical_single": {
+                "liquid_bar_output@uc.fluid_bar": {
                     "$collection_index": 5,
-                    "$is_liquid": true,
+                    "$has_bg": false,
                     "offset": [
-                        63,
+                        62,
                         0
                     ]
                 }
             },
-            // Input 2x2
             {
-                "item@common.container_item": {
+                "input_grid@uc.slot_grid_2x2": {
                     "anchor_from": "top_middle",
                     "anchor_to": "top_middle",
                     "offset": [
-                        -29,
+                        -21,
                         22
                     ],
-                    "collection_index": 6
+                    "$collection_index_1": 6,
+                    "$collection_index_2": 7,
+                    "$collection_index_3": 8,
+                    "$collection_index_4": 9
                 }
             },
             {
-                "item@common.container_item": {
+                "output_grid@uc.slot_grid_2x2": {
                     "anchor_from": "top_middle",
                     "anchor_to": "top_middle",
                     "offset": [
-                        -11,
+                        41,
                         22
                     ],
-                    "collection_index": 7
-                }
-            },
-            {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        -29,
-                        40
-                    ],
-                    "collection_index": 8
-                }
-            },
-            {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        -11,
-                        40
-                    ],
-                    "collection_index": 9
-                }
-            },
-            // Output 2x2
-            {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        33,
-                        22
-                    ],
-                    "collection_index": 10
-                }
-            },
-            {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        51,
-                        22
-                    ],
-                    "collection_index": 11
-                }
-            },
-            {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        33,
-                        40
-                    ],
-                    "collection_index": 12
-                }
-            },
-            {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        51,
-                        40
-                    ],
-                    "collection_index": 13
+                    "$collection_index_1": 10,
+                    "$collection_index_2": 11,
+                    "$collection_index_3": 12,
+                    "$collection_index_4": 13
                 }
             }
         ]

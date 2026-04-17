@@ -32,16 +32,10 @@
                 }
             },
             {
-                "chest_label@chest.chest_label": {
-                    "offset": [
-                        10,
-                        0
-                    ]
-                }
+                "machine_name@uc.machine_name": {}
             },
             {
-                "energy_bar@machineryCommon.vertical_single": {
-                    "$is_energy": true,
+                "energy_bar@uc.energy_bar": {
                     "$has_bg": false,
                     "offset": [
                         94,
@@ -50,7 +44,7 @@
                 }
             },
             {
-                "panel@machineryCommon.side_panel": {}
+                "panel@uc.machine_side_panel": {}
             },
             {
                 "screen": {
@@ -74,7 +68,7 @@
                 }
             },
             {
-                "item_label@machineryCommon.item_label": {
+                "item_label@uc.text_label": {
                     "collection_index": 1,
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
@@ -90,7 +84,7 @@
                 }
             },
             {
-                "item_label@machineryCommon.item_label": {
+                "item_label@uc.text_label": {
                     "collection_index": 2,
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
@@ -105,21 +99,19 @@
                     ]
                 }
             },
-            // Progress (slot 3)
             {
-                "machinery@common_machines.machinery": {
+                "machinery@uc.progress_display": {
                     "anchor_from": "top_middle",
                     "anchor_to": "top_middle",
                     "offset": [
                         43,
-                        31
+                        23
                     ],
                     "collection_index": 3
                 }
             },
-            // Extra UI slot (slot 4) – debajo esquina inferior derecha
             {
-                "machinery@common_machines.machinery": {
+                "item@uc.item_display": {
                     "anchor_from": "top_middle",
                     "anchor_to": "top_middle",
                     "offset": [
@@ -129,249 +121,56 @@
                     "collection_index": 4
                 }
             },
-            // Catalysts 2x2 (slots 5–8)
             {
-                "item@common.container_item": {
+                "catalyst_grid@uc.slot_grid_2x2": {
                     "anchor_from": "top_middle",
                     "anchor_to": "top_middle",
                     "offset": [
-                        -56,
+                        -47,
                         13
                     ],
-                    "collection_index": 5
+                    "$collection_index_1": 5,
+                    "$collection_index_2": 6,
+                    "$collection_index_3": 7,
+                    "$collection_index_4": 8
                 }
             },
             {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        -38,
-                        13
-                    ],
-                    "collection_index": 6
-                }
-            },
-            {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        -56,
-                        31
-                    ],
-                    "collection_index": 7
-                }
-            },
-            {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        -38,
-                        31
-                    ],
-                    "collection_index": 8
-                }
-            },
-            // Input 3x3 (slots 9–17)
-            {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        -15,
-                        13
-                    ],
-                    "collection_index": 9
-                }
-            },
-            {
-                "item@common.container_item": {
+                "input_grid@uc.slot_grid_3x3": {
                     "anchor_from": "top_middle",
                     "anchor_to": "top_middle",
                     "offset": [
                         3,
                         13
                     ],
-                    "collection_index": 10
+                    "$collection_index_1": 9,
+                    "$collection_index_2": 10,
+                    "$collection_index_3": 11,
+                    "$collection_index_4": 12,
+                    "$collection_index_5": 13,
+                    "$collection_index_6": 14,
+                    "$collection_index_7": 15,
+                    "$collection_index_8": 16,
+                    "$collection_index_9": 17
                 }
             },
             {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        21,
-                        13
-                    ],
-                    "collection_index": 11
-                }
-            },
-            {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        -15,
-                        31
-                    ],
-                    "collection_index": 12
-                }
-            },
-            {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        3,
-                        31
-                    ],
-                    "collection_index": 13
-                }
-            },
-            {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        21,
-                        31
-                    ],
-                    "collection_index": 14
-                }
-            },
-            {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        -15,
-                        49
-                    ],
-                    "collection_index": 15
-                }
-            },
-            {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        3,
-                        49
-                    ],
-                    "collection_index": 16
-                }
-            },
-            {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        21,
-                        49
-                    ],
-                    "collection_index": 17
-                }
-            },
-            // Output 3x3 (slots 18–26)
-            {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        65,
-                        13
-                    ],
-                    "collection_index": 18
-                }
-            },
-            {
-                "item@common.container_item": {
+                "output_grid@uc.slot_grid_3x3": {
                     "anchor_from": "top_middle",
                     "anchor_to": "top_middle",
                     "offset": [
                         83,
                         13
                     ],
-                    "collection_index": 19
-                }
-            },
-            {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        101,
-                        13
-                    ],
-                    "collection_index": 20
-                }
-            },
-            {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        65,
-                        31
-                    ],
-                    "collection_index": 21
-                }
-            },
-            {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        83,
-                        31
-                    ],
-                    "collection_index": 22
-                }
-            },
-            {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        101,
-                        31
-                    ],
-                    "collection_index": 23
-                }
-            },
-            {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        65,
-                        49
-                    ],
-                    "collection_index": 24
-                }
-            },
-            {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        83,
-                        49
-                    ],
-                    "collection_index": 25
-                }
-            },
-            {
-                "item@common.container_item": {
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "offset": [
-                        101,
-                        49
-                    ],
-                    "collection_index": 26
+                    "$collection_index_1": 18,
+                    "$collection_index_2": 19,
+                    "$collection_index_3": 20,
+                    "$collection_index_4": 21,
+                    "$collection_index_5": 22,
+                    "$collection_index_6": 23,
+                    "$collection_index_7": 24,
+                    "$collection_index_8": 25,
+                    "$collection_index_9": 26
                 }
             }
         ]

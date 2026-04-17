@@ -330,7 +330,7 @@ export class MultiblockMachine extends BasicMachine {
       if (suppressErrors) {
         try {
           writeOutput();
-        } catch {}
+        } catch { }
       } else {
         writeOutput();
       }
@@ -354,8 +354,6 @@ export class MultiblockMachine extends BasicMachine {
    */
   setProgress(value, options = {}) {
     super.setProgress(value, {
-      legacy: true,
-      scale: 16,
       ...options,
       maxValue: options.maxValue ?? this.getEnergyCost(options.index),
     });
@@ -375,8 +373,6 @@ export class MultiblockMachine extends BasicMachine {
     if (!energyCost || energyCost <= 0) return;
 
     super.displayProgress(energyCost, {
-      legacy: true,
-      scale: 16,
       ...options,
     });
   }
