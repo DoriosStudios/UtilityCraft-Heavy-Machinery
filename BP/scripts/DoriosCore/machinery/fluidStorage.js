@@ -237,11 +237,14 @@ export class FluidStorage {
    */
   static formatFluid(value) {
     let unit = "mB";
-    if (value >= 1e7) {
+    if (value >= 1e10) {
       unit = "MB";
+      value /= 1e9;
+    } else if (value >= 1e7) {
+      unit = "kB";
       value /= 1e6;
     } else if (value >= 1e4) {
-      unit = "kB";
+      unit = "B";
       value /= 1e3;
     }
     return `${value.toFixed(1)} ${unit}`;
@@ -267,8 +270,8 @@ export class FluidStorage {
     const multipliers = {
       mB: 1,
       B: 1000,
-      kB: 1000,
-      MB: 1_000_000,
+      kB: 1000_000,
+      MB: 1_000_000_000,
     };
 
     const amount = parseFloat(rawValue) * (multipliers[unit] ?? 1);

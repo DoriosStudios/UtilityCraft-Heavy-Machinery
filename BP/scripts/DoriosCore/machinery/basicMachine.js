@@ -43,14 +43,24 @@ export class BasicMachine {
   /**
    * Sets a label in the machine inventory using a fixed item as placeholder.
    *
-   * The label is displayed by overriding the item's `nameTag` with custom text.
+   * Strings are written directly into `nameTag`.
+   * Arrays use the first element as `nameTag` and the remaining ones as lore lines.
    *
-   * @param {string} text The text to display in the label. Supports Minecraft formatting codes (§).
+   * @param {string | string[]} text The text or lines to display in the label. Supports Minecraft formatting codes (§).
    * @param {number} [slot=1] The inventory slot where the label will be placed.
    */
   setLabel(text, slot = 1) {
     const baseItem = this.container.getItem(slot) ?? new ItemStack(Constants.LABEL_ITEM_ID);
-    baseItem.nameTag = text;
+
+    if (Array.isArray(text)) {
+      const [nameTag = "", ...lore] = text;
+      baseItem.nameTag = nameTag;
+      baseItem.setLore(lore);
+    } else {
+      baseItem.nameTag = text ?? "";
+      baseItem.setLore([]);
+    }
+
     this.container.setItem(slot, baseItem);
   }
 

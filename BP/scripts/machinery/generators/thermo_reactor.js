@@ -62,7 +62,7 @@ const EFF_ALPHA_HOT = 1.2;
 const COOLANT_TIER = 0
 const THERMO_REACTOR_INPUT_SLOT = 6;
 const THERMO_REACTOR_INPUT_ITEM = 'utilitycraft:arrow_right_0';
-const THERMO_REACTOR_INPUT_MAX_LENGTH = 9;
+const THERMO_REACTOR_INPUT_MAX_LENGTH = 6;
 const THERMO_REACTOR_KEYPAD_BY_SLOT = {
     7: '7',
     8: '8',
@@ -296,7 +296,9 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
 
             const heatDissipated = Math.min(maxByDiss, maxByCoolant * coolantData.efficiency, maxByTMin);
             if (heatDissipated > 0) {
-                spawnRandomVentSmoke(entity);
+                if (data.state !== "off") {
+                    spawnRandomVentSmoke(entity);
+                }
                 const coolantConsumed = heatDissipated * config.coolantPerKelvin;
                 coolant.consume(coolantConsumed / coolantData.efficiency);
                 data.temperature -= heatDissipated;
@@ -411,15 +413,71 @@ function applyThermoReactorBurnRate(entity) {
  * @param {Object} data 
  * @param {MultiblockGenerator} reactor 
  */
-function updateReactorInfoItem(data, reactor) {
+function formatReactorDuration(ticks = 0) {
+    const totalSeconds = Math.max(0, Math.floor((ticks ?? 0) / 20));
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    return [hours, minutes, seconds].map(value => String(value).padStart(2, '0')).join(':');
+}
 
-    reactor.setLabel(`
-§r§3Producing: §f${EnergyStorage.formatEnergyToText(data.producing ?? 0)}/t
-§r§3Burn Rate: §f${(data.rate ?? 0).toFixed(2)} mB/t
-§r§3Temperature: §f${(data.temperature ?? 0).toFixed(2)} K
-§r§3Efficiency: §f${((data.efficiency ?? 0) * 100).toFixed(2)}%%
-§r${data.warning ?? ""}
-    `);
+function formatReactorEtaSeconds(seconds) {
+    if (!Number.isFinite(seconds) || seconds <= 0) return '--:--:--';
+
+    const safeSeconds = Math.floor(seconds);
+    const hours = Math.floor(safeSeconds / 3600);
+    const minutes = Math.floor((safeSeconds % 3600) / 60);
+    const secs = safeSeconds % 60;
+    return [hours, minutes, secs].map(value => String(value).padStart(2, '0')).join(':');
+}
+
+function updateReactorInfoItem(data, reactor) {
+    const energy = reactor.energy;
+    const tanks = [new FluidStorage(reactor.entity, 0), new FluidStorage(reactor.entity, 1)];
+
+    const lavaTank = tanks.find(tank => tank.getType() === 'lava');
+    const coolantTank = tanks.find(tank => tank.getType() !== 'lava' && tank.getType() !== 'empty' && tank.get() > 0)
+        ?? tanks.find(tank => tank.getType() !== 'lava' && tank.getType() !== 'empty');
+
+    const storedEnergy = energy.get();
+    const energyCap = energy.getCap();
+    const fuelStored = lavaTank?.get() ?? 0;
+    const fuelName = lavaTank ? DoriosAPI.utils.formatIdToText(lavaTank.getType()) : 'None';
+    const coolantStored = coolantTank?.get() ?? 0;
+    const coolantName = coolantTank ? DoriosAPI.utils.formatIdToText(coolantTank.getType()) : 'None';
+    const fuelPercent = (data.lavaCapacity ?? 0) > 0 ? ((fuelStored / (data.lavaCapacity ?? 0)) * 100).toFixed(2) : '0.00';
+    const coolantPercent = (data.coolantCapacity ?? 0) > 0 ? ((coolantStored / (data.coolantCapacity ?? 0)) * 100).toFixed(2) : '0.00';
+    const burnRate = data.rate ?? 0;
+    const statusText = data.warning || (data.state === 'off' ? '§eStopped' : '§7Idle');
+
+    reactor.setLabel([
+        `§r§7Status: ${statusText}
+
+§r§eReactor Information`,
+        `
+§r§cBurn Rate §f${burnRate.toFixed(2)} mB/t
+§r§aTemperature §f${(data.temperature ?? 0).toFixed(2)} K
+§r§aEfficiency §f${((data.efficiency ?? 0) * 100).toFixed(2)}%%
+§r§aOn Time §f${formatReactorDuration(data.time)}`,
+        `
+§r§eEnergy Information
+
+§r§bProducing §f${EnergyStorage.formatEnergyToText(data.producing ?? 0)}/t
+§r§bCapacity §f${energy.getPercent().toFixed(2)}%%
+§r§bStored §f${EnergyStorage.formatEnergyToText(storedEnergy)} / ${EnergyStorage.formatEnergyToText(energyCap)}`,
+        `
+§r§eFuel Information
+
+§r§aType §f${fuelName}
+§r§aStored §f${FluidStorage.formatFluid(fuelStored)} / ${FluidStorage.formatFluid(data.lavaCapacity ?? 0)}
+§r§aFuel §f${fuelPercent}%%`,
+        `
+§r§eCoolant Information
+
+§r§aType §f${coolantName}
+§r§aStored §f${FluidStorage.formatFluid(coolantStored)} / ${FluidStorage.formatFluid(data.coolantCapacity ?? 0)}
+§r§aCoolant §f${coolantPercent}%%`
+    ]);
 
     const container = reactor.container;
     if (container) {
