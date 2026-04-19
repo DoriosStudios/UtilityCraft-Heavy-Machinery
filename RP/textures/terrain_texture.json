@@ -64,6 +64,12 @@
 		"utilitycraft_thermal_reactor_controller": {
 			"textures": "textures/blocks/multiblock/bronze/thermal_reactor_controller"
 		},
+		"utilitycraft_magmatic_chamber_controller": {
+			"textures": "textures/blocks/multiblock/magmatic_chamber_controller"
+		},
+		"utilitycraft_nuclear_reactor_controller": {
+			"textures": "textures/blocks/multiblock/nuclear_reactor_controller"
+		},
 		"utilitycraft_bronze_vent_panel": {
 			"textures": "textures/blocks/multiblock/bronze/bronze_vent_panel"
 		},
@@ -151,6 +157,9 @@
 		"utilitycraft_netherite_plated_block": {
 			"textures": "textures/blocks/multiblock/netherite/netherite_plated_block"
 		},
+		"utilitycraft_stamped_netherite_plate": {
+			"textures": "textures/blocks/multiblock/netherite/stamped_netherite_plate"
+		},
 		"utilitycraft_reinforced_netherite_glass": {
 			"textures": "textures/blocks/multiblock/netherite/reinforced_netherite_glass"
 		},
@@ -177,6 +186,12 @@
 		},
 		"utilitycraft_raw_tin_block": {
 			"textures": "textures/blocks/block_of_raw_tin"
+		},
+		"utilitycraft_raw_uranium_block": {
+			"textures": "textures/blocks/block_of_raw_uranium"
+		},
+		"utilitycraft_uranium_block": {
+			"textures": "textures/blocks/block_of_uranium"
 		},
 		"utilitycraft_controller_case": {
 			"textures": "textures/blocks/controller_case"

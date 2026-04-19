@@ -185,6 +185,9 @@
 		"utilitycraft_deepslate_tin_chunk": {
 			"textures": "textures/items/deepslate_tin_chunk"
 		},
+		"utilitycraft_deepslate_uranium_chunk": {
+			"textures": "textures/items/deepslate_uranium_dust"
+		},
 		"utilitycraft_darloonite_crystal": {
 			"textures": "textures/items/darloonite_crystal"
 		},
@@ -208,6 +211,30 @@
 		},
 		"utilitycraft_control_panel": {
 			"textures": "textures/items/control_panel"
+		},
+		"utilitycraft_raw_uranium": {
+			"textures": "textures/items/raw_uranium"
+		},
+		"utilitycraft_uranium_dust": {
+			"textures": "textures/items/uranium_dust"
+		},
+		"utilitycraft_uranium_ingot": {
+			"textures": "textures/items/uranium_ingot"
+		},
+		"utilitycraft_uranium_bar": {
+			"textures": "textures/items/uranium_bar"
+		},
+		"utilitycraft_uranium_pellet": {
+			"textures": "textures/items/uranium_pellet"
+		},
+		"utilitycraft_enriched_uranium_bar": {
+			"textures": "textures/items/enriched_uranium_bar"
+		},
+		"utilitycraft_enriched_uranium_pellet": {
+			"textures": "textures/items/enriched_uranium_pellet"
+		},
+		"utilitycraft_deepslate_uranium_dust": {
+			"textures": "textures/items/deepslate_uranium_dust"
 		}
 	}
 }

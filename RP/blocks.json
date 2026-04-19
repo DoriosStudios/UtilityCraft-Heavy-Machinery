@@ -113,6 +113,10 @@
 		"sound": "netherite",
 		"textures": "utilitycraft_netherite_plated_block"
 	},
+	"utilitycraft:stamped_netherite_plate": {
+		"sound": "netherite",
+		"textures": "utilitycraft_stamped_netherite_plate"
+	},
 	"utilitycraft:netherite_case": {
 		"sound": "netherite",
 		"textures": "utilitycraft_netherite_case"
@@ -153,6 +157,14 @@
 		"sound": "metal",
 		"textures": "utilitycraft_raw_tin_block"
 	},
+	"utilitycraft:raw_uranium_block": {
+		"sound": "metal",
+		"textures": "utilitycraft_raw_uranium_block"
+	},
+	"utilitycraft:uranium_block": {
+		"sound": "metal",
+		"textures": "utilitycraft_uranium_block"
+	},
 	"utilitycraft:autosieve_controller": {
 		"sound": "metal"
 	},
@@ -184,6 +196,12 @@
 		"sound": "metal"
 	},
 	"utilitycraft:infuser_controller": {
+		"sound": "metal"
+	},
+	"utilitycraft:magmatic_chamber_controller": {
+		"sound": "metal"
+	},
+	"utilitycraft:nuclear_reactor_controller": {
 		"sound": "metal"
 	},
 	"utilitycraft:power_condenser_controller": {
