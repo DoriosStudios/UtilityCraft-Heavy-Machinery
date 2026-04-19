@@ -26,6 +26,23 @@ const ENERGY_SCOREBOARD_OBJECTIVES = Object.freeze({
     ])
 });
 
+function resolveInsightComponentKeys(api, preferredKeys) {
+    const keys = Array.isArray(preferredKeys)
+        ? preferredKeys.filter((key) => typeof key === "string" && key.trim().length > 0)
+        : [];
+
+    if (!api || typeof api.getSupportedComponentKeys !== "function") {
+        return keys;
+    }
+
+    try {
+        const supportedKeys = new Set(api.getSupportedComponentKeys());
+        return keys.filter((key) => supportedKeys.has(key));
+    } catch {
+        return keys;
+    }
+}
+
 function safeGetBlockStates(block) {
     try {
         return block?.permutation?.getAllStates?.() ?? {};
@@ -267,9 +284,11 @@ function tryRegisterInjectors() {
         return false;
     }
 
+    const componentKeys = resolveInsightComponentKeys(api, INSIGHT_CUSTOM_COMPONENT_KEYS);
+
     api.registerBlockFieldInjector(collectUtilityCraftHmBlockFields, {
         provider: INSIGHT_PROVIDER_NAME,
-        components: INSIGHT_CUSTOM_COMPONENT_KEYS
+        components: componentKeys
     });
     globalThis[REGISTRATION_MARKER] = true;
     return true;
