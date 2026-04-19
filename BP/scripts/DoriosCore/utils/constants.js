@@ -14,6 +14,12 @@ export const SPECIAL_CONTAINER_EVENT_ID = "dorios:special_container";
 export const SPECIAL_CONTAINER_PROPERTY_ID = "dorios:special_container";
 
 /**
+ * Dynamic property used to persist which block a machine helper entity
+ * currently represents.
+ */
+export const MACHINE_BLOCK_ID_PROPERTY_ID = "dorios:machine_block_id";
+
+/**
  * Script event used to register Item Ducts slot data.
  */
 export const ITEM_DUCTS_REGISTER_EVENT_ID = "item_ducts:register";
