@@ -50,7 +50,6 @@ const ADDON_CONTENT = Object.freeze({
     "utilitycraft:magmatic_chamber_controller",
     "utilitycraft:multiblock_machine",
     "utilitycraft:nuclear_reactor_controller",
-    "utilitycraft:deepslate_uranium_dust",
     "utilitycraft:netherite_bricks",
     "utilitycraft:netherite_case",
     "utilitycraft:netherite_energy_port",

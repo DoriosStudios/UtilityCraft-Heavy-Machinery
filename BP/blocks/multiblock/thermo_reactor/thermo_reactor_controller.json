@@ -30,23 +30,7 @@
                     2
                 ]
             },
-            "utilitycraft:thermo_reactor": {
-                "entity": {
-                    "identifier": "utilitycraft:thermo_reactor",
-                    "name": "thermo_reactor"
-                },
-                "generator": {
-                    "energy_cap": 1,
-                    "rate_speed_base": 0
-                },
-                "multiblock": {
-                    "transfer_rate_ratio": 100
-                },
-                "required_case": "dorios:multiblock.case.bronze",
-                "required_components": {
-                    "energy_unit": 1
-                }
-            },
+            "utilitycraft:thermo_reactor": {},
             "minecraft:destructible_by_mining": {
                 "seconds_to_destroy": 1
             },

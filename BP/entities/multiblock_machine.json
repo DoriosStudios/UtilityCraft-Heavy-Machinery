@@ -529,7 +529,7 @@
                 "max": 1000
             },
             "minecraft:collision_box": {
-                "height": 0.5,
+                "height": 1,
                 "width": 1
             },
             "minecraft:inventory": {

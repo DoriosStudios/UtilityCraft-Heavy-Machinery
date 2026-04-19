@@ -9,19 +9,30 @@ import * as Utils from "../utils/entity.js";
 
 export class MultiblockGenerator extends Generator {
   /**
+   * Default interaction shown when the player clicks the controller without a wrench.
+   *
+   * @param {{ entity?: Entity, player: Player }} context
+   */
+  static defaultOnInteractWithoutWrench({ entity, player }) {
+    if (!entity) return;
+    player.sendMessage("§7Use a wrench to scan and activate this multiblock.");
+  }
+
+  /**
    * Creates a multiblock generator runtime bound to a controller block.
    *
    * Unlike multiblock machines, generators may still need to tick while their
    * state is `off`, so validity is inherited directly from {@link Generator}.
    *
    * @param {Block} block Controller block representing the generator.
-   * @param {GeneratorSettings} settings Multiblock generator configuration.
+   * @param {GeneratorSettings} config Multiblock generator configuration.
    */
-  constructor(block, settings) {
-    super(block, settings);
+  constructor(block, config) {
+    super(block, config);
     if (!this.valid) return;
 
-    this.settings = settings;
+    this.config = config;
+    this.settings = config;
   }
 
   /**
@@ -48,7 +59,7 @@ export class MultiblockGenerator extends Generator {
     const { energy, fluid } = Utils.getEnergyAndFluidFromItem(mainHand);
 
     system.run(() => {
-      const entity = Utils.spawnEntity(block, config)
+      const entity = Utils.spawnEntity(block, { ...config, spawn_offset: { x: 0, y: -0.5, z: 0 } });
       const energyManager = new EnergyStorage(entity)
       energyManager.setCap(config?.generator?.energy_cap);
       energyManager.set(energy);
@@ -75,40 +86,37 @@ export class MultiblockGenerator extends Generator {
    * Shared interaction pipeline for multiblock generator controller blocks.
    *
    * @param {{ block: Block, player: Player }} e Player interaction event.
-   * @param {GeneratorSettings} settings Controller generator configuration.
+   * @param {GeneratorSettings} config Controller generator configuration.
    * @param {{
-   *   initializeEntity?: (entity: Entity, context: { e: object, player: Player, settings: GeneratorSettings }) => void,
-   *   onInteractWithoutWrench?: (context: { e: object, entity?: Entity, player: Player, settings: GeneratorSettings }) => unknown,
-   *   requirements?: Record<string, { amount: number, warning: string }>,
+   *   initializeEntity?: (entity: Entity, context: { e: object, player: Player, config: GeneratorSettings, settings: GeneratorSettings }) => void,
+   *   onInteractWithoutWrench?: (context: { e: object, entity?: Entity, player: Player, config: GeneratorSettings, settings: GeneratorSettings }) => unknown,
    *   onActivate?: (context: object) => unknown,
    *   successMessages?: string[] | ((context: object) => string[]),
-   *   deactivateConfig?: { blockId?: string },
-   *   fillBlocksConfig?: { blockId?: string },
-   *   missingEnergyWarning?: string,
-   * }} [config={}] Per-generator interaction and activation configuration.
+   * }} [handlers={}] Per-generator interaction hooks.
    * @returns {Promise<unknown>}
    */
-  static async handlePlayerInteract(e, settings, config = {}) {
+  static async handlePlayerInteract(e, config, handlers = {}) {
     const {
       initializeEntity,
-      onInteractWithoutWrench,
-      ...activationConfig
-    } = config;
+      onInteractWithoutWrench = this.defaultOnInteractWithoutWrench,
+      onActivate,
+      successMessages,
+    } = handlers;
     const { block, player } = e;
     const entity = block.dimension.getEntitiesAtBlockLocation(block.location)[0];
     const mainHandTypeId = player.getEquipment("Mainhand")?.typeId ?? "";
     const isUsingWrench = mainHandTypeId.includes("wrench");
 
     if (!isUsingWrench) {
-      return onInteractWithoutWrench?.({ e, entity, player, settings });
+      return onInteractWithoutWrench?.({ e, entity, player, config, settings: config });
     }
 
     const activate = (targetEntity) =>
-      this.activateGeneratorController(e, settings, targetEntity, activationConfig);
+      this.activateGeneratorController(e, config, targetEntity, { onActivate, successMessages });
 
     if (!entity) {
-      this.spawnEntity(e, settings, (spawnedEntity) => {
-        initializeEntity?.(spawnedEntity, { e, player, settings });
+      this.spawnEntity(e, config, (spawnedEntity) => {
+        initializeEntity?.(spawnedEntity, { e, player, config, settings: config });
         void activate(spawnedEntity);
       });
       return;
@@ -121,40 +129,36 @@ export class MultiblockGenerator extends Generator {
    * Detects, validates, and activates a multiblock generator controller.
    *
    * @param {{ block: Block, player: Player }} e Interaction event data.
-   * @param {GeneratorSettings} settings Controller generator configuration.
+   * @param {GeneratorSettings} config Controller generator configuration.
    * @param {Entity} entity Controller entity to activate.
    * @param {{
-   *   requirements?: Record<string, { amount: number, warning: string }>,
    *   onActivate?: (context: {
    *     block: Block,
    *     components: Record<string, number>,
+   *     config: GeneratorSettings,
    *     energyCap: number,
    *     entity: Entity,
    *     player: Player,
-   *     settings: GeneratorSettings,
    *     structure: object,
    *   }) => unknown,
    *   successMessages?: string[] | ((context: object) => string[]),
-   *   deactivateConfig?: { blockId?: string },
-   *   fillBlocksConfig?: { blockId?: string },
-   *   missingEnergyWarning?: string,
-   * }} [config={}] Activation behavior for the generator.
+   * }} [handlers={}] Activation hooks for the generator.
    * @returns {Promise<object | undefined>} Activation context when successful.
    */
-  static async activateGeneratorController(e, settings, entity, config = {}) {
+  static async activateGeneratorController(e, config, entity, handlers = {}) {
     const {
-      requirements = {},
       onActivate,
       successMessages = [],
-      deactivateConfig,
-      fillBlocksConfig,
-      missingEnergyWarning,
-    } = config;
+    } = handlers;
     const { block, player } = e;
+    const requirements = config.requirements ?? {};
+    const deactivateConfig = config.deactivateConfig;
+    const fillBlocksConfig = config.fillBlocksConfig;
+    const missingEnergyWarning = config.missingEnergyWarning;
 
     DeactivationManager.deactivateMultiblock(block, player, deactivateConfig);
 
-    const structure = await StructureDetector.detectFromController(e, settings.required_case);
+    const structure = await StructureDetector.detectFromController(e, config.required_case);
     if (!structure) return;
 
     const failure = this.validateRequirements(structure.components ?? {}, requirements);
@@ -174,10 +178,11 @@ export class MultiblockGenerator extends Generator {
     const context = {
       block,
       components: structure.components,
+      config,
       energyCap,
       entity,
       player,
-      settings,
+      settings: config,
       structure,
     };
 

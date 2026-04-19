@@ -30,26 +30,7 @@
                     2
                 ]
             },
-            "utilitycraft:reaction_chamber_controller": {
-                "entity": {
-                    "type": "complex_machine_fluid",
-                    "input_range": [
-                        6,
-                        9
-                    ],
-                    "output_range": [
-                        10,
-                        13
-                    ],
-                    "inventory_size": 14,
-                    "identifier": "utilitycraft:multiblock_machine"
-                },
-                "required_case": "dorios:multiblock.case.steel",
-                "required_components": {
-                    "energy_unit": 1,
-                    "processing_module": 1
-                }
-            },
+            "utilitycraft:reaction_chamber_controller": {},
             "utilitycraft:special_container": {
                 "Input Slots": [
                     6,

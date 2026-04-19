@@ -29,26 +29,7 @@
                     2
                 ]
             },
-            "utilitycraft:autosieve_controller": {
-                "entity": {
-                    "type": "complex_machine",
-                    "input_range": [
-                        5,
-                        13
-                    ],
-                    "output_range": [
-                        14,
-                        28
-                    ],
-                    "inventory_size": 29,
-                    "identifier": "utilitycraft:multiblock_machine"
-                },
-                "required_case": "dorios:multiblock.case.steel",
-                "required_components": {
-                    "energy_unit": 1,
-                    "processing_module": 1
-                }
-            },
+            "utilitycraft:autosieve_controller": {},
             "utilitycraft:special_container": {
                 // Energy 0
                 // Info Label 1

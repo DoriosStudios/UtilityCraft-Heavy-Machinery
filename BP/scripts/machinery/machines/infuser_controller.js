@@ -17,17 +17,31 @@ const CONTROLLER_REQUIREMENTS = {
         warning: '§c[Controller] At least 1 processing module its required to operate.',
     },
 }
+const MULTIBLOCK_CONFIG = {
+    required_case: 'dorios:multiblock.case.steel',
+    entity: {
+        type: 'complex_machine',
+        inventory_size: 27,
+        identifier: 'utilitycraft:multiblock_machine',
+        input_range: [5, 17],
+        output_range: [18, 26],
+    },
+    machine: {
+        rate_speed_base: BASE_RATE,
+        energy_cap: 0,
+    },
+    requirements: CONTROLLER_REQUIREMENTS,
+}
 
 DoriosAPI.register.blockComponent('infuser_controller', {
-    onPlayerInteract(e, { params: settings }) {
-        return MultiblockMachine.handlePlayerInteract(e, settings, {
+    onPlayerInteract(e) {
+        return MultiblockMachine.handlePlayerInteract(e, MULTIBLOCK_CONFIG, {
             initializeEntity(entity) {
                 entity.setItem(1, 'utilitycraft:arrow_right_0', 1, ' ')
                 entity.setItem(2, 'utilitycraft:arrow_right_0', 1, ' ')
                 entity.setItem(3, 'utilitycraft:arrow_right_0', 1, '')
                 entity.setItem(4, 'utilitycraft:arrow_indicator_90', 1, '')
             },
-            requirements: CONTROLLER_REQUIREMENTS,
             successMessages: ({ energyCap }) => [
                 '\u00A7a[Controller] Infuser Factory created successfully.',
                 `\u00A77[Controller] Energy Capacity: \u00A7b${EnergyStorage.formatEnergyToText(energyCap)}`,
@@ -37,10 +51,10 @@ DoriosAPI.register.blockComponent('infuser_controller', {
     onPlayerBreak({ block, player }) {
         Multiblock.DeactivationManager.handleBreakController(block, player)
     },
-    onTick(e, { params: settings }) {
+    onTick(e) {
         if (!worldLoaded) return;
 
-        const controller = new MultiblockMachine(e.block, settings);
+        const controller = new MultiblockMachine(e.block, MULTIBLOCK_CONFIG);
         if (!controller.valid) return;
 
         const raw = controller.entity.getDynamicProperty('components');

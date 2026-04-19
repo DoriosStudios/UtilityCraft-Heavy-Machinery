@@ -23,17 +23,31 @@ const CONTROLLER_REQUIREMENTS = {
         warning: '§c[Controller] At least 1 fluid cell its required to operate.',
     },
 }
+const MULTIBLOCK_CONFIG = {
+    required_case: 'dorios:multiblock.case.steel',
+    entity: {
+        type: 'complex_machine_fluid',
+        input_range: [6, 9],
+        output_range: [10, 13],
+        inventory_size: 14,
+        identifier: 'utilitycraft:multiblock_machine',
+    },
+    machine: {
+        rate_speed_base: BASE_RATE,
+        energy_cap: 0,
+    },
+    requirements: CONTROLLER_REQUIREMENTS,
+}
 
 DoriosAPI.register.blockComponent('reaction_chamber_controller', {
-    onPlayerInteract(e, { params: settings }) {
-        return MultiblockMachine.handlePlayerInteract(e, settings, {
+    onPlayerInteract(e) {
+        return MultiblockMachine.handlePlayerInteract(e, MULTIBLOCK_CONFIG, {
             initializeEntity(entity) {
                 entity.setItem(1, 'utilitycraft:arrow_right_0', 1, ' ')
                 entity.setItem(2, 'utilitycraft:arrow_right_0', 1, ' ')
                 entity.setItem(3, 'utilitycraft:arrow_right_0', 1, '')
                 FluidStorage.initializeMultiple(entity, 2)
             },
-            requirements: CONTROLLER_REQUIREMENTS,
             onActivate: ({ entity, structure }) => {
                 const [inputFluid, outputFluid] = FluidStorage.initializeMultiple(entity, 2)
                 const fluidCapacity = (structure.components.fluid_cell ?? 0) * FLUID_CAPACITY_CELL
@@ -49,10 +63,10 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
     onPlayerBreak({ block, player }) {
         Multiblock.DeactivationManager.handleBreakController(block, player)
     },
-    onTick(e, { params: settings }) {
+    onTick(e) {
         if (!worldLoaded) return;
 
-        const controller = new MultiblockMachine(e.block, settings);
+        const controller = new MultiblockMachine(e.block, MULTIBLOCK_CONFIG);
         if (!controller.valid) return;
 
         const raw = controller.entity.getDynamicProperty("components");

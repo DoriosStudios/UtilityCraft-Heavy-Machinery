@@ -29,23 +29,7 @@
                     2
                 ]
             },
-            "utilitycraft:power_condenser": {
-                "entity": {
-                    "identifier": "utilitycraft:power_condenser",
-                    "name": "power_condenser"
-                },
-                "generator": {
-                    "energy_cap": 1,
-                    "rate_speed_base": 0
-                },
-                "multiblock": {
-                    "transfer_rate_ratio": 1000
-                },
-                "required_case": "dorios:multiblock.case.steel",
-                "required_components": {
-                    "energy_unit": 1
-                }
-            },
+            "utilitycraft:power_condenser": {},
             "minecraft:destructible_by_mining": {
                 "seconds_to_destroy": 1
             },

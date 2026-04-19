@@ -79,6 +79,29 @@ const THERMO_REACTOR_KEYPAD_BY_SLOT = {
 const THERMO_REACTOR_ACCEPT_SLOT = 18;
 const THERMO_REACTOR_CANCEL_SLOT = 19;
 const THERMO_REACTOR_DELETE_SLOT = 20;
+const GENERATOR_CONFIG = {
+    entity: {
+        identifier: 'utilitycraft:thermo_reactor',
+        name: 'thermo_reactor',
+    },
+    generator: {
+        energy_cap: 1,
+        rate_speed_base: 0,
+    },
+    multiblock: {
+        transfer_rate_ratio: 100,
+    },
+    required_case: 'dorios:multiblock.case.bronze',
+    requirements: {
+        thermo_core: {
+            amount: 1,
+            warning: '\u00A7c[Reactor] Missing Thermo Core - reactor cannot operate.',
+        },
+    },
+    deactivateConfig: { blockId: 'minecraft:water' },
+    fillBlocksConfig: { blockId: 'minecraft:water' },
+    missingEnergyWarning: '\u00A7c[Reactor] At least 1 energy unit is required.',
+};
 
 // #endregion
 
@@ -116,25 +139,8 @@ ButtonManager.registerMachineButton("thermo_reactor", THERMO_REACTOR_DELETE_SLOT
 });
 
 DoriosAPI.register.blockComponent('thermo_reactor', {
-    onPlayerInteract(e, { params: settings }) {
-        return MultiblockGenerator.handlePlayerInteract(e, settings, {
-            onInteractWithoutWrench({ entity, player }) {
-                if (!entity) return
-
-                const main = player.getEquipment('Mainhand')
-                if (!FluidStorage.handleFluidItemInteraction(player, entity, main)) {
-                    void showBurnRateConfigForm(entity, player)
-                }
-            },
-            deactivateConfig: { blockId: 'minecraft:water' },
-            fillBlocksConfig: { blockId: 'minecraft:water' },
-            requirements: {
-                thermo_core: {
-                    amount: 1,
-                    warning: '\u00A7c[Reactor] Missing Thermo Core - reactor cannot operate.',
-                },
-            },
-            missingEnergyWarning: '\u00A7c[Reactor] At least 1 energy unit is required.',
+    onPlayerInteract(e) {
+        return MultiblockGenerator.handlePlayerInteract(e, GENERATOR_CONFIG, {
             onActivate: ({ entity, components, energyCap, settings, structure }) => {
                 entity.setDynamicProperty(
                     'dorios:rateSpeed',
@@ -201,11 +207,11 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
         })
     },
     onPlayerBreak({ block, player }) {
-        Multiblock.DeactivationManager.handleBreakController(block, player, { blockId: 'minecraft:water' })
+        Multiblock.DeactivationManager.handleBreakController(block, player, GENERATOR_CONFIG.deactivateConfig)
     },
-    onTick({ block }, { params: settings }) {
+    onTick({ block }) {
         if (!worldLoaded) return;
-        const reactor = new MultiblockGenerator(block, settings);
+        const reactor = new MultiblockGenerator(block, GENERATOR_CONFIG);
         if (!reactor.valid) return;
         const { entity, energy } = reactor
         ButtonManager.ensureWatching(entity, "thermo_reactor")

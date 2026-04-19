@@ -18,16 +18,30 @@ const CONTROLLER_REQUIREMENTS = {
         warning: '§c[Controller] At least 1 processing module is required.',
     },
 }
+const MULTIBLOCK_CONFIG = {
+    required_case: 'dorios:multiblock.case.steel',
+    entity: {
+        type: 'complex_machine',
+        input_range: [5, 13],
+        output_range: [14, 28],
+        inventory_size: 29,
+        identifier: 'utilitycraft:multiblock_machine',
+    },
+    machine: {
+        rate_speed_base: BASE_RATE,
+        energy_cap: 0,
+    },
+    requirements: CONTROLLER_REQUIREMENTS,
+}
 
 DoriosAPI.register.blockComponent('autosieve_controller', {
 
-    onPlayerInteract(e, { params: settings }) {
-        return MultiblockMachine.handlePlayerInteract(e, settings, {
+    onPlayerInteract(e) {
+        return MultiblockMachine.handlePlayerInteract(e, MULTIBLOCK_CONFIG, {
             initializeEntity(entity) {
                 entity.setItem(1, 'utilitycraft:arrow_right_0', 1, '')
                 entity.setItem(2, 'utilitycraft:arrow_right_0', 1, '')
             },
-            requirements: CONTROLLER_REQUIREMENTS,
             successMessages: ({ energyCap }) => [
                 '\u00A7a[Controller] Autosieve Factory created successfully.',
                 `\u00A77Energy Capacity: \u00A7b${EnergyStorage.formatEnergyToText(energyCap)}`,
@@ -39,10 +53,10 @@ DoriosAPI.register.blockComponent('autosieve_controller', {
         Multiblock.DeactivationManager.handleBreakController(block, player)
     },
 
-    onTick(e, { params: settings }) {
+    onTick(e) {
         if (!worldLoaded) return
 
-        const controller = new MultiblockMachine(e.block, settings)
+        const controller = new MultiblockMachine(e.block, MULTIBLOCK_CONFIG)
         if (!controller.valid) return
 
         const raw = controller.entity.getDynamicProperty('components')

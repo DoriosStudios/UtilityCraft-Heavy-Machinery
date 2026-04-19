@@ -186,7 +186,7 @@
 			"textures": "textures/items/deepslate_tin_chunk"
 		},
 		"utilitycraft_deepslate_uranium_chunk": {
-			"textures": "textures/items/deepslate_uranium_dust"
+			"textures": "textures/items/deepslate_uranium_chunk"
 		},
 		"utilitycraft_darloonite_crystal": {
 			"textures": "textures/items/darloonite_crystal"
@@ -232,9 +232,6 @@
 		},
 		"utilitycraft_enriched_uranium_pellet": {
 			"textures": "textures/items/enriched_uranium_pellet"
-		},
-		"utilitycraft_deepslate_uranium_dust": {
-			"textures": "textures/items/deepslate_uranium_dust"
 		}
 	}
 }

@@ -29,26 +29,7 @@
                     2
                 ]
             },
-            "utilitycraft:infuser_controller": {
-                "entity": {
-                    "type": "complex_machine",
-                    "inventory_size": 27,
-                    "identifier": "utilitycraft:multiblock_machine",
-                    "input_range": [
-                        5,
-                        17
-                    ],
-                    "output_range": [
-                        18,
-                        26
-                    ]
-                },
-                "required_case": "dorios:multiblock.case.steel",
-                "required_components": {
-                    "energy_unit": 1,
-                    "processing_module": 1
-                }
-            },
+            "utilitycraft:infuser_controller": {},
             "utilitycraft:special_container": {
                 // Energy 0
                 // Info Label 1

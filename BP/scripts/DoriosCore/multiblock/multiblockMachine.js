@@ -11,16 +11,26 @@ import * as Constants from "./constants.js";
 
 export class MultiblockMachine extends BasicMachine {
   /**
+   * Default interaction shown when the player clicks the controller without a wrench.
+   *
+   * @param {{ entity?: Entity, player: Player }} context
+   */
+  static defaultOnInteractWithoutWrench({ entity, player }) {
+    if (!entity) return;
+    player.sendMessage("§7Use a wrench to scan and activate this multiblock.");
+  }
+
+  /**
    * Creates a multiblock machine runtime bound to a controller block.
    *
    * A multiblock machine is only considered valid when the backing controller
    * entity exists and its serialized multiblock state is currently active.
    *
    * @param {Block} block Controller block representing the machine.
-   * @param {MachineSettings} settings Multiblock machine configuration.
+   * @param {MachineSettings} config Multiblock machine configuration.
    */
-  constructor(block, settings) {
-    super(block, settings?.machine?.rate_speed_base ?? 0);
+  constructor(block, config) {
+    super(block, config?.machine?.rate_speed_base ?? 0);
     if (!this.valid) return;
 
     const state = this.entity.getDynamicProperty(Constants.STATE_PROPERTY_ID);
@@ -29,7 +39,8 @@ export class MultiblockMachine extends BasicMachine {
       return;
     }
 
-    this.settings = settings;
+    this.config = config;
+    this.settings = config;
   }
 
   /**
@@ -54,7 +65,7 @@ export class MultiblockMachine extends BasicMachine {
     const { energy, fluid } = Utils.getEnergyAndFluidFromItem(mainHand);
 
     system.run(() => {
-      const entity = Utils.spawnEntity(block, config);
+      const entity = Utils.spawnEntity(block, { ...config, spawn_offset: { x: 0, y: -0.5, z: 0 } });
       const energyManager = new EnergyStorage(entity);
       energyManager.setCap(config?.machine?.energy_cap ?? 0);
       energyManager.set(energy);
@@ -93,37 +104,37 @@ export class MultiblockMachine extends BasicMachine {
    * - and activate the structure through `activateMachineController`.
    *
    * @param {{ block: Block, player: Player }} e Player interaction event.
-   * @param {MachineSettings} settings Controller machine configuration.
+   * @param {MachineSettings} config Controller machine configuration.
    * @param {{
-   *   initializeEntity?: (entity: Entity, context: { e: object, player: Player, settings: MachineSettings }) => void,
-   *   onInteractWithoutWrench?: (context: { e: object, entity?: Entity, player: Player, settings: MachineSettings }) => unknown,
-   *   requirements?: Record<string, { amount: number, warning: string }>,
+   *   initializeEntity?: (entity: Entity, context: { e: object, player: Player, config: MachineSettings, settings: MachineSettings }) => void,
+   *   onInteractWithoutWrench?: (context: { e: object, entity?: Entity, player: Player, config: MachineSettings, settings: MachineSettings }) => unknown,
    *   onActivate?: (context: object) => unknown,
    *   successMessages?: string[] | ((context: object) => string[]),
-   * }} [config={}] Per-machine interaction and activation configuration.
+   * }} [handlers={}] Per-machine interaction hooks.
    * @returns {Promise<unknown>}
    */
-  static async handlePlayerInteract(e, settings, config = {}) {
+  static async handlePlayerInteract(e, config, handlers = {}) {
     const {
       initializeEntity,
-      onInteractWithoutWrench,
-      ...activationConfig
-    } = config;
+      onInteractWithoutWrench = this.defaultOnInteractWithoutWrench,
+      onActivate,
+      successMessages,
+    } = handlers;
     const { block, player } = e;
     const entity = block.dimension.getEntitiesAtBlockLocation(block.location)[0];
     const mainHandTypeId = player.getEquipment("Mainhand")?.typeId ?? "";
     const isUsingWrench = mainHandTypeId.includes("wrench");
 
     if (!isUsingWrench) {
-      return onInteractWithoutWrench?.({ e, entity, player, settings });
+      return onInteractWithoutWrench?.({ e, entity, player, config, settings: config });
     }
 
     const activate = (targetEntity) =>
-      this.activateMachineController(e, settings, targetEntity, activationConfig);
+      this.activateMachineController(e, config, targetEntity, { onActivate, successMessages });
 
     if (!entity) {
-      this.spawnEntity(e, settings, (spawnedEntity) => {
-        initializeEntity?.(spawnedEntity, { e, player, settings });
+      this.spawnEntity(e, config, (spawnedEntity) => {
+        initializeEntity?.(spawnedEntity, { e, player, config, settings: config });
         void activate(spawnedEntity);
       });
       return;
@@ -206,35 +217,34 @@ export class MultiblockMachine extends BasicMachine {
    * - and sends success messages to the player.
    *
    * @param {{ block: Block, player: Player }} e Interaction event data.
-   * @param {MachineSettings} settings Controller machine configuration.
+   * @param {MachineSettings} config Controller machine configuration.
    * @param {Entity} entity Controller entity to activate.
    * @param {{
-   *   requirements?: Record<string, { amount: number, warning: string }>,
    *   onActivate?: (context: {
    *     block: Block,
    *     components: Record<string, number>,
+   *     config: MachineSettings,
    *     energyCap: number,
    *     entity: Entity,
    *     factoryData: object,
    *     player: Player,
-   *     settings: MachineSettings,
    *     structure: object,
    *   }) => unknown,
    *   successMessages?: string[] | ((context: object) => string[]),
-   * }} [config={}] Activation behavior for the machine.
+   * }} [handlers={}] Activation hooks for the machine.
    * @returns {Promise<object | undefined>} Activation context when successful.
    */
-  static async activateMachineController(e, settings, entity, config = {}) {
+  static async activateMachineController(e, config, entity, handlers = {}) {
     const {
-      requirements = {},
       onActivate,
       successMessages = [],
-    } = config;
+    } = handlers;
     const { block, player } = e;
+    const requirements = config.requirements ?? {};
 
     DeactivationManager.deactivateMultiblock(block, player);
 
-    const structure = await StructureDetector.detectFromController(e, settings.required_case);
+    const structure = await StructureDetector.detectFromController(e, config.required_case);
     if (!structure) return;
 
     const failure = this.validateRequirements(structure.components, requirements);
@@ -251,11 +261,12 @@ export class MultiblockMachine extends BasicMachine {
     const context = {
       block,
       components: structure.components,
+      config,
       energyCap,
       entity,
       factoryData,
       player,
-      settings,
+      settings: config,
       structure,
     };
 
