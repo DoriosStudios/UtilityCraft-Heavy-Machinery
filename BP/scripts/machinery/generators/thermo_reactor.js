@@ -266,8 +266,12 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
 
         data.efficiency = EFF_MIN + (EFF_MAX - EFF_MIN) * shape;
 
-        if (fuel > 0 && data.state !== "off") {
-            const rate = Math.min(fuel, data.rate * f);
+        const energyFreeSpace = energy.getFreeSpace();
+
+        if (fuel > 0 && data.state !== "off" && energyFreeSpace > 0) {
+            const maxFuelByStorage =
+                energyFreeSpace / Math.max(1e-9, config.energyPerLavaUnit * data.efficiency);
+            const rate = Math.min(fuel, data.rate * f, maxFuelByStorage);
             if (rate > 0) {
                 lava.consume(rate)
                 fireLoop(entity, f);
@@ -290,7 +294,13 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
                 data.warning = undefined;
             }
         } else {
-            if (data.state !== "off") data.warning = "§eMissing Fuel!";
+            if (data.state !== "off") {
+                if (fuel <= 0) {
+                    data.warning = "§eMissing Fuel!";
+                } else if (energyFreeSpace <= 0) {
+                    data.warning = "§eEnergy Full";
+                }
+            }
             data.time = 0;
             data.producing = 0;
         }

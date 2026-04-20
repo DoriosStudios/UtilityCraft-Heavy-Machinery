@@ -6,6 +6,7 @@ const OUTPUT_SLOTS = [13, 14, 15, 16, 17, 18, 19, 20, 21]
 const DEFAULT_COST = 800
 const MULTI_PENALTY = 4
 const BASE_RATE = 100
+
 const CONTROLLER_REQUIREMENTS = {
     energy_cell: {
         amount: 1,
@@ -34,11 +35,11 @@ const MULTIBLOCK_CONFIG = {
 
 DoriosAPI.register.blockComponent('crusher_controller', {
     onPlayerInteract(e) {
-        return MultiblockMachine.handlePlayerInteract(e, MULTIBLOCK_CONFIG, {
+        MultiblockMachine.handlePlayerInteract(e, MULTIBLOCK_CONFIG, {
             initializeEntity(entity) {
                 entity.setItem(1, 'utilitycraft:arrow_right_0', 1, ' ')
                 entity.setItem(2, 'utilitycraft:arrow_right_0', 1, ' ')
-                entity.setItem(3, 'utilitycraft:arrow_right_0', 1, '')
+                entity.setItem(3, 'utilitycraft:arrow_right_0', 1, ' ')
             },
             successMessages: ({ energyCap }) => [
                 '\u00A7a[Controller] Crusher Factory created successfully.',

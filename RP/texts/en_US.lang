@@ -6,6 +6,7 @@ entity.utilitycraft:electro_press_controller.name=Electro Press Factory
 entity.utilitycraft:infuser_controller.name=Infuser Factory
 entity.utilitycraft:autosieve_controller.name=Autosieve Factory
 entity.utilitycraft:reaction_chamber_controller.name=Reaction Chamber
+entity.utilitycraft:magmatic_chamber_controller.name=Magmatic Chamber
 
 item.utilitycraft:utility_exo_helmet=Utility Exo Helmet
 item.utilitycraft:utility_exo_chestplate=Utility Exo Chestplate

@@ -6,6 +6,7 @@ entity.utilitycraft:electro_press_controller.name=Controlador de Prensa Elétric
 entity.utilitycraft:infuser_controller.name=Controlador de Infusor
 entity.utilitycraft:autosieve_controller.name=Controlador de Peneirador
 entity.utilitycraft:reaction_chamber_controller.name=Controlador de Câmara de Reação
+entity.utilitycraft:magmatic_chamber_controller.name=Câmara Magmática
 
 item.utilitycraft:utility_exo_helmet=Capacete Exo Utility
 item.utilitycraft:utility_exo_chestplate=Peitoral Exo Utility

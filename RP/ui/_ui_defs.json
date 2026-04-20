@@ -6,6 +6,7 @@
         "ui/infuser_controller.json",
         "ui/autosieve_controller.json",
         "ui/reaction_chamber_controller.json",
+        "ui/magmatic_chamber_controller.json",
         "ui/machineryCommon.json"
     ]
 }

@@ -6,6 +6,7 @@ entity.utilitycraft:electro_press_controller.name=Fábrica de Prensa Electro
 entity.utilitycraft:infuser_controller.name=Fábrica de Infusor
 entity.utilitycraft:autosieve_controller.name=Fábrica de Auto Tamiz
 entity.utilitycraft:reaction_chamber_controller.name=Cámara de Reacción
+entity.utilitycraft:magmatic_chamber_controller.name=Cámara Magmática
 
 item.utilitycraft:utility_exo_helmet=Casco Exo Utilitario
 item.utilitycraft:utility_exo_chestplate=Pechera Exo Utilitaria

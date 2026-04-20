@@ -45,6 +45,26 @@ function readSlotItem(container, slot) {
 }
 
 /**
+ * Creates an isolated button item instance for a slot restore.
+ *
+ * The shared global stack is used only as a template to avoid leaking
+ * dynamic `nameTag` changes across different buttons/entities.
+ *
+ * @param {string | undefined} [nameTag]
+ * @returns {import("@minecraft/server").ItemStack | null}
+ */
+function createButtonItemStack(nameTag) {
+  if (!ButtonItemStack) return null;
+
+  const buttonItem = ButtonItemStack.clone();
+  if (typeof nameTag === "string") {
+    buttonItem.nameTag = nameTag;
+  }
+
+  return buttonItem;
+}
+
+/**
  * Resolves the block where the entity is currently placed.
  *
  * Machine entities are spawned with a small offset, so the position is
@@ -120,6 +140,12 @@ export class ButtonManager {
    * Registers or replaces a button definition for a machine id.
    *
    * The callback is shared by every entity using the same machine id.
+   * If the callback returns a string, that value is used as the `nameTag`
+   * of the restored button item for that slot, allowing a dynamic button
+   * label per press/entity.
+   *
+   * To display that dynamic label in the UI, use the `dynamic_button`
+   * UI element instead of `machine_button`.
    *
    * @param {string} machineId
    * @param {number | number[]} slot
@@ -128,7 +154,9 @@ export class ButtonManager {
    *   block: import("@minecraft/server").Block | undefined,
    *   container: import("@minecraft/server").Container,
    *   slot: number
-   * }) => void} [onPressEvent]
+   * }) => string | void} [onPressEvent] Callback executed when the button
+   * slot changes. Return a string to assign a dynamic `nameTag` to the
+   * restored button item; return nothing to keep the default button name.
    * @returns {boolean}
    */
   static registerMachineButton(machineId, slot, onPressEvent = () => { }) {
@@ -283,7 +311,9 @@ export class ButtonManager {
     for (const { slot } of buttons) {
       const currentItem = readSlotItem(container, slot);
       if (currentItem?.typeId === ButtonItemStack.typeId) continue;
-      container.setItem(slot, ButtonItemStack);
+      const buttonItem = createButtonItemStack();
+      if (!buttonItem) continue;
+      container.setItem(slot, buttonItem);
     }
   }
 
@@ -379,16 +409,23 @@ export class ButtonManager {
 
           if (currentState === previousState) continue;
 
-          if (ButtonItemStack) {
-            container.setItem(slot, ButtonItemStack);
-          }
+          let buttonNameTag;
 
-          onPressEvent({
-            entity,
-            block: getEntityBlock(entity),
-            container,
-            slot,
-          });
+          try {
+            buttonNameTag = onPressEvent({
+              entity,
+              block: getEntityBlock(entity),
+              container,
+              slot,
+            });
+          } finally {
+            const buttonItem = createButtonItemStack(
+              typeof buttonNameTag === "string" ? buttonNameTag : undefined
+            );
+            if (buttonItem) {
+              container.setItem(slot, buttonItem);
+            }
+          }
 
           watcher.cacheBySlot.set(slot, getSlotState(readSlotItem(container, slot)));
         }
