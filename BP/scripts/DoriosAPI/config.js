@@ -1,23 +1,23 @@
 /**
- * DoriosAPI - Setup Instructions
- *
- * To ensure everything functions correctly, make sure to import the main API file
- * in your addon’s main script. The import should look like this:
- *
- * ```js
- * import './DoriosAPI/index.js';
- * ```
- *
- * Additionally, the **DoriosAPI** folder must be located in the `/scripts` directory
- * of your addon structure.
- *
- * Example folder structure:
- * ```
- * /scripts
- * └── /DoriosAPI
- *     └── index.js
- * ```
- */
+* DoriosAPI - Setup Instructions
+*
+* To ensure everything functions correctly, make sure to import the main API file
+* in your addon’s main script. The import should look like this:
+*
+* ```js
+* import './DoriosAPI/index.js';
+* ```
+*
+* Additionally, the **DoriosAPI** folder must be located in the `/scripts` directory
+* of your addon structure.
+*
+* Example folder structure:
+* ```
+* /scripts
+* └── /DoriosAPI
+*     └── index.js
+* ```
+*/
 
 /**
  * Addon Configuration
@@ -49,11 +49,11 @@ export const addonData = {
   name: "UtilityCraft: Heavy Machinery",
   author: "Dorios Studios",
   identifier: "uc_heavy_machinery",
-  version: "0.3.0",
+  version: "0.4.0",
   dependencies: {
     utilitycraft: {
       name: "UtilityCraft",
-      version: "3.3.5",
+      version: "3.4.1",
     },
   },
 };
