@@ -1,5 +1,6 @@
 {
     "ui_defs": [
+        "ui/how_to_play_screen.json",
         "ui/power_condenser.json",
         "ui/thermo_reactor.json",
         "ui/crusher_controller.json",

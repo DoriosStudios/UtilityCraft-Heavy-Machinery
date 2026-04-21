@@ -1,0 +1,359 @@
+{
+    "namespace": "how_to_play",
+    "how_to_play_selector_stack_panel/how_to_play_selector_pane": {
+        "modifications": [
+            {
+                "array_name": "controls",
+                "operation": "insert_front",
+                "value": [
+                    {
+                        "padding_00": {
+                            "type": "panel",
+                            "size": [
+                                0,
+                                6
+                            ]
+                        }
+                    },
+                    {
+                        "heavy_machinery_category@how_to_play_common.topic_category": {
+                            "$category": "heavy_machinery"
+                        }
+                    },
+                    {
+                        "hm:multiblock_overview_button@how_to_play.hm:multiblock_overview_button": {
+                            "$toggle_group_forced_index": 351
+                        }
+                    },
+                    {
+                        "hm:crusher_build_button@how_to_play.hm:crusher_build_button": {
+                            "$toggle_group_forced_index": 352
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    "how_to_play_section_content_panels/general_tips_sections": {
+        "modifications": [
+            {
+                "array_name": "controls",
+                "operation": "insert_front",
+                "value": [
+                    {
+                        "hm:multiblock_overview_section@how_to_play.hm:multiblock_overview_section": {}
+                    },
+                    {
+                        "hm:crusher_build_section@how_to_play.hm:crusher_build_section": {}
+                    }
+                ]
+            }
+        ]
+    },
+    "guide_step_image@how_to_play_common.image": {
+        "anchor_from": "top_middle",
+        "anchor_to": "top_middle",
+        "size": [
+            "150px",
+            "150px"
+        ]
+    },
+    "guide_step_wide_image@how_to_play_common.image": {
+        "anchor_from": "top_middle",
+        "anchor_to": "top_middle",
+        "size": [
+            "300px",
+            "150px"
+        ]
+    },
+    "guide_item_image@how_to_play_common.image": {
+        "anchor_from": "top_middle",
+        "anchor_to": "top_middle",
+        "size": [
+            "96px",
+            "96px"
+        ]
+    },
+    "guide_controller_strip_image@how_to_play_common.image": {
+        "anchor_from": "top_middle",
+        "anchor_to": "top_middle",
+        "size": [
+            "300px",
+            "60px"
+        ]
+    },
+    "guide_ui_image@how_to_play_common.image": {
+        "anchor_from": "top_middle",
+        "anchor_to": "top_middle",
+        "size": [
+            "360px",
+            "205px"
+        ]
+    },
+    "hm:multiblock_overview_button@how_to_play_common.section_toggle_button": {
+        "$section_topic": "hm:multiblock_overview"
+    },
+    "hm:crusher_build_button@how_to_play_common.section_toggle_button": {
+        "$section_topic": "hm:crusher_build"
+    },
+    "hm:multiblock_overview_section@how_to_play_common.main_sections": {
+        "bindings": [
+            {
+                "binding_type": "view",
+                "source_control_name": "hm:multiblock_overview_button_toggle",
+                "source_property_name": "#toggle_state",
+                "target_property_name": "#visible"
+            }
+        ],
+        "controls": [
+            {
+                "paragraph_1@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.multiblock_overview.p1"
+                }
+            },
+            {
+                "paragraph_2@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.multiblock_overview.p2"
+                }
+            },
+            {
+                "padding_1@how_to_play_common.padding": {}
+            },
+            {
+                "header_1@how_to_play_common.header": {
+                    "$text": "howtoplay.heavy_machinery.multiblock_overview.h1"
+                }
+            },
+            {
+                "paragraph_3@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.multiblock_overview.p3"
+                }
+            },
+            {
+                "paragraph_4@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.multiblock_overview.p4"
+                }
+            },
+            {
+                "padding_2@how_to_play_common.padding": {}
+            },
+            {
+                "header_2@how_to_play_common.header": {
+                    "$text": "howtoplay.heavy_machinery.multiblock_overview.h2"
+                }
+            },
+            {
+                "paragraph_5@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.multiblock_overview.p5"
+                }
+            },
+            {
+                "paragraph_6@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.multiblock_overview.p6"
+                }
+            },
+            {
+                "padding_3@how_to_play_common.padding": {}
+            },
+            {
+                "header_3@how_to_play_common.header": {
+                    "$text": "howtoplay.heavy_machinery.multiblock_overview.h3"
+                }
+            },
+            {
+                "paragraph_7@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.multiblock_overview.p7"
+                }
+            },
+            {
+                "paragraph_8@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.multiblock_overview.p8"
+                }
+            }
+        ]
+    },
+    "hm:crusher_build_section@how_to_play_common.main_sections": {
+        "bindings": [
+            {
+                "binding_type": "view",
+                "source_control_name": "hm:crusher_build_button_toggle",
+                "source_property_name": "#toggle_state",
+                "target_property_name": "#visible"
+            }
+        ],
+        "controls": [
+            {
+                "paragraph_intro_1@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.crusher_build.intro.p1"
+                }
+            },
+            {
+                "paragraph_intro_2@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.crusher_build.intro.p2"
+                }
+            },
+            {
+                "paragraph_intro_3@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.crusher_build.intro.p3"
+                }
+            },
+            {
+                "image_intro_1@how_to_play.guide_controller_strip_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/basic_controllers"
+                }
+            },
+            {
+                "padding_intro@how_to_play_common.padding": {}
+            },
+            {
+                "header_materials@how_to_play_common.header": {
+                    "$text": "howtoplay.heavy_machinery.crusher_build.materials.h1"
+                }
+            },
+            {
+                "paragraph_materials_1@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.crusher_build.materials.p1"
+                }
+            },
+            {
+                "paragraph_materials_2@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.crusher_build.materials.p2"
+                }
+            },
+            {
+                "padding_materials@how_to_play_common.padding": {}
+            },
+            {
+                "header_1@how_to_play_common.header": {
+                    "$text": "howtoplay.heavy_machinery.crusher_build.h1"
+                }
+            },
+            {
+                "paragraph_1@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.crusher_build.p1"
+                }
+            },
+            {
+                "image_1@how_to_play.guide_step_wide_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/heavy_multiblock_steps_1_2"
+                }
+            },
+            {
+                "padding_1@how_to_play_common.padding": {}
+            },
+            {
+                "header_2@how_to_play_common.header": {
+                    "$text": "howtoplay.heavy_machinery.crusher_build.h2"
+                }
+            },
+            {
+                "paragraph_2@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.crusher_build.p2"
+                }
+            },
+            {
+                "image_2@how_to_play.guide_step_wide_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/heavy_multiblock_steps_3_4"
+                }
+            },
+            {
+                "padding_2@how_to_play_common.padding": {}
+            },
+            {
+                "header_3@how_to_play_common.header": {
+                    "$text": "howtoplay.heavy_machinery.crusher_build.h3"
+                }
+            },
+            {
+                "paragraph_3@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.crusher_build.p3"
+                }
+            },
+            {
+                "image_3@how_to_play.guide_step_wide_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/heavy_multiblock_steps_5_6"
+                }
+            },
+            {
+                "padding_3@how_to_play_common.padding": {}
+            },
+            {
+                "header_4@how_to_play_common.header": {
+                    "$text": "howtoplay.heavy_machinery.crusher_build.h4"
+                }
+            },
+            {
+                "paragraph_4@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.crusher_build.p4"
+                }
+            },
+            {
+                "image_4@how_to_play.guide_step_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/heavy_multiblock_step_7"
+                }
+            },
+            {
+                "padding_4@how_to_play_common.padding": {}
+            },
+            {
+                "header_5@how_to_play_common.header": {
+                    "$text": "howtoplay.heavy_machinery.crusher_build.h5"
+                }
+            },
+            {
+                "paragraph_5@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.crusher_build.p5"
+                }
+            },
+            {
+                "image_5@how_to_play.guide_step_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/crusher_multiblock_step_8"
+                }
+            },
+            {
+                "padding_5@how_to_play_common.padding": {}
+            },
+            {
+                "header_6@how_to_play_common.header": {
+                    "$text": "howtoplay.heavy_machinery.crusher_build.h6"
+                }
+            },
+            {
+                "paragraph_6@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.crusher_build.p6"
+                }
+            },
+            {
+                "image_6@how_to_play.guide_item_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/wrench"
+                }
+            },
+            {
+                "padding_6@how_to_play_common.small_padding": {}
+            },
+            {
+                "paragraph_7@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.crusher_build.p7"
+                }
+            },
+            {
+                "padding_7@how_to_play_common.padding": {}
+            },
+            {
+                "header_7@how_to_play_common.header": {
+                    "$text": "howtoplay.heavy_machinery.crusher_build.h7"
+                }
+            },
+            {
+                "paragraph_8@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.crusher_build.p8"
+                }
+            },
+            {
+                "image_7@how_to_play.guide_ui_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/crusher_factory_ui"
+                }
+            }
+        ]
+    }
+}
