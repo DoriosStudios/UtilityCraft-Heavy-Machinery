@@ -12,13 +12,13 @@
                 "item": "utilitycraft:bronze_plate"
             },
             "T": {
-                "item": "utilitycraft:stabilized_obsidian_dust"
+                "item": "utilitycraft:charged_darloonite_crystal"
             },
             "S": {
                 "item": "utilitycraft:bronze_controller_case"
             },
             "X": {
-                "item": "utilitycraft:charged_darloonite_crystal"
+                "item": "utilitycraft:magmatic_chamber"
             },
             "R": {
                 "item": "utilitycraft:control_panel"
