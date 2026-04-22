@@ -95,7 +95,7 @@
                         "dorios:multiblock",
                         "dorios:energy_container",
                         "dorios:container",
-                        "dorios:simple_input"
+                        "dorios:special_container"
                     ]
                 }
             },
@@ -106,8 +106,7 @@
                         "dorios:multiblock",
                         "dorios:energy_container",
                         "dorios:container",
-                        "dorios:simple_input",
-                        "dorios:simple_output"
+                        "dorios:special_container"
                     ]
                 }
             },
@@ -118,8 +117,7 @@
                         "dorios:multiblock",
                         "dorios:energy_container",
                         "dorios:container",
-                        "dorios:complex_input",
-                        "dorios:simple_output"
+                        "dorios:special_container"
                     ]
                 }
             },
@@ -130,8 +128,7 @@
                         "dorios:multiblock",
                         "dorios:energy_container",
                         "dorios:container",
-                        "dorios:simple_input",
-                        "dorios:complex_output"
+                        "dorios:special_container"
                     ]
                 }
             },
@@ -142,8 +139,7 @@
                         "dorios:multiblock",
                         "dorios:energy_container",
                         "dorios:container",
-                        "dorios:complex_input",
-                        "dorios:complex_output"
+                        "dorios:special_container"
                     ]
                 }
             },
@@ -156,7 +152,7 @@
                         "dorios:energy_container",
                         "dorios:container",
                         "dorios:fluid_container",
-                        "dorios:simple_input"
+                        "dorios:special_container"
                     ]
                 }
             },
@@ -168,7 +164,7 @@
                         "dorios:energy_container",
                         "dorios:container",
                         "dorios:fluid_container",
-                        "dorios:complex_input"
+                        "dorios:special_container"
                     ]
                 }
             },
