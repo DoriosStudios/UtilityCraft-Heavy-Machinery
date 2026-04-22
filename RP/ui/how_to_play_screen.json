@@ -29,6 +29,11 @@
                         "hm:crusher_build_button@how_to_play.hm:crusher_build_button": {
                             "$toggle_group_forced_index": 352
                         }
+                    },
+                    {
+                        "hm:magmatic_chamber_build_button@how_to_play.hm:magmatic_chamber_build_button": {
+                            "$toggle_group_forced_index": 353
+                        }
                     }
                 ]
             }
@@ -45,6 +50,9 @@
                     },
                     {
                         "hm:crusher_build_section@how_to_play.hm:crusher_build_section": {}
+                    },
+                    {
+                        "hm:magmatic_chamber_build_section@how_to_play.hm:magmatic_chamber_build_section": {}
                     }
                 ]
             }
@@ -90,11 +98,70 @@
             "205px"
         ]
     },
+    "guide_showcase_wide_image@how_to_play_common.image": {
+        "anchor_from": "top_middle",
+        "anchor_to": "top_middle",
+        "size": [
+            "315px",
+            "135px"
+        ]
+    },
+    "guide_showcase_banner_image@how_to_play_common.image": {
+        "anchor_from": "top_middle",
+        "anchor_to": "top_middle",
+        "size": [
+            "315px",
+            "90px"
+        ]
+    },
+    "guide_showcase_strip_image@how_to_play_common.image": {
+        "anchor_from": "top_middle",
+        "anchor_to": "top_middle",
+        "size": [
+            "315px",
+            "45px"
+        ]
+    },
+    "guide_showcase_square_image@how_to_play_common.image": {
+        "anchor_from": "top_middle",
+        "anchor_to": "top_middle",
+        "size": [
+            "135px",
+            "135px"
+        ]
+    },
+    "guide_multiblock_final_image@how_to_play_common.image": {
+        "anchor_from": "top_middle",
+        "anchor_to": "top_middle",
+        "size": [
+            "250px",
+            "250px"
+        ]
+    },
+    "guide_pixelart_machine_image@how_to_play_common.image": {
+        "anchor_from": "top_middle",
+        "anchor_to": "top_middle",
+        "size": [
+            "177px",
+            "190px"
+        ]
+    },
+    "guide_pixelart_small_image@how_to_play_common.image": {
+        "anchor_from": "top_middle",
+        "anchor_to": "top_middle",
+        "size": [
+            "89px",
+            "95px"
+        ]
+    },
     "hm:multiblock_overview_button@how_to_play_common.section_toggle_button": {
         "$section_topic": "hm:multiblock_overview"
     },
     "hm:crusher_build_button@how_to_play_common.section_toggle_button": {
         "$section_topic": "hm:crusher_build"
+    },
+    "hm:magmatic_chamber_build_button@how_to_play_common.section_toggle_button": {
+        "$section_topic": "hm:magmatic_chamber_build"
     },
     "hm:multiblock_overview_section@how_to_play_common.main_sections": {
         "bindings": [
@@ -117,6 +184,11 @@
                 }
             },
             {
+                "image_intro_1@how_to_play.guide_showcase_banner_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/controllers_showcase"
+                }
+            },
+            {
                 "padding_1@how_to_play_common.padding": {}
             },
             {
@@ -135,6 +207,11 @@
                 }
             },
             {
+                "image_1@how_to_play.guide_showcase_wide_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/casings_showcase"
+                }
+            },
+            {
                 "padding_2@how_to_play_common.padding": {}
             },
             {
@@ -148,8 +225,18 @@
                 }
             },
             {
+                "image_2@how_to_play.guide_showcase_square_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/ports_showcase"
+                }
+            },
+            {
                 "paragraph_6@how_to_play_common.paragraph": {
                     "$text": "howtoplay.heavy_machinery.multiblock_overview.p6"
+                }
+            },
+            {
+                "image_3@how_to_play.guide_showcase_strip_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/components_showcase"
                 }
             },
             {
@@ -166,8 +253,37 @@
                 }
             },
             {
+                "image_4@how_to_play.guide_multiblock_final_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/crusher_multiblock_step_8"
+                }
+            },
+            {
+                "padding_4@how_to_play_common.small_padding": {}
+            },
+            {
                 "paragraph_8@how_to_play_common.paragraph": {
                     "$text": "howtoplay.heavy_machinery.multiblock_overview.p8"
+                }
+            },
+            {
+                "image_5@how_to_play.guide_pixelart_machine_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/magmatic_chamber_showcase_pixelart"
+                }
+            },
+            {
+                "padding_5@how_to_play_common.small_padding": {}
+            },
+            {
+                "image_6@how_to_play.guide_ui_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/crusher_factory_ui"
+                }
+            },
+            {
+                "padding_6@how_to_play_common.small_padding": {}
+            },
+            {
+                "image_7@how_to_play.guide_ui_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/thermal_reactor_ui"
                 }
             }
         ]
@@ -352,6 +468,200 @@
             {
                 "image_7@how_to_play.guide_ui_image": {
                     "texture": "textures/ui/wiki/heavy_machinery/guide/crusher_factory_ui"
+                }
+            }
+        ]
+    },
+    "hm:magmatic_chamber_build_section@how_to_play_common.main_sections": {
+        "bindings": [
+            {
+                "binding_type": "view",
+                "source_control_name": "hm:magmatic_chamber_build_button_toggle",
+                "source_property_name": "#toggle_state",
+                "target_property_name": "#visible"
+            }
+        ],
+        "controls": [
+            {
+                "paragraph_intro_1@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.magmatic_chamber_build.intro.p1"
+                }
+            },
+            {
+                "paragraph_intro_2@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.magmatic_chamber_build.intro.p2"
+                }
+            },
+            {
+                "paragraph_intro_3@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.magmatic_chamber_build.intro.p3"
+                }
+            },
+            {
+                "image_intro_1@how_to_play.guide_pixelart_small_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/magmatic_chamber_showcase_pixelart"
+                }
+            },
+            {
+                "padding_intro@how_to_play_common.padding": {}
+            },
+            {
+                "header_materials@how_to_play_common.header": {
+                    "$text": "howtoplay.heavy_machinery.magmatic_chamber_build.materials.h1"
+                }
+            },
+            {
+                "paragraph_materials_1@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.magmatic_chamber_build.materials.p1"
+                }
+            },
+            {
+                "paragraph_materials_2@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.magmatic_chamber_build.materials.p2"
+                }
+            },
+            {
+                "padding_materials@how_to_play_common.padding": {}
+            },
+            {
+                "header_1@how_to_play_common.header": {
+                    "$text": "howtoplay.heavy_machinery.magmatic_chamber_build.h1"
+                }
+            },
+            {
+                "paragraph_1@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.magmatic_chamber_build.p1"
+                }
+            },
+            {
+                "image_1@how_to_play.guide_pixelart_small_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/magmatic_chamber_step_1"
+                }
+            },
+            {
+                "padding_1@how_to_play_common.padding": {}
+            },
+            {
+                "header_2@how_to_play_common.header": {
+                    "$text": "howtoplay.heavy_machinery.magmatic_chamber_build.h2"
+                }
+            },
+            {
+                "paragraph_2@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.magmatic_chamber_build.p2"
+                }
+            },
+            {
+                "image_2@how_to_play.guide_pixelart_small_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/magmatic_chamber_step_2"
+                }
+            },
+            {
+                "padding_2@how_to_play_common.padding": {}
+            },
+            {
+                "header_3@how_to_play_common.header": {
+                    "$text": "howtoplay.heavy_machinery.magmatic_chamber_build.h3"
+                }
+            },
+            {
+                "paragraph_3@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.magmatic_chamber_build.p3"
+                }
+            },
+            {
+                "image_3@how_to_play.guide_pixelart_small_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/magmatic_chamber_step_3"
+                }
+            },
+            {
+                "padding_3@how_to_play_common.padding": {}
+            },
+            {
+                "header_4@how_to_play_common.header": {
+                    "$text": "howtoplay.heavy_machinery.magmatic_chamber_build.h4"
+                }
+            },
+            {
+                "paragraph_4@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.magmatic_chamber_build.p4"
+                }
+            },
+            {
+                "image_4@how_to_play.guide_pixelart_small_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/magmatic_chamber_step_4"
+                }
+            },
+            {
+                "padding_4@how_to_play_common.padding": {}
+            },
+            {
+                "header_5@how_to_play_common.header": {
+                    "$text": "howtoplay.heavy_machinery.magmatic_chamber_build.h5"
+                }
+            },
+            {
+                "paragraph_5@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.magmatic_chamber_build.p5"
+                }
+            },
+            {
+                "image_5@how_to_play.guide_pixelart_small_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/magmatic_chamber_step_5"
+                }
+            },
+            {
+                "padding_5@how_to_play_common.padding": {}
+            },
+            {
+                "header_6@how_to_play_common.header": {
+                    "$text": "howtoplay.heavy_machinery.magmatic_chamber_build.h6"
+                }
+            },
+            {
+                "paragraph_6@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.magmatic_chamber_build.p6"
+                }
+            },
+            {
+                "image_6@how_to_play.guide_pixelart_small_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/magmatic_chamber_step_6"
+                }
+            },
+            {
+                "padding_6@how_to_play_common.padding": {}
+            },
+            {
+                "header_7@how_to_play_common.header": {
+                    "$text": "howtoplay.heavy_machinery.magmatic_chamber_build.h7"
+                }
+            },
+            {
+                "paragraph_7@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.magmatic_chamber_build.p7"
+                }
+            },
+            {
+                "image_7@how_to_play.guide_pixelart_small_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/magmatic_chamber_step_7"
+                }
+            },
+            {
+                "padding_7@how_to_play_common.padding": {}
+            },
+            {
+                "header_8@how_to_play_common.header": {
+                    "$text": "howtoplay.heavy_machinery.magmatic_chamber_build.h8"
+                }
+            },
+            {
+                "paragraph_8@how_to_play_common.paragraph": {
+                    "$text": "howtoplay.heavy_machinery.magmatic_chamber_build.p8"
+                }
+            },
+            {
+                "image_8@how_to_play.guide_pixelart_small_image": {
+                    "texture": "textures/ui/wiki/heavy_machinery/guide/magmatic_chamber_showcase_pixelart"
                 }
             }
         ]

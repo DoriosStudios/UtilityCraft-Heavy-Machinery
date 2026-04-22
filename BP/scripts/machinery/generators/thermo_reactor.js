@@ -83,6 +83,7 @@ const GENERATOR_CONFIG = {
     entity: {
         identifier: 'utilitycraft:thermo_reactor',
         name: 'thermo_reactor',
+        fixed_fluid_types: true
     },
     generator: {
         energy_cap: 1,
@@ -173,8 +174,14 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
                 }))
 
                 const fluids = FluidStorage.initializeMultiple(entity, 2)
-                fluids[0].setCap(1000)
-                fluids[1].setCap(1000)
+                if (fluids[0].type == "empty") {
+                    fluids[0].setType("saline_coolant")
+                    fluids[0].setCap(coolantCapacity)
+                }
+                if (fluids[1].type == "empty") {
+                    fluids[1].setType("lava")
+                    fluids[1].setCap(lavaCapacity)
+                }
             },
             successMessages: ({ components, energyCap }) => {
                 const lavaCapacity =

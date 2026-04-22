@@ -40,7 +40,18 @@ export class FluidStorage {
 
     this.type = this.getType();
     this.cap = this.getCap();
-    if (this.get() == 0) this.setType(Constants.EMPTY_FLUID_TYPE);
+    if (this.get() == 0 && !this.hasFixedFluidType()) {
+      this.setType(Constants.EMPTY_FLUID_TYPE);
+    }
+  }
+
+  /**
+   * Checks whether this entity should preserve its fluid type tags while empty.
+   *
+   * @returns {boolean}
+   */
+  hasFixedFluidType() {
+    return this.entity.hasTag(Constants.CONSTANT_FLUID_TYPE_TAG);
   }
 
   /**
