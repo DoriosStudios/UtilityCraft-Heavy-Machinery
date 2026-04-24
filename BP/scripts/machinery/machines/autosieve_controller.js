@@ -1,9 +1,9 @@
 import { EnergyStorage, Multiblock, MultiblockMachine } from "DoriosCore/index.js"
 import { sieveRecipes } from 'config/recipes/sieve.js'
 
-const MESH_SLOT = 4
-const INPUT_SLOTS = [5, 6, 7, 8, 9, 10, 11, 12, 13]
-const OUTPUT_SLOTS = [14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28]
+const MESH_SLOT = 3
+const INPUT_SLOTS = [4, 5, 6, 7, 8, 9, 10, 11, 12]
+const OUTPUT_SLOTS = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
 
 const DEFAULT_COST = 6400
 const MULTI_PENALTY = 4
@@ -22,9 +22,9 @@ const MULTIBLOCK_CONFIG = {
     required_case: 'dorios:multiblock.case.steel',
     entity: {
         type: 'complex_machine',
-        input_range: [5, 13],
-        output_range: [14, 28],
-        inventory_size: 29,
+        input_range: [4, 12],
+        output_range: [13, 27],
+        inventory_size: 28,
         identifier: 'utilitycraft:multiblock_machine',
     },
     machine: {
@@ -39,7 +39,7 @@ DoriosAPI.register.blockComponent('autosieve_controller', {
     onPlayerInteract(e) {
         return MultiblockMachine.handlePlayerInteract(e, MULTIBLOCK_CONFIG, {
             initializeEntity(entity) {
-                entity.setItem(1, 'utilitycraft:arrow_right_0', 1, '')
+
                 entity.setItem(2, 'utilitycraft:arrow_right_0', 1, '')
             },
             successMessages: ({ energyCap }) => [
@@ -69,14 +69,14 @@ DoriosAPI.register.blockComponent('autosieve_controller', {
         const meshSlot = inv.getItem(MESH_SLOT)
         if (!meshSlot) {
             updateUI(controller, data, '§eNo Mesh')
-            controller.setProgress(0, { slot: 3 })
+            controller.setProgress(0, { slot: 2 })
             return
         }
 
         const meshComp = meshSlot.getComponent('utilitycraft:mesh')
         if (!meshComp) {
             updateUI(controller, data, '§eInvalid Mesh')
-            controller.setProgress(0, { slot: 3 })
+            controller.setProgress(0, { slot: 2 })
             return
         }
 
@@ -102,14 +102,14 @@ DoriosAPI.register.blockComponent('autosieve_controller', {
 
         if (!inputType || totalInput <= 0) {
             updateUI(controller, data, '§eNo Input')
-            controller.setProgress(0, { slot: 3 })
+            controller.setProgress(0, { slot: 2 })
             return
         }
 
         const recipe = sieveRecipes[inputType]
         if (!recipe) {
             updateUI(controller, data, '§eInvalid Input')
-            controller.setProgress(0, { slot: 3 })
+            controller.setProgress(0, { slot: 2 })
             return
         }
 
@@ -121,7 +121,7 @@ DoriosAPI.register.blockComponent('autosieve_controller', {
 
         if (processCount <= 0) {
             updateUI(controller, data, '§eCapacity Limit')
-            controller.setProgress(0, { slot: 3 })
+            controller.setProgress(0, { slot: 2 })
             return
         }
 
@@ -133,7 +133,7 @@ DoriosAPI.register.blockComponent('autosieve_controller', {
 
         if (controller.energy.get() <= 0) {
             updateUI(controller, data, '§eNo Energy')
-            controller.displayProgress({ slot: 3 })
+            controller.displayProgress({ slot: 2 })
             return
         }
 
@@ -162,7 +162,7 @@ DoriosAPI.register.blockComponent('autosieve_controller', {
             )
         }
 
-        controller.displayProgress({ slot: 3 })
+        controller.displayProgress({ slot: 2 })
         updateUI(controller, data, '§aRunning')
     }
 })
@@ -215,41 +215,30 @@ function processAutosieveDrops(
  */
 function updateUI(controller, data, status = '§aRunning', recipe) {
     controller.displayEnergy()
-    const offsetLines = MultiblockMachine.setMachineInfoLabel(controller, data, status);
-    setEnergyAndRecipeLabel(controller, offsetLines, recipe);
+    controller.setLabel([
+        MultiblockMachine.getMachineInfoLabel(data, status),
+        MultiblockMachine.getEnergyInfoLabel(controller),
+        getRecipeLabel(recipe),
+    ]);
+
 
 }
 
 /**
- * Writes the autosieve-specific energy and recipe information section.
+ * Builds the autosieve-specific recipe information section.
  *
- * @param {MultiblockMachine} controller Active autosieve controller runtime.
- * @param {string} offsetLines Padding returned by `setMachineInfoLabel`.
  * @param {object} [recipe] Optional recipe data used for display.
  */
-function setEnergyAndRecipeLabel(controller, offsetLines, recipe) {
-    const energy = controller.energy
-    const rate = controller.baseRate
-
+function getRecipeLabel(recipe) {
     const hasRecipe = !!recipe;
-
     const output = hasRecipe ? DoriosAPI.utils.formatIdToText(recipe.output) ?? '---' : '---';
     const yieldAmt = hasRecipe ? (recipe.amount ?? 1) : '---';
     const inputReq = hasRecipe ? (recipe.required ?? 1) : '---';
 
-    const text = `${offsetLines}
-§r§eEnergy Information
+    return `\u00A7r\u00A7eRecipe Information
 
-§r§bCapacity §f${Math.floor(energy.getPercent())}%%
-§r§bStored §f${EnergyStorage.formatEnergyToText(energy.get())} / ${EnergyStorage.formatEnergyToText(energy.cap)}
-§r§bRate §f${EnergyStorage.formatEnergyToText(rate)}/t
-
-§r§eRecipe Information
-
-§r§aOutput §f${output}
-§r§aYield §f${yieldAmt}
-§r§aInput Required §f${inputReq}
+\u00A7r\u00A7aOutput \u00A7f${output}
+\u00A7r\u00A7aYield \u00A7f${yieldAmt}
+\u00A7r\u00A7aInput Required \u00A7f${inputReq}
 `;
-
-    controller.setLabel(text, 2);
 }

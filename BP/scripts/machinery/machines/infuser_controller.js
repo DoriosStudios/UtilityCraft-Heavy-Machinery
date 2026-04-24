@@ -1,9 +1,9 @@
 import { EnergyStorage, Multiblock, MultiblockMachine } from "DoriosCore/index.js"
 import { infuserRecipes } from 'config/recipes/infuser.js'
 
-const CATALYST_SLOTS = [5, 6, 7, 8]
-const INPUT_SLOTS = [9, 10, 11, 12, 13, 14, 15, 16, 17]
-const OUTPUT_SLOTS = [18, 19, 20, 21, 22, 23, 24, 25, 26]
+const CATALYST_SLOTS = [4, 5, 6, 7]
+const INPUT_SLOTS = [8, 9, 10, 11, 12, 13, 14, 15, 16]
+const OUTPUT_SLOTS = [17, 18, 19, 20, 21, 22, 23, 24, 25]
 const DEFAULT_COST = 1600
 const MULTI_PENALTY = 4
 const BASE_RATE = 400
@@ -21,10 +21,10 @@ const MULTIBLOCK_CONFIG = {
     required_case: 'dorios:multiblock.case.steel',
     entity: {
         type: 'complex_machine',
-        inventory_size: 27,
+        inventory_size: 26,
         identifier: 'utilitycraft:multiblock_machine',
-        input_range: [5, 17],
-        output_range: [18, 26],
+        input_range: [4, 16],
+        output_range: [17, 25],
     },
     machine: {
         rate_speed_base: BASE_RATE,
@@ -37,10 +37,10 @@ DoriosAPI.register.blockComponent('infuser_controller', {
     onPlayerInteract(e) {
         return MultiblockMachine.handlePlayerInteract(e, MULTIBLOCK_CONFIG, {
             initializeEntity(entity) {
-                entity.setItem(1, 'utilitycraft:arrow_right_0', 1, ' ')
+
                 entity.setItem(2, 'utilitycraft:arrow_right_0', 1, ' ')
-                entity.setItem(3, 'utilitycraft:arrow_right_0', 1, '')
-                entity.setItem(4, 'utilitycraft:arrow_indicator_90', 1, '')
+
+                entity.setItem(3, 'utilitycraft:arrow_indicator_90', 1, '')
             },
             successMessages: ({ energyCap }) => [
                 '\u00A7a[Controller] Infuser Factory created successfully.',
@@ -98,14 +98,14 @@ DoriosAPI.register.blockComponent('infuser_controller', {
 
         if (!inputType || !catalystType) {
             updateUI(controller, data, '§eEmpty');
-            controller.setProgress(0, { slot: 3 });
+            controller.setProgress(0, { slot: 2 });
             return;
         }
 
         recipe = recipes[catalystType + '|' + inputType];
         if (!recipe) {
             updateUI(controller, data, '§eInvalid Recipe');
-            controller.setProgress(0, { slot: 3 });
+            controller.setProgress(0, { slot: 2 });
             return;
         }
 
@@ -125,12 +125,12 @@ DoriosAPI.register.blockComponent('infuser_controller', {
 
         if (requiredInput > totalInput) {
             updateUI(controller, data, '§eMissing Input', recipe);
-            controller.setProgress(0, { slot: 3 });
+            controller.setProgress(0, { slot: 2 });
             return;
         }
         if (requiredCatalyst > totalCatalyst) {
             updateUI(controller, data, '§eMissing Catalyst', recipe);
-            controller.setProgress(0, { slot: 3 });
+            controller.setProgress(0, { slot: 2 });
             return;
         }
 
@@ -144,7 +144,7 @@ DoriosAPI.register.blockComponent('infuser_controller', {
 
         if (maxProcess <= 0) {
             updateUI(controller, data, '§eOutput Full', recipe);
-            controller.setProgress(0, { slot: 3 });
+            controller.setProgress(0, { slot: 2 });
             return;
         }
 
@@ -156,7 +156,7 @@ DoriosAPI.register.blockComponent('infuser_controller', {
 
         if (controller.energy.get() <= 0) {
             updateUI(controller, data, '§eNo Energy', recipe);
-            controller.displayProgress({ slot: 3 });
+            controller.displayProgress({ slot: 2 });
             return;
         }
 
@@ -196,7 +196,7 @@ DoriosAPI.register.blockComponent('infuser_controller', {
             );
         }
 
-        controller.displayProgress({ slot: 3 });
+        controller.displayProgress({ slot: 2 });
         updateUI(controller, data, '§aRunning', recipe);
     }
 })
@@ -212,44 +212,33 @@ DoriosAPI.register.blockComponent('infuser_controller', {
  */
 function updateUI(controller, data, status = '§aRunning', recipe) {
     controller.displayEnergy()
-    const offsetLines = MultiblockMachine.setMachineInfoLabel(controller, data, status);
-    setEnergyAndRecipeLabel(controller, offsetLines, recipe);
+    controller.setLabel([
+        MultiblockMachine.getMachineInfoLabel(data, status),
+        MultiblockMachine.getEnergyInfoLabel(controller),
+        getRecipeLabel(recipe),
+    ]);
+
 
 }
 
 /**
- * Writes the infuser-specific energy and recipe information section.
+ * Builds the infuser-specific recipe information section.
  *
- * @param {MultiblockMachine} controller Active infuser controller runtime.
- * @param {string} offsetLines Padding returned by `setMachineInfoLabel`.
  * @param {{ output?: string, amount?: number, required?: number, input_required?: number }} [recipe]
  * Current infuser recipe, if one is active.
  */
-function setEnergyAndRecipeLabel(controller, offsetLines, recipe) {
-    const energy = controller.energy;
-    const rate = controller.baseRate;
-
+function getRecipeLabel(recipe) {
     const hasRecipe = !!recipe;
-
     const output = hasRecipe ? DoriosAPI.utils.formatIdToText(recipe.output) ?? '---' : '---';
     const yieldAmt = hasRecipe ? (recipe.amount ?? 1) : '---';
     const catalystReq = hasRecipe ? (recipe.required ?? 1) : '---';
     const inputReq = hasRecipe ? (recipe.input_required ?? 1) : '---';
 
-    const text = `${offsetLines}
-§r§eEnergy Information
+    return `\u00A7r\u00A7eRecipe Information
 
-§r§bCapacity §f${Math.floor(energy.getPercent())}%%
-§r§bStored §f${EnergyStorage.formatEnergyToText(energy.get())} / ${EnergyStorage.formatEnergyToText(energy.cap)}
-§r§bRate §f${EnergyStorage.formatEnergyToText(rate)}/t
-
-§r§eRecipe Information
-
-§r§aOutput §f${output}
-§r§aYield §f${yieldAmt}
-§r§aCatalyst Required §f${catalystReq}
-§r§aInput Required §f${inputReq}
+\u00A7r\u00A7aOutput \u00A7f${output}
+\u00A7r\u00A7aYield \u00A7f${yieldAmt}
+\u00A7r\u00A7aCatalyst Required \u00A7f${catalystReq}
+\u00A7r\u00A7aInput Required \u00A7f${inputReq}
 `;
-
-    controller.setLabel(text, 2);
 }

@@ -1,8 +1,8 @@
 import { EnergyStorage, FluidStorage, Multiblock, MultiblockMachine } from "DoriosCore/index.js"
 import { melterRecipes } from 'config/recipes/melter.js'
 
-const OUTPUT_LIQUID_SLOT = 4
-const INPUT_SLOTS = [5, 6, 7, 8, 9, 10, 11, 12, 13]
+const OUTPUT_LIQUID_SLOT = 3
+const INPUT_SLOTS = [4, 5, 6, 7, 8, 9, 10, 11, 12]
 const DEFAULT_COST = 6400
 const MULTI_PENALTY = 4
 const BASE_RATE = 1600
@@ -27,9 +27,9 @@ const MULTIBLOCK_CONFIG = {
     required_case: 'dorios:multiblock.case.bronze',
     entity: {
         type: 'complex_machine_fluid',
-        inventory_size: 14,
+        inventory_size: 13,
         identifier: 'utilitycraft:multiblock_machine',
-        input_range: [5, 13],
+        input_range: [4, 12],
     },
     machine: {
         rate_speed_base: BASE_RATE,
@@ -42,9 +42,9 @@ DoriosAPI.register.blockComponent('magmatic_chamber_controller', {
     onPlayerInteract(e) {
         return MultiblockMachine.handlePlayerInteract(e, MULTIBLOCK_CONFIG, {
             initializeEntity(entity) {
-                entity.setItem(1, 'utilitycraft:arrow_right_0', 1, ' ')
+
                 entity.setItem(2, 'utilitycraft:arrow_right_0', 1, ' ')
-                entity.setItem(3, 'utilitycraft:arrow_right_0', 1, ' ')
+
                 FluidStorage.initializeSingle(entity)
             },
             onActivate: ({ entity, structure }) => {
@@ -102,13 +102,13 @@ DoriosAPI.register.blockComponent('magmatic_chamber_controller', {
 
         if (!recipe || !inputType) {
             updateUI(controller, outputFluid, data, '\u00A7eNo Input')
-            controller.setProgress(0, { slot: 3 })
+            controller.setProgress(0, { slot: 2 })
             return
         }
 
         if (outputFluid.getType() !== 'empty' && outputFluid.getType() !== recipe.liquid) {
             updateUI(controller, outputFluid, data, '\u00A7eWrong Output Fluid', recipe)
-            controller.setProgress(0, { slot: 3 })
+            controller.setProgress(0, { slot: 2 })
             return
         }
 
@@ -124,7 +124,7 @@ DoriosAPI.register.blockComponent('magmatic_chamber_controller', {
 
         if (maxProcess <= 0) {
             updateUI(controller, outputFluid, data, '\u00A7eOutput Full', recipe)
-            controller.setProgress(0, { slot: 3 })
+            controller.setProgress(0, { slot: 2 })
             return
         }
 
@@ -136,7 +136,7 @@ DoriosAPI.register.blockComponent('magmatic_chamber_controller', {
 
         if (controller.energy.get() <= 0) {
             updateUI(controller, outputFluid, data, '\u00A7eNo Energy', recipe)
-            controller.displayProgress({ slot: 3 })
+            controller.displayProgress({ slot: 2 })
             return
         }
 
@@ -165,7 +165,7 @@ DoriosAPI.register.blockComponent('magmatic_chamber_controller', {
             )
         }
 
-        controller.displayProgress({ slot: 3 })
+        controller.displayProgress({ slot: 2 })
         updateUI(controller, outputFluid, data, '\u00A7aRunning', recipe)
     }
 })
@@ -173,13 +173,15 @@ DoriosAPI.register.blockComponent('magmatic_chamber_controller', {
 function updateUI(controller, outputFluid, data, status = '\u00A7aRunning', recipe) {
     outputFluid.display(OUTPUT_LIQUID_SLOT)
     controller.displayEnergy()
-    const offsetLines = MultiblockMachine.setMachineInfoLabel(controller, data, status)
-    setEnergyAndRecipeLabel(controller, offsetLines, recipe)
+    controller.setLabel([
+        MultiblockMachine.getMachineInfoLabel(data, status),
+        MultiblockMachine.getEnergyInfoLabel(controller),
+        getRecipeLabel(recipe),
+    ])
+
 }
 
-function setEnergyAndRecipeLabel(controller, offsetLines, recipe) {
-    const energy = controller.energy
-    const rate = controller.baseRate
+function getRecipeLabel(recipe) {
     const hasRecipe = !!recipe
 
     const outputFluid = hasRecipe
@@ -192,19 +194,10 @@ function setEnergyAndRecipeLabel(controller, offsetLines, recipe) {
         ? (recipe.required ?? 1)
         : '-'
 
-    const text = `${offsetLines}
-\u00A7r\u00A7eEnergy
-
-\u00A7r\u00A7bCapacity \u00A7f${Math.floor(energy.getPercent())}%%
-\u00A7r\u00A7bStored \u00A7f${EnergyStorage.formatEnergyToText(energy.get())} / ${EnergyStorage.formatEnergyToText(energy.cap)}
-\u00A7r\u00A7bRate \u00A7f${EnergyStorage.formatEnergyToText(rate)}/t
-
-\u00A7r\u00A7eRecipe
+    return `\u00A7r\u00A7eRecipe
 
 \u00A7r\u00A7aOutput Fluid \u00A7f${outputFluid}
 \u00A7r\u00A7aYield \u00A7f${yieldAmt}
 \u00A7r\u00A7aInput Required \u00A7f${inputReq}
 `
-
-    controller.setLabel(text, 2)
 }

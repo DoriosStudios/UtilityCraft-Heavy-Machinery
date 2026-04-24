@@ -1,10 +1,10 @@
 import { EnergyStorage, FluidStorage, Multiblock, MultiblockMachine } from "DoriosCore/index.js"
 import { reactionRecipes } from 'config/recipes/reaction_chamber.js'
 
-const INPUT_LIQUID_SLOT = 4
-const OUTPUT_LIQUID_SLOT = 5
-const INPUT_SLOTS = [6, 7, 8, 9]
-const OUTPUT_SLOTS = [10, 11, 12, 13]
+const INPUT_LIQUID_SLOT = 3
+const OUTPUT_LIQUID_SLOT = 4
+const INPUT_SLOTS = [5, 6, 7, 8]
+const OUTPUT_SLOTS = [9, 10, 11, 12]
 const DEFAULT_COST = 12800
 const BASE_RATE = 1600
 
@@ -27,9 +27,9 @@ const MULTIBLOCK_CONFIG = {
     required_case: 'dorios:multiblock.case.steel',
     entity: {
         type: 'complex_machine_fluid',
-        input_range: [6, 9],
-        output_range: [10, 13],
-        inventory_size: 14,
+        input_range: [5, 8],
+        output_range: [9, 12],
+        inventory_size: 13,
         identifier: 'utilitycraft:multiblock_machine',
     },
     machine: {
@@ -43,9 +43,7 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
     onPlayerInteract(e) {
         return MultiblockMachine.handlePlayerInteract(e, MULTIBLOCK_CONFIG, {
             initializeEntity(entity) {
-                entity.setItem(1, 'utilitycraft:arrow_right_0', 1, ' ')
                 entity.setItem(2, 'utilitycraft:arrow_right_0', 1, ' ')
-                entity.setItem(3, 'utilitycraft:arrow_right_0', 1, '')
                 FluidStorage.initializeMultiple(entity, 2)
             },
             onActivate: ({ entity, structure }) => {
@@ -104,7 +102,7 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
 
         if (!recipe) {
             updateUI(controller, [inputFluid, outputFluid], data, "§eNo Recipe");
-            controller.setProgress(0, { slot: 3 });
+            controller.setProgress(0, { slot: 2 });
             return;
         }
 
@@ -113,13 +111,13 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
 
         if (inputItemId !== "empty" && totalItems < reqItems) {
             updateUI(controller, [inputFluid, outputFluid], data, "§eNot Enough Items", recipe);
-            controller.setProgress(0, { slot: 3 });
+            controller.setProgress(0, { slot: 2 });
             return;
         }
 
         if (inputFluidType !== "empty" && inputFluid.get() < reqFluid) {
             updateUI(controller, [inputFluid, outputFluid], data, "§eNot Enough Fluid", recipe);
-            controller.setProgress(0, { slot: 3 });
+            controller.setProgress(0, { slot: 2 });
             return;
         }
 
@@ -146,7 +144,7 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
                 outputFluid.getType() !== outType
             ) {
                 updateUI(controller, [inputFluid, outputFluid], data, "§eWrong Output Fluid", recipe);
-                controller.setProgress(0, { slot: 3 });
+                controller.setProgress(0, { slot: 2 });
                 return;
             }
             fluidSpace = outputFluid.getFreeSpace();
@@ -170,7 +168,7 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
 
         if (maxProcess <= 0) {
             updateUI(controller, [inputFluid, outputFluid], data, "§eOutput Full", recipe);
-            controller.setProgress(0, { slot: 3 });
+            controller.setProgress(0, { slot: 2 });
             return;
         }
 
@@ -182,7 +180,7 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
 
         if (controller.energy.get() <= 0) {
             updateUI(controller, [inputFluid, outputFluid], data, "§eNo Energy", recipe);
-            controller.displayProgress({ slot: 3 });
+            controller.displayProgress({ slot: 2 });
             return;
         }
 
@@ -230,7 +228,7 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
             );
         }
 
-        controller.displayProgress({ slot: 3 });
+        controller.displayProgress({ slot: 2 });
         updateUI(controller, [inputFluid, outputFluid], data, "§aRunning", recipe);
     }
 })
@@ -251,58 +249,42 @@ function updateUI(controller, [inputFluid, outputFluid], data, status = '§aRunn
     inputFluid.display(INPUT_LIQUID_SLOT)
     outputFluid.display(OUTPUT_LIQUID_SLOT)
     controller.displayEnergy()
-    const offsetLines = MultiblockMachine.setMachineInfoLabel(controller, data, status);
-    setEnergyAndRecipeLabel(controller, offsetLines, recipe);
-
+    controller.setLabel([
+        MultiblockMachine.getMachineInfoLabel(data, status),
+        MultiblockMachine.getEnergyInfoLabel(controller),
+        getRecipeLabel(recipe),
+    ]);
 }
 
 /**
- * Writes the reaction chamber-specific energy and output information section.
+ * Builds the reaction chamber-specific output information section.
  *
- * @param {MultiblockMachine} controller Active reaction chamber controller runtime.
- * @param {string} offsetLines Padding returned by `setMachineInfoLabel`.
  * @param {{
  *   output_item?: { id: string, amount?: number },
  *   output_liquid?: { type: string, amount?: number }
  * }} [recipe] Current reaction recipe, if one is active.
  */
-function setEnergyAndRecipeLabel(controller, offsetLines, recipe) {
-    const energy = controller.energy;
-    const rate = controller.baseRate;
-
+function getRecipeLabel(recipe) {
     const hasRecipe = !!recipe;
-
     const outItem = hasRecipe && recipe.output_item
         ? DoriosAPI.utils.formatIdToText(recipe.output_item.id)
         : 'None';
-
     const outItemAmt = hasRecipe && recipe.output_item
         ? (recipe.output_item.amount ?? 1)
         : '-';
-
     const outFluid = hasRecipe && recipe.output_liquid
         ? DoriosAPI.utils.formatIdToText(recipe.output_liquid.type)
         : 'None';
-
     const outFluidAmt = hasRecipe && recipe.output_liquid
         ? FluidStorage.formatFluid(recipe.output_liquid.amount)
         : '-';
 
-    const text = `${offsetLines}
-§r§eEnergy
+    return `\u00A7r\u00A7eRecipe
 
-§r§bCapacity §f${Math.floor(energy.getPercent())}%%
-§r§bStored §f${EnergyStorage.formatEnergyToText(energy.get())} / ${EnergyStorage.formatEnergyToText(energy.cap)}
-§r§bRate §f${EnergyStorage.formatEnergyToText(rate)}/t
+\u00A7r\u00A7aOutput Item \u00A7f${outItem}
+\u00A7r\u00A7aYield \u00A7f${outItemAmt}
 
-§r§eRecipe
-
-§r§aOutput Item §f${outItem}
-§r§aYield §f${outItemAmt}
-
-§r§aOutput Fluid §f${outFluid}
-§r§aYield §f${outFluidAmt}
+\u00A7r\u00A7aOutput Fluid \u00A7f${outFluid}
+\u00A7r\u00A7aYield \u00A7f${outFluidAmt}
 `;
-
-    controller.setLabel(text, 2);
 }

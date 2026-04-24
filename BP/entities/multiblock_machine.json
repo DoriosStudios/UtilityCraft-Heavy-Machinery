@@ -815,6 +815,13 @@
                     ]
                 }
             },
+            "utilitycraft:inventory_26": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:inventory_26"
+                    ]
+                }
+            },
             "utilitycraft:inventory_27": {
                 "add": {
                     "component_groups": [

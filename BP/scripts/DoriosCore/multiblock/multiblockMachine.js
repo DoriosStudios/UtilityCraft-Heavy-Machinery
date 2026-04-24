@@ -467,29 +467,34 @@ export class MultiblockMachine extends BasicMachine {
   }
 
   /**
-   * Writes the standard machine information label into the controller UI.
+   * Builds the standard machine information label for multiblock controllers.
    *
-   * The returned newline padding string is useful when callers want to append
-   * more sections below the base multiblock machine information block.
-   *
-   * @param {MultiblockMachine} controller Machine runtime receiving the label.
    * @param {ReturnType<typeof MultiblockMachine.computeMachineStats> & { cost?: number }} data
    * Computed machine stats plus optional cost data.
-   * @param {string} [status="§aRunning"] Current machine status text.
-   * @returns {string} Newline padding string for additional label sections.
+   * @param {string} [status="\u00A7aRunning"] Current machine status text.
+   * @returns {string} Formatted machine information label text.
    */
-  static setMachineInfoLabel(controller, data, status = "§aRunning") {
-    const infoText = `§r§7Status: ${status}
+  static getMachineInfoLabel(data, status = "\u00A7aRunning") {
+    return `\u00A7r\u00A77Status: ${status}
 
-§r§eMachine Information
+\u00A7r\u00A7eMachine Information
 
-§r§aInput Capacity §fx${data.processing.amount}
-§r§aCost §f${data.cost ? EnergyStorage.formatEnergyToText(data.cost * data.processing.amount) : "---"}
-§r§aSpeed §fx${data.speed.multiplier.toFixed(2)}
-§r§aEfficiency §f${((data.processing.amount / data.energyMultiplier) * 100).toFixed(2)}%%
+\u00A7r\u00A7aInput Capacity \u00A7fx${data.processing.amount}
+\u00A7r\u00A7aCost \u00A7f${data.cost ? EnergyStorage.formatEnergyToText(data.cost * data.processing.amount) : "---"}
+\u00A7r\u00A7aSpeed \u00A7fx${data.speed.multiplier.toFixed(2)}
+\u00A7r\u00A7aEfficiency \u00A7f${((data.processing.amount / data.energyMultiplier) * 100).toFixed(2)}%%
 `;
+  }
 
-    controller.setLabel(infoText, 1);
-    return "\n".repeat(infoText.split("\n").length - 1);
+  static getEnergyInfoLabel(controller) {
+    const energy = controller.energy;
+    const rate = controller.baseRate;
+
+    return `\u00A7r\u00A7eEnergy Information
+
+\u00A7r\u00A7bCapacity \u00A7f${Math.floor(energy.getPercent())}%%
+\u00A7r\u00A7bStored \u00A7f${EnergyStorage.formatEnergyToText(energy.get())} / ${EnergyStorage.formatEnergyToText(energy.cap)}
+\u00A7r\u00A7bRate \u00A7f${EnergyStorage.formatEnergyToText(rate)}/t
+`;
   }
 }
