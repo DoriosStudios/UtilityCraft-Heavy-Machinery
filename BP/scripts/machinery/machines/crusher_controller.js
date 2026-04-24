@@ -71,87 +71,49 @@ DoriosAPI.register.blockComponent('crusher_controller', {
 
         const inv = controller.container;
         const recipes = crusherRecipes;
-
-        let recipe = null;
-        let inputType = null;
-        let totalInput = 0;
         const crusherMode = getCrusherMode(controller.entity);
+        const plan = planCrusherBatches(inv, recipes, crusherMode, data.processing.amount);
 
-        for (const slot of INPUT_SLOTS) {
-            const item = inv.getItem(slot);
-            if (!item) continue;
-
-            const r = resolveCrusherRecipe(item.typeId, crusherMode, recipes);
-            if (!r) continue;
-
-            if (!recipe) {
-                recipe = r;
-                inputType = item.typeId;
-            }
-
-            if (item.typeId === inputType) {
-                totalInput += item.amount;
-            }
-        }
-
-        if (!recipe) {
+        if (!plan.foundValidRecipe) {
             updateUI(controller, data, '\u00A7eNo Input');
             controller.setProgress(0, { slot: 2 });
             return;
         }
 
-        let availableSpace = 0;
-        for (const slot of OUTPUT_SLOTS) {
-            const out = inv.getItem(slot);
-            if (!out) {
-                availableSpace += 64;
-            } else if (out.typeId === recipe.output) {
-                availableSpace += out.maxAmount - out.amount;
-            }
-        }
-
-        const required = recipe.required ?? 1;
-        const recipeAmount = recipe.amount ?? 1;
-
-        const maxProcess = Math.min(
-            data.processing.amount,
-            Math.floor(totalInput / required),
-            Math.floor(availableSpace / recipeAmount)
-        );
-
-        if (maxProcess <= 0) {
-            updateUI(controller, data, '\u00A7eOutput Full', recipe);
+        if (plan.totalCrafts <= 0) {
+            updateUI(controller, data, '\u00A7eOutput Full', plan.displayRecipe);
             controller.setProgress(0, { slot: 2 });
             return;
         }
 
-        const cost = (recipe.cost ?? DEFAULT_COST) * MULTI_PENALTY;
+        const cost = plan.totalCost;
         data.cost = cost;
         controller.setEnergyCost(cost);
 
         const progress = controller.getProgress();
 
         if (controller.energy.get() <= 0) {
-            updateUI(controller, data, '\u00A7eNo Energy', recipe);
+            updateUI(controller, data, '\u00A7eNo Energy', plan.displayRecipe);
             controller.displayProgress({ slot: 2 });
             return;
         }
 
         if (progress >= cost) {
-            const craftCount = maxProcess;
+            if (plan.batches.length > 0) {
+                for (const batch of plan.batches) {
+                    const recipe = batch.recipe;
+                    MultiblockMachine.distributeOutput(
+                        controller,
+                        OUTPUT_SLOTS,
+                        recipe.output,
+                        batch.craftCount * (recipe.amount ?? 1)
+                    );
 
-            if (craftCount > 0) {
-                MultiblockMachine.distributeOutput(
-                    controller,
-                    OUTPUT_SLOTS,
-                    recipe.output,
-                    craftCount * recipeAmount
-                );
-
-                controller.entity.removeItem(
-                    inputType,
-                    craftCount * required
-                );
+                    controller.entity.removeItem(
+                        batch.inputType,
+                        batch.craftCount * (recipe.required ?? 1)
+                    );
+                }
 
                 controller.addProgress(-cost);
             }
@@ -169,7 +131,7 @@ DoriosAPI.register.blockComponent('crusher_controller', {
         }
 
         controller.displayProgress({ slot: 2 });
-        updateUI(controller, data, '\u00A7aRunning', recipe);
+        updateUI(controller, data, '\u00A7aRunning', plan.displayRecipe);
     }
 })
 
@@ -185,7 +147,7 @@ DoriosAPI.register.blockComponent('crusher_controller', {
 function updateUI(controller, data, status = '\u00A7aRunning', recipe) {
     controller.displayEnergy()
     controller.setLabel([
-        MultiblockMachine.getMachineInfoLabel(data, status),
+        getCrusherInfoLabel(data, status),
         MultiblockMachine.getEnergyInfoLabel(controller),
         getRecipeLabel(recipe),
         getCrusherModeLabel()
@@ -228,6 +190,18 @@ function getCrusherMode(entity) {
  */
 function setCrusherMode(entity, value) {
     return entity.setDynamicProperty("crusher_mode", value)
+}
+
+function getCrusherInfoLabel(data, status = "\u00A7aRunning") {
+    return `\u00A7r\u00A77Status: ${status}
+
+\u00A7r\u00A7eMachine Information
+
+\u00A7r\u00A7aInput Capacity \u00A7fx${data.processing.amount}
+\u00A7r\u00A7aCost \u00A7f${data.cost ? EnergyStorage.formatEnergyToText(data.cost) : "---"}
+\u00A7r\u00A7aSpeed \u00A7fx${data.speed.multiplier.toFixed(2)}
+\u00A7r\u00A7aEfficiency \u00A7f${((data.processing.amount / data.energyMultiplier) * 100).toFixed(2)}%%
+`;
 }
 
 /**
@@ -276,6 +250,135 @@ function resolveCrusherRecipe(inputType, crusherMode, recipes) {
     }
 
     return resolvedRecipe;
+}
+
+function planCrusherBatches(inv, recipes, crusherMode, maxCrafts) {
+    const inputTotals = new Map();
+    const inputOrder = [];
+
+    for (const slot of INPUT_SLOTS) {
+        const item = inv.getItem(slot);
+        if (!item) continue;
+
+        if (!inputTotals.has(item.typeId)) {
+            inputTotals.set(item.typeId, 0);
+            inputOrder.push(item.typeId);
+        }
+
+        inputTotals.set(item.typeId, inputTotals.get(item.typeId) + item.amount);
+    }
+
+    const outputState = OUTPUT_SLOTS.map(slot => {
+        const item = inv.getItem(slot);
+        return item ? {
+            typeId: item.typeId,
+            amount: item.amount,
+            maxAmount: item.maxAmount,
+        } : null;
+    });
+
+    const batches = [];
+    let totalCrafts = 0;
+    let totalCost = 0;
+    let foundValidRecipe = false;
+    let displayRecipe = null;
+    let fallbackRecipe = null;
+
+    for (const inputType of inputOrder) {
+        if (totalCrafts >= maxCrafts) break;
+
+        const recipe = resolveCrusherRecipe(inputType, crusherMode, recipes);
+        if (!recipe) continue;
+
+        foundValidRecipe = true;
+        if (!fallbackRecipe) fallbackRecipe = recipe;
+
+        const required = recipe.required ?? 1;
+        const recipeAmount = recipe.amount ?? 1;
+        const totalInput = inputTotals.get(inputType) ?? 0;
+        const remainingCrafts = maxCrafts - totalCrafts;
+        const availableCrafts = Math.min(
+            remainingCrafts,
+            Math.floor(totalInput / required)
+        );
+
+        if (availableCrafts <= 0) continue;
+
+        const craftCount = reserveCraftsInOutput(outputState, recipe.output, recipeAmount, availableCrafts);
+        if (craftCount <= 0) continue;
+
+        if (!displayRecipe) displayRecipe = recipe;
+
+        batches.push({
+            inputType,
+            recipe,
+            craftCount,
+        });
+
+        totalCrafts += craftCount;
+        totalCost = Math.max(
+            totalCost,
+            (recipe.cost ?? DEFAULT_COST) * MULTI_PENALTY
+        );
+    }
+
+    return {
+        batches,
+        totalCrafts,
+        totalCost,
+        foundValidRecipe,
+        displayRecipe: displayRecipe ?? fallbackRecipe,
+    };
+}
+
+function reserveCraftsInOutput(outputState, itemId, amountPerCraft, maxCrafts) {
+    let craftCount = 0;
+
+    for (let i = 0; i < maxCrafts; i++) {
+        const nextState = cloneOutputState(outputState);
+        if (!reserveOutputAmount(nextState, itemId, amountPerCraft)) {
+            break;
+        }
+
+        outputState.splice(0, outputState.length, ...nextState);
+        craftCount++;
+    }
+
+    return craftCount;
+}
+
+function cloneOutputState(outputState) {
+    return outputState.map(slot => slot ? { ...slot } : null);
+}
+
+function reserveOutputAmount(outputState, itemId, amount) {
+    let remaining = amount;
+
+    for (const slot of outputState) {
+        if (!slot || slot.typeId !== itemId || slot.amount >= slot.maxAmount) continue;
+
+        const add = Math.min(slot.maxAmount - slot.amount, remaining);
+        slot.amount += add;
+        remaining -= add;
+
+        if (remaining <= 0) return true;
+    }
+
+    for (let i = 0; i < outputState.length; i++) {
+        if (outputState[i]) continue;
+
+        const add = Math.min(64, remaining);
+        outputState[i] = {
+            typeId: itemId,
+            amount: add,
+            maxAmount: 64,
+        };
+        remaining -= add;
+
+        if (remaining <= 0) return true;
+    }
+
+    return remaining <= 0;
 }
 
 function getCrusherModeLabel() {
