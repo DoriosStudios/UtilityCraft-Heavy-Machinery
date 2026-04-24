@@ -75,12 +75,13 @@ DoriosAPI.register.blockComponent('crusher_controller', {
         let recipe = null;
         let inputType = null;
         let totalInput = 0;
+        const crusherMode = getCrusherMode(controller.entity);
 
         for (const slot of INPUT_SLOTS) {
             const item = inv.getItem(slot);
             if (!item) continue;
 
-            const r = recipes[item.typeId];
+            const r = resolveCrusherRecipe(item.typeId, crusherMode, recipes);
             if (!r) continue;
 
             if (!recipe) {
@@ -227,6 +228,54 @@ function getCrusherMode(entity) {
  */
 function setCrusherMode(entity, value) {
     return entity.setDynamicProperty("crusher_mode", value)
+}
+
+/**
+ * Resolves the crusher recipe chain according to the selected crusher mode.
+ *
+ * Mode 1: use the first recipe only.
+ * Mode 2-3: reuse the previous output as the next recipe input, up to the
+ * selected number of total crush steps.
+ *
+ * @param {string} inputType
+ * @param {number} crusherMode
+ * @param {Record<string, { output?: string, amount?: number, required?: number, cost?: number }>} recipes
+ */
+function resolveCrusherRecipe(inputType, crusherMode, recipes) {
+    const firstRecipe = recipes[inputType];
+    if (!firstRecipe) return null;
+
+    const maxSteps = Math.max(1, Math.min(3, crusherMode | 0));
+    const resolvedRecipe = {
+        ...firstRecipe,
+        required: firstRecipe.required ?? 1,
+        amount: firstRecipe.amount ?? 1,
+        cost: firstRecipe.cost ?? DEFAULT_COST,
+    };
+
+    let currentOutput = resolvedRecipe.output;
+    let currentAmount = resolvedRecipe.amount;
+
+    for (let step = 1; step < maxSteps; step++) {
+        if (!currentOutput) break;
+
+        const nextRecipe = recipes[currentOutput];
+        if (!nextRecipe) break;
+
+        const nextRequired = nextRecipe.required ?? 1;
+        const nextAmount = nextRecipe.amount ?? 1;
+
+        if (currentAmount < nextRequired) break;
+
+        resolvedRecipe.output = nextRecipe.output;
+        resolvedRecipe.amount = Math.floor(currentAmount / nextRequired) * nextAmount;
+        resolvedRecipe.cost += nextRecipe.cost ?? DEFAULT_COST;
+
+        currentOutput = nextRecipe.output;
+        currentAmount = resolvedRecipe.amount;
+    }
+
+    return resolvedRecipe;
 }
 
 function getCrusherModeLabel() {
