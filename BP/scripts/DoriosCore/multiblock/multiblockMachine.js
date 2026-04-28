@@ -493,7 +493,7 @@ export class MultiblockMachine extends BasicMachine {
     return `\u00A7r\u00A7eEnergy Information
 
 \u00A7r\u00A7bCapacity \u00A7f${Math.floor(energy.getPercent())}%%
-\u00A7r\u00A7bStored \u00A7f${EnergyStorage.formatEnergyToText(energy.get())} / ${EnergyStorage.formatEnergyToText(energy.cap)}
+\u00A7r\u00A7bStored \u00A7f${EnergyStorage.formatEnergyToText(energy.get())}
 \u00A7r\u00A7bRate \u00A7f${EnergyStorage.formatEnergyToText(rate)}/t
 `;
   }

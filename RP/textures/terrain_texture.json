@@ -70,6 +70,15 @@
 		"utilitycraft_nuclear_reactor_controller": {
 			"textures": "textures/blocks/multiblock/nuclear_reactor_controller"
 		},
+		"utilitycraft_rod_control": {
+			"textures": "textures/blocks/multiblock/rod_control"
+		},
+		"utilitycraft_fluid_controller": {
+			"textures": "textures/blocks/multiblock/fluid_controller"
+		},
+		"utilitycraft_fuel_assemblies": {
+			"textures": "textures/blocks/multiblock/fuel_assemblies"
+		},
 		"utilitycraft_bronze_vent_panel": {
 			"textures": "textures/blocks/multiblock/bronze/bronze_vent_panel"
 		},

@@ -92,7 +92,10 @@
                             "utilitycraft:efficiency_module",
                             "utilitycraft:speed_module",
                             "utilitycraft:heat_conductor",
-                            "utilitycraft:thermo_core"
+                            "utilitycraft:thermo_core",
+                            "utilitycraft:rod_control",
+                            "utilitycraft:fluid_controller",
+                            "utilitycraft:fuel_assemblies"
                         ]
                     },
                     {
@@ -133,10 +136,10 @@
                             "utilitycraft:tin_plated_block",
                             "utilitycraft:uranium_dust",
                             "utilitycraft:uranium_ingot",
-                            "utilitycraft:uranium_bar",
                             "utilitycraft:uranium_pellet",
-                            "utilitycraft:enriched_uranium_bar",
                             "utilitycraft:enriched_uranium_pellet",
+                            "utilitycraft:uranium_rod",
+                            "utilitycraft:enriched_uranium_rod",
                             "utilitycraft:uranium_block",
                             "utilitycraft:bronze_dust",
                             "utilitycraft:bronze_ingot",

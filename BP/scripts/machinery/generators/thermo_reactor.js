@@ -487,7 +487,7 @@ function updateReactorInfoItem(data, reactor) {
 
 §r§bProducing §f${EnergyStorage.formatEnergyToText(data.producing ?? 0)}/t
 §r§bCapacity §f${energy.getPercent().toFixed(2)}%%
-§r§bStored §f${EnergyStorage.formatEnergyToText(storedEnergy)} / ${EnergyStorage.formatEnergyToText(energyCap)}`,
+§r§bStored §f${EnergyStorage.formatEnergyToText(storedEnergy)}`,
         `
 §r§eFuel Information
 

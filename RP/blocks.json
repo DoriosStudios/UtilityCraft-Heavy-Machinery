@@ -204,6 +204,15 @@
 	"utilitycraft:nuclear_reactor_controller": {
 		"sound": "metal"
 	},
+	"utilitycraft:rod_control": {
+		"sound": "metal"
+	},
+	"utilitycraft:fluid_controller": {
+		"sound": "metal"
+	},
+	"utilitycraft:fuel_assemblies": {
+		"sound": "metal"
+	},
 	"utilitycraft:power_condenser_controller": {
 		"sound": "metal"
 	},

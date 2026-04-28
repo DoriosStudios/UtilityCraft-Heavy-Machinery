@@ -221,17 +221,17 @@
 		"utilitycraft_uranium_ingot": {
 			"textures": "textures/items/uranium_ingot"
 		},
-		"utilitycraft_uranium_bar": {
-			"textures": "textures/items/uranium_bar"
-		},
 		"utilitycraft_uranium_pellet": {
 			"textures": "textures/items/uranium_pellet"
 		},
-		"utilitycraft_enriched_uranium_bar": {
-			"textures": "textures/items/enriched_uranium_bar"
-		},
 		"utilitycraft_enriched_uranium_pellet": {
 			"textures": "textures/items/enriched_uranium_pellet"
+		},
+		"utilitycraft_uranium_rod": {
+			"textures": "textures/items/uranium_rod"
+		},
+		"utilitycraft_enriched_uranium_rod": {
+			"textures": "textures/items/enriched_uranium_rod"
 		}
 	}
 }

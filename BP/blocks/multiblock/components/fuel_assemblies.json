@@ -1,0 +1,26 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:block": {
+        "description": {
+            "identifier": "utilitycraft:fuel_assemblies",
+            "menu_category": {
+                "category": "construction"
+            }
+        },
+        "components": {
+            "minecraft:geometry": "geometry.utilitycraft_fuel_assemblies",
+            "minecraft:material_instances": {
+                "*": {
+                    "texture": "utilitycraft_fuel_assemblies",
+                    "render_method": "alpha_test"
+                }
+            },
+            "minecraft:destructible_by_mining": {
+                "seconds_to_destroy": 1
+            },
+            "minecraft:destructible_by_explosion": false,
+            "minecraft:light_emission": 15,
+            "minecraft:light_dampening": 0
+        }
+    }
+}

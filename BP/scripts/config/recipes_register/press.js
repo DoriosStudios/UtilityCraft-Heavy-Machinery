@@ -4,7 +4,7 @@ const newRecipes = {
     // Tin
     "utilitycraft:tin_ingot": { output: "utilitycraft:tin_plate", amount: 1 },
     // Uranium
-    "utilitycraft:uranium_ingot": { output: "utilitycraft:uranium_bar", amount: 1 },
+    "utilitycraft:uranium_ingot": { output: "utilitycraft:uranium_rod", amount: 1 },
     // Bronze
     "utilitycraft:bronze_ingot": { output: "utilitycraft:bronze_plate", amount: 1 },
 };

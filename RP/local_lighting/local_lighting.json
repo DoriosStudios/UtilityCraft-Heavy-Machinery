@@ -1,0 +1,9 @@
+{
+    "format_version": "1.21.120",
+    "minecraft:local_light_settings": {
+        "utilitycraft:fuel_assemblies": {
+            "light_color": [80, 255, 60],
+            "light_type": "static_light"
+        }
+    }
+}
