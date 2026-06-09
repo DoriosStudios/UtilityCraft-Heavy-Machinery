@@ -2,7 +2,7 @@
 	"$schema": "https://raw.githubusercontent.com/Bedrock-OSS/regolith-schemas/main/config/unified.json",
 	"type": "minecraftBedrock",
 	"author": "Dorios Studios",
-	"name": "UtilityCraft: Heavy Machinery",
+	"name": "UtilityCraft Heavy Machinery",
 	"namespace": "utilitycraft",
 	"authors": [
 		"Dorios Studios"
