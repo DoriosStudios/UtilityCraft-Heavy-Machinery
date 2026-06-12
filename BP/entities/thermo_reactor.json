@@ -24,6 +24,7 @@
 			},
 			"minecraft:type_family": {
 				"family": [
+					"inanimate",
 					"dorios:multiblock",
 					"dorios:energy_source"
 				]
