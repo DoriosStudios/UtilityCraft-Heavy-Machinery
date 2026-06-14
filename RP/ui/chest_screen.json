@@ -42,7 +42,7 @@
         "value": [
           {
             "requires": "($temp_container_title = 'entity.utilitycraft:incinerator_controller.name')",
-            "$screen_content": "crusher_controller.utilitycraft_panel",
+            "$screen_content": "basic_machine_controller.utilitycraft_panel",
             "$screen_bg_content": "common.screen_background"
           }
         ]
@@ -64,7 +64,7 @@
         "value": [
           {
             "requires": "($temp_container_title = 'entity.utilitycraft:electro_press_controller.name')",
-            "$screen_content": "crusher_controller.utilitycraft_panel",
+            "$screen_content": "basic_machine_controller.utilitycraft_panel",
             "$screen_bg_content": "common.screen_background"
           }
         ]

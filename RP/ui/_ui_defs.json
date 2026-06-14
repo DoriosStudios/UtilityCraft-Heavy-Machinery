@@ -4,6 +4,7 @@
         "ui/power_condenser.json",
         "ui/thermo_reactor.json",
         "ui/crusher_controller.json",
+        "ui/basic_machine_controller.json",
         "ui/infuser_controller.json",
         "ui/autosieve_controller.json",
         "ui/reaction_chamber_controller.json",
