@@ -27,17 +27,12 @@
                 }
             },
             {
-                "panel@uc.machine_side_panel": {
-                    "offset": [
-                        2,
-                        0
-                    ]
-                }
+                "panel@uc.machine_side_panel": {}
             },
             {
                 "panel@uc.machine_side_panel": {
                     "offset": [
-                        266,
+                        264,
                         0
                     ]
                 }
