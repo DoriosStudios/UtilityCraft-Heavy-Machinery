@@ -149,6 +149,135 @@
 		"utilitycraft:saline_coolant_48": {
 			"textures": "textures/ui/saline_coolant_bar/saline_coolant_48"
 		},
+		"utilitycraft:uranium_bar_00": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_00"
+		},
+		"utilitycraft:uranium_bar_01": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_01"
+		},
+		"utilitycraft:uranium_bar_02": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_02"
+		},
+		"utilitycraft:uranium_bar_03": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_03"
+		},
+		"utilitycraft:uranium_bar_04": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_04"
+		},
+		"utilitycraft:uranium_bar_05": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_05"
+		},
+		"utilitycraft:uranium_bar_06": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_06"
+		},
+		"utilitycraft:uranium_bar_07": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_07"
+		},
+		"utilitycraft:uranium_bar_08": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_08"
+		},
+		"utilitycraft:uranium_bar_09": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_09"
+		},
+		"utilitycraft:uranium_bar_10": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_10"
+		},
+		"utilitycraft:uranium_bar_11": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_11"
+		},
+		"utilitycraft:uranium_bar_12": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_12"
+		},
+		"utilitycraft:uranium_bar_13": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_13"
+		},
+		"utilitycraft:uranium_bar_14": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_14"
+		},
+		"utilitycraft:uranium_bar_15": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_15"
+		},
+		"utilitycraft:uranium_bar_16": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_16"
+		},
+		"utilitycraft:uranium_bar_17": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_17"
+		},
+		"utilitycraft:uranium_bar_18": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_18"
+		},
+		"utilitycraft:uranium_bar_19": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_19"
+		},
+		"utilitycraft:uranium_bar_20": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_20"
+		},
+		"utilitycraft:uranium_bar_21": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_21"
+		},
+		"utilitycraft:uranium_bar_22": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_22"
+		},
+		"utilitycraft:uranium_bar_23": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_23"
+		},
+		"utilitycraft:uranium_bar_24": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_24"
+		},
+		"utilitycraft:uranium_bar_25": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_25"
+		},
+		"utilitycraft:uranium_bar_26": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_26"
+		},
+		"utilitycraft:uranium_bar_27": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_27"
+		},
+		"utilitycraft:uranium_bar_28": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_28"
+		},
+		"utilitycraft:uranium_bar_29": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_29"
+		},
+		"utilitycraft:uranium_bar_30": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_30"
+		},
+		"utilitycraft:uranium_bar_31": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_31"
+		},
+		"utilitycraft:uranium_bar_32": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_32"
+		},
+		"utilitycraft:uranium_bar_33": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_33"
+		},
+		"utilitycraft:uranium_bar_34": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_34"
+		},
+		"utilitycraft:uranium_bar_35": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_35"
+		},
+		"utilitycraft:uranium_bar_36": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_36"
+		},
+		"utilitycraft:uranium_bar_37": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_37"
+		},
+		"utilitycraft:uranium_bar_38": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_38"
+		},
+		"utilitycraft:uranium_bar_39": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_39"
+		},
+		"utilitycraft:uranium_bar_40": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_40"
+		},
+		"utilitycraft:uranium_bar_41": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_41"
+		},
+		"utilitycraft:uranium_bar_42": {
+			"textures": "textures/ui/uranium_bar/uranium_bar_42"
+		},
 		"utilitycraft_bronze_ingot": {
 			"textures": "textures/items/bronze_ingot"
 		},
