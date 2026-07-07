@@ -1,5 +1,8 @@
 import { world, ItemStack, system } from "@minecraft/server";
 import * as Constants from "./constants.js";
+import { OutputTracker } from "./outputTracker.js";
+
+const OPEN_UI_PLAYERS_PROPERTY_ID = "utilitycraft:players";
 
 /** @type {ScoreboardObjective} */
 let maxLiquidsData;
@@ -30,6 +33,7 @@ export class FluidStorage {
     this.entity = entity;
     this.index = index;
     this.scoreId = entity?.scoreboardIdentity;
+    this.shouldUpdateUI = FluidStorage.hasOpenUI(entity);
 
     this.scores = {
       fluid: objectives.get(`fluid_${index}`),
@@ -48,7 +52,7 @@ export class FluidStorage {
   /**
    * Checks whether this entity should preserve its fluid type tags while empty.
    *
-   * @returns {boolean}
+   * @returns {boolean} True when the entity has the constant fluid type tag.
    */
   hasFixedFluidType() {
     return this.entity.hasTag(Constants.CONSTANT_FLUID_TYPE_TAG);
@@ -69,11 +73,26 @@ export class FluidStorage {
   }
 
   /**
+   * Returns whether at least one player currently has this entity container UI open.
+   *
+   * @param {Entity} entity The entity to inspect.
+   * @returns {boolean} Whether the UI is currently open.
+   */
+  static hasOpenUI(entity) {
+    try {
+      const count = Number(entity?.getProperty?.(OPEN_UI_PLAYERS_PROPERTY_ID) ?? 0);
+      return count > 0;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
    * Initializes multiple fluid tanks for an entity and updates maxLiquids.
    *
-   * @param {Entity} entity Machine entity
-   * @param {number} count Amount of supported fluids
-   * @returns {FluidStorage[]} Array of FluidStorage instances
+   * @param {Entity} entity Machine entity.
+   * @param {number} count Amount of supported fluids.
+   * @returns {FluidStorage[]} Array of FluidStorage instances.
    */
   static initializeMultiple(entity, count) {
     // Set scoreboard maxLiquids for this entity
@@ -333,6 +352,67 @@ export class FluidStorage {
     return this.itemFluidStorages[id] ?? null;
   }
 
+  /**
+   * Returns the currently selected inventory stack for a player.
+   *
+   * @param {Player} player
+   * @returns {{ slot: number, inventory: Container, item: ItemStack | undefined } | null}
+   */
+  static getSelectedInventoryItem(player) {
+    if (!player) return null;
+
+    const slot = player.selectedSlotIndex ?? 0;
+    const inventory = player.getComponent("minecraft:inventory")?.container;
+    if (!inventory) return null;
+
+    return {
+      slot,
+      inventory,
+      item: inventory.getItem(slot)
+    };
+  }
+
+  /**
+   * Replaces or preserves the held fluid item after a fluid interaction.
+   *
+   * This is safer than decrement + give because it keeps the selected slot stable,
+   * works with stacks, and avoids losing items when the result item equals the input.
+   *
+   * @param {Player} player
+   * @param {string} expectedTypeId
+   * @param {string | undefined} nextTypeId
+   * @returns {boolean}
+   */
+  static replaceHeldFluidItem(player, expectedTypeId, nextTypeId) {
+    if (!player || !expectedTypeId) return false;
+    if (typeof player.isInCreative === "function" && player.isInCreative()) return true;
+    if (expectedTypeId === nextTypeId) return true;
+
+    const selected = FluidStorage.getSelectedInventoryItem(player);
+    if (!selected) return false;
+
+    const { slot, inventory } = selected;
+    const current = inventory.getItem(slot);
+    if (!current || current.typeId !== expectedTypeId) return false;
+
+    if (current.amount > 1) {
+      current.amount -= 1;
+      inventory.setItem(slot, current);
+
+      if (!nextTypeId) return true;
+
+      const overflow = inventory.addItem(new ItemStack(nextTypeId, 1));
+      if (overflow) {
+        player.dimension?.spawnItem?.(overflow, player.location);
+      }
+
+      return true;
+    }
+
+    inventory.setItem(slot, nextTypeId ? new ItemStack(nextTypeId, 1) : undefined);
+    return true;
+  }
+
   // --------------------------------------------------------------------------
   // Core operations
   // --------------------------------------------------------------------------
@@ -421,7 +501,9 @@ export class FluidStorage {
       const tank = new FluidStorage(entity, i);
       const tankType = tank.getType();
 
-      if (tankType === type && tank.getFreeSpace() > 0) return tank;
+      // If this type already exists in any slot, keep using that slot
+      // even when it is full so the entity never duplicates a fluid type.
+      if (tankType === type) return tank;
       if (!emptyTank && tankType === Constants.EMPTY_FLUID_TYPE && tank.getFreeSpace() > 0) {
         emptyTank = tank;
       }
@@ -461,8 +543,7 @@ export class FluidStorage {
     );
 
     if (!player.isInCreative()) {
-      player.changeItemAmount(player.selectedSlotIndex, -1);
-      if (insert) player.giveItem(insert);
+      FluidStorage.replaceHeldFluidItem(player, mainHand.typeId, insert || undefined);
     }
   }
 
@@ -507,7 +588,19 @@ export class FluidStorage {
     // 1. INSERTION: item adds fluid into tank
     const insertData = FluidStorage.itemFluidStorages[typeId];
     if (insertData) {
-      const { type, amount, output } = insertData;
+      const { type, amount, output, infinite } = insertData;
+
+      if (infinite === true) {
+        const currentType = this.getType();
+        if (currentType !== Constants.EMPTY_FLUID_TYPE && currentType !== type) return false;
+
+        const freeSpace = this.getFreeSpace();
+        if (freeSpace <= 0) return false;
+
+        if (currentType === Constants.EMPTY_FLUID_TYPE) this.setType(type);
+        this.add(freeSpace);
+        return output ?? typeId;
+      }
 
       if (!this.tryInsert(type, amount)) return false;
 
@@ -808,48 +901,33 @@ export class FluidStorage {
   }
 
   /**
-   * Transfers fluid from this tank or machine toward the opposite
-   * direction of its facing axis (`utilitycraft:axis`).
+   * Transfers fluid to this machine's cached fluid output target.
    *
    * ## Behavior
-   * - Reads `utilitycraft:axis` from the source block.
+   * - Reads the cached target from {@link OutputTracker}.
    * - Determines the **opposite direction vector** (e.g. east → west).
-   * - Locates the target block in that opposite direction.
-   * - If the target has the tag `"dorios:fluid"`, tries to transfer fluid to it.
+   * - Refreshes the target once from the block axis when no cache exists.
+   * - Clears stale targets when they no longer support fluid storage.
    * - If the target is a fluid tank with no entity, one is spawned empty first.
    * - Uses {@link FluidStorage.transferTo} to handle transfer and visual updates.
    *
    * @param {Block} block The source block associated with this fluid entity.
    * @param {number} [amount=100] Maximum amount to transfer (in mB).
-   * @returns {boolean} True if a valid transfer occurred, false otherwise.
+   * @returns {boolean} True if fluid was transferred.
    */
   transferFluids(block, amount = 100) {
     if (!block || !this.entity?.isValid) return false;
+    if (this.get() <= 0 || this.getType() === Constants.EMPTY_FLUID_TYPE) return false;
 
-    const facing = block.getState("utilitycraft:axis");
-    if (!facing) return false;
+    const targetLoc = OutputTracker.getOutputTarget(this.entity, "fluid") ?? OutputTracker.refreshOutput(block, "fluid");
+    if (!targetLoc) return false;
 
-    // Opposite direction vectors
-    const opposites = {
-      east: [-1, 0, 0],
-      west: [1, 0, 0],
-      north: [0, 0, 1],
-      south: [0, 0, -1],
-      up: [0, -1, 0],
-      down: [0, 1, 0],
-    };
-
-    const offset = opposites[facing];
-    if (!offset) return false;
-
-    const { x, y, z } = block.location;
-    const targetLoc = { x: x + offset[0], y: y + offset[1], z: z + offset[2] };
     const dim = block.dimension;
     const targetBlock = dim.getBlock(targetLoc);
-    if (!targetBlock) return false;
-
-    // Only proceed if the target block supports fluids
-    if (!targetBlock.hasTag("dorios:fluid") || targetBlock.hasTag("dorios:isTube")) return false;
+    if (!OutputTracker.isOutputTarget(targetBlock, "fluid")) {
+      OutputTracker.clearOutputTarget(this.entity, "fluid");
+      return false;
+    }
 
     let targetEntity = dim.getEntitiesAtBlockLocation(targetLoc)[0];
 
@@ -861,10 +939,16 @@ export class FluidStorage {
       targetEntity = dim.getEntitiesAtBlockLocation(targetLoc)[0];
     }
 
-    if (!targetEntity) return false;
+    if (!targetEntity) {
+      OutputTracker.clearOutputTarget(this.entity, "fluid");
+      return false;
+    }
 
     const targetFluid = new FluidStorage(targetEntity, 0);
-    if (!targetFluid || targetFluid.getCap() <= 0) return false;
+    if (!targetFluid || targetFluid.getCap() <= 0) {
+      OutputTracker.clearOutputTarget(this.entity, "fluid");
+      return false;
+    }
 
     const transferred = this.transferTo(targetFluid, amount);
     return transferred > 0;
@@ -914,6 +998,8 @@ export class FluidStorage {
    * @returns {void}
    */
   display(slot = Constants.DEFAULT_FLUID_DISPLAY_SLOT) {
+    if (!this.shouldUpdateUI) return;
+
     const inv = this.entity.getComponent("minecraft:inventory")?.container;
     if (!inv) return;
 
@@ -951,8 +1037,8 @@ export class FluidStorage {
    * @param {Block} block The block representing the tank.
    * @param {string} type The type of fluid to insert.
    * @param {number} amount Amount of fluid to insert in mB.
-   * @returns {Entity} entity if insertion was successful.
-   */
+   * @returns {Entity | undefined} The tank entity if insertion was successful.
+  */
   static addfluidToTank(block, type, amount) {
     const dim = block.dimension;
     const pos = block.location;
