@@ -1,304 +1,273 @@
 ﻿{
-    "namespace":  "uc",
-    "hm_brute_bronze_input_animation":  {
-                                            "anim_type":  "flip_book",
-                                            "frame_count":  2,
-                                            "frame_step":  0,
-                                            "fps":  1,
-                                            "easing":  "linear",
-                                            "initial_uv":  [
-                                                               0,
-                                                               0
-                                                           ]
-                                        },
-    "infuser_recipes_buttons/addon_recipe_rows":  {
-                                                      "modifications":  [
-                                                                            {
-                                                                                "array_name":  "controls",
-                                                                                "operation":  "insert_back",
-                                                                                "value":  [
-                                                                                              {
-                                                                                                  "heavy_machinery_recipe_rows@uc.hm_infuser_recipe_rows":  {
-
-                                                                                                                                                            }
-                                                                                              }
-                                                                                          ]
-                                                                            }
-                                                                        ]
-                                                  },
-    "infuser_recipes_panel/recipes_panel/addon_recipe_panels":  {
-                                                                    "modifications":  [
-                                                                                          {
-                                                                                              "array_name":  "controls",
-                                                                                              "operation":  "insert_back",
-                                                                                              "value":  [
-                                                                                                            {
-                                                                                                                "heavy_machinery_recipe_panels@uc.hm_infuser_recipe_panels":  {
-
-                                                                                                                                                                              }
-                                                                                                            }
-                                                                                                        ]
-                                                                                          }
-                                                                                      ]
-                                                                },
-    "hm_infuser_recipe_rows":  {
-                                   "type":  "stack_panel",
-                                   "size":  [
-                                                126,
-                                                "100%c"
-                                            ],
-                                   "orientation":  "vertical",
-                                   "controls":  [
-                                                    {
-                                                        "heavy_machinery_separator@uc.addon_recipe_separator":  {
-                                                                                                                    "$separator_label":  "Heavy Machinery"
-                                                                                                                }
-                                                    },
-                                                    {
-                                                        "heavy_machinery_recipe_row_0":  {
-                                                                                             "type":  "panel",
-                                                                                             "size":  [
-                                                                                                          126,
-                                                                                                          18
-                                                                                                      ],
-                                                                                             "controls":  [
-                                                                                                              {
-                                                                                                                  "hm_brute_bronze_toggle@uc.infuser_recipe_toggle":  {
-                                                                                                                                                                          "anchor_from":  "top_left",
-                                                                                                                                                                          "anchor_to":  "top_left",
-                                                                                                                                                                          "$toggle_index":  2000,
-                                                                                                                                                                          "$toggle_hover_text":  "item.utilitycraft:brute_bronze",
-                                                                                                                                                                          "$toggle_control_name":  "hm_brute_bronze_recipe",
-                                                                                                                                                                          "$recipe_icon":  "textures/items/brute_bronze",
-                                                                                                                                                                          "offset":  [
-                                                                                                                                                                                         0,
-                                                                                                                                                                                         0
-                                                                                                                                                                                     ]
-                                                                                                                                                                      }
-                                                                                                              },
-                                                                                                              {
-                                                                                                                  "hm_darloonite_crystal_toggle@uc.infuser_recipe_toggle":  {
-                                                                                                                                                                                "anchor_from":  "top_left",
-                                                                                                                                                                                "anchor_to":  "top_left",
-                                                                                                                                                                                "$toggle_index":  2001,
-                                                                                                                                                                                "$toggle_hover_text":  "item.utilitycraft:darloonite_crystal",
-                                                                                                                                                                                "$toggle_control_name":  "hm_darloonite_crystal_recipe",
-                                                                                                                                                                                "$recipe_icon":  "textures/items/darloonite_crystal",
-                                                                                                                                                                                "offset":  [
-                                                                                                                                                                                               18,
-                                                                                                                                                                                               0
-                                                                                                                                                                                           ]
-                                                                                                                                                                            }
-                                                                                                              },
-                                                                                                              {
-                                                                                                                  "hm_charged_darloonite_crystal_toggle@uc.infuser_recipe_toggle":  {
-                                                                                                                                                                                        "anchor_from":  "top_left",
-                                                                                                                                                                                        "anchor_to":  "top_left",
-                                                                                                                                                                                        "$toggle_index":  2002,
-                                                                                                                                                                                        "$toggle_hover_text":  "item.utilitycraft:charged_darloonite_crystal",
-                                                                                                                                                                                        "$toggle_control_name":  "hm_charged_darloonite_crystal_recipe",
-                                                                                                                                                                                        "$recipe_icon":  "textures/items/charged_darloonite_crystal",
-                                                                                                                                                                                        "offset":  [
-                                                                                                                                                                                                       36,
-                                                                                                                                                                                                       0
-                                                                                                                                                                                                   ]
-                                                                                                                                                                                    }
-                                                                                                              },
-                                                                                                              {
-                                                                                                                  "hm_tempered_bronze_glass_toggle@uc.infuser_recipe_toggle":  {
-                                                                                                                                                                                   "anchor_from":  "top_left",
-                                                                                                                                                                                   "anchor_to":  "top_left",
-                                                                                                                                                                                   "$toggle_index":  2003,
-                                                                                                                                                                                   "$toggle_hover_text":  "tile.utilitycraft:tempered_bronze_glass.name",
-                                                                                                                                                                                   "$toggle_control_name":  "hm_tempered_bronze_glass_recipe",
-                                                                                                                                                                                   "$recipe_icon":  "textures/blocks/multiblock/bronze/tempered_bronze_glass",
-                                                                                                                                                                                   "offset":  [
-                                                                                                                                                                                                  54,
-                                                                                                                                                                                                  0
-                                                                                                                                                                                              ]
-                                                                                                                                                                               }
-                                                                                                              },
-                                                                                                              {
-                                                                                                                  "hm_tempered_steel_glass_toggle@uc.infuser_recipe_toggle":  {
-                                                                                                                                                                                  "anchor_from":  "top_left",
-                                                                                                                                                                                  "anchor_to":  "top_left",
-                                                                                                                                                                                  "$toggle_index":  2004,
-                                                                                                                                                                                  "$toggle_hover_text":  "tile.utilitycraft:tempered_steel_glass.name",
-                                                                                                                                                                                  "$toggle_control_name":  "hm_tempered_steel_glass_recipe",
-                                                                                                                                                                                  "$recipe_icon":  "textures/blocks/multiblock/steel/tempered_steel_glass",
-                                                                                                                                                                                  "offset":  [
-                                                                                                                                                                                                 72,
-                                                                                                                                                                                                 0
-                                                                                                                                                                                             ]
-                                                                                                                                                                              }
-                                                                                                              }
-                                                                                                          ]
-                                                                                         }
-                                                    }
-                                                ]
-                               },
-    "hm_infuser_recipe_panels":  {
-                                     "type":  "panel",
-                                     "anchor_from":  "center",
-                                     "anchor_to":  "center",
-                                     "size":  [
-                                                  80,
-                                                  108
-                                              ],
-                                     "controls":  [
-                                                      {
-                                                          "hm_brute_bronze_panel@uc.recipe_panel":  {
-                                                                                                        "$recipe_control_name":  "hm_brute_bronze_recipe",
-                                                                                                        "controls":  [
-                                                                                                                         {
-                                                                                                                             "catalyst@uc.infuser_recipe_catalyst":  {
-                                                                                                                                                                         "$slot_item_texture":  "textures/items/raw_tin_dust",
-                                                                                                                                                                         "$slot_hover_text":  "item.utilitycraft:tin_dust",
-                                                                                                                                                                         "$has_slot_hover":  true,
-                                                                                                                                                                         "$slot_count_text":  "5",
-                                                                                                                                                                         "$has_slot_count":  true
-                                                                                                                                                                     }
-                                                                                                                         },
-                                                                                                                         {
-                                                                                                                             "input@uc.infuser_recipe_input":  {
-                                                                                                                                                                   "$has_slot_item":  false,
-                                                                                                                                                                   "$has_slot_flipbook":  true,
-                                                                                                                                                                   "$slot_item_flipbook_texture":  "textures/ui/recipes/brute_bronze_input_flipbook",
-                                                                                                                                                                   "$slot_hover_text":  "item.copper_ingot.name",
-                                                                                                                                                                   "$has_slot_hover":  true,
-                                                                                                                                                                   "$slot_count_text":  "2",
-                                                                                                                                                                   "$has_slot_count":  true,
-                                                                                                                                                                   "$slot_item_flipbook_uv":  "@uc.hm_brute_bronze_input_animation"
-                                                                                                                                                               }
-                                                                                                                         },
-                                                                                                                         {
-                                                                                                                             "output@uc.infuser_recipe_output":  {
-                                                                                                                                                                     "$slot_item_texture":  "textures/items/brute_bronze",
-                                                                                                                                                                     "$slot_hover_text":  "item.utilitycraft:brute_bronze",
-                                                                                                                                                                     "$has_slot_hover":  true
-                                                                                                                                                                 }
-                                                                                                                         }
-                                                                                                                     ]
-                                                                                                    }
-                                                      },
-                                                      {
-                                                          "hm_darloonite_crystal_panel@uc.recipe_panel":  {
-                                                                                                              "$recipe_control_name":  "hm_darloonite_crystal_recipe",
-                                                                                                              "controls":  [
-                                                                                                                               {
-                                                                                                                                   "catalyst@uc.infuser_recipe_catalyst":  {
-                                                                                                                                                                               "$slot_item_texture":  "textures/items/echo_shard",
-                                                                                                                                                                               "$slot_hover_text":  "item.echo_shard.name",
-                                                                                                                                                                               "$has_slot_hover":  true
-                                                                                                                                                                           }
-                                                                                                                               },
-                                                                                                                               {
-                                                                                                                                   "input@uc.infuser_recipe_input":  {
-                                                                                                                                                                         "$slot_item_texture":  "textures/items/amethyst_shard",
-                                                                                                                                                                         "$slot_hover_text":  "item.amethyst_shard.name",
-                                                                                                                                                                         "$has_slot_hover":  true
-                                                                                                                                                                     }
-                                                                                                                               },
-                                                                                                                               {
-                                                                                                                                   "output@uc.infuser_recipe_output":  {
-                                                                                                                                                                           "$slot_item_texture":  "textures/items/darloonite_crystal",
-                                                                                                                                                                           "$slot_hover_text":  "item.utilitycraft:darloonite_crystal",
-                                                                                                                                                                           "$has_slot_hover":  true
-                                                                                                                                                                       }
-                                                                                                                               }
-                                                                                                                           ]
-                                                                                                          }
-                                                      },
-                                                      {
-                                                          "hm_charged_darloonite_crystal_panel@uc.recipe_panel":  {
-                                                                                                                      "$recipe_control_name":  "hm_charged_darloonite_crystal_recipe",
-                                                                                                                      "controls":  [
-                                                                                                                                       {
-                                                                                                                                           "catalyst@uc.infuser_recipe_catalyst":  {
-                                                                                                                                                                                       "$slot_item_texture":  "textures/items/dusts/diamond_dust",
-                                                                                                                                                                                       "$slot_hover_text":  "item.utilitycraft:diamond_dust",
-                                                                                                                                                                                       "$has_slot_hover":  true,
-                                                                                                                                                                                       "$slot_count_text":  "8",
-                                                                                                                                                                                       "$has_slot_count":  true
-                                                                                                                                                                                   }
-                                                                                                                                       },
-                                                                                                                                       {
-                                                                                                                                           "input@uc.infuser_recipe_input":  {
-                                                                                                                                                                                 "$slot_item_texture":  "textures/items/darloonite_crystal",
-                                                                                                                                                                                 "$slot_hover_text":  "item.utilitycraft:darloonite_crystal",
-                                                                                                                                                                                 "$has_slot_hover":  true
-                                                                                                                                                                             }
-                                                                                                                                       },
-                                                                                                                                       {
-                                                                                                                                           "output@uc.infuser_recipe_output":  {
-                                                                                                                                                                                   "$slot_item_texture":  "textures/items/charged_darloonite_crystal",
-                                                                                                                                                                                   "$slot_hover_text":  "item.utilitycraft:charged_darloonite_crystal",
-                                                                                                                                                                                   "$has_slot_hover":  true
-                                                                                                                                                                               }
-                                                                                                                                       }
-                                                                                                                                   ]
-                                                                                                                  }
-                                                      },
-                                                      {
-                                                          "hm_tempered_bronze_glass_panel@uc.recipe_panel":  {
-                                                                                                                 "$recipe_control_name":  "hm_tempered_bronze_glass_recipe",
-                                                                                                                 "controls":  [
-                                                                                                                                  {
-                                                                                                                                      "catalyst@uc.infuser_recipe_catalyst":  {
-                                                                                                                                                                                  "$slot_item_texture":  "textures/items/bronze_dust",
-                                                                                                                                                                                  "$slot_hover_text":  "item.utilitycraft:bronze_dust",
-                                                                                                                                                                                  "$has_slot_hover":  true,
-                                                                                                                                                                                  "$slot_count_text":  "8",
-                                                                                                                                                                                  "$has_slot_count":  true
-                                                                                                                                                                              }
-                                                                                                                                  },
-                                                                                                                                  {
-                                                                                                                                      "input@uc.infuser_recipe_input":  {
-                                                                                                                                                                            "$slot_item_texture":  "textures/blocks/glass",
-                                                                                                                                                                            "$slot_hover_text":  "tile.glass.name",
-                                                                                                                                                                            "$has_slot_hover":  true
-                                                                                                                                                                        }
-                                                                                                                                  },
-                                                                                                                                  {
-                                                                                                                                      "output@uc.infuser_recipe_output":  {
-                                                                                                                                                                              "$slot_item_texture":  "textures/blocks/multiblock/bronze/tempered_bronze_glass",
-                                                                                                                                                                              "$slot_hover_text":  "tile.utilitycraft:tempered_bronze_glass.name",
-                                                                                                                                                                              "$has_slot_hover":  true
-                                                                                                                                                                          }
-                                                                                                                                  }
-                                                                                                                              ]
-                                                                                                             }
-                                                      },
-                                                      {
-                                                          "hm_tempered_steel_glass_panel@uc.recipe_panel":  {
-                                                                                                                "$recipe_control_name":  "hm_tempered_steel_glass_recipe",
-                                                                                                                "controls":  [
-                                                                                                                                 {
-                                                                                                                                     "catalyst@uc.infuser_recipe_catalyst":  {
-                                                                                                                                                                                 "$slot_item_texture":  "textures/items/dusts/steel_dust",
-                                                                                                                                                                                 "$slot_hover_text":  "item.utilitycraft:steel_dust",
-                                                                                                                                                                                 "$has_slot_hover":  true,
-                                                                                                                                                                                 "$slot_count_text":  "8",
-                                                                                                                                                                                 "$has_slot_count":  true
-                                                                                                                                                                             }
-                                                                                                                                 },
-                                                                                                                                 {
-                                                                                                                                     "input@uc.infuser_recipe_input":  {
-                                                                                                                                                                           "$slot_item_texture":  "textures/blocks/glass",
-                                                                                                                                                                           "$slot_hover_text":  "tile.glass.name",
-                                                                                                                                                                           "$has_slot_hover":  true
-                                                                                                                                                                       }
-                                                                                                                                 },
-                                                                                                                                 {
-                                                                                                                                     "output@uc.infuser_recipe_output":  {
-                                                                                                                                                                             "$slot_item_texture":  "textures/blocks/multiblock/steel/tempered_steel_glass",
-                                                                                                                                                                             "$slot_hover_text":  "tile.utilitycraft:tempered_steel_glass.name",
-                                                                                                                                                                             "$has_slot_hover":  true
-                                                                                                                                                                         }
-                                                                                                                                 }
-                                                                                                                             ]
-                                                                                                            }
-                                                      }
-                                                  ]
-                                 }
+  "namespace": "uc",
+  "hm_brute_bronze_input_animation": {
+    "anim_type": "flip_book",
+    "frame_count": 2,
+    "frame_step": 0,
+    "fps": 1,
+    "easing": "linear",
+    "initial_uv": [0, 0]
+  },
+  "infuser_recipes_buttons/addon_recipe_rows": {
+    "modifications": [
+      {
+        "array_name": "controls",
+        "operation": "insert_back",
+        "value": [
+          {
+            "heavy_machinery_recipe_rows@uc.hm_infuser_recipe_rows": {}
+          }
+        ]
+      }
+    ]
+  },
+  "infuser_recipes_panel/recipes_panel/addon_recipe_panels": {
+    "modifications": [
+      {
+        "array_name": "controls",
+        "operation": "insert_back",
+        "value": [
+          {
+            "heavy_machinery_recipe_panels@uc.hm_infuser_recipe_panels": {}
+          }
+        ]
+      }
+    ]
+  },
+  "hm_infuser_recipe_rows": {
+    "type": "stack_panel",
+    "size": [126, "100%c"],
+    "orientation": "vertical",
+    "controls": [
+      {
+        "heavy_machinery_separator@uc.addon_recipe_separator": {
+          "$separator_label": "Heavy Machinery"
+        }
+      },
+      {
+        "heavy_machinery_recipe_row_0": {
+          "type": "panel",
+          "size": [126, 18],
+          "controls": [
+            {
+              "hm_brute_bronze_toggle@uc.infuser_recipe_toggle": {
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "$toggle_index": 2000,
+                "$toggle_hover_text": "item.utilitycraft:brute_bronze",
+                "$toggle_control_name": "hm_brute_bronze_recipe",
+                "$recipe_icon": "textures/items/brute_bronze",
+                "offset": [0, 0]
+              }
+            },
+            {
+              "hm_darloonite_crystal_toggle@uc.infuser_recipe_toggle": {
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "$toggle_index": 2001,
+                "$toggle_hover_text": "item.utilitycraft:darloonite_crystal",
+                "$toggle_control_name": "hm_darloonite_crystal_recipe",
+                "$recipe_icon": "textures/items/darloonite_crystal",
+                "offset": [18, 0]
+              }
+            },
+            {
+              "hm_charged_darloonite_crystal_toggle@uc.infuser_recipe_toggle": {
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "$toggle_index": 2002,
+                "$toggle_hover_text": "item.utilitycraft:charged_darloonite_crystal",
+                "$toggle_control_name": "hm_charged_darloonite_crystal_recipe",
+                "$recipe_icon": "textures/items/charged_darloonite_crystal",
+                "offset": [36, 0]
+              }
+            },
+            {
+              "hm_tempered_bronze_glass_toggle@uc.infuser_recipe_toggle": {
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "$toggle_index": 2003,
+                "$toggle_hover_text": "tile.utilitycraft:tempered_bronze_glass.name",
+                "$toggle_control_name": "hm_tempered_bronze_glass_recipe",
+                "$recipe_icon": "textures/blocks/multiblock/bronze/tempered_bronze_glass",
+                "offset": [54, 0]
+              }
+            },
+            {
+              "hm_tempered_steel_glass_toggle@uc.infuser_recipe_toggle": {
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "$toggle_index": 2004,
+                "$toggle_hover_text": "tile.utilitycraft:tempered_steel_glass.name",
+                "$toggle_control_name": "hm_tempered_steel_glass_recipe",
+                "$recipe_icon": "textures/blocks/multiblock/steel/tempered_steel_glass",
+                "offset": [72, 0]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "hm_infuser_recipe_panels": {
+    "type": "panel",
+    "anchor_from": "center",
+    "anchor_to": "center",
+    "size": [80, 108],
+    "controls": [
+      {
+        "hm_brute_bronze_panel@uc.recipe_panel": {
+          "$recipe_control_name": "hm_brute_bronze_recipe",
+          "controls": [
+            {
+              "catalyst@uc.infuser_recipe_catalyst": {
+                "$slot_item_texture": "textures/items/raw_tin_dust",
+                "$slot_hover_text": "item.utilitycraft:tin_dust",
+                "$has_slot_hover": true,
+                "$slot_count_text": "5",
+                "$has_slot_count": true
+              }
+            },
+            {
+              "input@uc.infuser_recipe_input": {
+                "$has_slot_item": false,
+                "$has_slot_flipbook": true,
+                "$slot_item_flipbook_texture": "textures/ui/recipes/brute_bronze_input_flipbook",
+                "$slot_hover_text": "item.copper_ingot.name",
+                "$has_slot_hover": true,
+                "$slot_count_text": "2",
+                "$has_slot_count": true,
+                "$slot_item_flipbook_uv": "@uc.hm_brute_bronze_input_animation"
+              }
+            },
+            {
+              "output@uc.infuser_recipe_output": {
+                "$slot_item_texture": "textures/items/brute_bronze",
+                "$slot_hover_text": "item.utilitycraft:brute_bronze",
+                "$has_slot_hover": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "hm_darloonite_crystal_panel@uc.recipe_panel": {
+          "$recipe_control_name": "hm_darloonite_crystal_recipe",
+          "controls": [
+            {
+              "catalyst@uc.infuser_recipe_catalyst": {
+                "$slot_item_texture": "textures/items/echo_shard",
+                "$slot_hover_text": "item.echo_shard.name",
+                "$has_slot_hover": true
+              }
+            },
+            {
+              "input@uc.infuser_recipe_input": {
+                "$slot_item_texture": "textures/items/amethyst_shard",
+                "$slot_hover_text": "item.amethyst_shard.name",
+                "$has_slot_hover": true
+              }
+            },
+            {
+              "output@uc.infuser_recipe_output": {
+                "$slot_item_texture": "textures/items/darloonite_crystal",
+                "$slot_hover_text": "item.utilitycraft:darloonite_crystal",
+                "$has_slot_hover": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "hm_charged_darloonite_crystal_panel@uc.recipe_panel": {
+          "$recipe_control_name": "hm_charged_darloonite_crystal_recipe",
+          "controls": [
+            {
+              "catalyst@uc.infuser_recipe_catalyst": {
+                "$slot_item_texture": "textures/items/dusts/diamond_dust",
+                "$slot_hover_text": "item.utilitycraft:diamond_dust",
+                "$has_slot_hover": true,
+                "$slot_count_text": "8",
+                "$has_slot_count": true
+              }
+            },
+            {
+              "input@uc.infuser_recipe_input": {
+                "$slot_item_texture": "textures/items/darloonite_crystal",
+                "$slot_hover_text": "item.utilitycraft:darloonite_crystal",
+                "$has_slot_hover": true
+              }
+            },
+            {
+              "output@uc.infuser_recipe_output": {
+                "$slot_item_texture": "textures/items/charged_darloonite_crystal",
+                "$slot_hover_text": "item.utilitycraft:charged_darloonite_crystal",
+                "$has_slot_hover": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "hm_tempered_bronze_glass_panel@uc.recipe_panel": {
+          "$recipe_control_name": "hm_tempered_bronze_glass_recipe",
+          "controls": [
+            {
+              "catalyst@uc.infuser_recipe_catalyst": {
+                "$slot_item_texture": "textures/items/bronze_dust",
+                "$slot_hover_text": "item.utilitycraft:bronze_dust",
+                "$has_slot_hover": true,
+                "$slot_count_text": "8",
+                "$has_slot_count": true
+              }
+            },
+            {
+              "input@uc.infuser_recipe_input": {
+                "$slot_item_texture": "textures/blocks/glass",
+                "$slot_hover_text": "tile.glass.name",
+                "$has_slot_hover": true
+              }
+            },
+            {
+              "output@uc.infuser_recipe_output": {
+                "$slot_item_texture": "textures/blocks/multiblock/bronze/tempered_bronze_glass",
+                "$slot_hover_text": "tile.utilitycraft:tempered_bronze_glass.name",
+                "$has_slot_hover": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "hm_tempered_steel_glass_panel@uc.recipe_panel": {
+          "$recipe_control_name": "hm_tempered_steel_glass_recipe",
+          "controls": [
+            {
+              "catalyst@uc.infuser_recipe_catalyst": {
+                "$slot_item_texture": "textures/items/dusts/steel_dust",
+                "$slot_hover_text": "item.utilitycraft:steel_dust",
+                "$has_slot_hover": true,
+                "$slot_count_text": "8",
+                "$has_slot_count": true
+              }
+            },
+            {
+              "input@uc.infuser_recipe_input": {
+                "$slot_item_texture": "textures/blocks/glass",
+                "$slot_hover_text": "tile.glass.name",
+                "$has_slot_hover": true
+              }
+            },
+            {
+              "output@uc.infuser_recipe_output": {
+                "$slot_item_texture": "textures/blocks/multiblock/steel/tempered_steel_glass",
+                "$slot_hover_text": "tile.utilitycraft:tempered_steel_glass.name",
+                "$has_slot_hover": true
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
 }
