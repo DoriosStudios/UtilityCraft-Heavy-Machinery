@@ -1,4 +1,5 @@
 import { EnergyStorage, Multiblock, MultiblockMachine } from "DoriosCore/index.js"
+import * as DoriosLib from "DoriosLib/index.js";
 import { furnaceRecipes } from 'config/recipes/furnace.js'
 
 const INPUT_SLOTS = [3, 4, 5, 6, 7, 8, 9, 10, 11]
@@ -32,11 +33,11 @@ const MULTIBLOCK_CONFIG = {
     requirements: CONTROLLER_REQUIREMENTS,
 }
 
-DoriosAPI.register.blockComponent('incinerator_controller', {
+DoriosLib.registry.blockComponent('utilitycraft:incinerator_controller', {
     onPlayerInteract(e) {
         return MultiblockMachine.handlePlayerInteract(e, MULTIBLOCK_CONFIG, {
             initializeEntity(entity) {
-                entity.setItem(2, 'utilitycraft:arrow_right_0', 1, ' ')
+                DoriosLib.entity.setNewItem(entity, { slot: 2, typeId: 'utilitycraft:arrow_right_0', nameTag: ' ' })
             },
             successMessages: ({ energyCap }) => [
                 '\u00A7a[Controller] Incinerator Factory created successfully.',
@@ -57,7 +58,7 @@ DoriosAPI.register.blockComponent('incinerator_controller', {
         /** @type {MachineStats} */
         const data = raw ? JSON.parse(raw) : {};
 
-        controller.setRate(BASE_RATE * data.speed.multiplier);
+        controller.setRateMultiplier(data.speed.multiplier);
 
         const inv = controller.container;
         const recipes = furnaceRecipes;
@@ -98,7 +99,7 @@ DoriosAPI.register.blockComponent('incinerator_controller', {
                         batch.craftCount * (recipe.amount ?? 1)
                     );
 
-                    controller.entity.removeItem(
+                    DoriosLib.entity.removeItem(controller.entity,
                         batch.inputType,
                         batch.craftCount * (recipe.required ?? 1)
                     );
@@ -136,7 +137,7 @@ DoriosAPI.register.blockComponent('incinerator_controller', {
 function updateUI(controller, data, status = '\u00A7aRunning', recipe) {
     controller.displayEnergy()
     controller.setLabel([
-        getIncineratorInfoLabel(data, status),
+        MultiblockMachine.getMachineInfoLabel(data, status),
         MultiblockMachine.getEnergyInfoLabel(controller),
         getRecipeLabel(recipe),
     ]);
@@ -150,7 +151,7 @@ function updateUI(controller, data, status = '\u00A7aRunning', recipe) {
  */
 function getRecipeLabel(recipe) {
     const hasRecipe = !!recipe;
-    const output = hasRecipe ? DoriosAPI.utils.formatIdToText(recipe.output) ?? '---' : '---';
+    const output = hasRecipe ? DoriosLib.text.formatIdentifier(recipe.output) ?? '---' : '---';
     const yieldAmt = hasRecipe ? (recipe.amount ?? 1) : '---';
     const inputReq = hasRecipe ? (recipe.required ?? 1) : '---';
 
@@ -159,18 +160,6 @@ function getRecipeLabel(recipe) {
 \u00A7r\u00A7aOutput \u00A7f${output}
 \u00A7r\u00A7aYield \u00A7f${yieldAmt}
 \u00A7r\u00A7aInput Required \u00A7f${inputReq}
-`;
-}
-
-function getIncineratorInfoLabel(data, status = "\u00A7aRunning") {
-    return `\u00A7r\u00A77Status: ${status}
-
-\u00A7r\u00A7eMachine Information
-
-\u00A7r\u00A7aInput Capacity \u00A7fx${data.processing.amount}
-\u00A7r\u00A7aCost \u00A7f${data.cost ? EnergyStorage.formatEnergyToText(data.cost) : "---"}
-\u00A7r\u00A7aSpeed \u00A7fx${data.speed.multiplier.toFixed(2)}
-\u00A7r\u00A7aEfficiency \u00A7f${((data.processing.amount / data.energyMultiplier) * 100).toFixed(2)}%%
 `;
 }
 

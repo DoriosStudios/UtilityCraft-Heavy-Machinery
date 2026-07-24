@@ -1,4 +1,5 @@
 import { EnergyStorage, Multiblock, MultiblockMachine } from "DoriosCore/index.js"
+import * as DoriosLib from "DoriosLib/index.js";
 import { sieveRecipes } from 'config/recipes/sieve.js'
 
 const MESH_SLOT = 3
@@ -34,13 +35,13 @@ const MULTIBLOCK_CONFIG = {
     requirements: CONTROLLER_REQUIREMENTS,
 }
 
-DoriosAPI.register.blockComponent('autosieve_controller', {
+DoriosLib.registry.blockComponent('utilitycraft:autosieve_controller', {
 
     onPlayerInteract(e) {
         return MultiblockMachine.handlePlayerInteract(e, MULTIBLOCK_CONFIG, {
             initializeEntity(entity) {
 
-                entity.setItem(2, 'utilitycraft:arrow_right_0', 1, '')
+                DoriosLib.entity.setNewItem(entity, { slot: 2, typeId: 'utilitycraft:arrow_right_0', nameTag: '' })
             },
             successMessages: ({ energyCap }) => [
                 '\u00A7a[Controller] Autosieve Factory created successfully.',
@@ -62,7 +63,7 @@ DoriosAPI.register.blockComponent('autosieve_controller', {
         const raw = controller.entity.getDynamicProperty('components')
         const data = raw ? JSON.parse(raw) : {}
 
-        controller.setRate(BASE_RATE * data.speed.multiplier)
+        controller.setRateMultiplier(data.speed.multiplier)
 
         const inv = controller.container
 
@@ -147,7 +148,7 @@ DoriosAPI.register.blockComponent('autosieve_controller', {
                 amountMultiplier
             )
 
-            controller.entity.removeItem(inputType, processCount)
+            DoriosLib.entity.removeItem(controller.entity, inputType, processCount)
             controller.addProgress(-cost)
         } else {
             const energyToConsume = Math.min(
@@ -192,7 +193,7 @@ function processAutosieveDrops(
 
         if (Math.random() <= loot.chance * multi) {
             let qty = Array.isArray(loot.amount)
-                ? DoriosAPI.math.randomInterval(loot.amount[0], loot.amount[1])
+                ? DoriosLib.math.randomInt(loot.amount[0], loot.amount[1])
                 : loot.amount
 
             if (amountMultiplier) qty *= amountMultiplier
@@ -231,7 +232,7 @@ function updateUI(controller, data, status = '§aRunning', recipe) {
  */
 function getRecipeLabel(recipe) {
     const hasRecipe = !!recipe;
-    const output = hasRecipe ? DoriosAPI.utils.formatIdToText(recipe.output) ?? '---' : '---';
+    const output = hasRecipe ? DoriosLib.text.formatIdentifier(recipe.output) ?? '---' : '---';
     const yieldAmt = hasRecipe ? (recipe.amount ?? 1) : '---';
     const inputReq = hasRecipe ? (recipe.required ?? 1) : '---';
 

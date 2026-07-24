@@ -1,8 +1,8 @@
+import * as DoriosLib from "DoriosLib/index.js";
 import { ItemStack, system, world } from "@minecraft/server";
 import * as Constants from "./constants.js";
 import * as MachineryConstants from "./machinery/constants.js";
-import * as UtilsConstants from "./utils/constants.js";
-import { FluidStorage, Generator, Machine } from "DoriosCore/index.js";
+import { FluidStorage, GasStorage, Generator, Machine, MachineUpgradeRegistry } from "DoriosCore/index.js";
 import { TickScheduler } from "./machinery/tickScheduler.js";
 
 export const scriptEventHandler = {
@@ -37,18 +37,6 @@ export const scriptEventHandler = {
         } catch (err) {
             console.warn(`[destroyMachine] Error: ${err}`);
         }
-    },
-    /**
-     * Registers input and output slots for special containers
-     */
-    [UtilsConstants.SPECIAL_CONTAINER_EVENT_ID]: ({ message, sourceEntity }) => {
-        let slots;
-        try {
-            slots = JSON.parse(message)
-        } catch { return }
-        if (!slots) return
-        if (!slots.input && !slots.output) return
-        sourceEntity.setDynamicProperty(UtilsConstants.SPECIAL_CONTAINER_PROPERTY_ID, JSON.stringify(slots))
     },
     /**
      * ScriptEvent handler to destroy a generator at given coordinates.
@@ -108,7 +96,7 @@ export const scriptEventHandler = {
 
             // Fluid lore
             if (fluid.type !== MachineryConstants.EMPTY_FLUID_TYPE && fluid.get() > 0) {
-                const liquidName = DoriosAPI.utils.capitalizeFirst(fluid.type);
+                const liquidName = DoriosLib.text.capitalizeFirst(fluid.type);
                 lore.push(
                     `§r§7  ${liquidName}: ${FluidStorage.formatFluid(fluid.get())}/${FluidStorage.formatFluid(fluid.cap)}`,
                 );
@@ -226,6 +214,79 @@ export const scriptEventHandler = {
                 "[UtilityCraft] Failed to parse fluid-holder registration payload:",
                 err
             );
+        }
+    },
+    /** Registers item-to-gas insertion mappings without sharing fluid registries. */
+    [Constants.REGISTER_GAS_ITEM_EVENT_ID]: ({ message }) => {
+        try {
+            const payload = JSON.parse(message);
+            if (!payload || typeof payload !== "object") return;
+
+            for (const [itemId, data] of Object.entries(payload)) {
+                if (typeof data.amount !== "number" || typeof data.type !== "string") continue;
+                GasStorage.itemGasStorages[itemId] = data;
+            }
+        } catch (err) {
+            console.warn("[UtilityCraft] Failed to parse gas-item registration payload:", err);
+        }
+    },
+    /** Registers or extends items that extract a supported gas from storage. */
+    [Constants.REGISTER_GAS_HOLDER_EVENT_ID]: ({ message }) => {
+        try {
+            const payload = JSON.parse(message);
+            if (!payload || typeof payload !== "object") return;
+
+            for (const [itemId, data] of Object.entries(payload)) {
+                if (!data.types || typeof data.types !== "object") continue;
+                const existing = GasStorage.itemGasHolders[itemId];
+
+                if (existing) {
+                    existing.types = { ...existing.types, ...data.types };
+                    if (typeof data.required === "number") existing.required = data.required;
+                } else if (typeof data.required === "number") {
+                    GasStorage.itemGasHolders[itemId] = {
+                        types: { ...data.types },
+                        required: data.required,
+                    };
+                }
+            }
+        } catch (err) {
+            console.warn("[UtilityCraft] Failed to parse gas-holder registration payload:", err);
+        }
+    },
+    /**
+     * Script event: "utilitycraft:register_machine_upgrade"
+     *
+     * Registers exact item identifiers in the compiled DoriosCore upgrade
+     * registry. The event is processed only when definitions are received;
+     * machines continue to use direct Map lookups while ticking.
+     *
+     * Payload format:
+     * {
+     *   "addon:upgrade_item": {
+     *     "type": "super_upgrade",
+     *     "value": 1,
+     *     "levels": {
+     *       "1": { "speed": 0.25, "energy_cost": 0.5 },
+     *       "2": { "speed": 0.75, "energy_cost": 1 }
+     *     }
+     *   }
+     * }
+     */
+    [Constants.REGISTER_MACHINE_UPGRADE_EVENT_ID]: ({ message }) => {
+        try {
+            const payload = JSON.parse(message);
+            if (!payload || typeof payload !== "object" || Array.isArray(payload)) return;
+
+            for (const [itemTypeId, registration] of Object.entries(payload)) {
+                try {
+                    MachineUpgradeRegistry.register(itemTypeId, registration);
+                } catch (error) {
+                    console.warn(`[UtilityCraft] Failed to register machine upgrade ${itemTypeId}:`, error);
+                }
+            }
+        } catch (error) {
+            console.warn("[UtilityCraft] Failed to parse machine-upgrade registration payload:", error);
         }
     },
     /**

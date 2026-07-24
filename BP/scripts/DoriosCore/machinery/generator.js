@@ -1,11 +1,22 @@
+import * as DoriosLib from "DoriosLib/index.js";
 import { ItemStack, system } from "@minecraft/server";
 import { ModalFormData } from "@minecraft/server-ui";
 import { BasicMachine } from "./basicMachine";
 import * as Constants from "./constants.js";
 import { EnergyStorage } from "./energyStorage";
 import { FluidStorage } from "./fluidStorage";
+import { GasStorage } from "./gasStorage.js";
 import { TickScheduler } from "./tickScheduler.js";
 import * as Utils from "../utils/entity";
+import { InterfaceManager } from "../interfaces/index.js";
+import { ensureItemIOConfig } from "../interfaces/itemIO.js";
+import { ensureFluidIOConfig } from "../interfaces/fluidIO.js";
+import { ensureGasIOConfig } from "../interfaces/gasIO.js";
+import { ensureBlockIOInterface } from "../interfaces/IOInterface.js";
+
+function translate(key) {
+  return { translate: key };
+}
 
 export class Generator extends BasicMachine {
   /**
@@ -43,6 +54,8 @@ export class Generator extends BasicMachine {
 
     const energy = new EnergyStorage(entity);
     const fluid = new FluidStorage(entity);
+    const supportsGas = entity.getComponent("minecraft:type_family")?.hasTypeFamily("dorios:gas_container") === true;
+    const gas = supportsGas ? new GasStorage(entity) : undefined;
     const blockItemId = brokenBlockPermutation.type.id;
     const blockItem = new ItemStack(blockItemId);
     const lore = [];
@@ -53,8 +66,13 @@ export class Generator extends BasicMachine {
     }
 
     if (fluid.type != Constants.EMPTY_FLUID_TYPE) {
-      const liquidName = DoriosAPI.utils.capitalizeFirst(fluid.type);
+      const liquidName = DoriosLib.text.capitalizeFirst(fluid.type);
       lore.push(`§r§7  ${liquidName}: ${FluidStorage.formatFluid(fluid.get())}/${FluidStorage.formatFluid(fluid.cap)}`);
+    }
+
+    if (gas && gas.type !== Constants.EMPTY_GAS_TYPE && gas.get() > 0) {
+      const gasName = DoriosLib.text.capitalizeFirst(gas.type);
+      lore.push(`§r§7  Gas (${gasName}): ${GasStorage.formatGas(gas.get())}/${GasStorage.formatGas(gas.cap)}`);
     }
 
     if (lore.length > 0) {
@@ -63,7 +81,7 @@ export class Generator extends BasicMachine {
 
     // Drop item and cleanup
     system.run(() => {
-      if (player?.isInSurvival()) {
+      if (DoriosLib.player.isSurvival(player)) {
         const oldItemEntity = dim
           .getEntities({
             type: "item",
@@ -109,16 +127,21 @@ export class Generator extends BasicMachine {
 
     const mainHand = player.getComponent("equippable").getEquipment("Mainhand");
     const { energy, fluid } = Utils.getEnergyAndFluidFromItem(mainHand);
+    const gasLine = mainHand?.getLore()?.find((line) => line.replace(/§./g, "").trim().startsWith("Gas ("));
+    const gas = gasLine ? GasStorage.getGasFromText(gasLine) : undefined;
 
     system.run(() => {
+      ensureBlockIOInterface(block);
       const entity = Utils.spawnEntity(block, config);
       const energyManager = new EnergyStorage(entity);
       energyManager.setCap(config.generator.energy_cap);
       energyManager.set(energy);
       energyManager.display();
       if (config.generator.fluid_cap) {
-        const fluidManager = new FluidStorage(entity);
-        fluidManager.setCap(config.generator.fluid_cap);
+        const fluidCount = Math.max(1, Math.floor(config.generator.fluid_types ?? 1));
+        const fluidManagers = FluidStorage.initializeMultiple(entity, fluidCount);
+        for (const manager of fluidManagers) manager.setCap(config.generator.fluid_cap);
+        const fluidManager = fluidManagers[0];
         fluidManager.display();
 
         if (fluid && fluid.amount > 0) {
@@ -126,10 +149,34 @@ export class Generator extends BasicMachine {
           fluidManager.set(fluid.amount);
         }
       }
+      if (config.generator.gas_cap) {
+        const gasCount = Math.max(1, Math.floor(config.generator.gas_types ?? 1));
+        const gasManagers = GasStorage.initializeMultiple(entity, gasCount);
+        for (const manager of gasManagers) manager.setCap(config.generator.gas_cap);
+        if (gas && gas.amount > 0) {
+          gasManagers[0].setType(gas.type);
+          gasManagers[0].set(gas.amount);
+        }
+      }
+      if (config.generator.gas_cap && config.generator.fluid_cap) {
+        entity.triggerEvent("utilitycraft:fluid_gas_generator");
+      } else if (config.generator.gas_cap) {
+        entity.triggerEvent("utilitycraft:gas_generator");
+      }
+      // Publish a fail-closed temporary policy if the inventory resize event
+      // has not exposed its final slot count yet.
+      ensureItemIOConfig(entity, block.typeId, { failClosedWhileResizing: true });
+      ensureFluidIOConfig(entity, block.typeId);
+      ensureGasIOConfig(entity, block.typeId);
       system.run(() => {
+        if (!entity.isValid) return;
+        ensureItemIOConfig(entity, block.typeId);
+        ensureFluidIOConfig(entity, block.typeId);
+        ensureGasIOConfig(entity, block.typeId);
         if (callback) {
           callback(entity);
         }
+        InterfaceManager.ensureEntityInterfaces(entity);
       });
     });
 
@@ -183,22 +230,32 @@ export class Generator extends BasicMachine {
     if (!entity || !player) return;
 
     const mode = entity.getDynamicProperty("transferMode") ?? "nearest";
-    const modes = ["Nearest", "Farthest", "Round"];
-    const currentIndex = modes.findIndex((m) => m.toLowerCase() === mode);
+    const modes = ["nearest", "farthest", "round"];
+    const modeLabels = modes.map((value) => translate(`ui.utilitycraft:energy.mode_${value}`));
+    const currentIndex = modes.indexOf(mode);
     const defaultIndex = currentIndex >= 0 ? currentIndex : 0;
 
-    const modal = new ModalFormData().title("Generator Transfer Mode").dropdown("Select how this generator distributes its output:", modes, {
-      defaultValueIndex: defaultIndex,
-    });
+    const modal = new ModalFormData()
+      .title(translate("ui.utilitycraft:energy.generator_transfer_title"))
+      .dropdown(translate("ui.utilitycraft:energy.generator_transfer_mode"), modeLabels, {
+        defaultValueIndex: defaultIndex,
+        tooltip: translate("ui.utilitycraft:energy.generator_transfer_tooltip"),
+      })
+      .submitButton(translate("ui.utilitycraft:energy.save"));
 
     modal.show(player).then((result) => {
       if (result.canceled) return;
 
-      const [selection] = result.formValues;
-      const newMode = modes[selection]?.toLowerCase() ?? "nearest";
+      const selection = Number(result.formValues?.find((value) => typeof value === "number"));
+      const newMode = modes[selection] ?? "nearest";
 
       entity.setDynamicProperty("transferMode", newMode);
-      player.onScreenDisplay.setActionBar(`§7Transfer mode set to: §e${DoriosAPI.utils.capitalizeFirst(newMode)}`);
+      player.onScreenDisplay.setActionBar({
+        rawtext: [
+          translate("message.utilitycraft.energy.transfer_mode_set"),
+          translate(`ui.utilitycraft:energy.mode_${newMode}`),
+        ],
+      });
     });
   }
 }

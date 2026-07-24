@@ -17,10 +17,34 @@
         },
         "components": {
             "utilitycraft:fluid_container": {},
-            "minecraft:geometry": "geometry.utilitycraft_block_2",
+            "minecraft:geometry": "minecraft:geometry.full_block",
             "minecraft:material_instances": {
                 "*": {
-                    "texture": "utilitycraft_thermal_reactor_controller",
+                    "texture": "utilitycraft_thermal_reactor_controller_north",
+                    "render_method": "alpha_test"
+                },
+                "north": {
+                    "texture": "utilitycraft_thermal_reactor_controller_north",
+                    "render_method": "alpha_test"
+                },
+                "south": {
+                    "texture": "utilitycraft_thermal_reactor_controller_south",
+                    "render_method": "alpha_test"
+                },
+                "east": {
+                    "texture": "utilitycraft_thermal_reactor_controller_east",
+                    "render_method": "alpha_test"
+                },
+                "west": {
+                    "texture": "utilitycraft_thermal_reactor_controller_west",
+                    "render_method": "alpha_test"
+                },
+                "up": {
+                    "texture": "utilitycraft_thermal_reactor_controller_up",
+                    "render_method": "alpha_test"
+                },
+                "down": {
+                    "texture": "utilitycraft_thermal_reactor_controller_down",
                     "render_method": "alpha_test"
                 }
             },
@@ -38,7 +62,7 @@
             "tag:dorios:energy": {},
             "tag:dorios:fluid": {},
             "tag:dorios:item": {},
-            "tag:dorios:controller": {}
+            "tag:dorios:machine": {}
         },
         "permutations": [
             {

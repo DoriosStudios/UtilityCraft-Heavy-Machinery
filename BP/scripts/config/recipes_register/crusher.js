@@ -1,4 +1,4 @@
-import { system, world } from "@minecraft/server";
+import * as DoriosLib from "DoriosLib/index.js";
 
 const newRecipes = {
     // Tin
@@ -23,6 +23,4 @@ const newRecipes = {
     "utilitycraft:bronze_block": { output: "utilitycraft:bronze_dust", amount: 6 },
 };
 
-world.afterEvents.worldLoad.subscribe(() => {
-    system.sendScriptEvent("utilitycraft:register_crusher_recipe", JSON.stringify(newRecipes));
-});
+DoriosLib.registry.registerCrusherRecipe(newRecipes);

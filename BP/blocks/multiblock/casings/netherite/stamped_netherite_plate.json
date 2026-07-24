@@ -8,7 +8,7 @@
             }
         },
         "components": {
-            "minecraft:geometry": "geometry.utilitycraft_block",
+            "minecraft:geometry": "minecraft:geometry.full_block",
             "minecraft:material_instances": {
                 "*": {
                     "texture": "utilitycraft_stamped_netherite_plate",
@@ -19,7 +19,7 @@
                 "seconds_to_destroy": 1
             },
             "minecraft:destructible_by_explosion": false,
-            "tag:dorios:multiblock_case": {}
+            "tag:dorios:multiblock.case.netherite": {}
         }
     }
 }

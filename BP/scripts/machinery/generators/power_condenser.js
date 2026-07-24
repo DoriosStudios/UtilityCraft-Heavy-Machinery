@@ -1,4 +1,5 @@
 import { EnergyStorage, Multiblock, MultiblockGenerator } from "DoriosCore/index.js"
+import * as DoriosLib from "DoriosLib/index.js";
 
 const GENERATOR_CONFIG = {
     entity: {
@@ -16,7 +17,7 @@ const GENERATOR_CONFIG = {
     missingEnergyWarning: '\u00A7c[Matrix] At least 1 energy container its required to operate.',
 }
 
-DoriosAPI.register.blockComponent('power_condenser', {
+DoriosLib.registry.blockComponent('utilitycraft:power_condenser', {
     onPlayerInteract(e) {
         return MultiblockGenerator.handlePlayerInteract(e, GENERATOR_CONFIG, {
             onActivate: ({ entity, energyCap, settings }) => {

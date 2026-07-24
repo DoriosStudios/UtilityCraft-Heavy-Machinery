@@ -1,4 +1,5 @@
 import { EnergyStorage, FluidStorage, Multiblock, MultiblockMachine } from "DoriosCore/index.js"
+import * as DoriosLib from "DoriosLib/index.js";
 import { melterRecipes } from 'config/recipes/melter.js'
 
 const OUTPUT_LIQUID_SLOT = 3
@@ -38,12 +39,12 @@ const MULTIBLOCK_CONFIG = {
     requirements: CONTROLLER_REQUIREMENTS,
 }
 
-DoriosAPI.register.blockComponent('magmatic_chamber_controller', {
+DoriosLib.registry.blockComponent('utilitycraft:magmatic_chamber_controller', {
     onPlayerInteract(e) {
         return MultiblockMachine.handlePlayerInteract(e, MULTIBLOCK_CONFIG, {
             initializeEntity(entity) {
 
-                entity.setItem(2, 'utilitycraft:arrow_right_0', 1, ' ')
+                DoriosLib.entity.setNewItem(entity, { slot: 2, typeId: 'utilitycraft:arrow_right_0', nameTag: ' ' })
 
                 FluidStorage.initializeSingle(entity)
             },
@@ -74,7 +75,7 @@ DoriosAPI.register.blockComponent('magmatic_chamber_controller', {
         const raw = controller.entity.getDynamicProperty('components')
         const data = raw ? JSON.parse(raw) : {}
 
-        controller.setRate(BASE_RATE * data.speed.multiplier)
+        controller.setRateMultiplier(data.speed.multiplier)
 
         const inv = controller.container
         const outputFluid = FluidStorage.initializeSingle(controller.entity)
@@ -149,7 +150,7 @@ DoriosAPI.register.blockComponent('magmatic_chamber_controller', {
                 }
 
                 outputFluid.add(craftCount * outputAmount)
-                controller.entity.removeItem(inputType, craftCount * required)
+                DoriosLib.entity.removeItem(controller.entity, inputType, craftCount * required)
                 controller.addProgress(-cost)
             }
         } else {
@@ -185,7 +186,7 @@ function getRecipeLabel(recipe) {
     const hasRecipe = !!recipe
 
     const outputFluid = hasRecipe
-        ? DoriosAPI.utils.formatIdToText(recipe.liquid)
+        ? DoriosLib.text.formatIdentifier(recipe.liquid)
         : 'None'
     const yieldAmt = hasRecipe
         ? FluidStorage.formatFluid(recipe.amount ?? 1)

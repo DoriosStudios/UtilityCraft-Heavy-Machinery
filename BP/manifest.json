@@ -8,11 +8,11 @@
 	},
 	"header": {
 		"name": "UtilityCraft: Heavy Machinery",
-		"description": "0.4.0 §6Dorios Studios",
+		"description": "0.4.0 §aRequires UtilityCraft 3.5.0+",
 		"min_engine_version": [
 			1,
 			21,
-			90
+			120
 		],
 		"uuid": "f99ab81c-e320-4e3e-aae3-2f7f5ac11775",
 		"version": [
@@ -53,8 +53,16 @@
 			]
 		},
 		{
+			"uuid": "9d61a8df-7d50-4624-8bff-d2c90c52a5a0",
+			"version": [
+				3,
+				5,
+				0
+			]
+		},
+		{
 			"module_name": "@minecraft/server",
-			"version": "2.4.0"
+			"version": "2.8.0"
 		},
 		{
 			"module_name": "@minecraft/server-ui",

@@ -204,6 +204,306 @@
 		},
 		"utilitycraft_controller_case": {
 			"textures": "textures/blocks/controller_case"
+		},
+		"utilitycraft_controller_case_north": {
+			"textures": "textures/blocks/controller_case_north"
+		},
+		"utilitycraft_controller_case_side": {
+			"textures": "textures/blocks/controller_case_side"
+		},
+		"utilitycraft_controller_case_up": {
+			"textures": "textures/blocks/controller_case_up"
+		},
+		"utilitycraft_controller_case_down": {
+			"textures": "textures/blocks/controller_case_down"
+		},
+		"utilitycraft_bronze_controller_case_north": {
+			"textures": "textures/blocks/multiblock/bronze/bronze_steel_case_north"
+		},
+		"utilitycraft_bronze_controller_case_south": {
+			"textures": "textures/blocks/multiblock/bronze/bronze_steel_case_south"
+		},
+		"utilitycraft_bronze_controller_case_east": {
+			"textures": "textures/blocks/multiblock/bronze/bronze_steel_case_east"
+		},
+		"utilitycraft_bronze_controller_case_west": {
+			"textures": "textures/blocks/multiblock/bronze/bronze_steel_case_west"
+		},
+		"utilitycraft_bronze_controller_case_up": {
+			"textures": "textures/blocks/multiblock/bronze/bronze_steel_case_up"
+		},
+		"utilitycraft_bronze_controller_case_down": {
+			"textures": "textures/blocks/multiblock/bronze/bronze_steel_case_down"
+		},
+		"utilitycraft_efficiency_module_north": {
+			"textures": "textures/blocks/multiblock/efficiency_module_north"
+		},
+		"utilitycraft_efficiency_module_south": {
+			"textures": "textures/blocks/multiblock/efficiency_module_south"
+		},
+		"utilitycraft_efficiency_module_east": {
+			"textures": "textures/blocks/multiblock/efficiency_module_east"
+		},
+		"utilitycraft_efficiency_module_west": {
+			"textures": "textures/blocks/multiblock/efficiency_module_west"
+		},
+		"utilitycraft_efficiency_module_up": {
+			"textures": "textures/blocks/multiblock/efficiency_module_up"
+		},
+		"utilitycraft_efficiency_module_down": {
+			"textures": "textures/blocks/multiblock/efficiency_module_down"
+		},
+		"utilitycraft_energy_cell_north": {
+			"textures": "textures/blocks/multiblock/energy_cell_north"
+		},
+		"utilitycraft_energy_cell_south": {
+			"textures": "textures/blocks/multiblock/energy_cell_south"
+		},
+		"utilitycraft_energy_cell_east": {
+			"textures": "textures/blocks/multiblock/energy_cell_east"
+		},
+		"utilitycraft_energy_cell_west": {
+			"textures": "textures/blocks/multiblock/energy_cell_west"
+		},
+		"utilitycraft_energy_cell_up": {
+			"textures": "textures/blocks/multiblock/energy_cell_up"
+		},
+		"utilitycraft_energy_cell_down": {
+			"textures": "textures/blocks/multiblock/energy_cell_down"
+		},
+		"utilitycraft_fluid_cell_side": {
+			"textures": "textures/blocks/multiblock/fluid_cell_side"
+		},
+		"utilitycraft_fluid_cell_up": {
+			"textures": "textures/blocks/multiblock/fluid_cell_up"
+		},
+		"utilitycraft_fluid_controller_north": {
+			"textures": "textures/blocks/multiblock/fluid_controller_north"
+		},
+		"utilitycraft_fluid_controller_side": {
+			"textures": "textures/blocks/multiblock/fluid_controller_side"
+		},
+		"utilitycraft_fluid_controller_up": {
+			"textures": "textures/blocks/multiblock/fluid_controller_up"
+		},
+		"utilitycraft_fluid_controller_down": {
+			"textures": "textures/blocks/multiblock/fluid_controller_down"
+		},
+		"utilitycraft_processing_module_north": {
+			"textures": "textures/blocks/multiblock/processing_module_north"
+		},
+		"utilitycraft_processing_module_south": {
+			"textures": "textures/blocks/multiblock/processing_module_south"
+		},
+		"utilitycraft_processing_module_east": {
+			"textures": "textures/blocks/multiblock/processing_module_east"
+		},
+		"utilitycraft_processing_module_west": {
+			"textures": "textures/blocks/multiblock/processing_module_west"
+		},
+		"utilitycraft_processing_module_up": {
+			"textures": "textures/blocks/multiblock/processing_module_up"
+		},
+		"utilitycraft_processing_module_down": {
+			"textures": "textures/blocks/multiblock/processing_module_down"
+		},
+		"utilitycraft_rod_control_north": {
+			"textures": "textures/blocks/multiblock/rod_control_north"
+		},
+		"utilitycraft_rod_control_side": {
+			"textures": "textures/blocks/multiblock/rod_control_side"
+		},
+		"utilitycraft_rod_control_up": {
+			"textures": "textures/blocks/multiblock/rod_control_up"
+		},
+		"utilitycraft_rod_control_down": {
+			"textures": "textures/blocks/multiblock/rod_control_down"
+		},
+		"utilitycraft_speed_module_north": {
+			"textures": "textures/blocks/multiblock/speed_module_north"
+		},
+		"utilitycraft_speed_module_south": {
+			"textures": "textures/blocks/multiblock/speed_module_south"
+		},
+		"utilitycraft_speed_module_east": {
+			"textures": "textures/blocks/multiblock/speed_module_east"
+		},
+		"utilitycraft_speed_module_west": {
+			"textures": "textures/blocks/multiblock/speed_module_west"
+		},
+		"utilitycraft_speed_module_up": {
+			"textures": "textures/blocks/multiblock/speed_module_up"
+		},
+		"utilitycraft_speed_module_down": {
+			"textures": "textures/blocks/multiblock/speed_module_down"
+		},
+		"utilitycraft_autosieve_controller_north": {
+			"textures": "textures/blocks/multiblock/autosieve_controller_north"
+		},
+		"utilitycraft_autosieve_controller_side": {
+			"textures": "textures/blocks/multiblock/autosieve_controller_side"
+		},
+		"utilitycraft_autosieve_controller_up": {
+			"textures": "textures/blocks/multiblock/autosieve_controller_up"
+		},
+		"utilitycraft_autosieve_controller_down": {
+			"textures": "textures/blocks/multiblock/autosieve_controller_down"
+		},
+		"utilitycraft_crusher_controller_north": {
+			"textures": "textures/blocks/multiblock/crusher_controller_north"
+		},
+		"utilitycraft_crusher_controller_side": {
+			"textures": "textures/blocks/multiblock/crusher_controller_side"
+		},
+		"utilitycraft_crusher_controller_up": {
+			"textures": "textures/blocks/multiblock/crusher_controller_up"
+		},
+		"utilitycraft_crusher_controller_down": {
+			"textures": "textures/blocks/multiblock/crusher_controller_down"
+		},
+		"utilitycraft_electro_press_controller_north": {
+			"textures": "textures/blocks/multiblock/electro_press_controller_north"
+		},
+		"utilitycraft_electro_press_controller_side": {
+			"textures": "textures/blocks/multiblock/electro_press_controller_side"
+		},
+		"utilitycraft_electro_press_controller_up": {
+			"textures": "textures/blocks/multiblock/electro_press_controller_up"
+		},
+		"utilitycraft_electro_press_controller_down": {
+			"textures": "textures/blocks/multiblock/electro_press_controller_down"
+		},
+		"utilitycraft_incinerator_controller_north": {
+			"textures": "textures/blocks/multiblock/incinerator_controller_north"
+		},
+		"utilitycraft_incinerator_controller_side": {
+			"textures": "textures/blocks/multiblock/incinerator_controller_side"
+		},
+		"utilitycraft_incinerator_controller_up": {
+			"textures": "textures/blocks/multiblock/incinerator_controller_up"
+		},
+		"utilitycraft_incinerator_controller_down": {
+			"textures": "textures/blocks/multiblock/incinerator_controller_down"
+		},
+		"utilitycraft_infuser_controller_north": {
+			"textures": "textures/blocks/multiblock/infuser_controller_north"
+		},
+		"utilitycraft_infuser_controller_side": {
+			"textures": "textures/blocks/multiblock/infuser_controller_side"
+		},
+		"utilitycraft_infuser_controller_up": {
+			"textures": "textures/blocks/multiblock/infuser_controller_up"
+		},
+		"utilitycraft_infuser_controller_down": {
+			"textures": "textures/blocks/multiblock/infuser_controller_down"
+		},
+		"utilitycraft_magmatic_chamber_controller_north": {
+			"textures": "textures/blocks/multiblock/magmatic_chamber_controller_north"
+		},
+		"utilitycraft_magmatic_chamber_controller_side": {
+			"textures": "textures/blocks/multiblock/magmatic_chamber_controller_side"
+		},
+		"utilitycraft_magmatic_chamber_controller_up": {
+			"textures": "textures/blocks/multiblock/magmatic_chamber_controller_up"
+		},
+		"utilitycraft_magmatic_chamber_controller_down": {
+			"textures": "textures/blocks/multiblock/magmatic_chamber_controller_down"
+		},
+		"utilitycraft_nuclear_reactor_controller_north": {
+			"textures": "textures/blocks/multiblock/nuclear_reactor_controller_north"
+		},
+		"utilitycraft_nuclear_reactor_controller_side": {
+			"textures": "textures/blocks/multiblock/nuclear_reactor_controller_side"
+		},
+		"utilitycraft_nuclear_reactor_controller_up": {
+			"textures": "textures/blocks/multiblock/nuclear_reactor_controller_up"
+		},
+		"utilitycraft_nuclear_reactor_controller_down": {
+			"textures": "textures/blocks/multiblock/nuclear_reactor_controller_down"
+		},
+		"utilitycraft_matter_condenser_controller_north": {
+			"textures": "textures/blocks/multiblock/matter_condenser_controller_north"
+		},
+		"utilitycraft_matter_condenser_controller_side": {
+			"textures": "textures/blocks/multiblock/matter_condenser_controller_side"
+		},
+		"utilitycraft_matter_condenser_controller_up": {
+			"textures": "textures/blocks/multiblock/matter_condenser_controller_up"
+		},
+		"utilitycraft_matter_condenser_controller_down": {
+			"textures": "textures/blocks/multiblock/matter_condenser_controller_down"
+		},
+		"utilitycraft_advanced_power_condenser_unit_side": {
+			"textures": "textures/blocks/multiblock/advanced_energy_condenser_side"
+		},
+		"utilitycraft_advanced_power_condenser_unit_up": {
+			"textures": "textures/blocks/multiblock/advanced_energy_condenser_up"
+		},
+		"utilitycraft_basic_power_condenser_unit_side": {
+			"textures": "textures/blocks/multiblock/basic_energy_condenser_side"
+		},
+		"utilitycraft_basic_power_condenser_unit_up": {
+			"textures": "textures/blocks/multiblock/basic_energy_condenser_up"
+		},
+		"utilitycraft_expert_power_condenser_unit_side": {
+			"textures": "textures/blocks/multiblock/expert_energy_condenser_side"
+		},
+		"utilitycraft_expert_power_condenser_unit_up": {
+			"textures": "textures/blocks/multiblock/expert_energy_condenser_up"
+		},
+		"utilitycraft_power_condenser_controller_north": {
+			"textures": "textures/blocks/multiblock/power_condenser_controller_north"
+		},
+		"utilitycraft_power_condenser_controller_side": {
+			"textures": "textures/blocks/multiblock/power_condenser_controller_side"
+		},
+		"utilitycraft_power_condenser_controller_up": {
+			"textures": "textures/blocks/multiblock/power_condenser_controller_up"
+		},
+		"utilitycraft_power_condenser_controller_down": {
+			"textures": "textures/blocks/multiblock/power_condenser_controller_down"
+		},
+		"utilitycraft_ultimate_power_condenser_unit_side": {
+			"textures": "textures/blocks/multiblock/ultimate_energy_condenser_side"
+		},
+		"utilitycraft_ultimate_power_condenser_unit_up": {
+			"textures": "textures/blocks/multiblock/ultimate_energy_condenser_up"
+		},
+		"utilitycraft_heat_conductor_side": {
+			"textures": "textures/blocks/multiblock/heat_conductor_side"
+		},
+		"utilitycraft_heat_conductor_up": {
+			"textures": "textures/blocks/multiblock/heat_conductor_up"
+		},
+		"utilitycraft_thermo_core_side": {
+			"textures": "textures/blocks/multiblock/thermo_core_side"
+		},
+		"utilitycraft_thermo_core_up": {
+			"textures": "textures/blocks/multiblock/thermo_core_up"
+		},
+		"utilitycraft_burnt_thermo_core_side": {
+			"textures": "textures/blocks/multiblock/burnt_thermo_core_side"
+		},
+		"utilitycraft_burnt_thermo_core_up": {
+			"textures": "textures/blocks/multiblock/burnt_thermo_core_up"
+		},
+		"utilitycraft_thermal_reactor_controller_north": {
+			"textures": "textures/blocks/multiblock/bronze/thermal_reactor_controller_north"
+		},
+		"utilitycraft_thermal_reactor_controller_south": {
+			"textures": "textures/blocks/multiblock/bronze/thermal_reactor_controller_south"
+		},
+		"utilitycraft_thermal_reactor_controller_east": {
+			"textures": "textures/blocks/multiblock/bronze/thermal_reactor_controller_east"
+		},
+		"utilitycraft_thermal_reactor_controller_west": {
+			"textures": "textures/blocks/multiblock/bronze/thermal_reactor_controller_west"
+		},
+		"utilitycraft_thermal_reactor_controller_up": {
+			"textures": "textures/blocks/multiblock/bronze/thermal_reactor_controller_up"
+		},
+		"utilitycraft_thermal_reactor_controller_down": {
+			"textures": "textures/blocks/multiblock/bronze/thermal_reactor_controller_down"
 		}
 	}
 }

@@ -14,28 +14,28 @@
 			"utilitycraft:basic": {
 				"minecraft:health": {
 					"max": 8000,
-					"min": 0,
+					"min": 1,
 					"value": 8000
 				}
 			},
 			"utilitycraft:advanced": {
 				"minecraft:health": {
 					"max": 32000,
-					"min": 0,
+					"min": 1,
 					"value": 32000
 				}
 			},
 			"utilitycraft:expert": {
 				"minecraft:health": {
 					"max": 128000,
-					"min": 0,
+					"min": 1,
 					"value": 128000
 				}
 			},
 			"utilitycraft:ultimate": {
 				"minecraft:health": {
 					"max": 512000,
-					"min": 0,
+					"min": 1,
 					"value": 512000
 				}
 			}
@@ -63,7 +63,7 @@
 			},
 			"minecraft:health": {
 				"max": 8000,
-				"min": 0,
+				"min": 1,
 				"value": 8000
 			},
 			"minecraft:knockback_resistance": {

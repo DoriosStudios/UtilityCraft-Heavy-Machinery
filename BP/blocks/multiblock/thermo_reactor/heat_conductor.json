@@ -8,17 +8,24 @@
             }
         },
         "components": {
-            "minecraft:geometry": "geometry.utilitycraft_block_3",
+            "minecraft:geometry": "minecraft:geometry.full_block",
             "minecraft:material_instances": {
                 "*": {
-                    "texture": "utilitycraft_heat_conductor",
+                    "texture": "utilitycraft_heat_conductor_side",
+                    "render_method": "alpha_test"
+                },
+                "up": {
+                    "texture": "utilitycraft_heat_conductor_up",
+                    "render_method": "alpha_test"
+                },
+                "down": {
+                    "texture": "utilitycraft_heat_conductor_up",
                     "render_method": "alpha_test"
                 }
             },
             "minecraft:destructible_by_mining": {
                 "seconds_to_destroy": 1
             },
-            "tag:dorios:multiblock_case": {},
             "tag:dorios:multiblock_component": {}
         }
     }

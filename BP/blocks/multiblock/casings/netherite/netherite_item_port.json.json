@@ -9,8 +9,8 @@
         },
         "components": {
 			"tag:dorios:item": {},
-			"tag:dorios:input_block": {},
-            "tag:dorios:multiblock_case": {}
+			"tag:dorios:multiblock.port": {},
+            "tag:dorios:multiblock.case.netherite": {}
 		}
 	}
 }

@@ -16,10 +16,22 @@
             }
         },
         "components": {
-            "minecraft:geometry": "geometry.utilitycraft_block_4",
+            "minecraft:geometry": "minecraft:geometry.full_block",
             "minecraft:material_instances": {
                 "*": {
-                    "texture": "utilitycraft_incinerator_controller",
+                    "texture": "utilitycraft_incinerator_controller_side",
+                    "render_method": "alpha_test"
+                },
+                "north": {
+                    "texture": "utilitycraft_incinerator_controller_north",
+                    "render_method": "alpha_test"
+                },
+                "up": {
+                    "texture": "utilitycraft_incinerator_controller_up",
+                    "render_method": "alpha_test"
+                },
+                "down": {
+                    "texture": "utilitycraft_incinerator_controller_down",
                     "render_method": "alpha_test"
                 }
             },
@@ -51,6 +63,7 @@
                 "seconds_to_destroy": 1
             },
             "minecraft:destructible_by_explosion": false,
+            "tag:dorios:machine": {},
             "tag:dorios:energy": {},
             "tag:dorios:item": {}
         },

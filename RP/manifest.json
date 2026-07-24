@@ -7,7 +7,7 @@
 	},
 	"header": {
 		"name": "UtilityCraft: Heavy Machinery",
-		"description": "0.4.0 §6Dorios Studios",
+		"description": "0.4.0 §aRequires UtilityCraft 3.5.0+",
 		"min_engine_version": [
 			1,
 			21,
@@ -37,6 +37,14 @@
 			"version": [
 				0,
 				4,
+				0
+			]
+		},
+		{
+			"uuid": "b8bff6b0-417e-43fb-9451-d1d9d80c309f",
+			"version": [
+				3,
+				5,
 				0
 			]
 		}

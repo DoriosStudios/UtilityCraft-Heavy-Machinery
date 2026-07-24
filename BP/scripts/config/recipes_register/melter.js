@@ -1,8 +1,2 @@
-import { world, system } from "@minecraft/server";
-
-
-// const melterRecipesRegister = {};
-
-// world.afterEvents.worldLoad.subscribe(() => {
-//     system.sendScriptEvent("utilitycraft:register_melter_recipe", JSON.stringify(melterRecipesRegister));
-// });
+// Heavy Machinery currently adds no melter recipes of its own.
+// Use DoriosLib.registry.registerMelterRecipe(payload) when recipes are added.

@@ -8,12 +8,12 @@
             }
         },
         "components": {
-            "minecraft:geometry": "geometry.utilitycraft_block",
+            "minecraft:geometry": "minecraft:geometry.full_block",
             "minecraft:destructible_by_mining": {
                 "seconds_to_destroy": 1
             },
             "minecraft:destructible_by_explosion": false,
-            "tag:dorios:multiblock_case": {}
+            "tag:dorios:multiblock.case.netherite": {}
         }
     }
 }

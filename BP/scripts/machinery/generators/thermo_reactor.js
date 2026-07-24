@@ -1,4 +1,5 @@
-import { EnergyStorage, FluidStorage, Multiblock, MultiblockGenerator, ButtonManager } from "DoriosCore/index.js"
+import { EnergyStorage, FluidStorage, InterfaceManager, Multiblock, MultiblockGenerator } from "DoriosCore/index.js"
+import * as DoriosLib from "DoriosLib/index.js";
 import { ModalFormData } from '@minecraft/server-ui'
 import { ItemStack } from '@minecraft/server'
 import { coolants } from 'config/coolants.js'
@@ -106,40 +107,42 @@ const GENERATOR_CONFIG = {
 
 // #endregion
 
-// Power button - Turns on/off the Reactor
-ButtonManager.registerMachineButton("thermo_reactor", 5, (({ entity }) => {
-    if (!entity) return;
+const THERMO_REACTOR_INTERFACE_ID = "uc_heavy_machinery:thermo_reactor_controls";
+const thermoReactorButtons = {
+    power: {
+        slot: 5,
+        onPress: ({ entity }) => {
+            if (!entity) return;
+            const data = getReactorInfo(entity);
+            data.state = String(data.state).toLowerCase() === "off" ? "on" : "off";
+            entity.setDynamicProperty("reactorData", JSON.stringify(data));
+        },
+    },
+    accept: {
+        slot: THERMO_REACTOR_ACCEPT_SLOT,
+        onPress: ({ entity }) => applyThermoReactorBurnRate(entity),
+    },
+    cancel: {
+        slot: THERMO_REACTOR_CANCEL_SLOT,
+        onPress: ({ entity }) => resetThermoReactorInput(entity),
+    },
+    delete: {
+        slot: THERMO_REACTOR_DELETE_SLOT,
+        onPress: ({ entity }) => deleteThermoReactorInput(entity),
+    },
+};
 
-    const data = getReactorInfo(entity);
-    data.state = String(data.state).toLowerCase() === "off" ? "on" : "off";
-    entity.setDynamicProperty("reactorData", JSON.stringify(data));
-}))
+for (const slot of Object.keys(THERMO_REACTOR_KEYPAD_BY_SLOT).map(Number)) {
+    thermoReactorButtons[`keypad_${slot}`] = {
+        slot,
+        onPress: ({ entity }) => appendThermoReactorInput(slot, entity),
+    };
+}
 
-// Numpad
-ButtonManager.registerMachineButton(
-    "thermo_reactor",
-    Object.keys(THERMO_REACTOR_KEYPAD_BY_SLOT).map(Number),
-    ({ entity, slot }) => {
-        appendThermoReactorInput(slot, entity);
-    }
-);
+InterfaceManager.registerInterface(THERMO_REACTOR_INTERFACE_ID, { buttons: thermoReactorButtons });
+InterfaceManager.linkBlockInterface("utilitycraft:thermo_reactor_controller", THERMO_REACTOR_INTERFACE_ID);
 
-// Accept Button - Sets the current number as the burn rate
-ButtonManager.registerMachineButton("thermo_reactor", THERMO_REACTOR_ACCEPT_SLOT, ({ entity }) => {
-    applyThermoReactorBurnRate(entity);
-});
-
-// Cancel Button - Deletes all characters
-ButtonManager.registerMachineButton("thermo_reactor", THERMO_REACTOR_CANCEL_SLOT, ({ entity }) => {
-    resetThermoReactorInput(entity);
-});
-
-// Delete Button - Deletes 1 character
-ButtonManager.registerMachineButton("thermo_reactor", THERMO_REACTOR_DELETE_SLOT, ({ entity }) => {
-    deleteThermoReactorInput(entity);
-});
-
-DoriosAPI.register.blockComponent('thermo_reactor', {
+DoriosLib.registry.blockComponent('utilitycraft:thermo_reactor', {
     onPlayerInteract(e) {
         return MultiblockGenerator.handlePlayerInteract(e, GENERATOR_CONFIG, {
             onActivate: ({ entity, components, energyCap, settings, structure }) => {
@@ -147,12 +150,12 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
                     'dorios:rateSpeed',
                     energyCap / settings.multiblock.transfer_rate_ratio
                 )
-                entity.setItem(
-                    THERMO_REACTOR_INPUT_SLOT,
-                    THERMO_REACTOR_INPUT_ITEM,
-                    1,
-                    '\n\u00A7r\u00A7fSet the burn rate for\n the reactor!\n\n 0 mB/t'
-                )
+                DoriosLib.entity.setNewItem(entity, {
+                    slot: THERMO_REACTOR_INPUT_SLOT,
+                    typeId: THERMO_REACTOR_INPUT_ITEM,
+                    nameTag: '\n\u00A7r\u00A7fSet the burn rate for\n the reactor!\n\n 0 mB/t',
+                })
+                InterfaceManager.ensureEntityInterfaces(entity)
                 const lavaCapacity =
                     (components['fluid_cell'] ?? 0) * config.lavaCapacityPerFluidCell
                 const internalVolume = components['air'] ?? 0
@@ -221,8 +224,6 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
         const reactor = new MultiblockGenerator(block, GENERATOR_CONFIG);
         if (!reactor.valid) return;
         const { entity, energy } = reactor
-        ButtonManager.ensureWatching(entity, "thermo_reactor")
-
         const newRate = entity.getDynamicProperty("dorios:rateSpeed");
         reactor.setRate(newRate);
 
@@ -340,7 +341,7 @@ DoriosAPI.register.blockComponent('thermo_reactor', {
                 data.state = "off"
                 data.temperature = 1000
                 Multiblock.DeactivationManager.deactivateMultiblock(block, undefined, { blockId: 'minecraft:water' })
-                DoriosAPI.utils.waitSeconds(4, () => {
+                DoriosLib.time.runAfterSeconds(4, () => {
                     if (!entity) return
                     const bounds = data.bounds
                     if (bounds) {
@@ -397,12 +398,11 @@ function getThermoReactorInputText(entity) {
 function setThermoReactorInputText(entity, text = '0') {
     if (!entity) return;
 
-    entity.setItem(
-        THERMO_REACTOR_INPUT_SLOT,
-        THERMO_REACTOR_INPUT_ITEM,
-        1,
-        `\n\u00A7r\u00A7fSet the burn rate for \nthe reactor!\n\n ${text || '0'} mB/t`
-    );
+    DoriosLib.entity.setNewItem(entity, {
+        slot: THERMO_REACTOR_INPUT_SLOT,
+        typeId: THERMO_REACTOR_INPUT_ITEM,
+        nameTag: `\n\u00A7r\u00A7fSet the burn rate for \nthe reactor!\n\n ${text || '0'} mB/t`,
+    });
 }
 
 function deleteThermoReactorInput(entity) {
@@ -465,9 +465,9 @@ function updateReactorInfoItem(data, reactor) {
     const storedEnergy = energy.get();
     const energyCap = energy.getCap();
     const fuelStored = lavaTank?.get() ?? 0;
-    const fuelName = lavaTank ? DoriosAPI.utils.formatIdToText(lavaTank.getType()) : 'None';
+    const fuelName = lavaTank ? DoriosLib.text.formatIdentifier(lavaTank.getType()) : 'None';
     const coolantStored = coolantTank?.get() ?? 0;
-    const coolantName = coolantTank ? DoriosAPI.utils.formatIdToText(coolantTank.getType()) : 'None';
+    const coolantName = coolantTank ? DoriosLib.text.formatIdentifier(coolantTank.getType()) : 'None';
     const fuelPercent = (data.lavaCapacity ?? 0) > 0 ? ((fuelStored / (data.lavaCapacity ?? 0)) * 100).toFixed(2) : '0.00';
     const coolantPercent = (data.coolantCapacity ?? 0) > 0 ? ((coolantStored / (data.coolantCapacity ?? 0)) * 100).toFixed(2) : '0.00';
     const burnRate = data.rate ?? 0;

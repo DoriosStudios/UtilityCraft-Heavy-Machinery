@@ -14,17 +14,24 @@
             }
         },
         "components": {
-            "minecraft:geometry": "geometry.utilitycraft_block_3",
+            "minecraft:geometry": "minecraft:geometry.full_block",
             "minecraft:material_instances": {
                 "*": {
-                    "texture": "utilitycraft_thermo_core",
+                    "texture": "utilitycraft_thermo_core_side",
+                    "render_method": "alpha_test"
+                },
+                "up": {
+                    "texture": "utilitycraft_thermo_core_up",
+                    "render_method": "alpha_test"
+                },
+                "down": {
+                    "texture": "utilitycraft_thermo_core_up",
                     "render_method": "alpha_test"
                 }
             },
             "minecraft:destructible_by_mining": {
                 "seconds_to_destroy": 1
             },
-            "tag:dorios:multiblock_case": {},
             "tag:dorios:multiblock_component": {}
         },
         "permutations": [
@@ -33,7 +40,15 @@
                 "components": {
                     "minecraft:material_instances": {
                         "*": {
-                            "texture": "utilitycraft_burnt_thermo_core",
+                            "texture": "utilitycraft_burnt_thermo_core_side",
+                            "render_method": "alpha_test"
+                        },
+                        "up": {
+                            "texture": "utilitycraft_burnt_thermo_core_up",
+                            "render_method": "alpha_test"
+                        },
+                        "down": {
+                            "texture": "utilitycraft_burnt_thermo_core_up",
                             "render_method": "alpha_test"
                         }
                     }

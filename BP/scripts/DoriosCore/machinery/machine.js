@@ -1,12 +1,23 @@
-import { ItemStack, system, world } from "@minecraft/server";
+import * as DoriosLib from "DoriosLib/index.js";
+import { ItemStack, system } from "@minecraft/server";
 import * as Constants from "./constants.js";
 import { EnergyStorage } from "./energyStorage";
 import { FluidStorage } from "./fluidStorage";
+import { GasStorage } from "./gasStorage.js";
 import { BasicMachine } from "./basicMachine";
 import { OutputTracker } from "./outputTracker.js";
+import { resolveItemContainerAt } from "./itemContainers.js";
 import { TickScheduler } from "./tickScheduler.js";
+import { MachineUpgradeRegistry } from "./machineUpgrades.js";
 import { Rotation } from "../utils/rotation";
 import * as Utils from "../utils/entity";
+import { InterfaceManager } from "../interfaces/index.js";
+import { ensureItemIOConfig } from "../interfaces/itemIO.js";
+import { ensureFluidIOConfig } from "../interfaces/fluidIO.js";
+import { ensureGasIOConfig } from "../interfaces/gasIO.js";
+import { ensureBlockIOInterface } from "../interfaces/IOInterface.js";
+import { getDirectionBetween, OPPOSITE_DIRECTIONS } from "../utils/directions.js";
+import * as DoriosContainer from "../../DoriosLib/containers/index.js";
 
 export class Machine extends BasicMachine {
   /**
@@ -24,23 +35,25 @@ export class Machine extends BasicMachine {
     const machineSettings = settings.machine;
     if (!machineSettings) return;
 
-    this.upgrades = {
-      energy: 0,
-      range: 0,
-      speed: 0,
-      ultimate: 0,
-    };
-    this.boosts = {
-      speed: 1,
-      consumption: 1,
-    };
+    this.boosts = MachineUpgradeRegistry.resolveBoosts(
+      this.container,
+      machineSettings.upgrades,
+      {
+        speed: 1,
+        energy_cost: 1,
+        energy_efficiency: 1,
+        process_batch: 1,
+      },
+    );
+    this.boosts.energy_cost = Math.max(0.01, this.boosts.energy_cost);
+    this.boosts.energy_efficiency = Math.max(0.01, this.boosts.energy_efficiency);
+    this.boosts.consumption = Math.max(
+      0.01,
+      this.boosts.energy_cost / this.boosts.energy_efficiency,
+    );
 
-    if (machineSettings.upgrades) {
-      this.upgrades = this.#getUpgradeLevels(machineSettings.upgrades);
-      this.boosts = this.#calculateBoosts(this.upgrades);
-      const adjustedRate = settings.machine.rate_speed_base * this.boosts.speed * this.boosts.consumption;
-      this.setRate(adjustedRate);
-    }
+    const adjustedRate = baseRate * this.boosts.speed * this.boosts.consumption;
+    this.setRate(adjustedRate);
   }
 
   /**
@@ -65,6 +78,8 @@ export class Machine extends BasicMachine {
 
     const energy = new EnergyStorage(entity);
     const fluid = new FluidStorage(entity);
+    const supportsGas = entity.getComponent("minecraft:type_family")?.hasTypeFamily("dorios:gas_container") === true;
+    const gas = supportsGas ? new GasStorage(entity) : undefined;
     const blockItemId = brokenBlockPermutation.type.id;
     const blockItem = new ItemStack(blockItemId);
     const lore = [];
@@ -74,9 +89,17 @@ export class Machine extends BasicMachine {
       lore.push(`§r§7  Energy: ${EnergyStorage.formatEnergyToText(energy.get())}/${EnergyStorage.formatEnergyToText(energy.cap)}`);
     }
 
-    if (fluid.type != Constants.EMPTY_FLUID_TYPE) {
-      const liquidName = DoriosAPI.utils.capitalizeFirst(fluid.type);
-      lore.push(`§r§7  ${liquidName}: ${FluidStorage.formatFluid(fluid.get())}/${FluidStorage.formatFluid(fluid.cap)}`);
+    if (fluid.type != Constants.EMPTY_FLUID_TYPE && fluid.get() > 0) {
+      const liquidName = DoriosLib.text.capitalizeFirst(fluid.type);
+      const storedFluid = fluid.type === "xp"
+        ? `${Math.floor(fluid.get())} mB`
+        : FluidStorage.formatFluid(fluid.get());
+      lore.push(`§r§7  ${liquidName}: ${storedFluid}/${FluidStorage.formatFluid(fluid.cap)}`);
+    }
+
+    if (gas && gas.type !== Constants.EMPTY_GAS_TYPE && gas.get() > 0) {
+      const gasName = DoriosLib.text.capitalizeFirst(gas.type);
+      lore.push(`§r§7  Gas (${gasName}): ${GasStorage.formatGas(gas.get())}/${GasStorage.formatGas(gas.cap)}`);
     }
 
     if (lore.length > 0) {
@@ -85,7 +108,7 @@ export class Machine extends BasicMachine {
 
     // Drop item and cleanup
     system.run(() => {
-      if (player?.isInSurvival()) {
+      if (DoriosLib.player.isSurvival(player)) {
         const oldItemEntity = dim
           .getEntities({
             type: "item",
@@ -106,6 +129,8 @@ export class Machine extends BasicMachine {
   /**
    * Spawns a machine entity at the specified block location and initializes
    * its energy and optional fluid storage based on the item held by the player.
+   * Registered InterfaceManager buttons are also written after the caller's
+   * placement callback, so UI-owned slots are reserved before machine ticks.
    *
    * Handles optional rotation logic before placing the machine.
    *
@@ -126,10 +151,12 @@ export class Machine extends BasicMachine {
     const { block, player, permutationToPlace } = e;
     const mainHand = player.getComponent("equippable").getEquipment("Mainhand");
     const { energy, fluid } = Utils.getEnergyAndFluidFromItem(mainHand);
+    const gasLine = mainHand?.getLore()?.find((line) => line.replace(/§./g, "").trim().startsWith("Gas ("));
+    const gas = gasLine ? GasStorage.getGasFromText(gasLine) : undefined;
 
     // Machine specific: rotation handling
     if (config.rotation) {
-      if (player.isInSurvival()) {
+      if (DoriosLib.player.isSurvival(player)) {
         system.run(() => {
           player.runCommand(`clear @s ${permutationToPlace.type.id} 0 1`);
         });
@@ -140,6 +167,7 @@ export class Machine extends BasicMachine {
     }
 
     system.run(() => {
+      ensureBlockIOInterface(block);
       const entity = Utils.spawnEntity(block, config);
       const energyManager = new EnergyStorage(entity);
       energyManager.setCap(config.machine.energy_cap);
@@ -147,9 +175,10 @@ export class Machine extends BasicMachine {
       energyManager.display();
 
       if (config.machine.fluid_cap) {
-        const fluidManager = new FluidStorage(entity);
-
-        fluidManager.setCap(config.machine.fluid_cap);
+        const fluidCount = Math.max(1, Math.floor(config.machine.fluid_types ?? 1));
+        const fluidManagers = FluidStorage.initializeMultiple(entity, fluidCount);
+        for (const manager of fluidManagers) manager.setCap(config.machine.fluid_cap);
+        const fluidManager = fluidManagers[0];
         fluidManager.display();
 
         if (fluid && fluid.amount > 0) {
@@ -157,10 +186,35 @@ export class Machine extends BasicMachine {
           fluidManager.set(fluid.amount);
         }
       }
+      if (config.machine.gas_cap) {
+        const gasCount = Math.max(1, Math.floor(config.machine.gas_types ?? 1));
+        const gasManagers = GasStorage.initializeMultiple(entity, gasCount);
+        for (const manager of gasManagers) manager.setCap(config.machine.gas_cap);
+        if (gas && gas.amount > 0) {
+          gasManagers[0].setType(gas.type);
+          gasManagers[0].set(gas.amount);
+        }
+      }
+      if (config.machine.gas_cap && config.machine.fluid_cap) {
+        entity.triggerEvent("utilitycraft:fluid_gas_machine");
+      } else if (config.machine.gas_cap) {
+        entity.triggerEvent("utilitycraft:gas_machine");
+      }
+      // The inventory-size entity event may still expose the base container in
+      // this tick. ensureItemIOConfig installs a fail-closed temporary config
+      // and the next tick reconciles it against the final inventory size.
+      ensureItemIOConfig(entity, block.typeId, { failClosedWhileResizing: true });
+      ensureFluidIOConfig(entity, block.typeId);
+      ensureGasIOConfig(entity, block.typeId);
       system.run(() => {
+        if (!entity.isValid) return;
+        ensureItemIOConfig(entity, block.typeId);
+        ensureFluidIOConfig(entity, block.typeId);
+        ensureGasIOConfig(entity, block.typeId);
         if (callback) {
           callback(entity);
         }
+        InterfaceManager.ensureEntityInterfaces(entity);
       });
     });
     Utils.updateAdjacentNetwork(block, permutationToPlace);
@@ -169,52 +223,45 @@ export class Machine extends BasicMachine {
    * Transfers output items to this machine's cached item output target.
    *
    * ## Behavior
-   * - Uses the output slot range registered on the machine entity.
+   * - Uses the slot array configured for the machine's output face.
    * - Reads the cached target from {@link OutputTracker}.
-   * - Calls {@link DoriosAPI.containers.transferItemsAt} and clears stale targets.
+   * - Applies the opposite input face on the resolved target.
    *
    * Compatible with:
    * - Vanilla containers (chests, barrels, hoppers, etc.)
    * - Dorios containers and machines with inventories
-   *
-   * Uses the output slot range registered on the machine entity.
-   * - `"simple"` → transfers only the **last slot** (output).
-   * - `"complex"` → transfers the **last 9 slots** (outputs).
-   *
    * @returns {boolean} True when at least one item was moved.
    */
   transferItems() {
-    const range = DoriosAPI.containers.getAllowedOutputRange(this.entity);
     const targetLoc = OutputTracker.getOutputTarget(this.entity, "item") ?? OutputTracker.refreshOutput(this.block, "item");
     if (!targetLoc) return false;
 
-    const moved = DoriosAPI.containers.transferItemsAt(this.container, targetLoc, this.dimension, range);
-    if (moved === -1) {
+    const target = resolveItemContainerAt(this.dimension, targetLoc);
+    const direction = getDirectionBetween(this.block.location, targetLoc);
+    if (!target || !direction) {
       OutputTracker.clearOutputTarget(this.entity, "item");
       return false;
     }
 
+    let moved = 0;
+    const slots = DoriosContainer.getOutputSlots(this.entity, { face: direction });
+    for (const sourceSlot of slots) {
+      moved += DoriosContainer.transfer(this.entity, {
+        sourceSlot,
+        target,
+        targetFace: OPPOSITE_DIRECTIONS[direction],
+      });
+    }
     return moved > 0;
   }
 
   /**
-   * Returns whether the configured output slot or slot range contains items.
+   * Returns whether an explicit no-face output slot contains items.
    *
    * @returns {boolean} True when at least one registered output slot has an item.
    */
   hasOutputItems() {
-    const range = DoriosAPI.containers.getAllowedOutputRange(this.entity);
-
-    if (typeof range === "number") {
-      return !!this.container.getItem(range);
-    }
-
-    if (!Array.isArray(range) || range.length !== 2) {
-      return false;
-    }
-
-    const [start, end] = range;
-    for (let slot = start; slot <= end; slot++) {
+    for (const slot of DoriosContainer.getOutputSlots(this.entity)) {
       if (this.container.getItem(slot)) return true;
     }
 
@@ -222,62 +269,28 @@ export class Machine extends BasicMachine {
   }
 
   /**
-   * Pulls items from the vanilla container block above the machine
-   * into a specific slot in its internal inventory.
-   *
-   * - Only works if the block above is a vanilla container (checked via DoriosAPI.constants.vanillaContainers).
-   * - If the target slot is empty, moves the first available item.
-   * - If it already contains an item, merges stacks until full.
+   * Pulls one available stack from the container above into a specific
+   * machine slot, respecting the source down face and machine up face.
    *
    * @param {number} targetSlot The slot index where items should be inserted.
    * @returns {boolean} True if at least one item was transferred.
    */
   pullItemsFromAbove(targetSlot) {
-    const inv = this.container;
-    const block = this.block;
-
-    const aboveBlock = block.above(1);
+    const aboveBlock = this.block.above(1);
     if (!aboveBlock) return false;
 
-    // Solo contenedores vanilla
-    if (!DoriosAPI.constants.vanillaContainers.includes(aboveBlock.typeId)) return false;
+    const source = resolveItemContainerAt(this.dimension, aboveBlock.location);
+    if (!source) return false;
 
-    const inputContainer = aboveBlock.getComponent("minecraft:inventory")?.container;
-    if (!inputContainer) return false;
-
-    const targetItem = inv.getItem(targetSlot);
-    let transferred = false;
-    for (let i = 0; i < inputContainer.size; i++) {
-      const inputItem = inputContainer.getItem(i);
-      if (!inputItem) continue;
-
-      // Si hay item distinto en el slot → saltar
-      if (targetItem && inputItem.typeId !== targetItem.typeId) continue;
-
-      // Si el slot está vacío → mover toda la pila al slot específico
-      if (!targetItem) {
-        inv.setItem(targetSlot, inputItem);
-        inputContainer.setItem(i);
-        return true;
-      }
-
-      const space = targetItem.maxAmount - targetItem.amount;
-      const amount = Math.min(space, inputItem.amount);
-
-      // Intentar combinar stacks
-      if (amount <= 0) continue;
-
-      targetItem.amount += amount;
-      inv.setItem(targetSlot, targetItem);
-      if (inputItem.amount - amount <= 0) {
-        inputContainer.setItem(i);
-      } else {
-        inputItem.amount -= amount;
-        inputContainer.setItem(i, inputItem);
-      }
-
-      return transferred;
+    for (const sourceSlot of DoriosContainer.getOutputSlots(source, { face: "down" })) {
+      const moved = DoriosContainer.transfer(source, {
+        sourceSlot,
+        target: this.entity,
+        targetSlots: [targetSlot],
+      });
+      if (moved > 0) return true;
     }
+    return false;
   }
 
   /**
@@ -392,7 +405,8 @@ export class Machine extends BasicMachine {
 §r${Constants.MACHINE_TEXT_COLORS.yellow}${message}!
 
 §r${Constants.MACHINE_TEXT_COLORS.green}Speed x${this.boosts.speed.toFixed(2)}
-§r${Constants.MACHINE_TEXT_COLORS.green}Efficiency ${((1 / this.boosts.consumption) * 100).toFixed(0)}%%
+§r${Constants.MACHINE_TEXT_COLORS.green}Efficiency x${(1 / this.boosts.consumption).toFixed(2)}
+§r${Constants.MACHINE_TEXT_COLORS.green}Recipe Batch x${Math.max(1, Math.floor(this.boosts.process_batch))}
 §r${Constants.MACHINE_TEXT_COLORS.green}Cost ---
 
 §r${Constants.MACHINE_TEXT_COLORS.red}Rate ${EnergyStorage.formatEnergyToText(Math.floor(this.baseRate))}/t
@@ -413,7 +427,8 @@ export class Machine extends BasicMachine {
 §r${Constants.MACHINE_TEXT_COLORS.darkGreen}${message}!
 
 §r${Constants.MACHINE_TEXT_COLORS.green}Speed x${this.boosts.speed.toFixed(2)}
-§r${Constants.MACHINE_TEXT_COLORS.green}Efficiency ${((1 / this.boosts.consumption) * 100).toFixed(0)}%%
+§r${Constants.MACHINE_TEXT_COLORS.green}Efficiency x${(1 / this.boosts.consumption).toFixed(2)}
+§r${Constants.MACHINE_TEXT_COLORS.green}Recipe Batch x${Math.max(1, Math.floor(this.boosts.process_batch))}
 §r${Constants.MACHINE_TEXT_COLORS.green}Cost ${EnergyStorage.formatEnergyToText(this.getEnergyCost() * this.boosts.consumption)}
 
 §r${Constants.MACHINE_TEXT_COLORS.red}Rate ${EnergyStorage.formatEnergyToText(Math.floor(this.baseRate))}/t
@@ -421,87 +436,4 @@ export class Machine extends BasicMachine {
   }
   //#endregion
 
-  /**
-   * Scans upgrade slots and returns upgrade levels by type.
-   *
-   * @param {Array<number>} [slots=[4,5,6]] The inventory slots reserved for upgrades.
-   * @returns {UpgradeLevels}
-   */
-  #getUpgradeLevels(slots = [4, 5]) {
-    /** @type {UpgradeLevels} */
-    const levels = {
-      energy: 0,
-      range: 0,
-      speed: 0,
-      ultimate: 0,
-    };
-
-    for (const slot of slots) {
-      const item = this.container.getItem(slot);
-      if (!item) continue;
-
-      if (!item.hasTag("utilitycraft:is_upgrade")) continue;
-
-      // Parse type (e.g. "utilitycraft:energy_upgrade" → "energy")
-      const [, raw] = item.typeId.split(":");
-      const type = raw.split("_")[0];
-
-      if (levels[type] !== undefined) {
-        levels[type] += item.amount;
-      }
-    }
-
-    return levels;
-  }
-
-  /**
-   * Calculates the speed multiplier based on upgrade amounts.
-   *
-   * Formula:
-   * speed = 1 + 0.125 * n * (n + 1)
-   *
-   * @param {number} speedAmount
-   * @returns {number} Speed multiplier
-   */
-  #calculateSpeed(speedAmount) {
-    const speedLevel = Math.min(8, speedAmount);
-    return 1 + 0.125 * speedLevel * (speedLevel + 1);
-  }
-
-  /**
-   * Calculates the consumption multiplier (lower = better).
-   *
-   * Formula (depends on energy upgrade level):
-   * If level < 4:
-   *   consumption = (1 - 0.2 * level) * speed
-   * Else:
-   *   consumption = (1 - (0.95 - 0.05 * (8 - level))) * speed
-   *
-   * @param {number} energyAmount
-   * @param {number} speed
-   * @returns {number} Consumption multiplier (0–1)
-   */
-  #calculateConsumption(energyAmount, speed) {
-    const energyLevel = Math.min(8, energyAmount);
-    if (energyLevel < 4) {
-      return (1 - 0.2 * energyLevel) * speed;
-    }
-    return (1 - (0.95 - 0.05 * (8 - energyLevel))) * speed;
-  }
-
-  /**
-   * Aggregates all boosts (speed + consumption).
-   *
-   * @param {Object} levels Upgrade levels { speed, energy, ... }
-   * @returns {{ speed: number, consumption: number }}
-   */
-  #calculateBoosts(levels) {
-    const speedLevel = levels.speed ?? 0;
-    const energyLevel = levels.energy ?? 0;
-
-    const speed = this.#calculateSpeed(speedLevel);
-    const consumption = this.#calculateConsumption(energyLevel, speed);
-
-    return { speed, consumption };
-  }
 }

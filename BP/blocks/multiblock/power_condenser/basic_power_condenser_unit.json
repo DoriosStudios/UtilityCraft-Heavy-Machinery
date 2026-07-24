@@ -8,10 +8,18 @@
             }
         },
         "components": {
-            "minecraft:geometry": "geometry.utilitycraft_block_3",
+            "minecraft:geometry": "minecraft:geometry.full_block",
             "minecraft:material_instances": {
                 "*": {
-                    "texture": "utilitycraft_basic_power_condenser_unit",
+                    "texture": "utilitycraft_basic_power_condenser_unit_side",
+                    "render_method": "alpha_test"
+                },
+                "up": {
+                    "texture": "utilitycraft_basic_power_condenser_unit_up",
+                    "render_method": "alpha_test"
+                },
+                "down": {
+                    "texture": "utilitycraft_basic_power_condenser_unit_up",
                     "render_method": "alpha_test"
                 }
             },

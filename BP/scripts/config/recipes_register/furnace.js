@@ -1,4 +1,4 @@
-import { system, world } from "@minecraft/server";
+import * as DoriosLib from "DoriosLib/index.js";
 
 const newRecipes = {
     "utilitycraft:tin_dust": { output: "utilitycraft:tin_ingot" },
@@ -13,6 +13,4 @@ const newRecipes = {
     "utilitycraft:brute_bronze_block": { output: "utilitycraft:bronze_block" },
 };
 
-world.afterEvents.worldLoad.subscribe(() => {
-    system.sendScriptEvent("utilitycraft:register_furnace_recipe", JSON.stringify(newRecipes));
-});
+DoriosLib.registry.registerFurnaceRecipe(newRecipes);

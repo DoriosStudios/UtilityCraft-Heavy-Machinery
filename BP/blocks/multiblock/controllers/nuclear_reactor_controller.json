@@ -16,10 +16,22 @@
             }
         },
         "components": {
-            "minecraft:geometry": "geometry.utilitycraft_block_4",
+            "minecraft:geometry": "minecraft:geometry.full_block",
             "minecraft:material_instances": {
                 "*": {
-                    "texture": "utilitycraft_nuclear_reactor_controller",
+                    "texture": "utilitycraft_nuclear_reactor_controller_side",
+                    "render_method": "alpha_test"
+                },
+                "north": {
+                    "texture": "utilitycraft_nuclear_reactor_controller_north",
+                    "render_method": "alpha_test"
+                },
+                "up": {
+                    "texture": "utilitycraft_nuclear_reactor_controller_up",
+                    "render_method": "alpha_test"
+                },
+                "down": {
+                    "texture": "utilitycraft_nuclear_reactor_controller_down",
                     "render_method": "alpha_test"
                 }
             },
@@ -30,7 +42,7 @@
             "tag:dorios:energy": {},
             "tag:dorios:fluid": {},
             "tag:dorios:item": {},
-            "tag:dorios:controller": {}
+            "tag:dorios:machine": {}
         },
         "permutations": [
             {

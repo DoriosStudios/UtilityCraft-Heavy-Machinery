@@ -1,4 +1,5 @@
-import { system, world } from "@minecraft/server";
+import { system } from "@minecraft/server";
+import * as DoriosLib from "DoriosLib/index.js";
 
 export const coolants = {}
 
@@ -9,9 +10,7 @@ const coolantsRegister = {
     }
 }
 
-world.afterEvents.worldLoad.subscribe(() => {
-    system.sendScriptEvent("utilitycraft:register_coolant", JSON.stringify(coolantsRegister))
-})
+DoriosLib.registry.registerCoolant(coolantsRegister);
 
 system.afterEvents.scriptEventReceive.subscribe(({ id, message }) => {
     if (id !== "utilitycraft:register_coolant") return;

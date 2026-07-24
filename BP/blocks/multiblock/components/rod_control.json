@@ -16,10 +16,22 @@
             }
         },
         "components": {
-            "minecraft:geometry": "geometry.utilitycraft_block_4",
+            "minecraft:geometry": "minecraft:geometry.full_block",
             "minecraft:material_instances": {
                 "*": {
-                    "texture": "utilitycraft_rod_control",
+                    "texture": "utilitycraft_rod_control_side",
+                    "render_method": "alpha_test"
+                },
+                "north": {
+                    "texture": "utilitycraft_rod_control_north",
+                    "render_method": "alpha_test"
+                },
+                "up": {
+                    "texture": "utilitycraft_rod_control_up",
+                    "render_method": "alpha_test"
+                },
+                "down": {
+                    "texture": "utilitycraft_rod_control_down",
                     "render_method": "alpha_test"
                 }
             },

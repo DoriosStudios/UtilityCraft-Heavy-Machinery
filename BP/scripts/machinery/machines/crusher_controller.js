@@ -1,4 +1,5 @@
-import { EnergyStorage, Multiblock, MultiblockMachine, ButtonManager } from "DoriosCore/index.js"
+import { EnergyStorage, InterfaceManager, Multiblock, MultiblockMachine } from "DoriosCore/index.js"
+import * as DoriosLib from "DoriosLib/index.js";
 import { crusherRecipes } from 'config/recipes/crusher.js'
 
 const INPUT_SLOTS = [3, 4, 5, 6, 7, 8, 9, 10, 11]
@@ -33,19 +34,29 @@ const MULTIBLOCK_CONFIG = {
     requirements: CONTROLLER_REQUIREMENTS,
 }
 
-ButtonManager.registerMachineButton("crusher", 21, ({ entity }) => {
-    let crusherMode = getCrusherMode(entity)
-    crusherMode++
-    if (crusherMode > 3) crusherMode = 1
-    setCrusherMode(entity, crusherMode)
-    return "\u00A7rx" + `${crusherMode}`
-});
+const CRUSHER_INTERFACE_ID = "uc_heavy_machinery:crusher_controls";
 
-DoriosAPI.register.blockComponent('crusher_controller', {
+InterfaceManager.registerInterface(CRUSHER_INTERFACE_ID, {
+    buttons: {
+        mode: {
+            slot: 21,
+            nameTag: ({ entity }) => `\u00A7rx${getCrusherMode(entity)}`,
+            onPress: ({ entity }) => {
+                const nextMode = (getCrusherMode(entity) % 3) + 1;
+                setCrusherMode(entity, nextMode);
+                return `\u00A7rx${nextMode}`;
+            },
+        },
+    },
+});
+InterfaceManager.linkBlockInterface("utilitycraft:crusher_controller", CRUSHER_INTERFACE_ID);
+
+DoriosLib.registry.blockComponent('utilitycraft:crusher_controller', {
     onPlayerInteract(e) {
         MultiblockMachine.handlePlayerInteract(e, MULTIBLOCK_CONFIG, {
             initializeEntity(entity) {
-                entity.setItem(2, 'utilitycraft:arrow_right_0', 1, ' ')
+                DoriosLib.entity.setNewItem(entity, { slot: 2, typeId: 'utilitycraft:arrow_right_0', nameTag: ' ' })
+                InterfaceManager.ensureEntityInterfaces(entity)
             },
             successMessages: ({ energyCap }) => [
                 '\u00A7a[Controller] Crusher Factory created successfully.',
@@ -61,13 +72,11 @@ DoriosAPI.register.blockComponent('crusher_controller', {
 
         const controller = new MultiblockMachine(e.block, MULTIBLOCK_CONFIG);
         if (!controller.valid) return;
-        ButtonManager.ensureWatching(controller.entity, "crusher")
-
         const raw = controller.entity.getDynamicProperty('components');
         /** @type {MachineStats} */
         const data = raw ? JSON.parse(raw) : {};
 
-        controller.setRate(BASE_RATE * data.speed.multiplier);
+        controller.setRateMultiplier(data.speed.multiplier);
 
         const inv = controller.container;
         const recipes = crusherRecipes;
@@ -109,7 +118,7 @@ DoriosAPI.register.blockComponent('crusher_controller', {
                         batch.craftCount * (recipe.amount ?? 1)
                     );
 
-                    controller.entity.removeItem(
+                    DoriosLib.entity.removeItem(controller.entity,
                         batch.inputType,
                         batch.craftCount * (recipe.required ?? 1)
                     );
@@ -147,7 +156,7 @@ DoriosAPI.register.blockComponent('crusher_controller', {
 function updateUI(controller, data, status = '\u00A7aRunning', recipe) {
     controller.displayEnergy()
     controller.setLabel([
-        getCrusherInfoLabel(data, status),
+        MultiblockMachine.getMachineInfoLabel(data, status),
         MultiblockMachine.getEnergyInfoLabel(controller),
         getRecipeLabel(recipe),
         getCrusherModeLabel()
@@ -164,7 +173,7 @@ function updateUI(controller, data, status = '\u00A7aRunning', recipe) {
  */
 function getRecipeLabel(recipe) {
     const hasRecipe = !!recipe;
-    const output = hasRecipe ? DoriosAPI.utils.formatIdToText(recipe.output) ?? '---' : '---';
+    const output = hasRecipe ? DoriosLib.text.formatIdentifier(recipe.output) ?? '---' : '---';
     const yieldAmt = hasRecipe ? (recipe.amount ?? 1) : '---';
     const inputReq = hasRecipe ? (recipe.required ?? 1) : '---';
 
@@ -190,18 +199,6 @@ function getCrusherMode(entity) {
  */
 function setCrusherMode(entity, value) {
     return entity.setDynamicProperty("crusher_mode", value)
-}
-
-function getCrusherInfoLabel(data, status = "\u00A7aRunning") {
-    return `\u00A7r\u00A77Status: ${status}
-
-\u00A7r\u00A7eMachine Information
-
-\u00A7r\u00A7aInput Capacity \u00A7fx${data.processing.amount}
-\u00A7r\u00A7aCost \u00A7f${data.cost ? EnergyStorage.formatEnergyToText(data.cost) : "---"}
-\u00A7r\u00A7aSpeed \u00A7fx${data.speed.multiplier.toFixed(2)}
-\u00A7r\u00A7aEfficiency \u00A7f${((data.processing.amount / data.energyMultiplier) * 100).toFixed(2)}%%
-`;
 }
 
 /**

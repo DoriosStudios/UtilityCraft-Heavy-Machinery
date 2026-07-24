@@ -1,4 +1,4 @@
-import { system, world } from "@minecraft/server";
+import * as DoriosLib from "DoriosLib/index.js";
 
 const newRecipes = {
     // Steel
@@ -12,6 +12,4 @@ const newRecipes = {
     "utilitycraft:bronze_dust|minecraft:glass": { output: "utilitycraft:tempered_bronze_glass", required: 8 },
 };
 
-world.afterEvents.worldLoad.subscribe(() => {
-    system.sendScriptEvent("utilitycraft:register_infuser_recipe", JSON.stringify(newRecipes));
-});
+DoriosLib.registry.registerInfuserRecipe(newRecipes);

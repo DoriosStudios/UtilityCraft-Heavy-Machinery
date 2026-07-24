@@ -1,4 +1,4 @@
-import { world, system } from '@minecraft/server'
+import * as DoriosLib from "DoriosLib/index.js";
 
 const newDrops = {
     "minecraft:gravel": [
@@ -17,6 +17,4 @@ const newDrops = {
     ]
 };
 
-world.afterEvents.worldLoad.subscribe(() => {
-    system.sendScriptEvent("utilitycraft:register_sieve_drop", JSON.stringify(newDrops));
-});
+DoriosLib.registry.registerSieveDrop(newDrops);

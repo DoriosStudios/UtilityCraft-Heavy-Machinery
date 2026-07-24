@@ -1,4 +1,5 @@
 import { EnergyStorage, Multiblock, MultiblockMachine } from "DoriosCore/index.js"
+import * as DoriosLib from "DoriosLib/index.js";
 import { infuserRecipes } from 'config/recipes/infuser.js'
 
 const CATALYST_SLOTS = [4, 5, 6, 7]
@@ -33,14 +34,14 @@ const MULTIBLOCK_CONFIG = {
     requirements: CONTROLLER_REQUIREMENTS,
 }
 
-DoriosAPI.register.blockComponent('infuser_controller', {
+DoriosLib.registry.blockComponent('utilitycraft:infuser_controller', {
     onPlayerInteract(e) {
         return MultiblockMachine.handlePlayerInteract(e, MULTIBLOCK_CONFIG, {
             initializeEntity(entity) {
 
-                entity.setItem(2, 'utilitycraft:arrow_right_0', 1, ' ')
+                DoriosLib.entity.setNewItem(entity, { slot: 2, typeId: 'utilitycraft:arrow_right_0', nameTag: ' ' })
 
-                entity.setItem(3, 'utilitycraft:arrow_indicator_90', 1, '')
+                DoriosLib.entity.setNewItem(entity, { slot: 3, typeId: 'utilitycraft:arrow_indicator_90', nameTag: '' })
             },
             successMessages: ({ energyCap }) => [
                 '\u00A7a[Controller] Infuser Factory created successfully.',
@@ -61,7 +62,7 @@ DoriosAPI.register.blockComponent('infuser_controller', {
         /** @type {MachineStats} */
         const data = raw ? JSON.parse(raw) : {};
 
-        controller.setRate(BASE_RATE * data.speed.multiplier);
+        controller.setRateMultiplier(data.speed.multiplier);
 
         const inv = controller.container;
         const recipes = infuserRecipes;
@@ -171,12 +172,12 @@ DoriosAPI.register.blockComponent('infuser_controller', {
                     craftCount * recipeAmount
                 );
 
-                controller.entity.removeItem(
+                DoriosLib.entity.removeItem(controller.entity,
                     inputType,
                     craftCount * requiredInput
                 );
 
-                controller.entity.removeItem(
+                DoriosLib.entity.removeItem(controller.entity,
                     catalystType,
                     craftCount * requiredCatalyst
                 );
@@ -229,7 +230,7 @@ function updateUI(controller, data, status = '§aRunning', recipe) {
  */
 function getRecipeLabel(recipe) {
     const hasRecipe = !!recipe;
-    const output = hasRecipe ? DoriosAPI.utils.formatIdToText(recipe.output) ?? '---' : '---';
+    const output = hasRecipe ? DoriosLib.text.formatIdentifier(recipe.output) ?? '---' : '---';
     const yieldAmt = hasRecipe ? (recipe.amount ?? 1) : '---';
     const catalystReq = hasRecipe ? (recipe.required ?? 1) : '---';
     const inputReq = hasRecipe ? (recipe.input_required ?? 1) : '---';

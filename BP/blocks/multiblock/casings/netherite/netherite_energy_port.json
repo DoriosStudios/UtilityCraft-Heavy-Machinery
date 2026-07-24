@@ -14,16 +14,16 @@
 			}
         },
         "components": {
-			"tag:dorios:input_block": {},
-			"tag:dorios:multiblock_case": {}
+			"tag:dorios:multiblock.port": {},
+			"tag:dorios:multiblock.case.netherite": {}
 		},
 		"permutations": [
 			{
 				"condition": "q.block_state('utilitycraft:active') == 1 ",
 				"components": {
 					"tag:dorios:energy": {},
-					"tag:dorios:input_block": {},
-					"tag:dorios:multiblock_case": {}
+					"tag:dorios:multiblock.port": {},
+					"tag:dorios:multiblock.case.netherite": {}
 				}
 			}
 		]

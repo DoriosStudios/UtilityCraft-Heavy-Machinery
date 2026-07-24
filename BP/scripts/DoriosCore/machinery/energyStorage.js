@@ -1,3 +1,4 @@
+import * as DoriosLib from "DoriosLib/index.js";
 import { world, ItemStack, system } from "@minecraft/server";
 import * as Constants from "./constants.js";
 import { loadObjectives } from "../utils/scoreboards.js";
@@ -422,6 +423,7 @@ export class EnergyStorage {
   /**
    * Consumes energy from the entity if available.
    * Internally this is just an add with a negative amount.
+   * Infinite and legacy creative storages report success without changing their amount.
    *
    * @param {number} amount The amount of energy to consume.
    * @returns {number} The actual amount of energy consumed.
@@ -431,8 +433,9 @@ export class EnergyStorage {
    * if (used > 0) console.log(`Consumed ${used} energy`);
    */
   consume(amount) {
-    if (this.entity.hasTag(Constants.CREATIVE_TAG)) return amount;
     if (amount <= 0) return 0;
+    if (this.entity.hasTag(Constants.INFINITE_STORAGE_TAG)) return amount;
+    if (this.entity.hasTag(Constants.CREATIVE_TAG)) return amount;
 
     const current = this.get();
     if (current < amount) return 0;
@@ -628,7 +631,7 @@ export class EnergyStorage {
         .filter((tag) => tag.startsWith("pos:[") || tag.startsWith("net:["))
         .map(parseNetworkTag)
         .filter(Boolean)
-        .sort((a, b) => DoriosAPI.math.distanceBetween(pos, a) - DoriosAPI.math.distanceBetween(pos, b));
+        .sort((a, b) => DoriosLib.math.distance(pos, a) - DoriosLib.math.distance(pos, b));
 
       this.entity.setDynamicProperty(ENERGY_NETWORK_NODES_PROPERTY_ID, JSON.stringify(positions));
       this.entity.removeTag("updateNetwork");
@@ -660,7 +663,9 @@ export class EnergyStorage {
       // Filtrar entidades válidas
       const validEntities = [];
       for (const loc of orderedTargets) {
-        const [target] = dim.getEntitiesAtBlockLocation(loc);
+        const target = dim
+          .getEntitiesAtBlockLocation(loc)
+          .find((candidate) => candidate.typeId !== "utilitycraft:machine_area_outline");
         if (!target) {
           invalidKeys.add(getLocationKey(loc));
           continue;
@@ -710,7 +715,9 @@ export class EnergyStorage {
       for (const loc of orderedTargets) {
         if (available <= 0 || speed <= 0) break;
 
-        const [target] = dim.getEntitiesAtBlockLocation(loc);
+        const target = dim
+          .getEntitiesAtBlockLocation(loc)
+          .find((candidate) => candidate.typeId !== "utilitycraft:machine_area_outline");
         if (!target) {
           invalidKeys.add(getLocationKey(loc));
           continue;

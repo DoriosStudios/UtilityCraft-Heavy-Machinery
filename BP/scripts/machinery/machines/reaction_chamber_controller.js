@@ -1,4 +1,5 @@
 import { EnergyStorage, FluidStorage, Multiblock, MultiblockMachine } from "DoriosCore/index.js"
+import * as DoriosLib from "DoriosLib/index.js";
 import { reactionRecipes } from 'config/recipes/reaction_chamber.js'
 
 const INPUT_LIQUID_SLOT = 3
@@ -39,11 +40,11 @@ const MULTIBLOCK_CONFIG = {
     requirements: CONTROLLER_REQUIREMENTS,
 }
 
-DoriosAPI.register.blockComponent('reaction_chamber_controller', {
+DoriosLib.registry.blockComponent('utilitycraft:reaction_chamber_controller', {
     onPlayerInteract(e) {
         return MultiblockMachine.handlePlayerInteract(e, MULTIBLOCK_CONFIG, {
             initializeEntity(entity) {
-                entity.setItem(2, 'utilitycraft:arrow_right_0', 1, ' ')
+                DoriosLib.entity.setNewItem(entity, { slot: 2, typeId: 'utilitycraft:arrow_right_0', nameTag: ' ' })
                 FluidStorage.initializeMultiple(entity, 2)
             },
             onActivate: ({ entity, structure }) => {
@@ -71,7 +72,7 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
         /** @type {MachineStats} */
         const data = raw ? JSON.parse(raw) : {};
 
-        controller.setRate(BASE_RATE * data.speed.multiplier);
+        controller.setRateMultiplier(data.speed.multiplier);
 
         const inv = controller.container;
         const recipes = reactionRecipes;
@@ -204,7 +205,7 @@ DoriosAPI.register.blockComponent('reaction_chamber_controller', {
             }
 
             if (inputItemId !== "empty") {
-                controller.entity.removeItem(
+                DoriosLib.entity.removeItem(controller.entity,
                     inputItemId,
                     craftCount * reqItems
                 );
@@ -267,13 +268,13 @@ function updateUI(controller, [inputFluid, outputFluid], data, status = '§aRunn
 function getRecipeLabel(recipe) {
     const hasRecipe = !!recipe;
     const outItem = hasRecipe && recipe.output_item
-        ? DoriosAPI.utils.formatIdToText(recipe.output_item.id)
+        ? DoriosLib.text.formatIdentifier(recipe.output_item.id)
         : 'None';
     const outItemAmt = hasRecipe && recipe.output_item
         ? (recipe.output_item.amount ?? 1)
         : '-';
     const outFluid = hasRecipe && recipe.output_liquid
-        ? DoriosAPI.utils.formatIdToText(recipe.output_liquid.type)
+        ? DoriosLib.text.formatIdentifier(recipe.output_liquid.type)
         : 'None';
     const outFluidAmt = hasRecipe && recipe.output_liquid
         ? FluidStorage.formatFluid(recipe.output_liquid.amount)
