@@ -1,4 +1,4 @@
-import { EnergyStorage, Multiblock, MultiblockMachine } from "DoriosCore/index.js"
+import { EnergyStorage, Multiblock, MultiblockMachine, registerLinkNodeIO } from "DoriosCore/index.js"
 import * as DoriosLib from "DoriosLib/index.js";
 import { furnaceRecipes } from 'config/recipes/furnace.js'
 
@@ -32,6 +32,15 @@ const MULTIBLOCK_CONFIG = {
     },
     requirements: CONTROLLER_REQUIREMENTS,
 }
+
+registerLinkNodeIO('utilitycraft:incinerator_controller', {
+    items: {
+        anyInputSlots: INPUT_SLOTS,
+        anyOutputSlots: OUTPUT_SLOTS,
+        inputs: [{ id: 'input', label: 'Input', slots: INPUT_SLOTS }],
+        outputs: [{ id: 'output', label: 'Output', slots: OUTPUT_SLOTS }],
+    },
+})
 
 DoriosLib.registry.blockComponent('utilitycraft:incinerator_controller', {
     onPlayerInteract(e) {

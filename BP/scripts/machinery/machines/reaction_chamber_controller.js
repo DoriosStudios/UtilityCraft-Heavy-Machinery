@@ -1,4 +1,4 @@
-import { EnergyStorage, FluidStorage, Multiblock, MultiblockMachine } from "DoriosCore/index.js"
+import { EnergyStorage, FluidStorage, Multiblock, MultiblockMachine, registerLinkNodeIO } from "DoriosCore/index.js"
 import * as DoriosLib from "DoriosLib/index.js";
 import { reactionRecipes } from 'config/recipes/reaction_chamber.js'
 
@@ -39,6 +39,21 @@ const MULTIBLOCK_CONFIG = {
     },
     requirements: CONTROLLER_REQUIREMENTS,
 }
+
+registerLinkNodeIO('utilitycraft:reaction_chamber_controller', {
+    items: {
+        anyInputSlots: INPUT_SLOTS,
+        anyOutputSlots: OUTPUT_SLOTS,
+        inputs: [{ id: 'material', label: 'Material', slots: INPUT_SLOTS }],
+        outputs: [{ id: 'product', label: 'Product', slots: OUTPUT_SLOTS }],
+    },
+    liquids: {
+        anyInputIndices: [0],
+        anyOutputIndices: [1],
+        inputs: [{ id: 'reactant', label: 'Reactant', indices: [0] }],
+        outputs: [{ id: 'product', label: 'Product', indices: [1] }],
+    },
+})
 
 DoriosLib.registry.blockComponent('utilitycraft:reaction_chamber_controller', {
     onPlayerInteract(e) {

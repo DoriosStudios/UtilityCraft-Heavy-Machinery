@@ -1,4 +1,4 @@
-import { EnergyStorage, FluidStorage, Multiblock, MultiblockMachine } from "DoriosCore/index.js"
+import { EnergyStorage, FluidStorage, Multiblock, MultiblockMachine, registerLinkNodeIO } from "DoriosCore/index.js"
 import * as DoriosLib from "DoriosLib/index.js";
 import { melterRecipes } from 'config/recipes/melter.js'
 
@@ -38,6 +38,21 @@ const MULTIBLOCK_CONFIG = {
     },
     requirements: CONTROLLER_REQUIREMENTS,
 }
+
+registerLinkNodeIO('utilitycraft:magmatic_chamber_controller', {
+    items: {
+        anyInputSlots: INPUT_SLOTS,
+        anyOutputSlots: [],
+        inputs: [{ id: 'material', label: 'Material', slots: INPUT_SLOTS }],
+        outputs: [],
+    },
+    liquids: {
+        anyInputIndices: [],
+        anyOutputIndices: [0],
+        inputs: [],
+        outputs: [{ id: 'molten_product', label: 'Molten Product', indices: [0] }],
+    },
+})
 
 DoriosLib.registry.blockComponent('utilitycraft:magmatic_chamber_controller', {
     onPlayerInteract(e) {

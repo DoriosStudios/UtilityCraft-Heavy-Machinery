@@ -14,7 +14,8 @@
 			}
         },
         "components": {
-			"tag:dorios:multiblock.port": {},
+			"utilitycraft:link_node_io": {},
+			"tag:dorios:link_node": {},
 			"tag:dorios:multiblock.case.bronze": {}
 		},
 		"permutations": [
@@ -22,7 +23,7 @@
 				"condition": "q.block_state('utilitycraft:active') == 1 ",
 				"components": {
 					"tag:dorios:item": {},
-					"tag:dorios:multiblock.port": {},
+					"tag:dorios:link_node": {},
 					"tag:dorios:multiblock.case.bronze": {}
 				}
 			}

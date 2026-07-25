@@ -1,4 +1,4 @@
-import { EnergyStorage, FluidStorage, InterfaceManager, Multiblock, MultiblockGenerator } from "DoriosCore/index.js"
+import { EnergyStorage, FluidStorage, InterfaceManager, Multiblock, MultiblockGenerator, registerLinkNodeIO } from "DoriosCore/index.js"
 import * as DoriosLib from "DoriosLib/index.js";
 import { ModalFormData } from '@minecraft/server-ui'
 import { ItemStack } from '@minecraft/server'
@@ -104,6 +104,18 @@ const GENERATOR_CONFIG = {
     fillBlocksConfig: { blockId: 'minecraft:water' },
     missingEnergyWarning: '\u00A7c[Reactor] At least 1 energy unit is required.',
 };
+
+registerLinkNodeIO('utilitycraft:thermo_reactor_controller', {
+    liquids: {
+        anyInputIndices: [],
+        anyOutputIndices: [],
+        inputs: [
+            { id: 'coolant', label: 'Coolant', indices: [0] },
+            { id: 'fuel', label: 'Fuel', indices: [1] },
+        ],
+        outputs: [],
+    },
+})
 
 // #endregion
 

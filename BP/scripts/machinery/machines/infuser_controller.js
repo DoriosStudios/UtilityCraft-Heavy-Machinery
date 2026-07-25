@@ -1,4 +1,4 @@
-import { EnergyStorage, Multiblock, MultiblockMachine } from "DoriosCore/index.js"
+import { EnergyStorage, Multiblock, MultiblockMachine, registerLinkNodeIO } from "DoriosCore/index.js"
 import * as DoriosLib from "DoriosLib/index.js";
 import { infuserRecipes } from 'config/recipes/infuser.js'
 
@@ -33,6 +33,18 @@ const MULTIBLOCK_CONFIG = {
     },
     requirements: CONTROLLER_REQUIREMENTS,
 }
+
+registerLinkNodeIO('utilitycraft:infuser_controller', {
+    items: {
+        anyInputSlots: [],
+        anyOutputSlots: OUTPUT_SLOTS,
+        inputs: [
+            { id: 'catalyst', label: 'Catalyst', slots: CATALYST_SLOTS },
+            { id: 'material', label: 'Material', slots: INPUT_SLOTS },
+        ],
+        outputs: [{ id: 'product', label: 'Product', slots: OUTPUT_SLOTS }],
+    },
+})
 
 DoriosLib.registry.blockComponent('utilitycraft:infuser_controller', {
     onPlayerInteract(e) {

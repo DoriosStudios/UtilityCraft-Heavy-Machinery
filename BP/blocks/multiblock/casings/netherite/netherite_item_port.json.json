@@ -8,8 +8,9 @@
             }
         },
         "components": {
+			"utilitycraft:link_node_io": {},
 			"tag:dorios:item": {},
-			"tag:dorios:multiblock.port": {},
+			"tag:dorios:link_node": {},
             "tag:dorios:multiblock.case.netherite": {}
 		}
 	}

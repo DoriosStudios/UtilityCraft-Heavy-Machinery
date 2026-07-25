@@ -1,4 +1,4 @@
-import { EnergyStorage, Multiblock, MultiblockMachine } from "DoriosCore/index.js"
+import { EnergyStorage, Multiblock, MultiblockMachine, registerLinkNodeIO } from "DoriosCore/index.js"
 import * as DoriosLib from "DoriosLib/index.js";
 import { sieveRecipes } from 'config/recipes/sieve.js'
 
@@ -34,6 +34,18 @@ const MULTIBLOCK_CONFIG = {
     },
     requirements: CONTROLLER_REQUIREMENTS,
 }
+
+registerLinkNodeIO('utilitycraft:autosieve_controller', {
+    items: {
+        anyInputSlots: [],
+        anyOutputSlots: OUTPUT_SLOTS,
+        inputs: [
+            { id: 'mesh', label: 'Mesh', slots: [MESH_SLOT] },
+            { id: 'material', label: 'Material', slots: INPUT_SLOTS },
+        ],
+        outputs: [{ id: 'drops', label: 'Drops', slots: OUTPUT_SLOTS }],
+    },
+})
 
 DoriosLib.registry.blockComponent('utilitycraft:autosieve_controller', {
 

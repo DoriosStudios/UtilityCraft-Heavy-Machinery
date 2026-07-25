@@ -1,4 +1,4 @@
-import { EnergyStorage, InterfaceManager, Multiblock, MultiblockMachine } from "DoriosCore/index.js"
+import { EnergyStorage, InterfaceManager, Multiblock, MultiblockMachine, registerLinkNodeIO } from "DoriosCore/index.js"
 import * as DoriosLib from "DoriosLib/index.js";
 import { crusherRecipes } from 'config/recipes/crusher.js'
 
@@ -33,6 +33,15 @@ const MULTIBLOCK_CONFIG = {
     },
     requirements: CONTROLLER_REQUIREMENTS,
 }
+
+registerLinkNodeIO('utilitycraft:crusher_controller', {
+    items: {
+        anyInputSlots: INPUT_SLOTS,
+        anyOutputSlots: OUTPUT_SLOTS,
+        inputs: [{ id: 'input', label: 'Input', slots: INPUT_SLOTS }],
+        outputs: [{ id: 'output', label: 'Output', slots: OUTPUT_SLOTS }],
+    },
+})
 
 const CRUSHER_INTERFACE_ID = "uc_heavy_machinery:crusher_controls";
 
