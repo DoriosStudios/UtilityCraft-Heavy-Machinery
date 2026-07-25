@@ -14,6 +14,7 @@
         ],
         "collection_name": "container_items",
         "$item_collection_name": "container_items",
+        "$show_side_content|default": true,
         "controls": [
             {
                 "exit_button_panel": {
@@ -44,7 +45,9 @@
                 }
             },
             {
-                "panel@uc.machine_side_panel": {}
+                "panel@uc.machine_side_panel": {
+                    "visible": "$show_side_content"
+                }
             },
             {
                 "screen": {
@@ -80,7 +83,8 @@
                     "offset": [
                         -78,
                         2
-                    ]
+                    ],
+                    "visible": "$show_side_content"
                 }
             },
             {
@@ -233,24 +237,70 @@
                     "layer": 1,
                     "controls": [
                         {
-                            "common_panel@common.common_panel": {}
-                        },
-                        {
                             "chest_panel": {
                                 "type": "panel",
                                 "layer": 5,
                                 "controls": [
+                                    { "recipes_side_panel@uc.sieve_recipes_side_panel": {} },
+                                    { "recipes_connector@uc.sieve_recipes_connector": {} },
                                     {
-                                        "autosieve_controller_top@autosieve_controller.autosieve_controller_top": {}
+                                        "normal_content": {
+                                            "type": "panel",
+                                            "bindings": [{
+                                                "binding_type": "view",
+                                                "source_control_name": "recipes_toggle_button",
+                                                "source_property_name": "(not (#toggle_state))",
+                                                "target_property_name": "#visible",
+                                                "resolve_sibling_scope": false
+                                            }],
+                                            "controls": [
+                                                {
+                                                    "view_top_bar@uc.machine_recipe_view_top_bar": {
+                                                        "$machine_toggle_unchecked": "textures/ui/toggle_button/tab_pressed",
+                                                        "$machine_toggle_checked": "textures/ui/toggle_button/tab_pressed",
+                                                        "$machine_toggle_unchecked_hover": "textures/ui/toggle_button/tab_hover_pressed",
+                                                        "$machine_toggle_checked_hover": "textures/ui/toggle_button/tab_hover_pressed",
+                                                        "$recipes_toggle_checked": "textures/ui/toggle_button/tab",
+                                                        "$recipes_toggle_checked_hover": "textures/ui/toggle_button/tab_hover"
+                                                    }
+                                                },
+                                                { "autosieve_controller_top@autosieve_controller.autosieve_controller_top": {} },
+                                                { "inventory_panel_bottom_half_with_label@common.inventory_panel_bottom_half_with_label": {} },
+                                                { "hotbar_grid@common.hotbar_grid_template": {} },
+                                                { "inventory_take_progress_icon_button@common.inventory_take_progress_icon_button": {} }
+                                            ]
+                                        }
                                     },
                                     {
-                                        "inventory_panel_bottom_half_with_label@common.inventory_panel_bottom_half_with_label": {}
-                                    },
-                                    {
-                                        "hotbar_grid@common.hotbar_grid_template": {}
-                                    },
-                                    {
-                                        "inventory_take_progress_icon_button@common.inventory_take_progress_icon_button": {}
+                                        "recipes_content": {
+                                            "type": "panel",
+                                            "offset": [76, 0],
+                                            "bindings": [{
+                                                "binding_type": "view",
+                                                "source_control_name": "recipes_toggle_button",
+                                                "source_property_name": "#toggle_state",
+                                                "target_property_name": "#visible",
+                                                "resolve_sibling_scope": false
+                                            }],
+                                            "controls": [
+                                                {
+                                                    "view_top_bar@uc.machine_recipe_view_top_bar": {
+                                                        "$machine_toggle_default_state": false,
+                                                        "$recipes_toggle_default_state": true,
+                                                        "$machine_toggle_checked": "textures/ui/toggle_button/tab",
+                                                        "$machine_toggle_checked_hover": "textures/ui/toggle_button/tab_hover",
+                                                        "$recipes_toggle_unchecked": "textures/ui/toggle_button/tab_pressed",
+                                                        "$recipes_toggle_checked": "textures/ui/toggle_button/tab_pressed",
+                                                        "$recipes_toggle_unchecked_hover": "textures/ui/toggle_button/tab_hover_pressed",
+                                                        "$recipes_toggle_checked_hover": "textures/ui/toggle_button/tab_hover_pressed"
+                                                    }
+                                                },
+                                                { "autosieve_controller_top@autosieve_controller.autosieve_controller_top": { "$show_side_content": false } },
+                                                { "inventory_panel_bottom_half_with_label@common.inventory_panel_bottom_half_with_label": {} },
+                                                { "hotbar_grid@common.hotbar_grid_template": {} },
+                                                { "inventory_take_progress_icon_button@common.inventory_take_progress_icon_button": {} }
+                                            ]
+                                        }
                                     }
                                 ]
                             }
