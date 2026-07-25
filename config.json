@@ -62,7 +62,7 @@
 			},
 			"cleanup_bundled_scripts": {
 				"runWith": "shell",
-				"command": "Move-Item BP/scripts/__bundle.js BP/__bundle.js; Remove-Item BP/scripts -Recurse -Force; New-Item -ItemType Directory BP/scripts | Out-Null; Move-Item BP/__bundle.js BP/scripts/__bundle.js"
+				"command": "node -e \"const fs=require('fs'); fs.renameSync('BP/scripts/__bundle.js','BP/__bundle.js'); fs.rmSync('BP/scripts',{recursive:true,force:true}); fs.mkdirSync('BP/scripts',{recursive:true}); fs.renameSync('BP/__bundle.js','BP/scripts/__bundle.js');\""
 			}
 		},
 		"formatVersion": "1.8.0",
@@ -113,13 +113,39 @@
 			},
 			"build": {
 				"export": {
-					"bpName": "'UtilityCraft Heavy Machinery BP'",
-					"rpName": "'UtilityCraft Heavy Machinery RP'",
+					"bpName": "project.name + ' BP'",
+					"rpName": "project.name + ' RP'",
 					"target": "local"
 				},
 				"filters": [
 					{
 						"filter": "bundle_scripts"
+					},
+					{
+						"filter": "use_bundle_entry"
+					},
+					{
+						"filter": "cleanup_bundled_scripts"
+					}
+				]
+			},
+			"buildDev": {
+				"export": {
+					"bpName": "project.name + ' BP'",
+					"rpName": "project.name + ' RP'",
+					"target": "local"
+				},
+				"filters": []
+			},
+			"buildMinify": {
+				"export": {
+					"bpName": "project.name + ' BP'",
+					"rpName": "project.name + ' RP'",
+					"target": "local"
+				},
+				"filters": [
+					{
+						"filter": "minify_bundle_scripts"
 					},
 					{
 						"filter": "use_bundle_entry"
