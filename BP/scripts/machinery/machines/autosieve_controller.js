@@ -40,10 +40,10 @@ registerLinkNodeIO('utilitycraft:autosieve_controller', {
         anyInputSlots: [],
         anyOutputSlots: OUTPUT_SLOTS,
         inputs: [
-            { id: 'mesh', label: 'Mesh', slots: [MESH_SLOT] },
-            { id: 'material', label: 'Material', slots: INPUT_SLOTS },
+            { id: 'mesh', label: 'Mesh Slot', color: '§b', slots: [MESH_SLOT] },
+            { id: 'material', label: 'Material Grid', color: '§9', slots: INPUT_SLOTS },
         ],
-        outputs: [{ id: 'drops', label: 'Drops', slots: OUTPUT_SLOTS }],
+        outputs: [{ id: 'drops', label: 'Output Grid', color: '§c', slots: OUTPUT_SLOTS }],
     },
 })
 

@@ -14,6 +14,8 @@
         ],
         "collection_name": "container_items",
         "$item_collection_name": "container_items",
+        "$right_machine_tabs_name|default": "right_machine_tabs",
+        "$info_toggle_control_name|default": "info_toggle_button",
         "controls": [
             {
                 "machine_name@uc.machine_name": {}
@@ -38,8 +40,10 @@
                 }
             },
             {
-                "liquid_bar_0@uc.fluid_bar": {
+                "liquid_bar_0@uc.liquid_bar": {
                     "$collection_index": 2,
+                    "$show_liquid_outline": true,
+                    "$liquid_outline_texture": "textures/ui/slots/input_extra_slot",
                     "offset": [
                         -44,
                         0
@@ -47,8 +51,10 @@
                 }
             },
             {
-                "liquid_bar_1@uc.fluid_bar": {
+                "liquid_bar_1@uc.liquid_bar": {
                     "$collection_index": 3,
+                    "$show_liquid_outline": true,
+                    "$liquid_outline_texture": "textures/ui/slots/fuel_slot",
                     "offset": [
                         44,
                         0
@@ -66,7 +72,7 @@
                     ],
                     "$text_scale": 0.55,
                     "offset": [
-                        -78,
+                        -76,
                         2
                     ]
                 }
@@ -90,7 +96,7 @@
                     "layer": 11,
                     "$text_scale": 0.67,
                     "offset": [
-                        186,
+                        188,
                         -5
                     ]
                 }
@@ -317,6 +323,13 @@
                         234,
                         112
                     ]
+                }
+            },
+            {
+                "info_tab@uc.info_tab": {
+                    "$right_machine_tabs_name": "$right_machine_tabs_name",
+                    "$info_toggle_control_name": "$info_toggle_control_name",
+                    "$info_description": "ui.utilitycraft:info.thermo_reactor"
                 }
             }
         ]

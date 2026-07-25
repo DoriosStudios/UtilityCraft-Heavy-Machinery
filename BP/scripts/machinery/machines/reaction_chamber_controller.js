@@ -44,14 +44,14 @@ registerLinkNodeIO('utilitycraft:reaction_chamber_controller', {
     items: {
         anyInputSlots: INPUT_SLOTS,
         anyOutputSlots: OUTPUT_SLOTS,
-        inputs: [{ id: 'material', label: 'Material', slots: INPUT_SLOTS }],
-        outputs: [{ id: 'product', label: 'Product', slots: OUTPUT_SLOTS }],
+        inputs: [{ id: 'material', label: 'Item Input Grid', color: '§9', slots: INPUT_SLOTS }],
+        outputs: [{ id: 'product', label: 'Item Output Grid', color: '§c', slots: OUTPUT_SLOTS }],
     },
     liquids: {
         anyInputIndices: [0],
         anyOutputIndices: [1],
-        inputs: [{ id: 'reactant', label: 'Reactant', indices: [0] }],
-        outputs: [{ id: 'product', label: 'Product', indices: [1] }],
+        inputs: [{ id: 'reactant', label: 'Reactant Tank', color: '§9', indices: [0] }],
+        outputs: [{ id: 'product', label: 'Product Tank', color: '§c', indices: [1] }],
     },
 })
 

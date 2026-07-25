@@ -43,14 +43,14 @@ registerLinkNodeIO('utilitycraft:magmatic_chamber_controller', {
     items: {
         anyInputSlots: INPUT_SLOTS,
         anyOutputSlots: [],
-        inputs: [{ id: 'material', label: 'Material', slots: INPUT_SLOTS }],
+        inputs: [{ id: 'material', label: 'Input Grid', color: '§9', slots: INPUT_SLOTS }],
         outputs: [],
     },
     liquids: {
         anyInputIndices: [],
         anyOutputIndices: [0],
         inputs: [],
-        outputs: [{ id: 'molten_product', label: 'Molten Product', indices: [0] }],
+        outputs: [{ id: 'molten_product', label: 'Output Tank', color: '§c', indices: [0] }],
     },
 })
 

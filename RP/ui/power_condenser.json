@@ -14,6 +14,8 @@
         ],
         "collection_name": "container_items",
         "$item_collection_name": "container_items",
+        "$right_machine_tabs_name|default": "right_machine_tabs",
+        "$info_toggle_control_name|default": "info_toggle_button",
         "controls": [
             {
                 "machine_name@uc.machine_name": {}
@@ -39,6 +41,13 @@
                         14,
                         12
                     ]
+                }
+            },
+            {
+                "info_tab@uc.info_tab": {
+                    "$right_machine_tabs_name": "$right_machine_tabs_name",
+                    "$info_toggle_control_name": "$info_toggle_control_name",
+                    "$info_description": "ui.utilitycraft:info.power_condenser"
                 }
             }
         ]

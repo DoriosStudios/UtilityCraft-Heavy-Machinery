@@ -16,17 +16,20 @@
         "$item_collection_name": "container_items",
         "$show_side_content|default": true,
         "$show_recipe_overlays|default": false,
+        "$right_machine_tabs_name|default": "right_machine_tabs",
+        "$info_toggle_control_name|default": "info_toggle_button",
+        "$info_description|default": "ui.utilitycraft:info.incinerator_controller",
         "controls": [
             {
                 "machine_name@uc.machine_name": {}
             },
             {
                 "energy_bar@uc.energy_bar": {
-                    "$has_bg": true,
                     "offset": [
-                        102,
-                        0
-                    ]
+                        97,
+                        64
+                    ],
+                    "$bar_bg_texture": "textures/ui/toggle_button/right_bg"
                 }
             },
             {
@@ -45,7 +48,7 @@
                     ],
                     "$text_scale": 0.55,
                     "offset": [
-                        -78,
+                        -76,
                         2
                     ],
                     "visible": "$show_side_content"
@@ -66,10 +69,7 @@
                 "input_grid@uc.slot_grid_3x3": {
                     "anchor_from": "top_middle",
                     "anchor_to": "top_middle",
-                    "offset": [
-                        -29,
-                        13
-                    ],
+                    "offset": [-32, 13],
                     "$collection_index_1": 3,
                     "$collection_index_2": 4,
                     "$collection_index_3": 5,
@@ -78,7 +78,8 @@
                     "$collection_index_6": 8,
                     "$collection_index_7": 9,
                     "$collection_index_8": 10,
-                    "$collection_index_9": 11
+                    "$collection_index_9": 11,
+                    "$slot_outline_texture": "textures/ui/slots/input_slot"
                 }
             },
             // Output
@@ -86,10 +87,7 @@
                 "output_grid@uc.slot_grid_3x3": {
                     "anchor_from": "top_middle",
                     "anchor_to": "top_middle",
-                    "offset": [
-                        51,
-                        13
-                    ],
+                    "offset": [54, 13],
                     "$collection_index_1": 12,
                     "$collection_index_2": 13,
                     "$collection_index_3": 14,
@@ -98,17 +96,25 @@
                     "$collection_index_6": 17,
                     "$collection_index_7": 18,
                     "$collection_index_8": 19,
-                    "$collection_index_9": 20
+                    "$collection_index_9": 20,
+                    "$slot_outline_texture": "textures/ui/slots/output_slot"
+                }
+            },
+            {
+                "info_tab@uc.info_tab": {
+                    "$right_machine_tabs_name": "$right_machine_tabs_name",
+                    "$info_toggle_control_name": "$info_toggle_control_name",
+                    "$info_description": "$info_description"
                 }
             },
             {
                 "recipe_overlays@uc.electro_press_recipes_panel": {
                     "visible": "$show_recipe_overlays",
                     "$recipe_input_index": 3,
-                    "$recipe_input_offset": [-48, -15],
+                    "$recipe_input_offset": [-50, -14],
                     "$recipe_input_size": [16, 16],
                     "$recipe_output_index": 12,
-                    "$recipe_output_offset": [32, -15],
+                    "$recipe_output_offset": [36, -14],
                     "$recipe_output_size": [16, 16]
                 }
             }
@@ -211,7 +217,8 @@
                                                 },
                                                 {
                                                     "basic_machine_controller_top@basic_machine_controller.basic_machine_controller_top": {
-                                                        "$show_recipe_overlays": true
+                                                        "$show_recipe_overlays": true,
+                                                        "$info_description": "ui.utilitycraft:info.electro_press_controller"
                                                     }
                                                 },
                                                 { "inventory_panel_bottom_half_with_label@common.inventory_panel_bottom_half_with_label": {} },
@@ -248,7 +255,10 @@
                                                 {
                                                     "basic_machine_controller_top@basic_machine_controller.basic_machine_controller_top": {
                                                         "$show_side_content": false,
-                                                        "$show_recipe_overlays": true
+                                                        "$show_recipe_overlays": true,
+                                                        "$right_machine_tabs_name": "right_machine_tabs_recipes",
+                                                        "$info_toggle_control_name": "info_toggle_button_recipes",
+                                                        "$info_description": "ui.utilitycraft:info.electro_press_controller"
                                                     }
                                                 },
                                                 { "inventory_panel_bottom_half_with_label@common.inventory_panel_bottom_half_with_label": {} },

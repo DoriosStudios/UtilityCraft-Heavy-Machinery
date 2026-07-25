@@ -37,8 +37,8 @@ registerLinkNodeIO('utilitycraft:electro_press_controller', {
     items: {
         anyInputSlots: INPUT_SLOTS,
         anyOutputSlots: OUTPUT_SLOTS,
-        inputs: [{ id: 'input', label: 'Input', slots: INPUT_SLOTS }],
-        outputs: [{ id: 'output', label: 'Output', slots: OUTPUT_SLOTS }],
+        inputs: [{ id: 'input', label: 'Input Grid', color: '§9', slots: INPUT_SLOTS }],
+        outputs: [{ id: 'output', label: 'Output Grid', color: '§c', slots: OUTPUT_SLOTS }],
     },
 })
 

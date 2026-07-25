@@ -39,10 +39,10 @@ registerLinkNodeIO('utilitycraft:infuser_controller', {
         anyInputSlots: [],
         anyOutputSlots: OUTPUT_SLOTS,
         inputs: [
-            { id: 'catalyst', label: 'Catalyst', slots: CATALYST_SLOTS },
-            { id: 'material', label: 'Material', slots: INPUT_SLOTS },
+            { id: 'catalyst', label: 'Catalyst Grid', color: '§b', slots: CATALYST_SLOTS },
+            { id: 'material', label: 'Material Grid', color: '§9', slots: INPUT_SLOTS },
         ],
-        outputs: [{ id: 'product', label: 'Product', slots: OUTPUT_SLOTS }],
+        outputs: [{ id: 'product', label: 'Output Grid', color: '§c', slots: OUTPUT_SLOTS }],
     },
 })
 

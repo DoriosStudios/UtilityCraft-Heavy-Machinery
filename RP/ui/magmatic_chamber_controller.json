@@ -15,17 +15,19 @@
         "collection_name": "container_items",
         "$item_collection_name": "container_items",
         "$show_side_content|default": true,
+        "$right_machine_tabs_name|default": "right_machine_tabs",
+        "$info_toggle_control_name|default": "info_toggle_button",
         "controls": [
             {
                 "machine_name@uc.machine_name": {}
             },
             {
                 "energy_bar@uc.energy_bar": {
-                    "$has_bg": true,
                     "offset": [
-                        102,
-                        0
-                    ]
+                        97,
+                        64
+                    ],
+                    "$bar_bg_texture": "textures/ui/toggle_button/right_bg"
                 }
             },
             {
@@ -44,7 +46,7 @@
                     ],
                     "$text_scale": 0.55,
                     "offset": [
-                        -78,
+                        -76,
                         2
                     ],
                     "visible": "$show_side_content"
@@ -77,17 +79,27 @@
                     "$collection_index_6": 9,
                     "$collection_index_7": 10,
                     "$collection_index_8": 11,
-                    "$collection_index_9": 12
+                    "$collection_index_9": 12,
+                    "$slot_outline_texture": "textures/ui/slots/input_slot"
                 }
             },
             {
-                "liquid_bar_output@uc.fluid_bar": {
+                "liquid_bar_output@uc.liquid_bar": {
                     "$collection_index": 3,
                     "$has_bg": false,
+                    "$show_liquid_outline": true,
+                    "$liquid_outline_texture": "textures/ui/slots/output_slot",
                     "offset": [
                         53,
                         0
                     ]
+                }
+            },
+            {
+                "info_tab@uc.info_tab": {
+                    "$right_machine_tabs_name": "$right_machine_tabs_name",
+                    "$info_toggle_control_name": "$info_toggle_control_name",
+                    "$info_description": "ui.utilitycraft:info.magmatic_chamber_controller"
                 }
             }
         ]
@@ -174,7 +186,13 @@
                                                         "$recipes_toggle_checked_hover": "textures/ui/toggle_button/tab_hover_pressed"
                                                     }
                                                 },
-                                                { "magmatic_chamber_controller_top@magmatic_chamber_controller.magmatic_chamber_controller_top": { "$show_side_content": false } },
+                                                {
+                                                    "magmatic_chamber_controller_top@magmatic_chamber_controller.magmatic_chamber_controller_top": {
+                                                        "$show_side_content": false,
+                                                        "$right_machine_tabs_name": "right_machine_tabs_recipes",
+                                                        "$info_toggle_control_name": "info_toggle_button_recipes"
+                                                    }
+                                                },
                                                 { "inventory_panel_bottom_half_with_label@common.inventory_panel_bottom_half_with_label": {} },
                                                 { "hotbar_grid@common.hotbar_grid_template": {} },
                                                 { "inventory_take_progress_icon_button@common.inventory_take_progress_icon_button": {} }

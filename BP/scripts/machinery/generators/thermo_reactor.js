@@ -110,8 +110,8 @@ registerLinkNodeIO('utilitycraft:thermo_reactor_controller', {
         anyInputIndices: [],
         anyOutputIndices: [],
         inputs: [
-            { id: 'coolant', label: 'Coolant', indices: [0] },
-            { id: 'fuel', label: 'Fuel', indices: [1] },
+            { id: 'coolant', label: 'Coolant Tank', color: '§b', indices: [0] },
+            { id: 'fuel', label: 'Lava Fuel Tank', color: '§v', indices: [1] },
         ],
         outputs: [],
     },
