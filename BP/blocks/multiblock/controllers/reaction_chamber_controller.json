@@ -43,14 +43,6 @@
                 ]
             },
             "utilitycraft:reaction_chamber_controller": {},
-            "utilitycraft:special_container": {
-                "Input Slots": [
-                    6,
-                    7,
-                    8,
-                    9
-                ]
-            },
             "minecraft:destructible_by_mining": {
                 "seconds_to_destroy": 1
             },

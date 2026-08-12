@@ -42,24 +42,6 @@
                 ]
             },
             "utilitycraft:autosieve_controller": {},
-            "utilitycraft:special_container": {
-                // Energy 0
-                // Info Label 1
-                // Energy Label 2
-                // Progress 3
-                "Mesh Slot": 4,
-                "Input Slots": [
-                    5,
-                    6,
-                    7,
-                    8,
-                    9,
-                    10,
-                    11,
-                    12,
-                    13
-                ]
-            },
             "minecraft:destructible_by_mining": {
                 "seconds_to_destroy": 1
             },
