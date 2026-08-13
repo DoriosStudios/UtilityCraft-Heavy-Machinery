@@ -1,3 +1,4 @@
+import './recipes/crafter.js'
 import './recipes/crusher.js'
 import './recipes/furnace.js'
 import './recipes/press.js'
