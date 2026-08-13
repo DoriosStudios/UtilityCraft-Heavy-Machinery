@@ -8,7 +8,7 @@
 		"Dorios Studios"
 	],
 	"targetVersion": "1.21.90",
-	"description": "",
+	"description": "0.5.1 §aRequires UtilityCraft 3.5.0+",
 	"experimentalGameplay": {
 		"creationOfCustomBiomes": false,
 		"upcomingCreatorFeatures": false,

@@ -1,6 +1,6 @@
 # UtilityCraft: Heavy Machinery  
 
-- Latest Release: https://github.com/DoriosStudios/UtilityCraft-Heavy-Machinery/tag/v0.4.0
+- Latest Release: https://github.com/DoriosStudios/UtilityCraft-Heavy-Machinery/releases/tag/v0.5.1
 ---
 **UtilityCraft: Heavy Machinery** is an expansion pack for **[UtilityCraft](https://github.com/DoriosStudios/UtilityCraft)**, aiming for a new progression line for end-game using **modular, multiblock** machines with better management and, obviously, more power and capanilities. 
 

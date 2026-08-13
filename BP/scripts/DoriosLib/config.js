@@ -12,7 +12,7 @@ export const ADDON_METADATA = {
   name: "UtilityCraft: Heavy Machinery",
   author: "Dorios Studios",
   identifier: "uc_heavy_machinery",
-  version: "0.4.0",
+  version: "0.5.1",
   dependencies: {
     utilitycraft: {
       version: "3.5.0",

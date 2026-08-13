@@ -1,3 +1,20 @@
+# UtilityCraft: Heavy Machinery v0.5.1
+
+## CHANGED
+
+- Moved Link Node I/O interaction handling to the shared UtilityCraft runtime and removed the duplicate Heavy Machinery handler.
+- Updated the Behavior Pack and Resource Pack icons.
+
+## FIXED
+
+- Removed obsolete `utilitycraft:special_container` mappings from seven multiblock controllers so automation uses their dedicated configured ports.
+
+## COMPATIBILITY
+
+- Registered all 42 Heavy Machinery recipes tagged `utilitycraft_workbench` with UtilityCraft's Crafter through DoriosLib.
+
+---
+
 # UtilityCraft: Heavy Machinery v0.5.0
 
 This is the complete changelog for the changes introduced after v0.4.0.
@@ -148,7 +165,6 @@ This is the complete changelog for the changes introduced after v0.4.0.
 
 ## COMPATIBILITY
 
-- Registered every Heavy Machinery recipe tagged `utilitycraft_workbench` with UtilityCraft's Crafter through DoriosLib.
 - Requires UtilityCraft 3.5.0 or newer.
 - Updated for the current DoriosCore and DoriosLib runtime used by UtilityCraft 3.5.0.
 
