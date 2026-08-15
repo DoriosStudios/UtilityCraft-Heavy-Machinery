@@ -1,72 +1,47 @@
-name: Build Addon
+name: Release Addon
 
 on:
-  release:
-    types: [published]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Optional explicit tag; blank uses the active changelog version
+        required: false
+        type: string
+        default: ""
+      release_channel:
+        description: Release channel
+        required: true
+        type: choice
+        default: project_default
+        options:
+          - project_default
+          - stable
+          - beta
+          - alpha
+      execution:
+        description: Preview is read-only; production publishes
+        required: true
+        type: choice
+        default: preview
+        options:
+          - preview
+          - production
+      production_confirmation:
+        description: Type PUBLISH when execution is production
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: write
 
 jobs:
-  build-addon:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-
-      - name: Prepare release variables
-        env:
-          RELEASE_TITLE: ${{ github.event.release.name }}
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
-        run: |
-          TAG_NAME="${RELEASE_TAG:-$GITHUB_REF_NAME}"
-
-          if [ -z "$TAG_NAME" ]; then
-            echo "::error::Release tag could not be resolved."
-            exit 1
-          fi
-
-          REL_TITLE="${RELEASE_TITLE:-$TAG_NAME}"
-          FILE_NAME="$(printf '%s' "$REL_TITLE" | tr ' ' '_' | tr -cd '[:alnum:]_.-')"
-
-          if [ -z "$FILE_NAME" ]; then
-            FILE_NAME="$(printf '%s' "$TAG_NAME" | tr ' ' '_' | tr -cd '[:alnum:]_.-')"
-          fi
-
-          echo "TAG_NAME=$TAG_NAME" >> "$GITHUB_ENV"
-          echo "REL_TITLE=$REL_TITLE" >> "$GITHUB_ENV"
-          echo "FILE_NAME=$FILE_NAME" >> "$GITHUB_ENV"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Install Regolith
-        run: |
-          curl -L https://github.com/Bedrock-OSS/regolith/releases/download/1.8.0/regolith_1.8.0_linux_amd64.tar.gz -o regolith.tar.gz
-          tar -xzf regolith.tar.gz
-          sudo mv regolith /usr/local/bin/regolith
-          regolith --version
-
-      - name: Build dev addon
-        run: |
-          rm -rf build artifacts
-          regolith run buildDev
-          mkdir -p artifacts
-          cd build
-          zip -r "../artifacts/${FILE_NAME}_dev.mcaddon" "UtilityCraft Heavy Machinery BP" "UtilityCraft Heavy Machinery RP"
-
-      - name: Build minified addon
-        run: |
-          rm -rf build
-          regolith run buildMinify
-          cd build
-          zip -r "../artifacts/${FILE_NAME}.mcaddon" "UtilityCraft Heavy Machinery BP" "UtilityCraft Heavy Machinery RP"
-
-      - name: Upload release assets
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release upload "$TAG_NAME" \
-            "artifacts/${FILE_NAME}_dev.mcaddon" \
-            "artifacts/${FILE_NAME}.mcaddon" \
-            --clobber
+  release:
+    uses: DoriosStudios/Dorios-Workflows/.github/workflows/release-addon.yml@v1.0.2
+    with:
+      operation: release_only
+      release_tag: ${{ inputs.release_tag }}
+      release_channel: ${{ inputs.release_channel }}
+      workflow_ref: v1.0.2
+      preview_only: ${{ inputs.execution == 'preview' }}
+      production_confirmation: ${{ inputs.production_confirmation }}
