@@ -228,8 +228,8 @@ DoriosLib.registry.blockComponent('utilitycraft:thermo_reactor', {
             },
         })
     },
-    onPlayerBreak({ block, player }) {
-        Multiblock.DeactivationManager.handleBreakController(block, player, GENERATOR_CONFIG.deactivateConfig)
+    onPlayerBreak({ block, brokenBlockPermutation, player }) {
+        Multiblock.DeactivationManager.handleBreakController(block, player, GENERATOR_CONFIG.deactivateConfig, brokenBlockPermutation)
     },
     onTick({ block }) {
         if (!worldLoaded) return;

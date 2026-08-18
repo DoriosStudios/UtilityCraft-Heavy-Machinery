@@ -34,8 +34,8 @@ DoriosLib.registry.blockComponent('utilitycraft:power_condenser', {
             },
         })
     },
-    onPlayerBreak({ block, player }) {
-        Multiblock.DeactivationManager.handleBreakController(block, player, GENERATOR_CONFIG.deactivateConfig)
+    onPlayerBreak({ block, brokenBlockPermutation, player }) {
+        Multiblock.DeactivationManager.handleBreakController(block, player, GENERATOR_CONFIG.deactivateConfig, brokenBlockPermutation)
     },
     onTick({ block }) {
         const matrix = new MultiblockGenerator(block, GENERATOR_CONFIG)

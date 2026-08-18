@@ -35,6 +35,23 @@ DoriosLib.entity.setEquipment(player, {
 });
 ```
 
+Player-relative entities can be attached to one shared one-tick tracking
+manager. Starting the same entity again updates its target and options:
+
+```js
+DoriosLib.entity.startPlayerTracking(entity, player, {
+  anchor: "head",
+  viewOffset: 0.5,
+  velocityFactor: 5,
+});
+
+DoriosLib.entity.stopPlayerTracking(entity);
+```
+
+Stopping an attachment does not remove the entity. Invalid entities and
+players are discarded automatically, and the shared interval is released when
+no attachments remain.
+
 Items can be created independently:
 
 ```js
@@ -186,6 +203,20 @@ event: `registerAutoFisherDrop`, `registerBonsai` (legacy),
 `registerGasHolder`, `registerGasItem`, `registerInfuserRecipe`,
 `registerMachineUpgrade`, `registerMelterRecipe`, `registerPlant`, `registerPressRecipe`,
 `registerSieveDrop`, and `registerSpecialContainerSlots`.
+
+Item Ducts compatibility uses the same world-load queue and its public runtime
+ScriptEvent protocol:
+
+```js
+DoriosLib.registry.registerItemDuctCompatibility({
+  typeId: "example:machine",
+  insertSlots: [0, 1],
+  extractSlots: [4],
+});
+
+DoriosLib.registry.registerItemDuctChest("example:storage");
+DoriosLib.registry.unregisterItemDuctCompatibility("example:old_machine");
+```
 
 Dependency discovery starts automatically when the main DoriosLib entry point
 is imported. It uses:

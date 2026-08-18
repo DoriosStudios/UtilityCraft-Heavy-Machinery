@@ -54,8 +54,8 @@ DoriosLib.registry.blockComponent('utilitycraft:electro_press_controller', {
             ],
         })
     },
-    onPlayerBreak({ block, player }) {
-        Multiblock.DeactivationManager.handleBreakController(block, player)
+    onPlayerBreak({ block, brokenBlockPermutation, player }) {
+        Multiblock.DeactivationManager.handleBreakController(block, player, undefined, brokenBlockPermutation)
     },
     onTick(e) {
         if (!worldLoaded) return;

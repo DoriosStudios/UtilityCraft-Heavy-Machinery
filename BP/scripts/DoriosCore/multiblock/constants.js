@@ -47,6 +47,11 @@ export const ACTIVE_STATE_ID = "utilitycraft:active";
 export const MULTIBLOCK_CASE_TAG_PREFIX = "dorios:multiblock.case";
 
 /**
+ * Block tag used to identify multiblock controller blocks.
+ */
+export const MULTIBLOCK_CONTROLLER_TAG = "dorios:multiblock.controller";
+
+/**
  * Block tag used by internal multiblock component blocks.
  */
 export const MULTIBLOCK_COMPONENT_TAG = "dorios:multiblock_component";

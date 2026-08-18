@@ -50,6 +50,7 @@
             "tag:dorios:energy": {},
             "tag:dorios:fluid": {},
             "tag:dorios:item": {},
+            "tag:dorios:multiblock.controller": {},
             "tag:dorios:machine": {}
         },
         "permutations": [

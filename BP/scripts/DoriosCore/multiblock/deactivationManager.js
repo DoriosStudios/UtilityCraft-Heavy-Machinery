@@ -39,16 +39,16 @@ export class DeactivationManager {
   }
 
   /**
-   * Deactivates a multiblock structure associated with the given controller block.
+   * Deactivates the active multiblock structure that owns a general block.
    *
    * Responsibilities:
-   * - Finds the controller entity.
+   * - Finds the controller entity through its serialized structure bounds.
    * - Hides the entity visual state.
    * - Clears active tags from connected multiblock ports.
    * - Resets controller dynamic properties used by the machine runtime.
    * - Optionally removes filled helper blocks such as water.
    *
-   * @param {import("@minecraft/server").Block} block Controller block or any block inside the structure bounds.
+   * @param {import("@minecraft/server").Block} block Any block inside the active structure bounds.
    * @param {import("@minecraft/server").Player} [player] Optional player to notify about the deactivation.
    * @param {{ blockId?: string }} [emptyBlocksConfig]
    * Optional config describing which block should be removed from the bounds.
@@ -56,8 +56,22 @@ export class DeactivationManager {
    */
   static deactivateMultiblock(block, player, emptyBlocksConfig) {
     const entity = EntityManager.getEntityFromBlock(block);
-    if (player) player.sendMessage("\u00A7c[Scan] Multiblock structure deactivated.");
+    return DeactivationManager.deactivateEntity(entity, player, emptyBlocksConfig);
+  }
+
+  /**
+   * Deactivates an already resolved multiblock controller entity.
+   *
+   * @param {import("@minecraft/server").Entity} entity Controller entity to deactivate.
+   * @param {import("@minecraft/server").Player} [player] Optional player to notify when an active structure was deactivated.
+   * @param {{ blockId?: string }} [emptyBlocksConfig] Optional filled-block cleanup configuration.
+   * @returns {import("@minecraft/server").Entity | undefined} The controller entity, if supplied.
+   */
+  static deactivateEntity(entity, player, emptyBlocksConfig) {
     if (!entity) return;
+
+    const wasActive = entity.getDynamicProperty(Constants.STATE_PROPERTY_ID) === Constants.ACTIVE_STATE_VALUE
+      && entity.getDynamicProperty(Constants.BOUNDS_PROPERTY_ID) !== undefined;
 
     entity.triggerEvent(Constants.HIDE_EVENT_ID);
     entity.getTags().forEach((tag) => {
@@ -84,6 +98,10 @@ export class DeactivationManager {
       DeactivationManager.emptyBlocks(entity, emptyBlocksConfig.blockId);
     }
 
+    if (player && wasActive) {
+      player.sendMessage("\u00A7c[Scan] Multiblock structure deactivated.");
+    }
+
     return entity;
   }
 
@@ -96,12 +114,15 @@ export class DeactivationManager {
    * @param {import("@minecraft/server").Player} [player] Player responsible for the break event.
    * @param {{ blockId?: string }} [emptyBlocksConfig]
    * Optional config describing which filled block should be removed first.
+   * @param {import("@minecraft/server").BlockPermutation} [controllerPermutation=block.permutation]
+   * Current or pre-break controller permutation used to validate its block tag.
    * @returns {import("@minecraft/server").Entity | undefined} Removed controller entity, if one was found.
    */
-  static handleBreakController(block, player, emptyBlocksConfig) {
-    const entity = DeactivationManager.deactivateMultiblock(block, player, emptyBlocksConfig);
+  static handleBreakController(block, player, emptyBlocksConfig, controllerPermutation = block?.permutation) {
+    const entity = EntityManager.getControllerEntityFromBlock(block, controllerPermutation);
     if (!entity) return;
 
+    DeactivationManager.deactivateEntity(entity, player, emptyBlocksConfig);
     system.runTimeout(() => entity.remove(), 2);
     return entity;
   }

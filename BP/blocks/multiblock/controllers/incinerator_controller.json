@@ -46,6 +46,7 @@
                 "seconds_to_destroy": 1
             },
             "minecraft:destructible_by_explosion": false,
+            "tag:dorios:multiblock.controller": {},
             "tag:dorios:machine": {},
             "tag:dorios:energy": {},
             "tag:dorios:item": {}
