@@ -7,7 +7,7 @@
 	},
 	"header": {
 		"name": "UtilityCraft: Heavy Machinery",
-		"description": "0.5.1 §aRequires UtilityCraft 3.5.0+",
+		"description": "0.5.2 §aRequires UtilityCraft 3.5.0+",
 		"min_engine_version": [
 			1,
 			21,
@@ -17,7 +17,7 @@
 		"version": [
 			0,
 			5,
-			1
+			2
 		]
 	},
 	"modules": [
@@ -37,7 +37,7 @@
 			"version": [
 				0,
 				5,
-				1
+				2
 			]
 		}
 	]
