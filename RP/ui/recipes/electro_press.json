@@ -73,6 +73,39 @@
                 "$recipe_icon": "textures/items/bronze_plate",
                 "offset": [36, 0]
               }
+            },
+            {
+              "hm_tin_chunks_to_ore_toggle@uc.electro_press_recipe_toggle": {
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "$toggle_index": 2003,
+                "$toggle_hover_text": "tile.utilitycraft:tin_ore.name",
+                "$toggle_control_name": "hm_tin_chunks_to_ore_recipe",
+                "$recipe_icon": "textures/blocks/ores/tin_ore",
+                "offset": [54, 0]
+              }
+            },
+            {
+              "hm_deepslate_tin_chunks_to_ore_toggle@uc.electro_press_recipe_toggle": {
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "$toggle_index": 2004,
+                "$toggle_hover_text": "tile.utilitycraft:deepslate_tin_ore.name",
+                "$toggle_control_name": "hm_deepslate_tin_chunks_to_ore_recipe",
+                "$recipe_icon": "textures/blocks/ores/deepslate_tin_ore",
+                "offset": [72, 0]
+              }
+            },
+            {
+              "hm_deepslate_uranium_chunks_to_ore_toggle@uc.electro_press_recipe_toggle": {
+                "anchor_from": "top_left",
+                "anchor_to": "top_left",
+                "$toggle_index": 2005,
+                "$toggle_hover_text": "tile.utilitycraft:deepslate_uranium_ore.name",
+                "$toggle_control_name": "hm_deepslate_uranium_chunks_to_ore_recipe",
+                "$recipe_icon": "textures/blocks/ores/deepslate_uranium_ore",
+                "offset": [90, 0]
+              }
             }
           ]
         }
@@ -85,6 +118,75 @@
     "anchor_to": "center",
     "size": [80, 108],
     "controls": [
+      {
+        "hm_tin_chunks_to_ore_panel@uc.recipe_panel": {
+          "$recipe_control_name": "hm_tin_chunks_to_ore_recipe",
+          "controls": [
+            {
+              "input@uc.electro_press_recipe_input": {
+                "$slot_item_texture": "textures/items/tin_chunk",
+                "$slot_hover_text": "item.utilitycraft:tin_chunk",
+                "$has_slot_hover": true,
+                "$slot_count_text": "4",
+                "$has_slot_count": true
+              }
+            },
+            {
+              "output@uc.electro_press_recipe_output": {
+                "$slot_item_texture": "textures/blocks/ores/tin_ore",
+                "$slot_hover_text": "tile.utilitycraft:tin_ore.name",
+                "$has_slot_hover": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "hm_deepslate_tin_chunks_to_ore_panel@uc.recipe_panel": {
+          "$recipe_control_name": "hm_deepslate_tin_chunks_to_ore_recipe",
+          "controls": [
+            {
+              "input@uc.electro_press_recipe_input": {
+                "$slot_item_texture": "textures/items/deepslate_tin_chunk",
+                "$slot_hover_text": "item.utilitycraft:deepslate_tin_chunk",
+                "$has_slot_hover": true,
+                "$slot_count_text": "4",
+                "$has_slot_count": true
+              }
+            },
+            {
+              "output@uc.electro_press_recipe_output": {
+                "$slot_item_texture": "textures/blocks/ores/deepslate_tin_ore",
+                "$slot_hover_text": "tile.utilitycraft:deepslate_tin_ore.name",
+                "$has_slot_hover": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "hm_deepslate_uranium_chunks_to_ore_panel@uc.recipe_panel": {
+          "$recipe_control_name": "hm_deepslate_uranium_chunks_to_ore_recipe",
+          "controls": [
+            {
+              "input@uc.electro_press_recipe_input": {
+                "$slot_item_texture": "textures/items/deepslate_uranium_chunk",
+                "$slot_hover_text": "item.utilitycraft:deepslate_uranium_chunk",
+                "$has_slot_hover": true,
+                "$slot_count_text": "4",
+                "$has_slot_count": true
+              }
+            },
+            {
+              "output@uc.electro_press_recipe_output": {
+                "$slot_item_texture": "textures/blocks/ores/deepslate_uranium_ore",
+                "$slot_hover_text": "tile.utilitycraft:deepslate_uranium_ore.name",
+                "$has_slot_hover": true
+              }
+            }
+          ]
+        }
+      },
       {
         "hm_tin_plate_panel@uc.recipe_panel": {
           "$recipe_control_name": "hm_tin_plate_recipe",

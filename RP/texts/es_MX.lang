@@ -43,6 +43,17 @@ tile.utilitycraft:thermo_core.name=Núcleo Térmico\n§o§9@UC: heavy Machinery
 
 item.utilitycraft:bronze_ingot=Lingote de Bronce\n§o§9@UC: heavy Machinery
 
+tile.utilitycraft:tin_ore.name=Mineral de Estaño\n§o§9@UC: heavy Machinery
+tile.utilitycraft:deepslate_tin_ore.name=Mineral de Estaño de Pizarra Profunda\n§o§9@UC: heavy Machinery
+tile.utilitycraft:deepslate_uranium_ore.name=Mineral de Uranio de Pizarra Profunda\n§o§9@UC: heavy Machinery
+tile.utilitycraft:tin_case.name=Carcasa de Estaño\n§o§9@UC: heavy Machinery
+tile.utilitycraft:tin_crystal.name=Cristal de Estaño\n§o§9@UC: heavy Machinery
+tile.utilitycraft:tin_energy_port.name=Puerto de Energía de Estaño\n§o§9@UC: heavy Machinery
+tile.utilitycraft:tin_fluid_port.name=Puerto de Líquido de Estaño\n§o§9@UC: heavy Machinery
+tile.utilitycraft:tin_hazard_block.name=Bloque de Riesgo de Estaño\n§o§9@UC: heavy Machinery
+tile.utilitycraft:tin_item_port.name=Puerto de Ítems de Estaño\n§o§9@UC: heavy Machinery
+tile.utilitycraft:tin_vent_panel.name=Panel de Ventilación de Estaño\n§o§9@UC: heavy Machinery
+
 tile.utilitycraft:bronze_block.name=Bloque de Bronce\n§o§9@UC: heavy Machinery
 tile.utilitycraft:bronze_bricks.name=Ladrillos de Bronce\n§o§9@UC: heavy Machinery
 tile.utilitycraft:bronze_case.name=Carcasa de Bronce\n§o§9@UC: heavy Machinery
@@ -109,9 +120,11 @@ tile.utilitycraft:raw_uranium_block.name=Bloque de Uranio en Bruto\n§o§9@UC: h
 tile.utilitycraft:uranium_block.name=Bloque de Uranio\n§o§9@UC: heavy Machinery
 tile.utilitycraft:controller_case.name=Carcasa de Controlador\n§o§9@UC: heavy Machinery
 item.utilitycraft:saline_coolant_bucket=Cubo de Refrigerante Salino\n§o§9@UC: heavy Machinery
+tile.utilitycraft:creative_saline_coolant_tank.name=Tanque Creativo de Refrigerante Salino\n§7- Refrigerante Salino Infinito\n§o§9@UC: heavy Machinery
 item.utilitycraft:control_panel=Panel de Control\n§o§9@UC: heavy Machinery
 
 utilitycraft:itemGroup.controllers=Controladores
+utilitycraft:itemGroup.tin_casing=Carcasas y Puertos de Estaño
 ui.utilitycraft:info.crusher_controller=Procesa recetas del Crusher en 1 a 3 etapas encadenadas. Un modo mayor vuelve a triturar el resultado de la etapa anterior.\n\n§8Slots:\n- §9Grid de entrada§8: materiales.\n- §cGrid de salida§8: productos finales.\n\n§8Estructura:\n- Processing Modules: más objetos por ciclo.\n- Speed Modules: trabaja más rápido, pero gasta más energía.\n- Efficiency Modules: reduce el gasto de energía.\n- Energy Cells: más almacenamiento de §senergía§8.
 ui.utilitycraft:info.incinerator_controller=Funde en paralelo recetas de horno registradas usando §sDorios Energy§8.\n\n§8Slots:\n- §9Grid de entrada§8: objetos por fundir.\n- §cGrid de salida§8: productos fundidos.\n\n§8Estructura:\n- Processing Modules: más objetos por ciclo.\n- Speed Modules: trabaja más rápido, pero gasta más energía.\n- Efficiency Modules: reduce el gasto de energía.\n- Energy Cells: más almacenamiento de §senergía§8.
 ui.utilitycraft:info.electro_press_controller=Prensa materiales registrados en paralelo usando §sDorios Energy§8.\n\n§8Slots:\n- §9Grid de entrada§8: materiales por prensar.\n- §cGrid de salida§8: productos prensados.\n\n§8Estructura:\n- Processing Modules: más objetos por ciclo.\n- Speed Modules: trabaja más rápido, pero gasta más energía.\n- Efficiency Modules: reduce el gasto de energía.\n- Energy Cells: más almacenamiento de §senergía§8.
@@ -125,6 +138,7 @@ utilitycraft:itemGroup.bronze_casing=Carcasas y Puertos de Bronce
 utilitycraft:itemGroup.steel_casing=Carcasas y Puertos de Acero
 utilitycraft:itemGroup.netherite_casing=Carcasas y Puertos de Netherita
 utilitycraft:itemGroup.components_modules=Componentes y Módulos
+utilitycraft:itemGroup.creative_tanks=Tanques Creativos
 utilitycraft:itemGroup.power_condenser_units=Unidades de Condensador de Energía
 utilitycraft:itemGroup.materials_resources=Materiales y Recursos\n§6(Heavy Machinery)
 utilitycraft:itemGroup.utility_tools=Herramientas Utilitarias

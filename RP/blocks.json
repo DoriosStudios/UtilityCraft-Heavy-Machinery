@@ -4,6 +4,49 @@
 		1,
 		0
 	],
+	"utilitycraft:tin_ore": {
+		"sound": "stone",
+		"textures": "utilitycraft_tin_ore"
+	},
+	"utilitycraft:deepslate_tin_ore": {
+		"sound": "stone",
+		"textures": "utilitycraft_deepslate_tin_ore"
+	},
+	"utilitycraft:deepslate_uranium_ore": {
+		"sound": "stone",
+		"textures": "utilitycraft_deepslate_uranium_ore"
+	},
+	"utilitycraft:tin_crystal": {
+		"sound": "glass"
+	},
+	"utilitycraft:tin_case": {
+		"sound": "metal",
+		"textures": "utilitycraft_tin_case"
+	},
+	"utilitycraft:tin_energy_port": {
+		"sound": "metal",
+		"textures": "utilitycraft_tin_energy_port"
+	},
+	"utilitycraft:tin_fluid_port": {
+		"sound": "metal",
+		"textures": "utilitycraft_tin_fluid_port"
+	},
+	"utilitycraft:tin_item_port": {
+		"sound": "metal",
+		"textures": "utilitycraft_tin_item_port"
+	},
+	"utilitycraft:tin_hazard_block": {
+		"sound": "metal",
+		"textures": {
+			"up": "utilitycraft_tin_plated_block",
+			"down": "utilitycraft_tin_plated_block",
+			"side": "utilitycraft_tin_hazard_block"
+		}
+	},
+	"utilitycraft:tin_vent_panel": {
+		"sound": "metal",
+		"textures": "utilitycraft_tin_vent_panel"
+	},
 	"utilitycraft:reinforced_bronze_glass": {
 		"sound": "glass"
 	},
@@ -238,6 +281,9 @@
 		"sound": "metal"
 	},
 	"utilitycraft:controller_case": {
+		"sound": "metal"
+	},
+	"utilitycraft:creative_saline_coolant_tank": {
 		"sound": "metal"
 	}
 }

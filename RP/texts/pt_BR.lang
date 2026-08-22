@@ -52,6 +52,17 @@ tile.utilitycraft:thermo_core.name=Núcleo Térmico\n§o§9@UC: heavy Machinery
 
 item.utilitycraft:bronze_ingot=Lingote de Bronze\n§o§9@UC: heavy Machinery
 
+tile.utilitycraft:tin_ore.name=Minério de Estanho\n§o§9@UC: heavy Machinery
+tile.utilitycraft:deepslate_tin_ore.name=Minério de Estanho de Ardósia Profunda\n§o§9@UC: heavy Machinery
+tile.utilitycraft:deepslate_uranium_ore.name=Minério de Urânio de Ardósia Profunda\n§o§9@UC: heavy Machinery
+tile.utilitycraft:tin_case.name=Carcaça de Estanho\n§o§9@UC: heavy Machinery
+tile.utilitycraft:tin_crystal.name=Cristal de Estanho\n§o§9@UC: heavy Machinery
+tile.utilitycraft:tin_energy_port.name=Porta de Energia de Estanho\n§o§9@UC: heavy Machinery
+tile.utilitycraft:tin_fluid_port.name=Porta de Líquido de Estanho\n§o§9@UC: heavy Machinery
+tile.utilitycraft:tin_hazard_block.name=Bloco de Risco de Estanho\n§o§9@UC: heavy Machinery
+tile.utilitycraft:tin_item_port.name=Porta de Itens de Estanho\n§o§9@UC: heavy Machinery
+tile.utilitycraft:tin_vent_panel.name=Painel de Ventilação de Estanho\n§o§9@UC: heavy Machinery
+
 tile.utilitycraft:bronze_block.name=Bloco de Bronze\n§o§9@UC: heavy Machinery
 tile.utilitycraft:bronze_bricks.name=Tijolos de Bronze\n§o§9@UC: heavy Machinery
 tile.utilitycraft:bronze_case.name=Carcaça de Bronze\n§o§9@UC: heavy Machinery
@@ -118,13 +129,16 @@ tile.utilitycraft:raw_uranium_block.name=Bloco de Urânio Bruto\n§o§9@UC: heav
 tile.utilitycraft:uranium_block.name=Bloco de Urânio\n§o§9@UC: heavy Machinery
 tile.utilitycraft:controller_case.name=Carcaça de Controlador\n§o§9@UC: heavy Machinery
 item.utilitycraft:saline_coolant_bucket=Balde de Líquido Arrefecedor Salino\n§o§9@UC: heavy Machinery
+tile.utilitycraft:creative_saline_coolant_tank.name=Tanque Criativo de Líquido Arrefecedor Salino\n§7- Líquido Arrefecedor Salino Infinito\n§o§9@UC: heavy Machinery
 item.utilitycraft:control_panel=Painel de Controle\n§o§9@UC: heavy Machinery
 
 utilitycraft:itemGroup.controllers=Controladores
+utilitycraft:itemGroup.tin_casing=Carcaças e Portas de Estanho
 utilitycraft:itemGroup.bronze_casing=Carcaças e Portas de Bronze
 utilitycraft:itemGroup.steel_casing=Carcaças e Portas de Aço
 utilitycraft:itemGroup.netherite_casing=Carcaças e Portas de Netherita
 utilitycraft:itemGroup.components_modules=Componentes e Módulos
+utilitycraft:itemGroup.creative_tanks=Tanques Criativos
 utilitycraft:itemGroup.power_condenser_units=Unidades de Condensador de Energia
 utilitycraft:itemGroup.materials_resources=Materiais e Recursos\n§6(Heavy Machinery)
 utilitycraft:itemGroup.utility_tools=Ferramentas Utility

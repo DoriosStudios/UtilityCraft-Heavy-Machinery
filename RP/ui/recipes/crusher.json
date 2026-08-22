@@ -42,17 +42,6 @@
           "size": [126, 18],
           "controls": [
             {
-              "hm_raw_tin_toggle@uc.crusher_recipe_toggle": {
-                "anchor_from": "top_left",
-                "anchor_to": "top_left",
-                "$toggle_index": 2000,
-                "$toggle_hover_text": "item.utilitycraft:raw_tin",
-                "$toggle_control_name": "hm_raw_tin_recipe",
-                "$recipe_icon": "textures/items/raw_tin",
-                "offset": [0, 0]
-              }
-            },
-            {
               "hm_tin_dust_1_toggle@uc.crusher_recipe_toggle": {
                 "anchor_from": "top_left",
                 "anchor_to": "top_left",
@@ -60,7 +49,7 @@
                 "$toggle_hover_text": "item.utilitycraft:tin_dust",
                 "$toggle_control_name": "hm_tin_dust_1_recipe",
                 "$recipe_icon": "textures/items/raw_tin_dust",
-                "offset": [18, 0]
+                "offset": [0, 0]
               }
             },
             {
@@ -71,7 +60,7 @@
                 "$toggle_hover_text": "item.utilitycraft:tin_dust",
                 "$toggle_control_name": "hm_tin_dust_2_recipe",
                 "$recipe_icon": "textures/items/raw_tin_dust",
-                "offset": [36, 0]
+                "offset": [18, 0]
               }
             },
             {
@@ -82,7 +71,7 @@
                 "$toggle_hover_text": "item.utilitycraft:tin_dust",
                 "$toggle_control_name": "hm_tin_dust_6_recipe",
                 "$recipe_icon": "textures/items/raw_tin_dust",
-                "offset": [54, 0]
+                "offset": [36, 0]
               }
             },
             {
@@ -93,29 +82,18 @@
                 "$toggle_hover_text": "item.utilitycraft:tin_dust",
                 "$toggle_control_name": "hm_tin_dust_12_recipe",
                 "$recipe_icon": "textures/items/raw_tin_dust",
-                "offset": [72, 0]
-              }
-            },
-            {
-              "hm_raw_uranium_toggle@uc.crusher_recipe_toggle": {
-                "anchor_from": "top_left",
-                "anchor_to": "top_left",
-                "$toggle_index": 2005,
-                "$toggle_hover_text": "item.utilitycraft:raw_uranium",
-                "$toggle_control_name": "hm_raw_uranium_recipe",
-                "$recipe_icon": "textures/items/raw_uranium",
-                "offset": [90, 0]
+                "offset": [54, 0]
               }
             },
             {
               "hm_uranium_dust_1_toggle@uc.crusher_recipe_toggle": {
                 "anchor_from": "top_left",
                 "anchor_to": "top_left",
-                "$toggle_index": 2006,
+                "$toggle_index": 2014,
                 "$toggle_hover_text": "item.utilitycraft:uranium_dust",
                 "$toggle_control_name": "hm_uranium_dust_1_recipe",
                 "$recipe_icon": "textures/items/uranium_dust",
-                "offset": [108, 0]
+                "offset": [72, 0]
               }
             }
           ]
@@ -215,31 +193,6 @@
     "size": [80, 108],
     "controls": [
       {
-        "hm_raw_tin_panel@uc.recipe_panel": {
-          "$recipe_control_name": "hm_raw_tin_recipe",
-          "controls": [
-            {
-              "input@uc.crusher_recipe_input": {
-                "$slot_item_texture": "textures/items/tin_chunk",
-                "$slot_hover_text": "item.utilitycraft:tin_chunk",
-                "$has_slot_hover": true,
-                "$has_slot_item": false,
-                "$has_slot_flipbook": true,
-                "$slot_item_flipbook_texture": "textures/ui/recipes/hm_crusher_raw_tin_input_flipbook",
-                "$slot_item_flipbook_uv": "@uc.hm_crusher_raw_tin_input_animation"
-              }
-            },
-            {
-              "output@uc.crusher_recipe_output": {
-                "$slot_item_texture": "textures/items/raw_tin",
-                "$slot_hover_text": "item.utilitycraft:raw_tin",
-                "$has_slot_hover": true
-              }
-            }
-          ]
-        }
-      },
-      {
         "hm_tin_dust_1_panel@uc.recipe_panel": {
           "$recipe_control_name": "hm_tin_dust_1_recipe",
           "controls": [
@@ -272,7 +225,11 @@
               "input@uc.crusher_recipe_input": {
                 "$slot_item_texture": "textures/items/raw_tin",
                 "$slot_hover_text": "item.utilitycraft:raw_tin",
-                "$has_slot_hover": true
+                "$has_slot_hover": true,
+                "$has_slot_item": false,
+                "$has_slot_flipbook": true,
+                "$slot_item_flipbook_texture": "textures/ui/recipes/hm_crusher_tin_dust_2_input_flipbook",
+                "$slot_item_flipbook_uv": "@uc.hm_crusher_tin_dust_2_input_animation"
               }
             },
             {
@@ -334,27 +291,6 @@
         }
       },
       {
-        "hm_raw_uranium_panel@uc.recipe_panel": {
-          "$recipe_control_name": "hm_raw_uranium_recipe",
-          "controls": [
-            {
-              "input@uc.crusher_recipe_input": {
-                "$slot_item_texture": "textures/items/deepslate_uranium_chunk",
-                "$slot_hover_text": "item.utilitycraft:deepslate_uranium_chunk",
-                "$has_slot_hover": true
-              }
-            },
-            {
-              "output@uc.crusher_recipe_output": {
-                "$slot_item_texture": "textures/items/raw_uranium",
-                "$slot_hover_text": "item.utilitycraft:raw_uranium",
-                "$has_slot_hover": true
-              }
-            }
-          ]
-        }
-      },
-      {
         "hm_uranium_dust_1_panel@uc.recipe_panel": {
           "$recipe_control_name": "hm_uranium_dust_1_recipe",
           "controls": [
@@ -383,7 +319,11 @@
               "input@uc.crusher_recipe_input": {
                 "$slot_item_texture": "textures/items/raw_uranium",
                 "$slot_hover_text": "item.utilitycraft:raw_uranium",
-                "$has_slot_hover": true
+                "$has_slot_hover": true,
+                "$has_slot_item": false,
+                "$has_slot_flipbook": true,
+                "$slot_item_flipbook_texture": "textures/ui/recipes/hm_crusher_uranium_dust_2_input_flipbook",
+                "$slot_item_flipbook_uv": "@uc.hm_crusher_uranium_dust_2_input_animation"
               }
             },
             {
@@ -540,7 +480,7 @@
       }
     ]
   },
-  "hm_crusher_raw_tin_input_animation": {
+  "hm_crusher_tin_dust_1_input_animation": {
     "anim_type": "flip_book",
     "frame_count": 2,
     "frame_step": 0,
@@ -548,7 +488,15 @@
     "easing": "linear",
     "initial_uv": [0, 0]
   },
-  "hm_crusher_tin_dust_1_input_animation": {
+  "hm_crusher_tin_dust_2_input_animation": {
+    "anim_type": "flip_book",
+    "frame_count": 3,
+    "frame_step": 0,
+    "fps": 1,
+    "easing": "linear",
+    "initial_uv": [0, 0]
+  },
+  "hm_crusher_uranium_dust_2_input_animation": {
     "anim_type": "flip_book",
     "frame_count": 2,
     "frame_step": 0,

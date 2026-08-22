@@ -2,7 +2,7 @@
 	"format_version": "1.20.80",
 	"minecraft:block": {
 		"description": {
-			"identifier": "utilitycraft:tin_plated_block",
+			"identifier": "utilitycraft:tin_vent_panel",
 			"menu_category": {
 				"category": "construction"
 			}
@@ -12,7 +12,8 @@
 			"minecraft:destructible_by_mining": {
 				"seconds_to_destroy": 1
 			},
-			"tag:dorios:multiblock.case.tin": {}
+			"tag:dorios:multiblock.case.tin": {},
+			"tag:dorios:vent_block": {}
 		}
 	}
 }

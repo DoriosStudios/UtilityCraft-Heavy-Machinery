@@ -1,0 +1,29 @@
+{
+	"format_version": "1.20.80",
+	"minecraft:block": {
+		"description": {
+			"identifier": "utilitycraft:tin_item_port",
+			"menu_category": {
+				"category": "construction"
+			},
+			"states": {
+				"utilitycraft:active": [0, 1]
+			}
+		},
+		"components": {
+			"utilitycraft:link_node_io": {},
+			"tag:dorios:link_node": {},
+			"tag:dorios:multiblock.case.tin": {}
+		},
+		"permutations": [
+			{
+				"condition": "q.block_state('utilitycraft:active') == 1",
+				"components": {
+					"tag:dorios:item": {},
+					"tag:dorios:link_node": {},
+					"tag:dorios:multiblock.case.tin": {}
+				}
+			}
+		]
+	}
+}

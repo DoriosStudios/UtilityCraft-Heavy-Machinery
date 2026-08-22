@@ -7,6 +7,22 @@
                 "groups": [
                     {
                         "group_identifier": {
+                            "icon": "utilitycraft:tin_case",
+                            "name": "utilitycraft:itemGroup.tin_casing"
+                        },
+                        "items": [
+                            "utilitycraft:tin_case",
+                            "utilitycraft:tin_crystal",
+                            "utilitycraft:tin_plated_block",
+                            "utilitycraft:tin_hazard_block",
+                            "utilitycraft:tin_vent_panel",
+                            "utilitycraft:tin_item_port",
+                            "utilitycraft:tin_fluid_port",
+                            "utilitycraft:tin_energy_port"
+                        ]
+                    },
+                    {
+                        "group_identifier": {
                             "icon": "utilitycraft:autosieve_controller",
                             "name": "utilitycraft:itemGroup.controllers"
                         },
@@ -100,6 +116,15 @@
                     },
                     {
                         "group_identifier": {
+                            "icon": "utilitycraft:creative_saline_coolant_tank",
+                            "name": "utilitycraft:itemGroup.creative_tanks"
+                        },
+                        "items": [
+                            "utilitycraft:creative_saline_coolant_tank"
+                        ]
+                    },
+                    {
+                        "group_identifier": {
                             "icon": "utilitycraft:basic_power_condenser_unit",
                             "name": "utilitycraft:itemGroup.power_condenser_units"
                         },
@@ -133,7 +158,6 @@
                             "utilitycraft:tin_nugget",
                             "utilitycraft:tin_plate",
                             "utilitycraft:tin_block",
-                            "utilitycraft:tin_plated_block",
                             "utilitycraft:uranium_dust",
                             "utilitycraft:uranium_ingot",
                             "utilitycraft:uranium_pellet",

@@ -184,11 +184,41 @@
 		"utilitycraft_netherite_item_port": {
 			"textures": "textures/blocks/multiblock/netherite/netherite_item_port"
 		},
+		"utilitycraft_tin_ore": {
+			"textures": "textures/blocks/ores/tin_ore"
+		},
+		"utilitycraft_deepslate_tin_ore": {
+			"textures": "textures/blocks/ores/deepslate_tin_ore"
+		},
+		"utilitycraft_deepslate_uranium_ore": {
+			"textures": "textures/blocks/ores/deepslate_uranium_ore"
+		},
+		"utilitycraft_tin_crystal": {
+			"textures": "textures/blocks/multiblock/tin/tin_crystal"
+		},
+		"utilitycraft_tin_case": {
+			"textures": "textures/blocks/multiblock/tin/tin_case"
+		},
+		"utilitycraft_tin_energy_port": {
+			"textures": "textures/blocks/multiblock/tin/tin_energy_port"
+		},
+		"utilitycraft_tin_fluid_port": {
+			"textures": "textures/blocks/multiblock/tin/tin_fluid_port"
+		},
+		"utilitycraft_tin_item_port": {
+			"textures": "textures/blocks/multiblock/tin/tin_item_port"
+		},
+		"utilitycraft_tin_hazard_block": {
+			"textures": "textures/blocks/multiblock/tin/tin_hazard_block"
+		},
+		"utilitycraft_tin_vent_panel": {
+			"textures": "textures/blocks/multiblock/tin/tin_vent_panel"
+		},
 		"utilitycraft_tin_block": {
 			"textures": "textures/blocks/block_of_tin"
 		},
 		"utilitycraft_tin_plated_block": {
-			"textures": "textures/blocks/block_of_tin_plate"
+			"textures": "textures/blocks/multiblock/tin/tin_plated_block"
 		},
 		"utilitycraft_brute_bronze_block": {
 			"textures": "textures/blocks/brute_bronze_block"
@@ -504,6 +534,9 @@
 		},
 		"utilitycraft_thermal_reactor_controller_down": {
 			"textures": "textures/blocks/multiblock/bronze/thermal_reactor_controller_down"
+		},
+		"utilitycraft_saline_coolant_fluid": {
+			"textures": "textures/entity/saline_coolant_fluid"
 		}
 	}
 }

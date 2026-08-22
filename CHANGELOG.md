@@ -1,5 +1,17 @@
 # UtilityCraft: Heavy Machinery v0.5.2
 
+## ADDED
+
+- Added a Creative Saline Coolant Tank that provides infinite Saline Coolant to fluid networks and compatible containers.
+- Added Tin Ore and Deepslate Tin Ore blocks with Silk Touch support and Raw Tin drops.
+- Added Deepslate Uranium Ore with Silk Touch support and Raw Uranium drops.
+- Added a complete Tin multiblock casing family with a casing, crystal, plated and hazard blocks, ventilation panel, and item, liquid, and energy ports.
+
+## CHANGED
+
+- Changed Tin and Uranium chunks to reconstruct their ore blocks from four chunks at a crafting table or in the Electro Press.
+- Changed Tin and Uranium ore processing to produce one ingot in furnaces or two dust in the Crusher.
+
 ## FIXED
 
 - Fixed Item and Liquid Port conflicts with UtilityCraft by sharing Heavy Machinery's link-node I/O registrations across every loaded DoriosCore runtime.

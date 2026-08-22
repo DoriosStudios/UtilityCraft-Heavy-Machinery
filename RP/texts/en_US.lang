@@ -53,6 +53,17 @@ tile.utilitycraft:thermo_core.name=Thermo Core\n§o§9@UC: Heavy Machinery
 
 item.utilitycraft:bronze_ingot=Bronze Ingot\n§o§9@UC: Heavy Machinery
 
+tile.utilitycraft:tin_ore.name=Tin Ore\n§o§9@UC: Heavy Machinery
+tile.utilitycraft:deepslate_tin_ore.name=Deepslate Tin Ore\n§o§9@UC: Heavy Machinery
+tile.utilitycraft:deepslate_uranium_ore.name=Deepslate Uranium Ore\n§o§9@UC: Heavy Machinery
+tile.utilitycraft:tin_case.name=Tin Casing\n§o§9@UC: Heavy Machinery
+tile.utilitycraft:tin_crystal.name=Tin Crystal\n§o§9@UC: Heavy Machinery
+tile.utilitycraft:tin_energy_port.name=Tin Energy Port\n§o§9@UC: Heavy Machinery
+tile.utilitycraft:tin_fluid_port.name=Tin Liquid Port\n§o§9@UC: Heavy Machinery
+tile.utilitycraft:tin_hazard_block.name=Tin Hazard Block\n§o§9@UC: Heavy Machinery
+tile.utilitycraft:tin_item_port.name=Tin Item Port\n§o§9@UC: Heavy Machinery
+tile.utilitycraft:tin_vent_panel.name=Tin Vent Panel\n§o§9@UC: Heavy Machinery
+
 tile.utilitycraft:bronze_block.name=Block of Bronze\n§o§9@UC: Heavy Machinery
 tile.utilitycraft:bronze_bricks.name=Bronze Bricks\n§o§9@UC: Heavy Machinery
 tile.utilitycraft:bronze_case.name=Bronze Casing\n§o§9@UC: Heavy Machinery
@@ -119,13 +130,16 @@ tile.utilitycraft:raw_uranium_block.name=Block of Raw Uranium\n§o§9@UC: Heavy 
 tile.utilitycraft:uranium_block.name=Block of Uranium\n§o§9@UC: Heavy Machinery
 tile.utilitycraft:controller_case.name=Controller Case\n§o§9@UC: Heavy Machinery
 item.utilitycraft:saline_coolant_bucket=Saline Coolant Bucket\n§o§9@UC: Heavy Machinery
+tile.utilitycraft:creative_saline_coolant_tank.name=Creative Saline Coolant Tank\n§7- Infinite Saline Coolant\n§o§9@UC: Heavy Machinery
 item.utilitycraft:control_panel=Control Panel\n§o§9@UC: Heavy Machinery
 
 utilitycraft:itemGroup.controllers=Controllers
+utilitycraft:itemGroup.tin_casing=Tin Casings and Ports
 utilitycraft:itemGroup.bronze_casing=Bronze Casings and Ports
 utilitycraft:itemGroup.steel_casing=Steel Casings and Ports
 utilitycraft:itemGroup.netherite_casing=Netherite Casings and Ports
 utilitycraft:itemGroup.components_modules=Components and Modules
+utilitycraft:itemGroup.creative_tanks=Creative Tanks
 utilitycraft:itemGroup.power_condenser_units=Power Condenser Units
 utilitycraft:itemGroup.materials_resources=Materials and Resources\n§6(Heavy Machinery)
 utilitycraft:itemGroup.utility_tools=Utility Tools
