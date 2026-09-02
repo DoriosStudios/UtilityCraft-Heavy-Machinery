@@ -11,12 +11,14 @@
 
 - Changed Tin and Uranium chunks to reconstruct their ore blocks from four chunks at a crafting table or in the Electro Press.
 - Changed Tin and Uranium ore processing to produce one ingot in furnaces or two dust in the Crusher.
+- Link Nodes now start in `Default`, can select a machine-specific IO group, and retain `Disabled` as an explicit fully blocked state.
 
 ## FIXED
 
 - Fixed Tin and Uranium ores so they only drop from pickaxes, correctly support Silk Touch, and gain additional Raw Ore drops from Fortune.
 - Fixed Item and Liquid Port conflicts with UtilityCraft by sharing Heavy Machinery's link-node I/O registrations across every loaded DoriosCore runtime.
 - Fixed multiblock controller and helper-entity resolution so connected ports consistently resolve their owning active structure.
+- Fixed default Link Node inputs for the Thermal Reactor, Auto Sieve and Infuser so they expose their intended tanks or material slots without requiring manual node configuration.
 
 ---
 

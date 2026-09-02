@@ -36,7 +36,7 @@ const MULTIBLOCK_CONFIG = {
 
 registerLinkNodeIO('utilitycraft:infuser_controller', {
     items: {
-        anyInputSlots: [],
+        anyInputSlots: INPUT_SLOTS,
         anyOutputSlots: OUTPUT_SLOTS,
         inputs: [
             { id: 'catalyst', label: 'Catalyst Grid', color: '§b', slots: CATALYST_SLOTS },

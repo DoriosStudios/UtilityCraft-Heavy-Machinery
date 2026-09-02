@@ -37,7 +37,7 @@ const MULTIBLOCK_CONFIG = {
 
 registerLinkNodeIO('utilitycraft:autosieve_controller', {
     items: {
-        anyInputSlots: [],
+        anyInputSlots: INPUT_SLOTS,
         anyOutputSlots: OUTPUT_SLOTS,
         inputs: [
             { id: 'mesh', label: 'Mesh Slot', color: '§b', slots: [MESH_SLOT] },

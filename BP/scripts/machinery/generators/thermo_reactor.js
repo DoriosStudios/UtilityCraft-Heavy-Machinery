@@ -107,7 +107,7 @@ const GENERATOR_CONFIG = {
 
 registerLinkNodeIO('utilitycraft:thermo_reactor_controller', {
     liquids: {
-        anyInputIndices: [],
+        anyInputIndices: [0, 1],
         anyOutputIndices: [],
         inputs: [
             { id: 'coolant', label: 'Coolant Tank', color: '§b', indices: [0] },
