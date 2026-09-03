@@ -15,6 +15,7 @@
 
 ## FIXED
 
+- Fixed repeated machine watcher registration restoring pressed interface buttons before their actions could be detected.
 - Fixed Tin and Uranium ores so they only drop from pickaxes, correctly support Silk Touch, and gain additional Raw Ore drops from Fortune.
 - Fixed Item and Liquid Port conflicts with UtilityCraft by sharing Heavy Machinery's link-node I/O registrations across every loaded DoriosCore runtime.
 - Fixed multiblock controller and helper-entity resolution so connected ports consistently resolve their owning active structure.
