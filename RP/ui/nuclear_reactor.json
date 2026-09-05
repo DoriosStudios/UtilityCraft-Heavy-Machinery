@@ -1,0 +1,427 @@
+{
+    "namespace": "nuclear_reactor",
+    "nuclear_reactor_top": {
+        "type": "collection_panel",
+        "anchor_from": "center",
+        "anchor_to": "center",
+        "size": [
+            162,
+            72
+        ],
+        "offset": [
+            -10,
+            -40
+        ],
+        "collection_name": "container_items",
+        "$item_collection_name": "container_items",
+        "$right_machine_tabs_name|default": "right_machine_tabs",
+        "$info_toggle_control_name|default": "info_toggle_button",
+        "controls": [
+            {
+                "machine_name@uc.machine_name": {}
+            },
+            {
+                "energy_bar@uc.big_energy_bar": {
+                    "offset": [
+                        0,
+                        0
+                    ]
+                }
+            },
+            {
+                "panel@uc.machine_side_panel": {}
+            },
+            {
+                "panel@uc.machine_side_panel": {
+                    "offset": [
+                        264,
+                        0
+                    ]
+                }
+            },
+            {
+                "liquid_bar_0@uc.liquid_bar": {
+                    "$collection_index": 2,
+                    "$show_liquid_outline": true,
+                    "$liquid_outline_texture": "textures/ui/slots/input_extra_slot",
+                    "offset": [
+                        -44,
+                        0
+                    ]
+                }
+            },
+            {
+                "fuel_bar@uc.item_display_hover_large": {
+                    "collection_index": 3,
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        50,
+                        16
+                    ]
+                }
+            },
+            {
+                "fuel_input@uc.input_slot": {
+                    "collection_index": 21,
+                    "$slot_background_texture": "textures/ui/slots/fuel_slot",
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        -55,
+                        28
+                    ]
+                }
+            },
+            {
+                "fuel_overlay@uc.function_panel": {
+                    "collection_index": 21,
+                    "type": "panel",
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "size": [16, 16],
+                    "offset": [-55, 29],
+                    "controls": [
+                        {
+                            "fuel_rod_image": {
+                                "type": "image",
+                                "texture": "textures/items/enriched_uranium_rod",
+                                "layer": 4,
+                                "alpha": 0.5,
+                                "anchor_from": "center",
+                                "anchor_to": "center",
+                                "size": [16, 16]
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "item_label@uc.text_label": {
+                    "collection_index": 1,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "size": [
+                        92,
+                        180
+                    ],
+                    "$text_scale": 0.55,
+                    "offset": [
+                        -76,
+                        2
+                    ]
+                }
+            },
+            {
+                "temperature_bar@uc.item_display_hover_large": {
+                    "collection_index": 4,
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        81,
+                        14
+                    ]
+                }
+            },
+            {
+                "item_label@uc.text_label": {
+                    "collection_index": 6,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "layer": 11,
+                    "$text_scale": 0.67,
+                    "offset": [
+                        188,
+                        -5
+                    ]
+                }
+            },
+            {
+                "burn_rate_lock_icon": {
+                    "type": "image",
+                    "texture": "textures/ui/player_preview_border",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "layer": 9,
+                    "size": [
+                        73,
+                        12
+                    ],
+                    "offset": [
+                        186,
+                        18
+                    ]
+                }
+            },
+            {
+                "start_button@uc.machine_button": {
+                    "$index": 5,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        242,
+                        132
+                    ]
+                }
+            },
+            {
+                "cancel@uc.machine_button": {
+                    "$index": 19,
+                    "$default_texture": "textures/ui/buttons/cancel",
+                    "$hover_texture": "textures/ui/buttons/cancel_selected",
+                    "$pressed_texture": "textures/ui/buttons/cancel_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        194,
+                        32
+                    ]
+                }
+            },
+            {
+                "delete@uc.machine_button": {
+                    "$index": 20,
+                    "$default_texture": "textures/ui/buttons/delete",
+                    "$hover_texture": "textures/ui/buttons/delete_selected",
+                    "$pressed_texture": "textures/ui/buttons/delete_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        234,
+                        32
+                    ]
+                }
+            },
+            {
+                "7@uc.machine_button": {
+                    "$index": 7,
+                    "$default_texture": "textures/ui/buttons/number_7",
+                    "$hover_texture": "textures/ui/buttons/number_7_selected",
+                    "$pressed_texture": "textures/ui/buttons/number_7_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        194,
+                        52
+                    ]
+                }
+            },
+            {
+                "8@uc.machine_button": {
+                    "$index": 8,
+                    "$default_texture": "textures/ui/buttons/number_8",
+                    "$hover_texture": "textures/ui/buttons/number_8_selected",
+                    "$pressed_texture": "textures/ui/buttons/number_8_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        214,
+                        52
+                    ]
+                }
+            },
+            {
+                "9@uc.machine_button": {
+                    "$index": 9,
+                    "$default_texture": "textures/ui/buttons/number_9",
+                    "$hover_texture": "textures/ui/buttons/number_9_selected",
+                    "$pressed_texture": "textures/ui/buttons/number_9_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        234,
+                        52
+                    ]
+                }
+            },
+            {
+                "4@uc.machine_button": {
+                    "$index": 10,
+                    "$default_texture": "textures/ui/buttons/number_4",
+                    "$hover_texture": "textures/ui/buttons/number_4_selected",
+                    "$pressed_texture": "textures/ui/buttons/number_4_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        194,
+                        72
+                    ]
+                }
+            },
+            {
+                "5@uc.machine_button": {
+                    "$index": 11,
+                    "$default_texture": "textures/ui/buttons/number_5",
+                    "$hover_texture": "textures/ui/buttons/number_5_selected",
+                    "$pressed_texture": "textures/ui/buttons/number_5_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        214,
+                        72
+                    ]
+                }
+            },
+            {
+                "6@uc.machine_button": {
+                    "$index": 12,
+                    "$default_texture": "textures/ui/buttons/number_6",
+                    "$hover_texture": "textures/ui/buttons/number_6_selected",
+                    "$pressed_texture": "textures/ui/buttons/number_6_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        234,
+                        72
+                    ]
+                }
+            },
+            {
+                "1@uc.machine_button": {
+                    "$index": 13,
+                    "$default_texture": "textures/ui/buttons/number_1",
+                    "$hover_texture": "textures/ui/buttons/number_1_selected",
+                    "$pressed_texture": "textures/ui/buttons/number_1_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        194,
+                        92
+                    ]
+                }
+            },
+            {
+                "2@uc.machine_button": {
+                    "$index": 14,
+                    "$default_texture": "textures/ui/buttons/number_2",
+                    "$hover_texture": "textures/ui/buttons/number_2_selected",
+                    "$pressed_texture": "textures/ui/buttons/number_2_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        214,
+                        92
+                    ]
+                }
+            },
+            {
+                "3@uc.machine_button": {
+                    "$index": 15,
+                    "$default_texture": "textures/ui/buttons/number_3",
+                    "$hover_texture": "textures/ui/buttons/number_3_selected",
+                    "$pressed_texture": "textures/ui/buttons/number_3_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        234,
+                        92
+                    ]
+                }
+            },
+            {
+                "dot@uc.machine_button": {
+                    "$index": 16,
+                    "$default_texture": "textures/ui/buttons/dot",
+                    "$hover_texture": "textures/ui/buttons/dot_selected",
+                    "$pressed_texture": "textures/ui/buttons/dot_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        194,
+                        112
+                    ]
+                }
+            },
+            {
+                "0@uc.machine_button": {
+                    "$index": 17,
+                    "$default_texture": "textures/ui/buttons/number_0",
+                    "$hover_texture": "textures/ui/buttons/number_0_selected",
+                    "$pressed_texture": "textures/ui/buttons/number_0_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        214,
+                        112
+                    ]
+                }
+            },
+            {
+                "enter@uc.machine_button": {
+                    "$index": 18,
+                    "$default_texture": "textures/ui/buttons/accept",
+                    "$hover_texture": "textures/ui/buttons/accept_selected",
+                    "$pressed_texture": "textures/ui/buttons/accept_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        234,
+                        112
+                    ]
+                }
+            },
+            {
+                "info_tab@uc.info_tab": {
+                    "$right_machine_tabs_name": "$right_machine_tabs_name",
+                    "$info_toggle_control_name": "$info_toggle_control_name",
+                    "$info_description": "ui.utilitycraft:info.nuclear_reactor"
+                }
+            }
+        ]
+    },
+    "utilitycraft_panel": {
+        "type": "panel",
+        "controls": [
+            {
+                "container_gamepad_helpers@common.container_gamepad_helpers": {}
+            },
+            {
+                "flying_item_renderer@common.flying_item_renderer": {
+                    "layer": 14
+                }
+            },
+            {
+                "selected_item_details_factory@common.selected_item_details_factory": {}
+            },
+            {
+                "item_lock_notification_factory@common.item_lock_notification_factory": {}
+            },
+            {
+                "root_panel@common.root_panel": {
+                    "layer": 1,
+                    "controls": [
+                        {
+                            "common_panel@common.common_panel": {}
+                        },
+                        {
+                            "chest_panel": {
+                                "type": "panel",
+                                "layer": 5,
+                                "controls": [
+                                    {
+                                        "nuclear_reactor_top@nuclear_reactor.nuclear_reactor_top": {}
+                                    },
+                                    {
+                                        "inventory_panel_bottom_half_with_label@common.inventory_panel_bottom_half_with_label": {}
+                                    },
+                                    {
+                                        "hotbar_grid@common.hotbar_grid_template": {}
+                                    },
+                                    {
+                                        "inventory_take_progress_icon_button@common.inventory_take_progress_icon_button": {}
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "inventory_selected_icon_button@common.inventory_selected_icon_button": {}
+                        },
+                        {
+                            "gamepad_cursor@common.gamepad_cursor_button": {}
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

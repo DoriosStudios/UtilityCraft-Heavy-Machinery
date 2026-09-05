@@ -39,6 +39,14 @@
                 "seconds_to_destroy": 1
             },
             "minecraft:destructible_by_explosion": false,
+            "utilitycraft:fluid_container": {},
+            "minecraft:tick": {
+                "interval_range": [
+                    2,
+                    2
+                ]
+            },
+            "utilitycraft:nuclear_reactor": {},
             "tag:dorios:energy": {},
             "tag:dorios:fluid": {},
             "tag:dorios:item": {},

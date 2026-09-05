@@ -11,7 +11,7 @@ const GENERATOR_CONFIG = {
         rate_speed_base: 0,
     },
     multiblock: {
-        transfer_rate_ratio: 1000,
+        transfer_rate_ratio: 20,
     },
     required_case: 'dorios:multiblock.case.steel',
     missingEnergyWarning: '\u00A7c[Matrix] At least 1 energy container its required to operate.',
@@ -46,7 +46,7 @@ DoriosLib.registry.blockComponent('utilitycraft:power_condenser', {
 
         if (matrix.rate <= 0) return
         const energy = matrix.energy
-        const transfered = energy.transferToNetwork(matrix.rate) / tickSpeed
+        const transfered = energy.transferToNetwork(matrix.rate) / matrix.processingInterval
 
         matrix.setLabel(`        
 §r§eEnergy Information

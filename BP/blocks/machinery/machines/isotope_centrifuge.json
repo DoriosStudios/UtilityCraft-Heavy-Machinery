@@ -1,0 +1,130 @@
+{
+	"format_version": "1.20.80",
+	"minecraft:block": {
+		"description": {
+			"identifier": "utilitycraft:isotope_centrifuge",
+			"menu_category": {
+				"category": "construction"
+			},
+			"traits": {
+				"minecraft:placement_direction": {
+					"enabled_states": [
+						"minecraft:cardinal_direction"
+					],
+					"y_rotation_offset": 180
+				}
+			},
+			"states": {
+				"utilitycraft:active": [0, 1]
+			}
+		},
+		"components": {
+			"minecraft:geometry": "minecraft:geometry.full_block",
+			"minecraft:material_instances": {
+				"*": {
+					"texture": "utilitycraft_isotope_centrifuge_off_north",
+					"render_method": "alpha_test"
+				},
+				"north": {
+					"texture": "utilitycraft_isotope_centrifuge_off_north",
+					"render_method": "alpha_test"
+				},
+				"south": {
+					"texture": "utilitycraft_isotope_centrifuge_off_south",
+					"render_method": "alpha_test"
+				},
+				"east": {
+					"texture": "utilitycraft_isotope_centrifuge_off_east",
+					"render_method": "alpha_test"
+				},
+				"west": {
+					"texture": "utilitycraft_isotope_centrifuge_off_west",
+					"render_method": "alpha_test"
+				},
+				"up": {
+					"texture": "utilitycraft_isotope_centrifuge_off_up",
+					"render_method": "alpha_test"
+				},
+				"down": {
+					"texture": "utilitycraft_isotope_centrifuge_off_down",
+					"render_method": "alpha_test"
+				}
+			},
+			"minecraft:destructible_by_mining": {
+				"seconds_to_destroy": 1.5
+			},
+			"minecraft:destructible_by_explosion": false,
+			"tag:minecraft:is_pickaxe_item_destructible": {}
+		},
+		"permutations": [
+			{
+				"condition": "q.block_state('utilitycraft:active') == 1",
+				"components": {
+					"minecraft:material_instances": {
+						"*": {
+							"texture": "utilitycraft_isotope_centrifuge_on_north",
+							"render_method": "alpha_test"
+						},
+						"north": {
+							"texture": "utilitycraft_isotope_centrifuge_on_north",
+							"render_method": "alpha_test"
+						},
+						"south": {
+							"texture": "utilitycraft_isotope_centrifuge_on_south",
+							"render_method": "alpha_test"
+						},
+						"east": {
+							"texture": "utilitycraft_isotope_centrifuge_on_east",
+							"render_method": "alpha_test"
+						},
+						"west": {
+							"texture": "utilitycraft_isotope_centrifuge_on_west",
+							"render_method": "alpha_test"
+						},
+						"up": {
+							"texture": "utilitycraft_isotope_centrifuge_on_up",
+							"render_method": "alpha_test"
+						},
+						"down": {
+							"texture": "utilitycraft_isotope_centrifuge_on_down",
+							"render_method": "alpha_test"
+						}
+					},
+					"minecraft:light_emission": 4
+				}
+			},
+			{
+				"condition": "q.block_state('minecraft:cardinal_direction') == 'north'",
+				"components": {
+					"minecraft:transformation": {
+						"rotation": [0, 0, 0]
+					}
+				}
+			},
+			{
+				"condition": "q.block_state('minecraft:cardinal_direction') == 'south'",
+				"components": {
+					"minecraft:transformation": {
+						"rotation": [0, 180, 0]
+					}
+				}
+			},
+			{
+				"condition": "q.block_state('minecraft:cardinal_direction') == 'east'",
+				"components": {
+					"minecraft:transformation": {
+						"rotation": [0, -90, 0]
+					}
+				}
+			},
+			{
+				"condition": "q.block_state('minecraft:cardinal_direction') == 'west'",
+				"components": {
+					"minecraft:transformation": {
+						"rotation": [0, 90, 0]
+					}
+				}
+			}
+		]
+	}
+}

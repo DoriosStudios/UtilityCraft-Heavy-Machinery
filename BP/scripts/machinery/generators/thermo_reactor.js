@@ -3,6 +3,13 @@ import * as DoriosLib from "DoriosLib/index.js";
 import { ModalFormData } from '@minecraft/server-ui'
 import { ItemStack } from '@minecraft/server'
 import { coolants } from 'config/coolants.js'
+import { advanceReactorTemperature } from './reactorThermalModel.js'
+import {
+    formatReactorOnTime,
+    setReactorRunning,
+    spawnReactorVentSmoke,
+    synchronizeReactorTimer,
+} from './reactorRuntime.js'
 
 // #region Config
 /** @type ThermoReactorConfig */
@@ -14,6 +21,7 @@ const config = {
     // Component rates
     ventReleaseRate: 40,             // mB/tick per vent block
     conductorHeatDissipation: 0.05,     // K/tick per conductor block
+    thermalResponseTimeSeconds: 60,
 
     // Conversion factors
     coolantPerKelvin: 50,              // mB/K
@@ -32,7 +40,7 @@ const config = {
         pressure: 0,
         temperature: 300,
         efficiency: 0.1,
-        time: 0,
+        startedAtMs: 0,
         warning: ''
     }
 }
@@ -91,7 +99,7 @@ const GENERATOR_CONFIG = {
         rate_speed_base: 0,
     },
     multiblock: {
-        transfer_rate_ratio: 100,
+        transfer_rate_ratio: 20,
     },
     required_case: 'dorios:multiblock.case.bronze',
     requirements: {
@@ -126,7 +134,7 @@ const thermoReactorButtons = {
         onPress: ({ entity }) => {
             if (!entity) return;
             const data = getReactorInfo(entity);
-            data.state = String(data.state).toLowerCase() === "off" ? "on" : "off";
+            setReactorRunning(data, String(data.state).toLowerCase() === "off");
             entity.setDynamicProperty("reactorData", JSON.stringify(data));
         },
     },
@@ -241,6 +249,7 @@ DoriosLib.registry.blockComponent('utilitycraft:thermo_reactor', {
 
         energy.transferToNetwork(reactor.rate);
         const data = getReactorInfo(entity);
+        synchronizeReactorTimer(data);
 
         const fluids = FluidStorage.initializeMultiple(entity, 2);
         fluids.forEach(fluid => fluid.display(fluid.index + 2))
@@ -266,8 +275,9 @@ DoriosLib.registry.blockComponent('utilitycraft:thermo_reactor', {
             }
         });
 
-        const f = tickSpeed;
+        const f = Math.max(1, reactor.processingInterval ?? 1);
         let working = false;
+        let generatedHeat = 0;
 
         const tMin = CORE_TMIN_K;
         const tMax = CORE_TCAP_K;
@@ -298,18 +308,10 @@ DoriosLib.registry.blockComponent('utilitycraft:thermo_reactor', {
                 const waste = 1 - data.efficiency;
                 const energyProduced = rate * config.energyPerLavaUnit * data.efficiency;
                 const rawHeat = rate * config.heatPerLavaUnit * (1 + waste);
-                const tMin = CORE_TMIN_K;
-                const tMax = CORE_TCAP_K;
-                const span = Math.max(1e-6, tMax - tMin);
-                const normT = Math.min(1, Math.max(0, (data.temperature - tMin) / span));
-                const TEMP_SLOWDOWN_EXP = 2;
-                const slowdown = 1 - Math.pow(normT, TEMP_SLOWDOWN_EXP);
-                let heatProduced = rawHeat * slowdown;
+                generatedHeat = rawHeat;
 
                 energy.add(energyProduced);
                 data.producing = energyProduced / f;
-                data.temperature += heatProduced;
-                data.time += f;
                 working = true;
                 data.warning = undefined;
             }
@@ -321,28 +323,36 @@ DoriosLib.registry.blockComponent('utilitycraft:thermo_reactor', {
                     data.warning = "§eEnergy Full";
                 }
             }
-            data.time = 0;
             data.producing = 0;
         }
 
-        if (coolant && coolantData.tier >= COOLANT_TIER) {
-            const maxByDiss = (data.heatDissipation ?? 0) * f;
-            const maxByCoolant = coolantAmount / config.coolantPerKelvin;
-            const maxByTMin = Math.max(0, data.temperature - tMin);
+        const hasCoolant = Boolean(coolant && coolantData?.tier >= COOLANT_TIER && coolantAmount > 0)
+        const maximumCoolantHeat = hasCoolant
+            ? coolantAmount / config.coolantPerKelvin * coolantData.efficiency
+            : 0
+        const thermalStep = advanceReactorTemperature({
+            temperature: data.temperature,
+            ambientTemperature: tMin,
+            maximumTemperature: tMax,
+            idealTemperatureFraction: CORE_TIDEAL_FRAC,
+            generatedHeat,
+            conductorCoolingAtIdeal: (data.heatDissipation ?? 0) * f,
+            tickDelta: f,
+            hasCoolant,
+            maximumCoolantHeat,
+            responseTimeSeconds: config.thermalResponseTimeSeconds,
+        })
+        data.temperature = thermalStep.temperature
 
-            const heatDissipated = Math.min(maxByDiss, maxByCoolant * coolantData.efficiency, maxByTMin);
-            if (heatDissipated > 0) {
-                if (data.state !== "off") {
-                    spawnRandomVentSmoke(entity);
-                }
-                const coolantConsumed = heatDissipated * config.coolantPerKelvin;
-                coolant.consume(coolantConsumed / coolantData.efficiency);
-                data.temperature -= heatDissipated;
-            }
-        } else {
-            data.temperature -= data.heatDissipation * ((data.temperature) ** 2) / 100_000_000
-            data.temperature = Math.max(CORE_TMIN_K, data.temperature)
-            if (working) data.warning = "§cMissing Coolant!";
+        if (thermalStep.coolantHeatRemoved > 0) {
+            if (data.state !== "off") spawnReactorVentSmoke(entity)
+            coolant.consume(
+                thermalStep.coolantHeatRemoved
+                    * config.coolantPerKelvin
+                    / coolantData.efficiency,
+            )
+        } else if (working && !hasCoolant) {
+            data.warning = "§cMissing Coolant!";
         }
 
         data.temperature = Math.min(CORE_TCAP_K, Math.max(CORE_TMIN_K, data.temperature));
@@ -350,7 +360,7 @@ DoriosLib.registry.blockComponent('utilitycraft:thermo_reactor', {
         if (data.temperature >= WARN_DANGER_K - 100) {
             data.warning = "§cCore overheating!";
             if (data.temperature >= WARN_DANGER_K) {
-                data.state = "off"
+                setReactorRunning(data, false)
                 data.temperature = 1000
                 Multiblock.DeactivationManager.deactivateMultiblock(block, undefined, { blockId: 'minecraft:water' })
                 DoriosLib.time.runAfterSeconds(4, () => {
@@ -448,14 +458,6 @@ function applyThermoReactorBurnRate(entity) {
  * @param {Object} data 
  * @param {MultiblockGenerator} reactor 
  */
-function formatReactorDuration(ticks = 0) {
-    const totalSeconds = Math.max(0, Math.floor((ticks ?? 0) / 20));
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-    return [hours, minutes, seconds].map(value => String(value).padStart(2, '0')).join(':');
-}
-
 function formatReactorEtaSeconds(seconds) {
     if (!Number.isFinite(seconds) || seconds <= 0) return '--:--:--';
 
@@ -493,7 +495,7 @@ function updateReactorInfoItem(data, reactor) {
 §r§cBurn Rate §f${burnRate.toFixed(2)} mB/t
 §r§aTemperature §f${(data.temperature ?? 0).toFixed(2)} K
 §r§aEfficiency §f${((data.efficiency ?? 0) * 100).toFixed(2)}%%
-§r§aOn Time §f${formatReactorDuration(data.time)}`,
+§r§aOn Time §f${formatReactorOnTime(data)}`,
         `
 §r§eEnergy Information
 
@@ -619,33 +621,6 @@ async function showBurnRateConfigForm(entity, player) {
  * @param {number} [ratio=0.5] Fraction of vents to use (0..1)
  * @param {boolean} [center=true] If true, spawns at block centers (+0.5)
  */
-function spawnRandomVentSmoke(entity, ratio = 0.1, center = true) {
-    const dim = entity.dimension;
-
-    let vents = [];
-    const raw = entity.getDynamicProperty('ventBlocks');
-    try { vents = raw ? JSON.parse(raw) : []; } catch { vents = []; }
-
-    const n = vents.length;
-    if (n < 2) return;
-
-    const k = Math.max(1, Math.floor(n * ratio)); // 8->4
-    // Partial Fisher–Yates to sample k unique vents without replacement
-    for (let i = n - 1; i > n - 1 - k; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [vents[i], vents[j]] = [vents[j], vents[i]];
-    }
-
-    // Spawn particle on the sampled vents
-    for (let i = n - k; i < n; i++) {
-        const v = vents[i];
-        const pos = center ? { x: v.x + 0.5, y: v.y + 0.5, z: v.z + 0.5 } : v;
-        try {
-            dim.spawnParticle("minecraft:campfire_tall_smoke_particle", pos);
-        } catch { }
-    }
-}
-
 const PERIOD = 30; // 2 s
 
 /**

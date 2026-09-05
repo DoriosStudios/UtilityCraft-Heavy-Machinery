@@ -2,6 +2,7 @@ import { system } from "@minecraft/server";
 import * as Constants from "./constants.js";
 import { EntityManager } from "./entityManager.js";
 import { isLinkNode, parseLinkNodeTag } from "../../DoriosLib/linkNodes/index.js";
+import { setTaggedBlocksWaterlogged } from "./waterlogging.js";
 
 export class DeactivationManager {
   /**
@@ -15,10 +16,25 @@ export class DeactivationManager {
    * @returns {void}
    */
   static emptyBlocks(entity, blockId = "minecraft:water") {
-    const oldDataRaw = entity.getDynamicProperty(Constants.LEGACY_REACTOR_STATS_PROPERTY_ID);
-    if (!oldDataRaw) return;
-    const oldData = JSON.parse(oldDataRaw);
-    const bounds = oldData.bounds;
+    let bounds;
+    const boundsRaw = entity.getDynamicProperty(Constants.BOUNDS_PROPERTY_ID);
+    if (boundsRaw) {
+      try {
+        bounds = JSON.parse(boundsRaw);
+      } catch { }
+    }
+
+    if (!bounds) {
+      const oldDataRaw = entity.getDynamicProperty(Constants.LEGACY_REACTOR_STATS_PROPERTY_ID);
+      if (!oldDataRaw) return;
+      try {
+        bounds = JSON.parse(oldDataRaw).bounds;
+      } catch {
+        return;
+      }
+    }
+    if (!bounds) return;
+
     const dim = entity.dimension;
     const xA = bounds.min.x;
     const yA = bounds.min.y;
@@ -32,8 +48,14 @@ export class DeactivationManager {
 
     system.run(async () => {
       for (let y = yTop; y >= yBottom; y--) {
-        dim.runCommand(`fill ${xA} ${y} ${zA} ${xB} ${y} ${zB} air replace ${blockId}`);
+        await dim.runCommand(`fill ${xA} ${y} ${zA} ${xB} ${y} ${zB} air replace ${blockId}`);
         await system.waitTicks(2);
+      }
+
+      if (blockId === "minecraft:water") {
+        for (let y = yTop; y >= yBottom; y--) {
+          setTaggedBlocksWaterlogged(bounds, dim, y, false);
+        }
       }
     });
   }
@@ -90,13 +112,13 @@ export class DeactivationManager {
       inputBlock.setPermutation(inputBlock.permutation.withState(Constants.ACTIVE_STATE_ID, 0));
     });
 
-    entity.setDynamicProperty(Constants.RATE_SPEED_PROPERTY_ID, 0);
-    entity.setDynamicProperty(Constants.BOUNDS_PROPERTY_ID, undefined);
-    entity.setDynamicProperty(Constants.STATE_PROPERTY_ID, Constants.INACTIVE_STATE_VALUE);
-
     if (emptyBlocksConfig) {
       DeactivationManager.emptyBlocks(entity, emptyBlocksConfig.blockId);
     }
+
+    entity.setDynamicProperty(Constants.RATE_SPEED_PROPERTY_ID, 0);
+    entity.setDynamicProperty(Constants.BOUNDS_PROPERTY_ID, undefined);
+    entity.setDynamicProperty(Constants.STATE_PROPERTY_ID, Constants.INACTIVE_STATE_VALUE);
 
     if (player && wasActive) {
       player.sendMessage("\u00A7c[Scan] Multiblock structure deactivated.");

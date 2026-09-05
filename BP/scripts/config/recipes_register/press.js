@@ -5,6 +5,10 @@ const newRecipes = {
     "utilitycraft:tin_chunk": { output: "utilitycraft:tin_ore", required: 4 },
     "utilitycraft:deepslate_tin_chunk": { output: "utilitycraft:deepslate_tin_ore", required: 4 },
     "utilitycraft:tin_ingot": { output: "utilitycraft:tin_plate", required: 1 },
+    // Lead
+    "utilitycraft:lead_chunk": { output: "utilitycraft:lead_ore", required: 4 },
+    "utilitycraft:deepslate_lead_chunk": { output: "utilitycraft:deepslate_lead_ore", required: 4 },
+    "utilitycraft:lead_ingot": { output: "utilitycraft:lead_plate", required: 1 },
     // Uranium
     "utilitycraft:deepslate_uranium_chunk": { output: "utilitycraft:deepslate_uranium_ore", required: 4 },
     "utilitycraft:uranium_ingot": { output: "utilitycraft:uranium_rod", required: 1 },

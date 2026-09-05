@@ -12,6 +12,14 @@
 		"sound": "stone",
 		"textures": "utilitycraft_deepslate_tin_ore"
 	},
+	"utilitycraft:lead_ore": {
+		"sound": "stone",
+		"textures": "utilitycraft_lead_ore"
+	},
+	"utilitycraft:deepslate_lead_ore": {
+		"sound": "stone",
+		"textures": "utilitycraft_deepslate_lead_ore"
+	},
 	"utilitycraft:deepslate_uranium_ore": {
 		"sound": "stone",
 		"textures": "utilitycraft_deepslate_uranium_ore"
@@ -200,6 +208,14 @@
 		"sound": "metal",
 		"textures": "utilitycraft_raw_tin_block"
 	},
+	"utilitycraft:raw_lead_block": {
+		"sound": "metal",
+		"textures": "utilitycraft_raw_lead_block"
+	},
+	"utilitycraft:lead_block": {
+		"sound": "metal",
+		"textures": "utilitycraft_lead_block"
+	},
 	"utilitycraft:raw_uranium_block": {
 		"sound": "metal",
 		"textures": "utilitycraft_raw_uranium_block"
@@ -281,6 +297,12 @@
 		"sound": "metal"
 	},
 	"utilitycraft:controller_case": {
+		"sound": "metal"
+	},
+	"utilitycraft:isotope_centrifuge": {
+		"sound": "metal"
+	},
+	"utilitycraft:electrolyzer": {
 		"sound": "metal"
 	},
 	"utilitycraft:creative_saline_coolant_tank": {

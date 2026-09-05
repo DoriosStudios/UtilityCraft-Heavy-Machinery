@@ -2,6 +2,16 @@
 
 ## ADDED
 
+- Added placeable, directional Electrolyzer and Isotope Centrifuge placeholder blocks with inactive and active visual states; their processing logic remains intentionally unimplemented.
+- Added the registered High-Speed Rotor component and complete temporary active/inactive six-face texture sets for the planned Isotope Centrifuge and Electrolyzer.
+- Added complete 49-frame internal UI bar sets and hidden UI items for Sulfuric Acid, Heavy Water, Hydrogen, Oxygen, Fluorine, Hydrogen Fluoride, Natural Uranium Hexafluoride, Enriched Uranium Hexafluoride, and Depleted Uranium Hexafluoride.
+- Added a wearable four-piece Hazmat Suit adapted from the provided Project Horizon assets, including custom item sprites, equipped textures, per-piece geometry, armor stats, enchantability, and Rubber Sheet repairs.
+- Added Uranium Concentrate, Enriched Uranium Oxide, Spent Uranium Pellet, Fluorite Crystal, Fluorite Dust, and Rubber Sheet items with localized names and inventory registration.
+- Added Fluorite Crystal as a 1.5% Emerald-tier Sieve drop from Crushed Cobbled Deepslate, with compressed support and Crusher processing into Fluorite Dust.
+- Added a complete Lead material family with Sieve-obtained chunks, reconstructable stone and deepslate ores, raw, dust, ingot, nugget, plate, and storage-block forms, plus dark blue Steel-derived textures and processing recipes.
+- Added a living Nuclear Reactor design document covering reactor behavior, fuel routes, gas production, enrichment, coolant moderation, waste, and implementation phases.
+- Added the first functional Nuclear Reactor multiblock, converting Enriched Uranium Rods into internal nuclear fuel and Dorios Energy.
+- Added a dedicated Nuclear Reactor interface with solid-fuel input, uranium reserve, coolant, temperature, output, structure statistics, and 0–100% power controls.
 - Added a Creative Saline Coolant Tank that provides infinite Saline Coolant to fluid networks and compatible containers.
 - Added Tin Ore and Deepslate Tin Ore blocks with Silk Touch support and Raw Tin drops.
 - Added Deepslate Uranium Ore with Silk Touch support and Raw Uranium drops.
@@ -9,12 +19,29 @@
 
 ## CHANGED
 
+- Reworked all planned nuclear liquid and gas UI bars with material-specific water, steam, lava, XP, milk, and bubble motifs derived from Ascendant Technology instead of flat single-color fills.
+- Updated Nuclear Reactor planning with Sieve-based Lead and Fluorite acquisition, final nuclear material names, deferred custom storage, meltdown-only radiation, Hazmat protection, Rubber Sheets, and fuel-route complexity.
+- Revised the planned nuclear fuel routes to reuse the existing Uranium and Enriched Uranium Pellets, removed unnecessary Fuel Core intermediates and Gypsum byproduct, and kept the reactor on the existing Netherite casing family.
+- Rebalanced Nuclear Reactor fuel for a clear endgame advantage: substantially higher per-tick production, shorter rod lifetime, lower total energy per rod, and twice the full-power cooling demand per Fuel Assembly.
+- Reworked both reactor temperature simulations around thermal equilibrium and inertia: cores now heat quickly at startup, slow naturally near their stable temperature, and settle to within 1% in about five minutes instead of drifting indefinitely or stabilizing instantly.
+- Fixed both reactor On Time labels to use a persisted real-world start timestamp instead of scheduler ticks, preventing inaccurate or inconsistent elapsed times.
+- Matched the Nuclear Reactor's active visuals to the Thermal Reactor: its internal air fills with water, hot coolant emits tall smoke from vent panels, and the visual water is removed when the multiblock deactivates or melts down.
+- Fixed filled multiblock cleanup to use the generic stored structure bounds, allowing non-Thermal reactors to remove their visual fill correctly.
+- Made Fuel Assemblies waterloggable and added a reusable `dorios:waterloggable` block tag; reactor fill and drain operations now automatically set or clear waterlogging on tagged internal components.
+- Power Condenser, Thermal Reactor, and Nuclear Reactor transfer rates are now standardized at 5% of their internal energy capacity per tick.
+- Nuclear Reactor efficiency now follows core temperature, ranges from 10% to a 95% ideal peak, and uses higher Netherite-class overheat and meltdown limits.
+- Nuclear Reactors now require a Netherite casing shell and accept all compatible Netherite casing variants and ports.
+- Fuel Assemblies now increase nuclear-fuel capacity and theoretical reaction speed, while each Rod Control efficiently manages up to four assemblies.
+- Nuclear Reactor empty space now determines coolant capacity, and Heat Conductors remove heat by consuming any registered coolant.
 - Changed Tin and Uranium chunks to reconstruct their ore blocks from four chunks at a crafting table or in the Electro Press.
 - Changed Tin and Uranium ore processing to produce one ingot in furnaces or two dust in the Crusher.
 - Link Nodes now start in `Default`, can select a machine-specific IO group, and retain `Disabled` as an explicit fully blocked state.
 
 ## FIXED
 
+- Fixed the Nuclear Reactor cancel button restoring the active power instead of clearing the input to zero, and removed the unnecessary full fuel-storage warning.
+- Fixed Netherite Item and Liquid Ports missing their active block state and active I/O permutations, which prevented Netherite multiblocks from forming.
+- Fixed the Nuclear Reactor interface layout by moving the fuel input beside the gauges, adding an Enriched Uranium overlay, shortening the status panel, and matching the Thermal Reactor keypad header.
 - Fixed repeated machine watcher registration restoring pressed interface buttons before their actions could be detected.
 - Fixed Tin and Uranium ores so they only drop from pickaxes, correctly support Silk Touch, and gain additional Raw Ore drops from Fortune.
 - Fixed Item and Liquid Port conflicts with UtilityCraft by sharing Heavy Machinery's link-node I/O registrations across every loaded DoriosCore runtime.

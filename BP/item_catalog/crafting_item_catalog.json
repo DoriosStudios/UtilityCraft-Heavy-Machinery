@@ -111,7 +111,18 @@
                             "utilitycraft:thermo_core",
                             "utilitycraft:rod_control",
                             "utilitycraft:fluid_controller",
-                            "utilitycraft:fuel_assemblies"
+                            "utilitycraft:fuel_assemblies",
+                            "utilitycraft:high_speed_rotor"
+                        ]
+                    },
+                    {
+                        "group_identifier": {
+                            "icon": "utilitycraft:isotope_centrifuge",
+                            "name": "utilitycraft:itemGroup.nuclear_machinery"
+                        },
+                        "items": [
+                            "utilitycraft:isotope_centrifuge",
+                            "utilitycraft:electrolyzer"
                         ]
                     },
                     {
@@ -152,6 +163,18 @@
                             "utilitycraft:raw_uranium_block",
                             "utilitycraft:tin_chunk",
                             "utilitycraft:deepslate_tin_chunk",
+                            "utilitycraft:raw_lead",
+                            "utilitycraft:raw_lead_block",
+                            "utilitycraft:lead_chunk",
+                            "utilitycraft:deepslate_lead_chunk",
+                            "utilitycraft:lead_dust",
+                            "utilitycraft:lead_ingot",
+                            "utilitycraft:lead_nugget",
+                            "utilitycraft:lead_plate",
+                            "utilitycraft:lead_block",
+                            "utilitycraft:fluorite_crystal",
+                            "utilitycraft:fluorite_dust",
+                            "utilitycraft:rubber_sheet",
                             "utilitycraft:deepslate_uranium_chunk",
                             "utilitycraft:tin_dust",
                             "utilitycraft:tin_ingot",
@@ -160,8 +183,11 @@
                             "utilitycraft:tin_block",
                             "utilitycraft:uranium_dust",
                             "utilitycraft:uranium_ingot",
+                            "utilitycraft:uranium_concentrate",
+                            "utilitycraft:enriched_uranium_oxide",
                             "utilitycraft:uranium_pellet",
                             "utilitycraft:enriched_uranium_pellet",
+                            "utilitycraft:spent_uranium_pellet",
                             "utilitycraft:uranium_rod",
                             "utilitycraft:enriched_uranium_rod",
                             "utilitycraft:uranium_block",

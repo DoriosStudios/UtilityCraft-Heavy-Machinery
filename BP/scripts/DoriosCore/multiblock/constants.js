@@ -87,6 +87,11 @@ export const ITEM_BLOCK_TAG = "dorios:item";
 export const GAS_BLOCK_TAG = "dorios:gas";
 
 /**
+ * Block tag used by reactor components that support scripted waterlogging.
+ */
+export const WATERLOGGABLE_BLOCK_TAG = "dorios:waterloggable";
+
+/**
  * Dynamic property used to store detected multiblock bounds.
  */
 export const BOUNDS_PROPERTY_ID = "dorios:bounds";

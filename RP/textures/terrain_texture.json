@@ -79,6 +79,78 @@
 		"utilitycraft_fuel_assemblies": {
 			"textures": "textures/blocks/multiblock/fuel_assemblies"
 		},
+		"utilitycraft_isotope_centrifuge_off_north": {
+			"textures": "textures/blocks/machines/isotope_centrifuge_off_north"
+		},
+		"utilitycraft_isotope_centrifuge_off_south": {
+			"textures": "textures/blocks/machines/isotope_centrifuge_off_south"
+		},
+		"utilitycraft_isotope_centrifuge_off_east": {
+			"textures": "textures/blocks/machines/isotope_centrifuge_off_east"
+		},
+		"utilitycraft_isotope_centrifuge_off_west": {
+			"textures": "textures/blocks/machines/isotope_centrifuge_off_west"
+		},
+		"utilitycraft_isotope_centrifuge_off_up": {
+			"textures": "textures/blocks/machines/isotope_centrifuge_off_up"
+		},
+		"utilitycraft_isotope_centrifuge_off_down": {
+			"textures": "textures/blocks/machines/isotope_centrifuge_off_down"
+		},
+		"utilitycraft_isotope_centrifuge_on_north": {
+			"textures": "textures/blocks/machines/isotope_centrifuge_on_north"
+		},
+		"utilitycraft_isotope_centrifuge_on_south": {
+			"textures": "textures/blocks/machines/isotope_centrifuge_on_south"
+		},
+		"utilitycraft_isotope_centrifuge_on_east": {
+			"textures": "textures/blocks/machines/isotope_centrifuge_on_east"
+		},
+		"utilitycraft_isotope_centrifuge_on_west": {
+			"textures": "textures/blocks/machines/isotope_centrifuge_on_west"
+		},
+		"utilitycraft_isotope_centrifuge_on_up": {
+			"textures": "textures/blocks/machines/isotope_centrifuge_on_up"
+		},
+		"utilitycraft_isotope_centrifuge_on_down": {
+			"textures": "textures/blocks/machines/isotope_centrifuge_on_down"
+		},
+		"utilitycraft_electrolyzer_off_north": {
+			"textures": "textures/blocks/machines/electrolyzer_off_north"
+		},
+		"utilitycraft_electrolyzer_off_south": {
+			"textures": "textures/blocks/machines/electrolyzer_off_south"
+		},
+		"utilitycraft_electrolyzer_off_east": {
+			"textures": "textures/blocks/machines/electrolyzer_off_east"
+		},
+		"utilitycraft_electrolyzer_off_west": {
+			"textures": "textures/blocks/machines/electrolyzer_off_west"
+		},
+		"utilitycraft_electrolyzer_off_up": {
+			"textures": "textures/blocks/machines/electrolyzer_off_up"
+		},
+		"utilitycraft_electrolyzer_off_down": {
+			"textures": "textures/blocks/machines/electrolyzer_off_down"
+		},
+		"utilitycraft_electrolyzer_on_north": {
+			"textures": "textures/blocks/machines/electrolyzer_on_north"
+		},
+		"utilitycraft_electrolyzer_on_south": {
+			"textures": "textures/blocks/machines/electrolyzer_on_south"
+		},
+		"utilitycraft_electrolyzer_on_east": {
+			"textures": "textures/blocks/machines/electrolyzer_on_east"
+		},
+		"utilitycraft_electrolyzer_on_west": {
+			"textures": "textures/blocks/machines/electrolyzer_on_west"
+		},
+		"utilitycraft_electrolyzer_on_up": {
+			"textures": "textures/blocks/machines/electrolyzer_on_up"
+		},
+		"utilitycraft_electrolyzer_on_down": {
+			"textures": "textures/blocks/machines/electrolyzer_on_down"
+		},
 		"utilitycraft_bronze_vent_panel": {
 			"textures": "textures/blocks/multiblock/bronze/bronze_vent_panel"
 		},
@@ -190,6 +262,12 @@
 		"utilitycraft_deepslate_tin_ore": {
 			"textures": "textures/blocks/ores/deepslate_tin_ore"
 		},
+		"utilitycraft_lead_ore": {
+			"textures": "textures/blocks/ores/lead_ore"
+		},
+		"utilitycraft_deepslate_lead_ore": {
+			"textures": "textures/blocks/ores/deepslate_lead_ore"
+		},
 		"utilitycraft_deepslate_uranium_ore": {
 			"textures": "textures/blocks/ores/deepslate_uranium_ore"
 		},
@@ -225,6 +303,12 @@
 		},
 		"utilitycraft_raw_tin_block": {
 			"textures": "textures/blocks/block_of_raw_tin"
+		},
+		"utilitycraft_raw_lead_block": {
+			"textures": "textures/blocks/block_of_raw_lead"
+		},
+		"utilitycraft_lead_block": {
+			"textures": "textures/blocks/block_of_lead"
 		},
 		"utilitycraft_raw_uranium_block": {
 			"textures": "textures/blocks/block_of_raw_uranium"

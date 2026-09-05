@@ -1,0 +1,23 @@
+{
+	"format_version": "1.20.80",
+	"minecraft:attachable": {
+		"description": {
+			"identifier": "utilitycraft:hazmat_boots",
+			"materials": {
+				"default": "armor",
+				"enchanted": "armor_enchanted"
+			},
+			"textures": {
+				"default": "textures/equipment/hazmat/hazmat_boots",
+				"enchanted": "textures/misc/enchanted_item_glint"
+			},
+			"geometry": {
+				"default": "geometry.utilitycraft_hazmat_boots"
+			},
+			"scripts": {
+				"parent_setup": "variable.boot_layer_visible = 0.0;"
+			},
+			"render_controllers": ["controller.render.armor"]
+		}
+	}
+}

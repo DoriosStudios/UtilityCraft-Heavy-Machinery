@@ -5,13 +5,28 @@
             "identifier": "utilitycraft:netherite_fluid_port",
             "menu_category": {
                 "category": "construction"
+            },
+            "states": {
+                "utilitycraft:active": [
+                    0,
+                    1
+                ]
             }
         },
         "components": {
-			"utilitycraft:link_node_io": {},
-			"tag:dorios:fluid": {},
-			"tag:dorios:link_node": {},
-			"tag:dorios:multiblock.case.netherite": {}
-		}
-	}
+            "utilitycraft:link_node_io": {},
+            "tag:dorios:link_node": {},
+            "tag:dorios:multiblock.case.netherite": {}
+        },
+        "permutations": [
+            {
+                "condition": "q.block_state('utilitycraft:active') == 1 ",
+                "components": {
+                    "tag:dorios:fluid": {},
+                    "tag:dorios:link_node": {},
+                    "tag:dorios:multiblock.case.netherite": {}
+                }
+            }
+        ]
+    }
 }

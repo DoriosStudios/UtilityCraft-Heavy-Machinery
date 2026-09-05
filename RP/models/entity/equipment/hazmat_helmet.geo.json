@@ -1,0 +1,192 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.utilitycraft_hazmat_helmet",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 4,
+				"visible_bounds_height": 3,
+				"visible_bounds_offset": [
+					0,
+					0.5,
+					0
+				]
+			},
+			"bones": [
+				{
+					"name": "bb_main",
+					"pivot": [
+						0,
+						0,
+						0
+					]
+				},
+				{
+					"name": "root_item",
+					"pivot": [
+						0,
+						0,
+						0
+					]
+				},
+				{
+					"name": "helmet",
+					"parent": "root_item",
+					"pivot": [
+						0,
+						0,
+						0
+					],
+					"binding": "'head'",
+					"cubes": [
+						{
+							"origin": [
+								-4,
+								0,
+								-4
+							],
+							"size": [
+								8,
+								8,
+								8
+							],
+							"inflate": 1,
+							"uv": [
+								0,
+								23
+							]
+						},
+						{
+							"origin": [
+								-6,
+								-1.01,
+								-7
+							],
+							"size": [
+								12,
+								11,
+								12
+							],
+							"uv": [
+								0,
+								0
+							]
+						},
+						{
+							"origin": [
+								-5,
+								2,
+								-6
+							],
+							"size": [
+								4,
+								5,
+								1
+							],
+							"uv": [
+								32,
+								23
+							]
+						},
+						{
+							"origin": [
+								1,
+								2,
+								-6
+							],
+							"size": [
+								4,
+								5,
+								1
+							],
+							"uv": [
+								1,
+								1
+							]
+						},
+						{
+							"origin": [
+								-2,
+								-1,
+								-6
+							],
+							"size": [
+								4,
+								4,
+								2
+							],
+							"pivot": [
+								0,
+								1,
+								-5
+							],
+							"rotation": [
+								-15,
+								0,
+								0
+							],
+							"uv": [
+								51,
+								3
+							]
+						},
+						{
+							"origin": [
+								1,
+								-1,
+								-8
+							],
+							"size": [
+								3,
+								2,
+								3
+							],
+							"pivot": [
+								2,
+								0,
+								-6
+							],
+							"rotation": [
+								-75,
+								-15,
+								0
+							],
+							"uv": [
+								44,
+								32
+							]
+						},
+						{
+							"origin": [
+								-4,
+								-1,
+								-8
+							],
+							"size": [
+								3,
+								2,
+								3
+							],
+							"pivot": [
+								-3,
+								0,
+								-6
+							],
+							"rotation": [
+								-80,
+								15,
+								0
+							],
+							"uv": [
+								44,
+								32
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}
