@@ -239,3 +239,22 @@ ui.utilitycraft:io.electrolyzer.gases=Modos de E/S de gases:\n§r- §8Padrão\n�
 entity.utilitycraft:isotope_centrifuge.name=Centrífuga de Isótopos
 ui.utilitycraft:info.isotope_centrifuge=§8Separa hexafluoreto de urânio natural em hexafluoreto de urânio enriquecido e empobrecido.\n\n§8Entrada: 1.000 mB de UF6 natural\nSaída 1: 250 mB de UF6 enriquecido\nSaída 2: 750 mB de UF6 empobrecido\nCusto base: 16.384 MDE\n\n§8O rotor de alta velocidade é usado para fabricar a máquina. Nenhum item é necessário durante o processamento.\n\n§8Cada tanque de gás armazena 32.000 mB. As duas saídas precisam de espaço e gases compatíveis. O progresso é mantido sem energia ou com uma saída cheia. Extraia ambos os gases para tanques normais.\n\n§8Aceita melhorias de velocidade e energia e E/S de gases por face. Capacidade de energia: 65.536 MDE.
 ui.utilitycraft:io.isotope_centrifuge.gases=Modos de E/S de gases:\n§r- §8Padrão\n§r- §9Entrada\n§r- §cSaída 1\n§r- §6Saída 2\n§r- §dDrenar entrada\n§r- §eDesativado
+
+## Single-block chemistry
+tile.utilitycraft:reaction_chamber.name=Câmara de Reação\n§7- Processa itens e líquidos em pequena escala\n§o§9@UC: Heavy Machinery
+entity.utilitycraft:reaction_chamber.name=Câmara de Reação
+ui.utilitycraft:info.reaction_chamber=§8Mistura um tipo de item com um líquido. Compartilha receitas com o multibloco, com um décimo da velocidade base. Ideal para ácido e concentrado; use o multibloco para grandes quantidades de refrigerante.\n\n§8Cada tanque: 32,000 mB. Configure as faces em E/S e instale melhorias de velocidade e energia. Mantém o progresso sem energia ou com saídas cheias.
+ui.utilitycraft:io.reaction_chamber.items=Modos de E/S de itens:\n§r- §8Default\n§r- §9Input\n§r- §cOutput\n§r- §eDisabled
+ui.utilitycraft:io.reaction_chamber.liquids=Modos de E/S de líquidos:\n§r- §8Default\n§r- §9Input\n§r- §cOutput\n§r- §6Drain Input\n§r- §eDisabled
+tile.utilitycraft:chemical_converter.name=Conversor Químico\n§7- Converte materiais em gases\n§o§9@UC: Heavy Machinery
+entity.utilitycraft:chemical_converter.name=Conversor Químico
+ui.utilitycraft:info.chemical_converter=§8Converte pó de fluorita e ácido sulfúrico em HF gasoso, ou concentrado de urânio e flúor em UF6 natural. A entrada não utilizada deve estar vazia.\n\n§8Cada tanque: 32,000 mB. Configure as faces em E/S e instale melhorias de velocidade e energia. Mantém o progresso sem energia ou com saídas cheias.
+ui.utilitycraft:io.chemical_converter.items=Modos de E/S de itens:\n§r- §8Default\n§r- §9Input\n§r- §eDisabled
+ui.utilitycraft:io.chemical_converter.liquids=Modos de E/S de líquidos:\n§r- §8Default\n§r- §9Input\n§r- §cDrain Input\n§r- §eDisabled
+ui.utilitycraft:io.chemical_converter.gases=Modos de E/S de gases:\n§r- §8Default\n§r- §9Input\n§r- §cOutput\n§r- §6Drain Input\n§r- §eDisabled
+tile.utilitycraft:chemical_processor.name=Processador Químico\n§7- Recupera sólidos e gás reutilizável\n§o§9@UC: Heavy Machinery
+entity.utilitycraft:chemical_processor.name=Processador Químico
+ui.utilitycraft:info.chemical_processor=§8Processa UF6 enriquecido e água para obter óxido de urânio enriquecido e HF gasoso. As duas saídas precisam de espaço.\n\n§8Cada tanque: 32,000 mB. Configure as faces em E/S e instale melhorias de velocidade e energia. Mantém o progresso sem energia ou com saídas cheias.
+ui.utilitycraft:io.chemical_processor.items=Modos de E/S de itens:\n§r- §8Default\n§r- §cOutput\n§r- §eDisabled
+ui.utilitycraft:io.chemical_processor.liquids=Modos de E/S de líquidos:\n§r- §8Default\n§r- §9Input\n§r- §cDrain Input\n§r- §eDisabled
+ui.utilitycraft:io.chemical_processor.gases=Modos de E/S de gases:\n§r- §8Default\n§r- §9Input\n§r- §cOutput\n§r- §6Drain Input\n§r- §eDisabled

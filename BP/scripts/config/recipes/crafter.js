@@ -5,6 +5,28 @@ import * as DoriosLib from "DoriosLib/index.js";
  * with UtilityCraft's Crafter through the shared DoriosLib registry.
  */
 const crafterRecipeBatches = [
+{
+  "steel_plate,fluid_pipe,steel_plate,glass,machine_case,glass,steel_plate,energy_cell,steel_plate": {
+    "output": "utilitycraft:reaction_chamber",
+    "amount": 1
+  },
+  "lead_plate,gas_pipe,lead_plate,expert_chip,machine_case,expert_chip,lead_plate,energy_cell,lead_plate": {
+    "output": "utilitycraft:chemical_converter",
+    "amount": 1
+  },
+  "lead_plate,gas_pipe,lead_plate,fluid_pipe,machine_case,fluid_pipe,lead_plate,energy_cell,lead_plate": {
+    "output": "utilitycraft:chemical_processor",
+    "amount": 1
+  },
+  "air,uranium_pellet,uranium_pellet,steel_plate,uranium_pellet,uranium_pellet,steel_plate,air,air": {
+    "output": "utilitycraft:uranium_rod",
+    "amount": 1
+  },
+  "air,enriched_uranium_pellet,enriched_uranium_pellet,steel_plate,enriched_uranium_pellet,enriched_uranium_pellet,steel_plate,air,air": {
+    "output": "utilitycraft:enriched_uranium_rod",
+    "amount": 1
+  }
+},
   {
     "lead_plate,high_speed_rotor,lead_plate,expert_chip,machine_case,expert_chip,netherite_plate,energy_cell,netherite_plate": {
       output: "utilitycraft:isotope_centrifuge",

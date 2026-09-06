@@ -1,0 +1,42 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "utilitycraft:reaction_chamber"
+        },
+        "tags": [
+            "utilitycraft_workbench"
+        ],
+        "key": {
+            "S": {
+                "item": "utilitycraft:steel_plate"
+            },
+            "F": {
+                "item": "utilitycraft:fluid_pipe"
+            },
+            "G": {
+                "item": "minecraft:glass"
+            },
+            "C": {
+                "item": "utilitycraft:machine_case"
+            },
+            "E": {
+                "item": "utilitycraft:energy_cell"
+            }
+        },
+        "pattern": [
+            "SFS",
+            "GCG",
+            "SES"
+        ],
+        "result": {
+            "item": "utilitycraft:reaction_chamber",
+            "count": 1
+        },
+        "unlock": [
+            {
+                "item": "utilitycraft:fluid_pipe"
+            }
+        ]
+    }
+}

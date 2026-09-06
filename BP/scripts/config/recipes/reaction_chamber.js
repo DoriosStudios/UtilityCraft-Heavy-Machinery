@@ -1,5 +1,17 @@
 
 export const reactionRecipes = {
+    "minecraft:sulfur_spike|water": {
+        required_items: 4,
+        required_liquid: 1000,
+        output_liquid: { type: "sulfuric_acid", amount: 1000 },
+        cost: 256000,
+    },
+    "utilitycraft:uranium_dust|sulfuric_acid": {
+        required_items: 1,
+        required_liquid: 250,
+        output_item: { id: "utilitycraft:uranium_concentrate", amount: 1 },
+        cost: 512000,
+    },
     "empty|water": {
         required_items: 0,
         required_liquid: 8000,

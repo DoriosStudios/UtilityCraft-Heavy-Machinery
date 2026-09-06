@@ -1,6 +1,18 @@
 # UtilityCraft: Heavy Machinery v0.5.3
 
+## CHANGED
+- Synchronized DoriosCore with UtilityCraft, preserving passive item IO, infinite energy transfer and consumed fluid/gas container fixes.
+- Liquid and gas bar tooltips now identify their resource category, including empty tanks.
+
+- Updated the nuclear documentation with compact chemical machines, liquid Sulfuric Acid, fuel fabrication, and HF recycling.
+- Uranium Ingots now press into Uranium Pellets; four pellets and two Steel Plates craft a fuel rod. Enriched Uranium Oxide presses into Enriched Uranium Pellets.
+
 ## ADDED
+
+- Added the single-block Reaction Chamber, Chemical Converter, and Chemical Processor with temporary 16x16 face textures, four visible material stores each, standard I/O, Speed/Energy upgrades, and Workbench/Crafter recipes.
+- The small Reaction Chamber shares multiblock recipes at one tenth the base rate. Added Sulfuric Acid and Uranium Concentrate recipes to both sizes.
+- Added HF/Natural UF6 production and enriched oxide/HF recovery, with initial 80% fluorine recovery through electrolysis.
+- Added Sulfuric Acid support in standard liquid tanks and Crafting Table/Workbench/Crafter recipes for both fuel rods.
 
 - Added Isotope Centrifuge crafting with a High-Speed Rotor as a construction ingredient, including UtilityCraft Crafter support.
 
@@ -17,6 +29,14 @@
 - Added standard Speed and Energy upgrade support to the Electrolyzer, including multiple batches per update when upgraded throughput allows.
 
 ## FIXED
+
+- Matched the small Reaction Chamber material layout to the multiblock: liquid input, item input, progress, item output, liquid output, centered horizontally.
+
+- Matched the five new machine/fuel-rod crafting recipes to the existing 1.20.80 format and ingredient-based unlock data, fixing recipe loading errors.
+- Matched the High-Speed Rotor item category to its construction catalog group, removing the category reassignment warning.
+
+- Updated HM item I/O to UtilityCraft's Default/Disabled behavior, fixing chemical-machine registration failing at startup. Default uses all declared passive input/output slots; explicit modes control automatic transfers and Disabled blocks the face.
+
 
 - Positioned I/O resource tabs at the upper-left corner through UtilityCraft's shared control: gas first for the Isotope Centrifuge, and liquid followed by gas for the Electrolyzer, independent of panel height.
 

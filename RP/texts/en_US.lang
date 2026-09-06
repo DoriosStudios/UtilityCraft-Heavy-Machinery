@@ -240,3 +240,22 @@ ui.utilitycraft:io.electrolyzer.gases=Gas I/O modes:\n§r- §8Default\n§r- §9I
 entity.utilitycraft:isotope_centrifuge.name=Isotope Centrifuge
 ui.utilitycraft:info.isotope_centrifuge=§8Separates Natural Uranium Hexafluoride into Enriched and Depleted Uranium Hexafluoride.\n\n§8Input: 1,000 mB Natural UF6\nOutput 1: 250 mB Enriched UF6\nOutput 2: 750 mB Depleted UF6\nBase cost: 16.384 MDE\n\n§8The High-Speed Rotor is used to craft the machine. No item is required during processing.\n\n§8All three gas tanks hold 32,000 mB. Both outputs must have space and compatible gas types. Progress is retained if energy is missing or an output is full. Extract both gases into standard gas tanks.\n\n§8Supports Speed and Energy upgrades and per-face gas I/O. Energy capacity: 65.536 MDE.
 ui.utilitycraft:io.isotope_centrifuge.gases=Gas I/O modes:\n§r- §8Default\n§r- §9Input\n§r- §cOutput 1\n§r- §6Output 2\n§r- §dDrain Input\n§r- §eDisabled
+
+## Single-block chemistry
+tile.utilitycraft:reaction_chamber.name=Reaction Chamber\n§7- Compact item and liquid chemistry\n§o§9@UC: Heavy Machinery
+entity.utilitycraft:reaction_chamber.name=Reaction Chamber
+ui.utilitycraft:info.reaction_chamber=§8Mixes one item type with one liquid. Uses the same recipes as the multiblock, at one tenth its base rate. Ideal for small acid and concentrate lines; use the multiblock for bulk coolant.\n\n§8All tanks: 32,000 mB. Configure faces in I/O and install Speed/Energy upgrades. Progress is retained when energy runs out or outputs fill.
+ui.utilitycraft:io.reaction_chamber.items=Item I/O modes:\n§r- §8Default\n§r- §9Input\n§r- §cOutput\n§r- §eDisabled
+ui.utilitycraft:io.reaction_chamber.liquids=Liquid I/O modes:\n§r- §8Default\n§r- §9Input\n§r- §cOutput\n§r- §6Drain Input\n§r- §eDisabled
+tile.utilitycraft:chemical_converter.name=Chemical Converter\n§7- Converts materials into gases\n§o§9@UC: Heavy Machinery
+entity.utilitycraft:chemical_converter.name=Chemical Converter
+ui.utilitycraft:info.chemical_converter=§8Converts Fluorite Dust and Sulfuric Acid into HF gas, or Uranium Concentrate and Fluorine into Natural UF6. The unused input must be empty.\n\n§8All tanks: 32,000 mB. Configure faces in I/O and install Speed/Energy upgrades. Progress is retained when energy runs out or outputs fill.
+ui.utilitycraft:io.chemical_converter.items=Item I/O modes:\n§r- §8Default\n§r- §9Input\n§r- §eDisabled
+ui.utilitycraft:io.chemical_converter.liquids=Liquid I/O modes:\n§r- §8Default\n§r- §9Input\n§r- §cDrain Input\n§r- §eDisabled
+ui.utilitycraft:io.chemical_converter.gases=Gas I/O modes:\n§r- §8Default\n§r- §9Input\n§r- §cOutput\n§r- §6Drain Input\n§r- §eDisabled
+tile.utilitycraft:chemical_processor.name=Chemical Processor\n§7- Recovers solids and reusable gas\n§o§9@UC: Heavy Machinery
+entity.utilitycraft:chemical_processor.name=Chemical Processor
+ui.utilitycraft:info.chemical_processor=§8Processes Enriched UF6 and Water into Enriched Uranium Oxide and HF gas. Both outputs must have space.\n\n§8All tanks: 32,000 mB. Configure faces in I/O and install Speed/Energy upgrades. Progress is retained when energy runs out or outputs fill.
+ui.utilitycraft:io.chemical_processor.items=Item I/O modes:\n§r- §8Default\n§r- §cOutput\n§r- §eDisabled
+ui.utilitycraft:io.chemical_processor.liquids=Liquid I/O modes:\n§r- §8Default\n§r- §9Input\n§r- §cDrain Input\n§r- §eDisabled
+ui.utilitycraft:io.chemical_processor.gases=Gas I/O modes:\n§r- §8Default\n§r- §9Input\n§r- §cOutput\n§r- §6Drain Input\n§r- §eDisabled

@@ -31,7 +31,14 @@ This is the living design document for the Nuclear Reactor and its fuel cycle. V
 - Fluorite will not have an ore block or world generation; Fluorite Crystals will come directly from filtering Crushed Cobbled Deepslate.
 - The generic reactor waste item will be the Spent Uranium Pellet.
 - The reusable centrifuge component will be named High-Speed Rotor.
-- The Reaction Chamber will be extended to handle the item, liquid, and gas combinations required by nuclear chemistry.
+- The existing Reaction Chamber multiblock keeps its current slots, liquid tanks, and item/liquid recipe format; it will not gain gas storage.
+- A much slower single-block Reaction Chamber will share the multiblock's recipe hashmap and base recipe costs, with one item input, one liquid input, one item output, and one liquid output.
+- The small Reaction Chamber serves compact, low-volume chemical lines; the multiblock remains the industrial option for batch processing and large coolant demand.
+- Chemical Converter and Chemical Processor are implemented single-block machines with four visible resource stores each and initial balance values.
+- Chemical Converter accepts one item type, one liquid, and one gas, and outputs one gas. Unused recipe inputs stay empty.
+- Chemical Processor accepts one gas and one liquid, and outputs one item type and one gas.
+- Sulfuric Acid is a liquid. Hydrogen Fluoride remains a gas; no liquid HF variant is planned.
+- The Electrolyzer retains both inputs: liquid for Water electrolysis and gas for HF electrolysis, without requiring both simultaneously.
 - Radiation exposure will only be created by a Nuclear Reactor meltdown.
 - The current scope will not add dedicated gas tanks, waste barrels, or fluid buckets; internal UI bar assets may be prepared before their machines are functional.
 - Latex will not be added in the current scope; Rubber Sheets will be used for the Hazmat Suit and reusable machine components.
@@ -69,11 +76,11 @@ The implemented reactor currently accepts only utilitycraft:enriched_uranium_rod
 
 At ideal efficiency, each FU produces 190,000 DE. One properly controlled Fuel Assembly can produce up to 380,000 DE/t.
 
-Saline Coolant is currently the only registered coolant and has a cooling efficiency of 1.0. The basic fuel route, the remaining nuclear gases, and waste described below are still in planning. Hydrogen, Oxygen, and Fluorine can now be produced by the Electrolyzer, and Heavy Water by the Reaction Chamber; Heavy Water coolant effects are not yet registered.
+Saline Coolant is currently the only registered coolant and has a cooling efficiency of 1.0. Pellet and rod fabrication and the gas-processing chain are implemented. Reactor support for basic fuel and spent-fuel generation remain planned. Hydrogen, Oxygen, and Fluorine can now be produced by the Electrolyzer, and Heavy Water by the Reaction Chamber; Heavy Water coolant effects are not yet registered.
 
-Complete 49-frame internal UI bar sets now exist for Sulfuric Acid, Heavy Water, Hydrogen, Oxygen, Fluorine, Hydrogen Fluoride, Natural UF6, Enriched UF6, and Depleted UF6. Hydrogen, Oxygen, and Fluorine have functional Electrolyzer outputs, and Hydrogen Fluoride is accepted as a gaseous input. All four gases support existing UtilityCraft gas tanks. Heavy Water has a Reaction Chamber recipe and support in existing liquid tanks. Natural, Enriched, and Depleted UF6 also have functional centrifuge storage and support in existing gas tanks. Sulfuric Acid remains a visual asset and hidden UI item set only.
+Complete 49-frame internal UI bar sets now exist for Sulfuric Acid, Heavy Water, Hydrogen, Oxygen, Fluorine, Hydrogen Fluoride, Natural UF6, Enriched UF6, and Depleted UF6. Hydrogen, Oxygen, and Fluorine have functional Electrolyzer outputs, and Hydrogen Fluoride is accepted as a gaseous input. All four gases support existing UtilityCraft gas tanks. Heavy Water has a Reaction Chamber recipe and support in existing liquid tanks. Natural, Enriched, and Depleted UF6 also have functional centrifuge storage and support in existing gas tanks. Sulfuric Acid has shared Reaction Chamber production, visible UI bars, and standard liquid-tank support.
 
-The Isotope Centrifuge is functional as a single-block gas machine. Its crafting recipe uses a High-Speed Rotor, and the machine separates Natural UF6 into Enriched and Depleted UF6. Its three visible gas tanks, standard I/O, Speed/Energy upgrades, and existing UtilityCraft tank support are implemented. Upstream Natural UF6 production and downstream fuel conversion remain pending.
+The Isotope Centrifuge is functional as a single-block gas machine. Its crafting recipe uses a High-Speed Rotor, and the machine separates Natural UF6 into Enriched and Depleted UF6. Its three visible gas tanks, standard I/O, Speed/Energy upgrades, and existing UtilityCraft tank support are implemented. The small Reaction Chamber, Chemical Converter, and Chemical Processor implement upstream UF6 production and downstream oxide/HF recovery. Pellet pressing and rod crafting complete fabrication. Existing machine layouts are preserved.
 
 ### Electrolyzer — First Functional Version
 
@@ -276,7 +283,7 @@ Deepslate Uranium Ore
          └─ Uranium Dust
             └─ Reaction Chamber + Sulfuric Acid
                └─ Yellowcake (Uranium Concentrate)
-                  └─ Reaction Chamber + Fluorine Gas
+                  └─ Chemical Converter + Fluorine Gas
                      └─ Natural Uranium Hexafluoride Gas
                         └─ Isotope Centrifuge
                            ├─ Enriched Uranium Hexafluoride Gas
@@ -287,7 +294,7 @@ Conversion and fabrication:
 
 ~~~text
 Enriched Uranium Hexafluoride Gas
-└─ Reaction Chamber + Hydrogen Gas
+└─ Chemical Processor + Water
    ├─ Enriched Uranium Oxide
    └─ Hydrogen Fluoride Gas
       └─ Recycled into the fluorine production chain
@@ -332,7 +339,7 @@ Crushed Cobbled Deepslate
    └─ Fluorite Crystal
       └─ Crusher
          └─ Fluorite Dust
-            └─ Reaction Chamber + Sulfuric Acid
+            └─ Chemical Converter + Sulfuric Acid
                └─ Hydrogen Fluoride Gas
 
 Hydrogen Fluoride Gas
@@ -362,7 +369,7 @@ Blackstone
    └─ Crushed Blackstone
       └─ Sieve + Copper-tier Mesh or better
          └─ Sulfur Spike
-            └─ Reaction Chamber + Oxygen Gas + Water
+            └─ Reaction Chamber + Water
                └─ Sulfuric Acid
 ~~~
 
@@ -373,23 +380,107 @@ The nuclear chemical chain consumes Sulfur Spikes directly. They do not need to 
 Initial proposed batch:
 
 ~~~text
-4 Sulfur Spikes + Oxygen Gas + Water
+4 Sulfur Spikes + Water
 → Reaction Chamber
 → 1,000 mB Sulfuric Acid
 ~~~
+
+Sulfuric Acid is stored and transported as a liquid. The recipe abstracts oxidation using ambient air; it does not consume piped Oxygen Gas or introduce hidden oxygen storage. The initial batch consumes four spikes and 1,000 mB Water for 1,000 mB Sulfuric Acid at 256,000 DE. Balance remains adjustable.
+
+Both sizes of Reaction Chamber will offer this same recipe. The slow single-block version is suitable for a dedicated acid line. High-volume coolant production is the main reason to scale up to a multiblock.
 
 ### Fluorine Recovery
 
 ~~~text
 Enriched UF6
-└─ Conversion with Hydrogen Gas
+└─ Chemical Processor + Water
    ├─ Enriched Uranium Oxide
    └─ Hydrogen Fluoride Gas
       └─ Electrolyzer
          └─ Reusable Fluorine Gas
 ~~~
 
-Initial recovery target: 75–90%. Fluorite starts the system and compensates for losses rather than replacing all gas after every operation.
+Initial implemented recovery is 80%: 400 mB Fluorine produces 1,000 mB Natural UF6; its 250 mB enriched fraction produces 800 mB HF, equivalent to 320 mB Fluorine after electrolysis. Multiple recovery batches accumulate before the existing 1,000 mB HF electrolysis batch can run. Fluorite starts the line and compensates for losses.
+
+## Chemical Machines - First Functional Version
+
+These three new single-block machines complete the chain without changing the existing Reaction Chamber multiblock, Electrolyzer, or Isotope Centrifuge layouts. All three have registered blocks, temporary 16x16 textures, Workbench/Crafter recipes, and standard helper-entity inventories. Initial values remain subject to balancing.
+
+| Machine | Material inputs | Material outputs | Role |
+|---|---|---|---|
+| Single-block Reaction Chamber | 1 item slot + 1 liquid bar | 1 item slot + 1 liquid bar | Slow, compact liquid chemistry |
+| Chemical Converter | 1 item slot + 1 liquid bar + 1 gas bar | 1 gas bar | Convert solid reactants into process gases |
+| Chemical Processor | 1 gas bar + 1 liquid bar | 1 item slot + 1 gas bar | Recover solid material and reusable gas |
+
+Each new machine has exactly four visible material stores. Energy and the standard Speed/Energy upgrade slots are separate from those material stores. Use the established single-block Machine behavior, energy/progress displays, Information, I/O, and Upgrades panels. No hidden resource tanks, catalyst slots, or rotor requirements are planned. Tank types clear naturally when emptied.
+
+### Reaction Chamber — Two Production Scales
+
+- Keep the existing multiblock unchanged: four item input slots and four item output slots provide bulk storage, while recipes use one input item type and one output item type, plus one liquid input and one liquid output.
+- The small machine exposes one slot for each item side and the same two liquid directions. It does not accept gases or multiple distinct item ingredients in one recipe.
+- Both machines use the same reactionRecipes hashmap keyed by itemId|liquidType, including empty for an unused input, and the existing required_items, required_liquid, output_item, output_liquid, and cost fields.
+- Both sizes use the same recipe quantities and base recipe cost. Different processing rates, capacities, upgrades, and multiblock batch processing determine throughput; do not create cheaper duplicate recipes for the small version.
+- The small chamber runs at 160 DE/t versus the multiblock base of 1,600 DE/t, before multiblock batching and upgrades. Standard Speed/Energy upgrades remain available.
+- Both sizes offer Sulfuric Acid, Yellowcake, Heavy Water, and Saline Coolant recipes. All four recipes are implemented through the shared registry.
+- One small chamber may be reused in stages. Dedicated small acid and Yellowcake lines avoid requiring two multiblocks just to start nuclear chemistry.
+
+### Recipe Routing
+
+The routes below are implemented. The following balance table records initial quantities and costs.
+
+| Machine | Inputs | Outputs | Status |
+|---|---|---|---|
+| Reaction Chamber, either size | Sulfur Spike + Water | Sulfuric Acid (liquid) | Implemented |
+| Reaction Chamber, either size | Uranium Dust + Sulfuric Acid | Yellowcake | Implemented |
+| Chemical Converter | Fluorite Dust + Sulfuric Acid; gas input empty | Hydrogen Fluoride Gas | Implemented |
+| Chemical Converter | Yellowcake + Fluorine Gas; liquid input empty | Natural UF6 Gas | Implemented |
+| Electrolyzer | Water; gas input empty | Hydrogen Gas + Oxygen Gas | Implemented |
+| Electrolyzer | HF Gas; liquid input empty | Hydrogen Gas + Fluorine Gas | Implemented |
+| Isotope Centrifuge | Natural UF6 Gas | Enriched UF6 Gas + Depleted UF6 Gas | Implemented |
+| Chemical Processor | Enriched UF6 Gas + Water | Enriched Uranium Oxide + HF Gas | Implemented |
+| Electro Press | Enriched Uranium Oxide | Enriched Uranium Pellet | Implemented |
+| Crafting / Crafter | Enriched Uranium Pellets + Steel Plates | Enriched Uranium Rod | Implemented |
+
+The Converter's gas input is necessary for Yellowcake + Fluorine; an item/liquid-only design cannot perform that recipe. The Processor's two inputs and two outputs close the gas-to-solid route while recovering HF for the Electrolyzer. Do not add a productive Depleted UF6 recipe until its solid product has a defined gameplay use.
+
+### Initial Chemistry Balance
+
+Values are initial gameplay balance. Yellowcake uses the existing utilitycraft:uranium_concentrate item. Chamber quantities and base costs are shared between both machine sizes.
+
+| Machine / recipe | Required inputs | Products | Base cost |
+|---|---|---|---:|
+| Reaction Chamber: acid | 4 Sulfur Spikes + 1,000 mB Water | 1,000 mB Sulfuric Acid | 256 kDE |
+| Reaction Chamber: concentrate | 1 Uranium Dust + 250 mB Sulfuric Acid | 1 Uranium Concentrate | 512 kDE |
+| Chemical Converter: HF | 1 Fluorite Dust + 250 mB Sulfuric Acid | 1,000 mB HF | 512 kDE |
+| Chemical Converter: UF6 | 1 Uranium Concentrate + 400 mB Fluorine | 1,000 mB Natural UF6 | 2.048 MDE |
+| Chemical Processor | 250 mB Enriched UF6 + 1,000 mB Water | 1 Enriched Uranium Oxide + 800 mB HF | 1.024 MDE |
+
+| Machine | Base rate | Energy capacity | Each material tank | Upgrades |
+|---|---:|---:|---:|---|
+| Small Reaction Chamber | 160 DE/t | 4.096 MDE | 32,000 mB | Speed, Energy |
+| Chemical Converter | 2,560 DE/t | 8.192 MDE | 32,000 mB | Speed, Energy |
+| Chemical Processor | 5,120 DE/t | 8.192 MDE | 32,000 mB | Speed, Energy |
+
+At base rate, acid takes 80 seconds in the small chamber versus 8 seconds per multiblock processing cycle before batch scaling. Heavy Water takes 1,280 seconds in the small chamber, motivating industrial coolant production in the multiblock. Existing multiblock batching semantics are unchanged.
+
+Each new machine has one runtime script. UI slots 0-2 hold energy, label, and progress; material slots are 3-6; upgrades are 7-8. Item I/O uses 9-14, liquid I/O 15-20, and gas I/O 21-26 where present. The small chamber has 21 inventory slots; Converter and Processor have 27.
+
+Uranium Ingots now press into Uranium Pellets instead of directly into rods. Enriched Uranium Oxide presses into Enriched Uranium Pellets. Four matching pellets plus two Steel Plates craft the respective rod through the Crafting Table, Workbench, or Crafter. Reactor fuel profiles remain separate work; the reactor still accepts only the enriched rod.
+
+### Recipe and Runtime Conventions
+
+- One runtime script per new machine, plus its recipe configuration; no separate storage-configuration script or machine-specific persistent resource state.
+- Recipes remain exported objects with direct hashmap lookup, not arrays or process selectors. No per-recipe names or ticks; cost and the machine's processing rate determine duration.
+- Converter lookup: itemId|liquidType|gasType. Processor lookup: gasType|liquidType. Use empty for unused inputs and require those stores to be empty.
+- Use the established required_items, required_liquid, required_gas, cost, and typed output conventions. Converter recipes use output_gas; Processor recipes use output_item and output_gas. The Reaction Chamber keeps its existing schema.
+- Validate required inputs, output types, and complete output capacity before consuming a batch. Both Processor products must fit; never silently discard its recovered gas.
+- Preserve generic I/O labels, Default first and Disabled last, and expose only the stores shown in the machine UI.
+
+### Gameplay Chemistry Boundary
+
+These recipes deliberately summarize industrial treatment rather than reproduce every reaction. Sulfuric Acid abstracts oxidation from ambient air; Uranium Dust to Yellowcake summarizes purification; Yellowcake to UF6 summarizes fluorination. Enriched UF6 plus water to oxide and HF summarizes the complete conversion treatment, including the omitted hydrogen-reduction/intermediate stages. Water alone is not a literal complete chemical route to the final oxide. There is no hidden hydrogen tank or consumption.
+
+Mekanism's Chemical Crystallizer is a role reference for recovering solids from chemicals, not the source of HM's specific UF6 recipe. The Processor also recovers gas, which is why it is treated as a processing machine rather than simple crystallization.
 
 ## Isotope Centrifuge
 
@@ -599,14 +690,14 @@ The reactor tracks activeFuelType for burn behavior and a separate numeric waste
 
 ### Waste Physical States
 
-The design contains two waste outputs, but only the reactor waste item is part of the current implementation scope:
+The design contains two waste outputs; centrifuge gas waste is implemented and reactor item waste remains planned:
 
 | Stage | Material | State | Reason |
 |---|---|---|---|
-| Reactor output | Spent Uranium Pellet | Item | Current scope; generated proportionally from burned FU |
-| Enrichment output | Depleted Uranium Hexafluoride | Gas | Designed but deferred until generic gas storage exists |
+| Reactor output | Spent Uranium Pellet | Item | Planned; generated proportionally from burned FU |
+| Enrichment output | Depleted Uranium Hexafluoride | Gas | Implemented with generic gas-tank storage |
 
-The Nuclear Reactor does not directly produce liquid or gaseous waste during normal operation. It outputs generic solid spent uranium. The enrichment industry will separately output depleted UF6 gas once compatible storage exists.
+The Nuclear Reactor does not directly produce liquid or gaseous waste during normal operation. It outputs generic solid spent uranium. The Isotope Centrifuge separately outputs depleted UF6 gas into compatible existing gas storage.
 
 The current gameplay loop stops at item extraction:
 
@@ -797,8 +888,8 @@ The fuel input remains beside the visual uranium bar. The bar represents interna
 - Natural Uranium Hexafluoride Gas.
 - Enriched Uranium Hexafluoride Gas.
 - Depleted Uranium Hexafluoride Gas.
-- Sulfuric Acid.
-- Heavy Water.
+- Sulfuric Acid (liquid).
+- Heavy Water (liquid).
 
 ### Deferred Fluids and Gases
 
@@ -811,13 +902,16 @@ The fuel input remains beside the visual uranium bar. The bar represents interna
 - Crusher.
 - Incinerator.
 - Electro Press.
-- Reaction Chamber.
+- Reaction Chamber multiblock, preserving its existing item/liquid interface.
 - UtilityCraft Crafter or Crafting Table.
 
 ### New Machines
 
-- Electrolyzer: produces and separates gases.
-- Isotope Centrifuge: separates Natural UF6.
+- Electrolyzer (implemented): retains liquid and gas inputs and two gas outputs.
+- Isotope Centrifuge (implemented): separates Natural UF6 into enriched and depleted gases.
+- Single-block Reaction Chamber (implemented): much slower compact counterpart sharing the multiblock recipes and base costs.
+- Chemical Converter (implemented): item + liquid + gas inputs, one gas output; produces HF and Natural UF6.
+- Chemical Processor (implemented): gas + liquid inputs, item + gas outputs; recovers enriched oxide and HF.
 
 ### Possible Expansions
 
@@ -828,22 +922,16 @@ The fuel input remains beside the visual uranium bar. The bar represents interna
 
 ## Process Complexity
 
-The counts below describe distinct transformations, not the number of machine blocks that must be built. The same Reaction Chamber, Electrolyzer, Crusher, and Electro Press may be reused for multiple recipes.
+Machine types describe distinct functions, not the number of blocks that must be built. Either Reaction Chamber size provides the same chemistry function.
 
-| Fuel route | From Raw Uranium | Full route from Sieve resources | Machine types |
-|---|---:|---:|---:|
-| Uranium Rod | 4 transformations | About 7 stages | 4 including Sieve |
-| Enriched Uranium Rod | 7 direct fuel transformations | About 18 stages including supporting chemistry | 6 including Sieve |
+| Fuel route | Machine types, including Sieve and excluding crafting | Production scale |
+|---|---|---|
+| Uranium Rod | 4: Sieve, Crusher, Incinerator, Electro Press | Basic solid-material route |
+| Enriched Uranium Rod | 8: Sieve, Crusher, Reaction Chamber, Chemical Converter, Electrolyzer, Isotope Centrifuge, Chemical Processor, Electro Press | Chemical processing and HF recycling |
 
-The basic route uses the Sieve, Crusher, Incinerator, and Electro Press, followed by ordinary crafting. It is a single linear production chain.
+The enriched route combines Uranium purification, Sulfur Spike and liquid acid production, and Fluorite-to-HF-to-Fluorine production. Oxygen is no longer a required piped input for acid; Hydrogen is no longer a required piped input for UF6 treatment in the simplified gameplay recipes. Both gases remain Electrolyzer products.
 
-The enriched route uses the Sieve, Crusher, Electrolyzer, Reaction Chamber, Isotope Centrifuge, and Electro Press, followed by ordinary crafting. Its complete startup chain combines three branches:
-
-1. Uranium recovery and concentration.
-2. Sulfur Spike, Oxygen, and Sulfuric Acid production.
-3. Fluorite, Hydrogen Fluoride, Fluorine, and Hydrogen production.
-
-Hydrogen Fluoride recovered from enriched UF6 conversion returns to the Electrolyzer, reducing later Fluorite consumption. One machine of each type can run the chain sequentially; additional Reaction Chambers and Electrolyzers only improve continuous throughput.
+Recovered HF returns from the Chemical Processor to the Electrolyzer. One machine of each type can be reused sequentially; separate small Reaction Chambers for acid and Yellowcake, and separate Converters for HF and UF6, support continuous production without requiring multiple multiblocks. High coolant demand and bulk processing motivate upgrading to the Reaction Chamber multiblock.
 
 ## Proposed Implementation Order
 
@@ -872,21 +960,34 @@ Hydrogen Fluoride recovered from enriched UF6 conversion returns to the Electrol
 - Reject normal water.
 - Display coolant effects in the interface.
 
+### Chemistry Milestone - Implemented, Balance Follow-up
+
+1. Implement the slow single-block Reaction Chamber using the existing recipe hashmap, preserving the multiblock layout.
+2. Define liquid Sulfuric Acid storage support and shared acid/Yellowcake recipes.
+3. Implement Chemical Converter and its HF/Natural UF6 recipes.
+4. Implement Chemical Processor, oxide recovery, and HF recycling; finish pellet and rod fabrication.
+5. Balance new quantities, costs, capacities, crafting recipes, and small-chamber throughput versus multiblock batches and coolant demand.
+
+Steps 1-4 above are implemented with initial values; step 5 remains ongoing balance work. The broader phases also include the completed Electrolyzer, centrifuge, and generic UF6 storage.
+
 ### Phase 4 — Fluorine Industry
 
 - Add Fluorite Crystal directly to Crushed Cobbled Deepslate filtering at a proposed 1.5% base chance with an Emerald-tier Mesh or better.
 - Crush Fluorite Crystals into Fluorite Dust; do not add Fluorite Ore or world generation.
-- Add the Electrolyzer.
-- Register Hydrogen, Oxygen, Hydrogen Fluoride, and Fluorine.
-- Implement Sulfuric Acid.
+- Preserve the implemented Electrolyzer layout, Water/HF recipes, and registered gas support.
+- Implement the slow single-block Reaction Chamber with shared recipes and standard upgrades.
+- Add liquid Sulfuric Acid from Sulfur Spikes + Water to both chamber sizes.
+- Implement Chemical Converter: Fluorite Dust + Sulfuric Acid to HF Gas.
 
 ### Phase 5 — Enrichment
 
-- Register natural, enriched, and depleted UF6 as gas types.
-- Implement the single-block Isotope Centrifuge.
-- Add the reusable High-Speed Rotor.
-- Implement enriched UF6 conversion into Enriched Uranium Oxide and press it into the existing Enriched Uranium Pellet.
-- Enable the centrifuge recipe and complete the Enriched Uranium Rod route after compatible generic storage can extract Depleted UF6.
+- Reuse the implemented UF6 gas types, generic tank support, and Isotope Centrifuge.
+- Keep the High-Speed Rotor in the centrifuge crafting recipe only.
+- Add Uranium Dust + Sulfuric Acid to Yellowcake in the shared Reaction Chamber registry.
+- Add Yellowcake + Fluorine Gas to Natural UF6 in the Chemical Converter.
+- Add Enriched UF6 + Water to Enriched Uranium Oxide + HF Gas in the Chemical Processor.
+- Press oxide into Enriched Uranium Pellets and complete rod crafting.
+- Balance HF recovery against existing centrifuge and Electrolyzer yields; preserve mandatory Depleted UF6 extraction.
 
 ### Phase 6 — Waste
 
@@ -917,6 +1018,9 @@ Hydrogen Fluoride recovered from enriched UF6 conversion returns to the Electrol
 
 ## Open Questions
 
+- What base rate and capacities keep the small Reaction Chamber much slower than industrial multiblock production, including upgrades?
+- What quantities, energy costs, capacities, and crafting recipes should the new chemistry machines use?
+
 - Will the proposed 4% Lead Chunk and 1.5% Fluorite Crystal base Sieve chances remain after balance testing?
 - Existing UtilityCraft gas tanks now support Depleted UF6; should dedicated storage be added later?
 - Will the centrifuge ratio remain 25/75?
@@ -940,3 +1044,7 @@ Hydrogen Fluoride recovered from enriched UF6 conversion returns to the Electrol
 - U.S. NRC — Fuel Fabrication: https://www.nrc.gov/materials/fuel-cycle-fac/fuel-fab
 - U.S. NRC — Deconversion of Depleted Uranium: https://www.nrc.gov/materials/fuel-cycle-fac/ur-deconversion
 - U.S. NRC — Radiation Shielding Principles: https://www.nrc.gov/about-nrc/radiation/protects-you/protection-principles
+
+- Mekanism — Chemical Crystallizer (machine-role reference): https://wiki.aidancbrady.com/wiki/Chemical_Crystallizer
+- World Nuclear Association — Fuel Fabrication (conversion stages summarized for gameplay): https://world-nuclear.org/information-library/Nuclear-Fuel-Cycle/Conversion-Enrichment-and-Fabrication/Fuel-Fabrication
+- U.S. EPA — Sulfuric Acid Supply Chain Profile: https://nepis.epa.gov/Exe/ZyPURL.cgi?Dockey=P1017QFW.txt

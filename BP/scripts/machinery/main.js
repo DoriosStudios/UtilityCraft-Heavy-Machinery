@@ -20,3 +20,7 @@ import './machines/isotope_centrifuge.js'
 import './machines/reaction_chamber_controller.js'
 import './machines/magmatic_chamber_controller.js'
 
+
+import './machines/reaction_chamber.js'
+import './machines/chemical_converter.js'
+import './machines/chemical_processor.js'

@@ -280,13 +280,13 @@ export class BasicMachine {
       const neighborLocation = OutputTracker.getNeighborLocation(this.block, direction);
       if (!neighborLocation) continue;
 
-      const outputSlots = DoriosContainer.getOutputSlots(this.entity, { face: direction });
+      const outputSlots = DoriosContainer.getOutputSlots(this.entity, { face: direction, automatic: true });
       if (outputSlots.length > 0 && maxOutputSlots > 0) {
         const result = this.#pushOutputItems(neighborLocation, outputSlots, direction, maxOutputSlots);
         summary.itemsMoved += result.itemsMoved;
       }
 
-      const inputSlots = DoriosContainer.getInputSlots(this.entity, { face: direction });
+      const inputSlots = DoriosContainer.getInputSlots(this.entity, { face: direction, automatic: true });
       if (inputSlots.length === 0 || maxInputScans <= 0) continue;
 
       const result = this.#pullInputItems(neighborLocation, inputSlots, direction, maxInputScans);

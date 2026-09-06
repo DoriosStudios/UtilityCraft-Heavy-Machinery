@@ -1,0 +1,42 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "utilitycraft:chemical_processor"
+        },
+        "tags": [
+            "utilitycraft_workbench"
+        ],
+        "key": {
+            "L": {
+                "item": "utilitycraft:lead_plate"
+            },
+            "G": {
+                "item": "utilitycraft:gas_pipe"
+            },
+            "F": {
+                "item": "utilitycraft:fluid_pipe"
+            },
+            "C": {
+                "item": "utilitycraft:machine_case"
+            },
+            "E": {
+                "item": "utilitycraft:energy_cell"
+            }
+        },
+        "pattern": [
+            "LGL",
+            "FCF",
+            "LEL"
+        ],
+        "result": {
+            "item": "utilitycraft:chemical_processor",
+            "count": 1
+        },
+        "unlock": [
+            {
+                "item": "utilitycraft:gas_pipe"
+            }
+        ]
+    }
+}
