@@ -645,6 +645,21 @@
 		},
 		"utilitycraft_saline_coolant_fluid": {
 			"textures": "textures/entity/saline_coolant_fluid"
+		},
+		"utilitycraft_fluorine_gas": {
+			"textures": "textures/entity/fluorine_gas"
+		},
+		"utilitycraft_hydrogen_fluoride_gas": {
+			"textures": "textures/entity/hydrogen_fluoride_gas"
+		},
+		"utilitycraft_natural_uranium_hexafluoride_gas": {
+			"textures": "textures/entity/natural_uranium_hexafluoride_gas"
+		},
+		"utilitycraft_enriched_uranium_hexafluoride_gas": {
+			"textures": "textures/entity/enriched_uranium_hexafluoride_gas"
+		},
+		"utilitycraft_depleted_uranium_hexafluoride_gas": {
+			"textures": "textures/entity/depleted_uranium_hexafluoride_gas"
 		}
 	}
 }

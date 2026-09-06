@@ -132,7 +132,12 @@
                             "name": "utilitycraft:itemGroup.creative_tanks"
                         },
                         "items": [
-                            "utilitycraft:creative_saline_coolant_tank"
+                            "utilitycraft:creative_saline_coolant_tank",
+                            "utilitycraft:creative_fluorine_tank",
+                            "utilitycraft:creative_hydrogen_fluoride_tank",
+                            "utilitycraft:creative_natural_uranium_hexafluoride_tank",
+                            "utilitycraft:creative_enriched_uranium_hexafluoride_tank",
+                            "utilitycraft:creative_depleted_uranium_hexafluoride_tank"
                         ]
                     },
                     {
