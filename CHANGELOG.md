@@ -1,6 +1,7 @@
 # UtilityCraft: Heavy Machinery v0.5.3
 
 ## CHANGED
+- Rebalanced enriched fuel production to 20.4192 MDE per rod before upgrades/recycling, with cheaper early chemistry and adjusted Converter, Processor, Electrolyzer and Centrifuge rates. Chamber coolant rates remain unchanged.
 - Synchronized DoriosCore with UtilityCraft, preserving passive item IO, infinite energy transfer and consumed fluid/gas container fixes.
 - Liquid and gas bar tooltips now identify their resource category, including empty tanks.
 
@@ -8,6 +9,7 @@
 - Uranium Ingots now press into Uranium Pellets; four pellets and two Steel Plates craft a fuel rod. Enriched Uranium Oxide presses into Enriched Uranium Pellets.
 
 ## ADDED
+- Added a standalone Spanish fuel-tree dashboard with basic/enriched routes, recipe details, batch quantities and HF recycling connections.
 
 - Added the single-block Reaction Chamber, Chemical Converter, and Chemical Processor with temporary 16x16 face textures, four visible material stores each, standard I/O, Speed/Energy upgrades, and Workbench/Crafter recipes.
 - The small Reaction Chamber shares multiblock recipes at one tenth the base rate. Added Sulfuric Acid and Uranium Concentrate recipes to both sizes.
@@ -29,6 +31,7 @@
 - Added standard Speed and Energy upgrade support to the Electrolyzer, including multiple batches per update when upgraded throughput allows.
 
 ## FIXED
+- Restored the tracked Regolith data directory so watch mode starts on fresh checkouts.
 
 - Matched the small Reaction Chamber material layout to the multiblock: liquid input, item input, progress, item output, liquid output, centered horizontally.
 

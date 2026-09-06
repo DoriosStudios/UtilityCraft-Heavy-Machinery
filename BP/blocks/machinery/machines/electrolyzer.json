@@ -32,7 +32,7 @@
 					"fluid_types": 1,
 					"gas_cap": 32000,
 					"gas_types": 3,
-					"rate_speed_base": 2560,
+					"rate_speed_base": 1280,
 					"overclock": false,
 					"upgrades": [6, 7]
 				}

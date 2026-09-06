@@ -26,10 +26,10 @@
 				},
 				"machine": {
 					"energy_cap": 65536000,
-					"energy_cost": 16384000,
+					"energy_cost": 4096000,
 					"gas_cap": 32000,
 					"gas_types": 3,
-					"rate_speed_base": 20480,
+					"rate_speed_base": 5120,
 					"overclock": false,
 					"upgrades": [6, 7]
 				}

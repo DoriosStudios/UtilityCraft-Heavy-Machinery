@@ -21,6 +21,6 @@ export const electrolyzerRecipes = {
             type: "fluorine_gas",
             amount: 400,
         },
-        cost: 1024000,
+        cost: 128000,
     },
 };

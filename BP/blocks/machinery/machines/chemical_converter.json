@@ -30,12 +30,12 @@
 				},
 				"machine": {
 					"energy_cap": 8192000,
-					"energy_cost": 512000,
+					"energy_cost": 32000,
 					"fluid_cap": 32000,
 					"fluid_types": 1,
 					"gas_cap": 32000,
 					"gas_types": 2,
-					"rate_speed_base": 2560,
+					"rate_speed_base": 1600,
 					"overclock": false,
 					"upgrades": [
 						7,

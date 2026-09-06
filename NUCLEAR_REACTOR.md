@@ -57,6 +57,22 @@ This is the living design document for the Nuclear Reactor and its fuel cycle. V
 
 ## Current Functional State
 
+This section describes shipped working code. Confirmed design decisions and sections explicitly marked planned below are not evidence of runtime support.
+
+| Area | Implemented now | Still pending |
+|---|---|---|
+| Materials | Lead chunks at 4% with tier 4 mesh; Fluorite Crystals at 1.5% with tier 5 mesh; crushing, smelting and pressing registrations | Further balance and final art |
+| Fuel fabrication | Both pellet/rod routes, rod Workbench/Crafting Table/Crafter recipes | Basic rod acceptance in reactor |
+| Chemical line | Water/HF Electrolyzer, small/shared Reaction Chamber, Converter, Processor, Centrifuge, 80% HF-to-Fluorine recovery potential | Electrolyzer block crafting recipe; in-game balance pass |
+| Transport/UI | Visible typed tanks, standard liquid/gas tank compatibility, ordered I/O, Speed/Energy upgrades, fixed I/O tabs, Liquid/Gas hover labels | Artist replacement for temporary textures |
+| Reactor | Enriched rods only; 1,000 FU each; thermal efficiency, heat, cooling, burn controls and meltdown explosion | Two-fuel typed storage/profiles, spent pellets and output blocking |
+| Coolants | Saline Coolant works; Heavy Water can be produced and stored | Heavy Water reactor registration and moderation multipliers |
+| Accidents | Multiblock deactivation/controller resolution and component waterlogging | Radiation zones, loaded-controller break protection, Hazmat/Rubber integration |
+| Development | Matching DoriosCore copies in UC/HM; Regolith watch data directory; local fuel-tree dashboard | Release and further gameplay validation |
+
+The dashboard is [Fuel production trees](docs/fuel-trees.html). Its totals start from prepared materials and distinguish initial production from recycling.
+
+
 The implemented reactor currently accepts only utilitycraft:enriched_uranium_rod.
 
 | Property | Current value |
@@ -89,13 +105,13 @@ The Isotope Centrifuge is functional as a single-block gas machine. Its crafting
 - Storage types are unrestricted and clear naturally when empty. There are no alternate hidden reservoirs or machine-specific persistence.
 - Recipes use an `electrolyzerRecipes` object keyed by `liquidType|gasType`, with `empty` for an unused input and `required_liquid`, `required_gas`, `output1`, `output2`, and `cost` fields.
 - `water|empty`: 1,000 mB Water → 1,000 mB Hydrogen + 500 mB Oxygen, costing 512,000 DE.
-- `empty|hydrogen_fluoride_gas`: 1,000 mB Hydrogen Fluoride → 400 mB Hydrogen + 400 mB Fluorine, costing 1,024,000 DE. The unused input must be empty.
-- The block sets a base processing rate of 2,560 DE/t; the recipe carries no independent duration or process name.
+- `empty|hydrogen_fluoride_gas`: 1,000 mB Hydrogen Fluoride → 400 mB Hydrogen + 400 mB Fluorine, costing 128,000 DE. The unused input must be empty.
+- The block sets a base processing rate of 1,280 DE/t; the recipe carries no independent duration or process name.
 - Processing starts automatically after checking the input and both output types/capacities. It preserves progress if energy runs out or an output fills.
 - The standard I/O panel configures six relative faces in Default → custom liquid input/drain or gas input/output 1/2/input drain → Disabled order. Default allows passive access to the declared tanks, custom modes enable automatic transfers, and Disabled blocks that face. Existing UtilityCraft gas tanks can store both gases.
 - The interface contains the four resource bars, energy, progress, standard machine status, and Information, I/O, and Upgrades tabs. It has no material slots or process selector.
 - Two standard upgrade slots accept Speed and Energy upgrades. Processing uses Machine's shared speed and consumption boosts and completes multiple batches when input and output capacities permit.
-- The block crafting recipe and upstream HF production are deferred.
+- Upstream HF production is implemented in the Chemical Converter. The Electrolyzer block crafting recipe remains deferred.
 
 ### Heavy Water — Reaction Chamber
 
@@ -167,7 +183,7 @@ Fuel Rod in the input slot
 
 The first accepted rod sets the active fuel type. Additional rods of that type may load normally. A different rod is not consumed while FU remains, but it may stay in the input slot and load automatically as soon as the current reserve reaches zero.
 
-### Typed Fuel Storage
+### Typed Fuel Storage — Planned, Not Implemented
 
 Fuel is not represented as an item, liquid, or gas after loading. It uses a dedicated storage model:
 
@@ -209,7 +225,9 @@ Storage rules:
 
 Waste uses a separate amount/progress field and remains generic. It is calculated from consumed FU, so switching fuel types never requires separate waste storage.
 
-## Fuel Summary
+## Fuel Summary — Proposed Next Milestone
+
+These profiles are NOT implemented. The current enriched rod still contains 1,000 FU and yields at most 190 MDE; the 2,000-FU proposal below would change that balance and must be reassessed before implementation.
 
 Initial proposed values:
 
@@ -385,7 +403,7 @@ Initial proposed batch:
 → 1,000 mB Sulfuric Acid
 ~~~
 
-Sulfuric Acid is stored and transported as a liquid. The recipe abstracts oxidation using ambient air; it does not consume piped Oxygen Gas or introduce hidden oxygen storage. The initial batch consumes four spikes and 1,000 mB Water for 1,000 mB Sulfuric Acid at 256,000 DE. Balance remains adjustable.
+Sulfuric Acid is stored and transported as a liquid. The recipe abstracts oxidation using ambient air; it does not consume piped Oxygen Gas or introduce hidden oxygen storage. The initial batch consumes four spikes and 1,000 mB Water for 1,000 mB Sulfuric Acid at 32,000 DE. Balance remains adjustable.
 
 Both sizes of Reaction Chamber will offer this same recipe. The slow single-block version is suitable for a dedicated acid line. High-volume coolant production is the main reason to scale up to a multiblock.
 
@@ -445,23 +463,30 @@ The Converter's gas input is necessary for Yellowcake + Fluorine; an item/liquid
 
 ### Initial Chemistry Balance
 
+Approved fuel-chain cost: **20.4192 MDE per enriched rod**, without upgrades or HF recycling, starting with prepared Uranium Dust, Fluorite Dust and Steel Plates. Includes acid production and four pellet press operations. Reactor maximum gross yield is 190 MDE per rod at 95% thermal efficiency; auxiliary costs are excluded.
+
+Base processing times: small chamber acid 10 s / concentrate 20 s; Converter HF 1 s / UF6 16 s; Electrolyzer HF 5 s / Water 20 s; Centrifuge 40 s; Processor 10 s. Small and multiblock chamber rates stay unchanged to preserve existing coolant processing.
+
 Values are initial gameplay balance. Yellowcake uses the existing utilitycraft:uranium_concentrate item. Chamber quantities and base costs are shared between both machine sizes.
 
 | Machine / recipe | Required inputs | Products | Base cost |
 |---|---|---|---:|
-| Reaction Chamber: acid | 4 Sulfur Spikes + 1,000 mB Water | 1,000 mB Sulfuric Acid | 256 kDE |
-| Reaction Chamber: concentrate | 1 Uranium Dust + 250 mB Sulfuric Acid | 1 Uranium Concentrate | 512 kDE |
-| Chemical Converter: HF | 1 Fluorite Dust + 250 mB Sulfuric Acid | 1,000 mB HF | 512 kDE |
-| Chemical Converter: UF6 | 1 Uranium Concentrate + 400 mB Fluorine | 1,000 mB Natural UF6 | 2.048 MDE |
-| Chemical Processor | 250 mB Enriched UF6 + 1,000 mB Water | 1 Enriched Uranium Oxide + 800 mB HF | 1.024 MDE |
+| Reaction Chamber: acid | 4 Sulfur Spikes + 1,000 mB Water | 1,000 mB Sulfuric Acid | 32 kDE |
+| Reaction Chamber: concentrate | 1 Uranium Dust + 250 mB Sulfuric Acid | 1 Uranium Concentrate | 64 kDE |
+| Chemical Converter: HF | 1 Fluorite Dust + 250 mB Sulfuric Acid | 1,000 mB HF | 32 kDE |
+| Chemical Converter: UF6 | 1 Uranium Concentrate + 400 mB Fluorine | 1,000 mB Natural UF6 | 512 kDE |
+| Chemical Processor | 250 mB Enriched UF6 + 1,000 mB Water | 1 Enriched Uranium Oxide + 800 mB HF | 256 kDE |
+| Electrolyzer: HF | 1,000 mB HF | 400 mB Hydrogen + 400 mB Fluorine | 128 kDE |
+| Isotope Centrifuge | 1,000 mB Natural UF6 | 250 mB Enriched UF6 + 750 mB Depleted UF6 | 4.096 MDE |
+| Electro Press | 1 Enriched Uranium Oxide | 1 Enriched Uranium Pellet | 800 DE |
 
 | Machine | Base rate | Energy capacity | Each material tank | Upgrades |
 |---|---:|---:|---:|---|
 | Small Reaction Chamber | 160 DE/t | 4.096 MDE | 32,000 mB | Speed, Energy |
-| Chemical Converter | 2,560 DE/t | 8.192 MDE | 32,000 mB | Speed, Energy |
-| Chemical Processor | 5,120 DE/t | 8.192 MDE | 32,000 mB | Speed, Energy |
+| Chemical Converter | 1,600 DE/t | 8.192 MDE | 32,000 mB | Speed, Energy |
+| Chemical Processor | 1,280 DE/t | 8.192 MDE | 32,000 mB | Speed, Energy |
 
-At base rate, acid takes 80 seconds in the small chamber versus 8 seconds per multiblock processing cycle before batch scaling. Heavy Water takes 1,280 seconds in the small chamber, motivating industrial coolant production in the multiblock. Existing multiblock batching semantics are unchanged.
+At base rate, acid takes 10 seconds in the small chamber versus 1 second per multiblock processing cycle before batch scaling. Heavy Water takes 1,280 seconds in the small chamber, motivating industrial coolant production in the multiblock. Existing multiblock batching semantics are unchanged.
 
 Each new machine has one runtime script. UI slots 0-2 hold energy, label, and progress; material slots are 3-6; upgrades are 7-8. Item I/O uses 9-14, liquid I/O 15-20, and gas I/O 21-26 where present. The small chamber has 21 inventory slots; Converter and Processor have 27.
 
@@ -507,8 +532,8 @@ This ratio is compressed for gameplay. The real process creates substantially mo
 
 | Property | Initial value |
 |---|---:|
-| Base rate | 20,480 DE/t (40 seconds per batch without upgrades) |
-| Energy per batch | 16.384 MDE |
+| Base rate | 5,120 DE/t (40 seconds per batch without upgrades) |
+| Energy per batch | 4.096 MDE |
 | Coolant | None |
 | Crafting component | High-Speed Rotor (no operating item requirement) |
 
@@ -522,7 +547,7 @@ The interface has three gas bars, centered progress, and the Ultimate Crusher en
 
 The UtilityCraft Workbench crafting recipe uses one High-Speed Rotor, one Machine Case, two Lead Plates, two Expert Chips, two Netherite Plates, and one Energy Cell. The same recipe is registered with the Crafter.
 
-## Coolant and Moderation
+## Coolant and Moderation — Planned
 
 The first version will not have a separate moderator tank. Every coolant will define:
 
@@ -672,7 +697,7 @@ The Nuclear Reactor will continue using the existing Netherite casing family in 
 - The centrifuge recipe is enabled with generic gas-tank extraction support.
 - Future deconversion may produce Depleted Uranium Dioxide, recover Hydrogen Fluoride, and enable dense shielding or heavy components.
 
-### Reactor Waste
+### Reactor Waste — Planned
 
 Rods are currently consumed without producing waste. The planned system will generate one generic Spent Uranium Pellet for every 250 FU burned:
 
@@ -772,7 +797,9 @@ Steel Case + Lead Plates + Reinforced Material
 
 Dedicated waste containment is deferred. Under the current radiation rule, handling or destroying stored waste does not create radiation; only a Nuclear Reactor meltdown does.
 
-## Radiation and Meltdown
+## Radiation and Meltdown — Partly Implemented
+
+The thermal meltdown explosion exists. Radiation zones, exposure effects, and loaded-controller break protection described below are planned.
 
 Radiation is an accident mechanic rather than a constant inventory or waste-handling simulation.
 
@@ -796,7 +823,7 @@ clamp(6 + floor(sqrt(Exposed Material) × 2), 8, 24) blocks
 
 The exact radius, duration, and player effects remain balance values. A small meltdown should persist for roughly five minutes, while a severe fuel-loaded meltdown may persist for up to twenty minutes. Radiation exposure may escalate through Nausea, Weakness, Mining Fatigue, Poison, and Wither.
 
-## Hazmat Suit and Rubber
+## Hazmat Suit and Rubber — Planned
 
 The Hazmat Suit exists to protect players who enter a radiation zone after a meltdown. It does not protect against the explosion itself, fire, or extreme reactor temperature.
 
@@ -935,7 +962,7 @@ Recovered HF returns from the Chemical Processor to the Electrolyzer. One machin
 
 ## Proposed Implementation Order
 
-### Phase 1 — Lead and Nuclear Construction
+### Phase 1 — Lead and Nuclear Construction (material processing implemented; construction audit pending)
 
 - Add Lead Chunk and Deepslate Lead Chunk to the Sieve at a proposed 4% base chance with a Golden-tier Mesh or better.
 - Reconstruct Lead Ore and Deepslate Lead Ore from four matching chunks.
@@ -944,7 +971,7 @@ Recovered HF returns from the Chemical Processor to the Electrolyzer. One machin
 - Update reactor components and nuclear-machine recipes to use Lead.
 - Keep the existing Netherite casing family as the Nuclear Reactor shell.
 
-### Phase 2 — Two Fuels
+### Phase 2 — Two Fuels (fabrication implemented; reactor profiles next)
 
 - Register the Uranium Fuel Rod.
 - Add FU, burn-rate, and efficiency values to each fuel profile.
@@ -968,9 +995,9 @@ Recovered HF returns from the Chemical Processor to the Electrolyzer. One machin
 4. Implement Chemical Processor, oxide recovery, and HF recycling; finish pellet and rod fabrication.
 5. Balance new quantities, costs, capacities, crafting recipes, and small-chamber throughput versus multiblock batches and coolant demand.
 
-Steps 1-4 above are implemented with initial values; step 5 remains ongoing balance work. The broader phases also include the completed Electrolyzer, centrifuge, and generic UF6 storage.
+Steps 1-4 are implemented. Step 5 now uses the approved 20.4192 MDE rod target and rates documented above; gameplay balance validation remains ongoing. The broader phases also include the completed Electrolyzer, centrifuge, and generic UF6 storage.
 
-### Phase 4 — Fluorine Industry
+### Phase 4 — Fluorine Industry (processing implemented)
 
 - Add Fluorite Crystal directly to Crushed Cobbled Deepslate filtering at a proposed 1.5% base chance with an Emerald-tier Mesh or better.
 - Crush Fluorite Crystals into Fluorite Dust; do not add Fluorite Ore or world generation.
@@ -979,7 +1006,7 @@ Steps 1-4 above are implemented with initial values; step 5 remains ongoing bala
 - Add liquid Sulfuric Acid from Sulfur Spikes + Water to both chamber sizes.
 - Implement Chemical Converter: Fluorite Dust + Sulfuric Acid to HF Gas.
 
-### Phase 5 — Enrichment
+### Phase 5 — Enrichment (processing implemented)
 
 - Reuse the implemented UF6 gas types, generic tank support, and Isotope Centrifuge.
 - Keep the High-Speed Rotor in the centrifuge crafting recipe only.
@@ -1024,7 +1051,7 @@ Steps 1-4 above are implemented with initial values; step 5 remains ongoing bala
 - Will the proposed 4% Lead Chunk and 1.5% Fluorite Crystal base Sieve chances remain after balance testing?
 - Existing UtilityCraft gas tanks now support Depleted UF6; should dedicated storage be added later?
 - Will the centrifuge ratio remain 25/75?
-- How much total energy should one Enriched Uranium Rod cost to manufacture?
+- Approved manufacturing target: 20.4192 MDE per enriched rod without upgrades/recycling. Reassess only when reactor fuel yields are changed.
 - What percentage of fluorine should be recoverable?
 - Will Heavy Water have a different consumption rate from Saline Coolant?
 - Should Spent Uranium Pellets compact into a larger spent-fuel item or block for storage?

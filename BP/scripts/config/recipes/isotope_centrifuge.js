@@ -9,6 +9,6 @@ export const isotopeCentrifugeRecipes = {
             type: "depleted_uranium_hexafluoride_gas",
             amount: 750,
         },
-        cost: 16384000,
+        cost: 4096000,
     },
 };
