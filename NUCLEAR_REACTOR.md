@@ -29,7 +29,7 @@ This is the living design document for the Nuclear Reactor and its fuel cycle. V
 - Processing byproducts without a defined gameplay use will not be added to the current scope.
 - Lead Chunks and Deepslate Lead Chunks will come from Sieve processing and reconstruct their corresponding ores.
 - Fluorite will not have an ore block or world generation; Fluorite Crystals will come directly from filtering Crushed Cobbled Deepslate.
-- The generic reactor waste item will be the Spent Uranium Pellet.
+- Reactor waste will be a liquid transported through pipes; a stabilized pellet belongs after treatment, not in the reactor output. Waste generation and treatment are not implemented yet.
 - The reusable centrifuge component will be named High-Speed Rotor.
 - The existing Reaction Chamber multiblock keeps its current slots, liquid tanks, and item/liquid recipe format; it will not gain gas storage.
 - A much slower single-block Reaction Chamber will share the multiblock's recipe hashmap and base recipe costs, with one item input, one liquid input, one item output, and one liquid output.
@@ -48,12 +48,12 @@ This is the living design document for the Nuclear Reactor and its fuel cycle. V
 - Coolants will have separate cooling and neutron-moderation properties.
 - Saline Coolant will prioritize cooling.
 - Heavy Water will prioritize moderation.
-- The first version will not add a second reactor tank or catalyst slot.
+- No separate moderator tank or catalyst slot is planned. The next waste milestone needs its own visible liquid output tank.
 - Enrichment will create depleted material that cannot be deleted automatically.
 - The reactor will eventually produce spent fuel instead of deleting consumed rods without a byproduct.
-- The current milestone includes Spent Uranium Pellet generation and extraction.
+- The next milestone is liquid-waste generation, visible storage, extraction, and treatment.
 - Depleted Uranium Hexafluoride is produced by the Isotope Centrifuge and can be extracted into existing UtilityCraft gas tanks.
-- Reprocessing, plutonium extraction, liquid nuclear waste, and vitrification are deferred.
+- Fuel recovery, plutonium extraction, and vitrification remain deferred; liquid reactor waste is the selected next direction.
 
 ## Current Functional State
 
@@ -63,7 +63,7 @@ This section describes shipped working code. Confirmed design decisions and sect
 |---|---|---|
 | Materials | Lead chunks at 4% with tier 4 mesh; Fluorite Crystals at 1.5% with tier 5 mesh; crushing, smelting and pressing registrations | Further balance and final art |
 | Fuel fabrication | Both pellet/rod routes, rod Workbench/Crafting Table/Crafter recipes | Waste treatment (deferred) |
-| Chemical line | Water/HF Electrolyzer, small/shared Reaction Chamber, Converter, Processor, Centrifuge, 80% HF-to-Fluorine recovery potential | Electrolyzer block crafting recipe; in-game balance pass |
+| Chemical line | Water/HF Electrolyzer, small/shared Reaction Chamber, Converter, Processor, Centrifuge, 80% HF-to-Fluorine recovery potential | In-game balance pass |
 | Transport/UI | Visible typed tanks, standard liquid/gas tank compatibility, ordered I/O, Speed/Energy upgrades, fixed I/O tabs, Liquid/Gas hover labels | Artist replacement for temporary textures |
 | Reactor | Both rods accepted in slot 21; persisted fuel type, thermal efficiency, heat, cooling, burn controls and meltdown explosion | Waste storage/treatment and output blocking |
 | Coolants | Nuclear accepts Heavy Water / addon coolants tier 2+; Thermo accepts Saline and Heavy Water | Moderation multipliers (deferred) |
@@ -71,6 +71,33 @@ This section describes shipped working code. Confirmed design decisions and sect
 | Development | Matching DoriosCore copies in UC/HM; Regolith watch data directory; local fuel-tree dashboard | Release and further gameplay validation |
 
 The dashboard is [Fuel production trees](docs/fuel-trees.html). Its totals start from prepared materials and distinguish initial production from recycling.
+
+### Native UtilityCraft Gas Machines
+
+Electrolyzer and Chemical Converter now belong to UtilityCraft, including block definitions, runtime scripts, UI, temporary textures and crafting. Heavy Machinery registers HF electrolysis and HF/UF6 conversion through the new shared recipe APIs; their nuclear quantities and costs are unchanged. UC includes Water electrolysis and Charcoal Dust + Hydrogen → Methane, plus four Gas Generator tiers. See [UtilityCraft gas generation](../UtilityCraft/docs/GAS_GENERATION.md) for initial fuel values, capacities and setup. The generator uses one visible gas tank, the Magmator layout and renamed temporary Magmator textures.
+
+### Shared Resources Migrated to UtilityCraft
+
+After Fuel Integration, UtilityCraft owns the complete Lead material family: both ores, raw material and storage blocks, ingot, nugget, dust, plate, normal/deepslate chunks, ore loot, crafting/smelting recipes, sieve drops and machine-processing registrations. Drop chances, mesh tiers, quantities and identifiers are unchanged. Heavy Machinery retains its machine recipes that consume Lead, referencing the base pack definitions.
+
+Oxygen, Hydrogen, Sulfuric Acid and Heavy Water each now have their 49 UI bar item definitions, 49 bar textures, atlas entries, BP/RP tank entities, dedicated 16x16 tank sprite and localized tank names in UtilityCraft. These definitions and assets are removed from Heavy Machinery to prevent duplicates. Hydrogen Fluoride, Fluorine, UF6 variants and Saline remain owned by Heavy Machinery.
+
+This is an ownership migration, not a chemical balance change. Reaction Chamber production recipes and Heavy Water coolant registration remain in Heavy Machinery. Electrolyzer Water processing is native to UC; HF processing is registered by HM. Use the updated versions of both development packs together; an older UtilityCraft does not provide the migrated assets. The Fuel Integration commit below predates this migration.
+
+### Fuel Integration Checkpoint
+
+Committed and pushed to main as **Fuel Integration**, commit `bb5645c3922cc815554c6b3d477eeadcfc31b0bd`. This checkpoint includes the two reactor fuel profiles, coolant integration, UI and item presentation, resource textures, documentation and dashboard updates. Waste work has not started in code.
+
+- Both fuels share the input and persisted type lock; enriched output remains unchanged. Basic fuel contains 250 FU with 35% of enriched maximum burn rate and 60% of its efficiency. No legacy migration or additional script animation timers were added.
+- The fuel-bar hover shows active type, stored/capacity, percentage, maximum efficiency, maximum burn and maximum power for the installed structure.
+- The empty fuel-slot overlay alternates the two rod icons once per second. Its two 16x16 frames form a horizontal 32x16 atlas; the corrected animation was confirmed in game.
+- Rods, plates, dusts, chunks, pellets, uranium concentrate, enriched oxide and both fluorite forms have brief source/use descriptions in English, Spanish and Portuguese. Ingots retain only their name and addon signature.
+- All five single-block chemistry machines use the UtilityCraft Crusher-style Speed/Energy upgrade glyphs. Their Creative group shows Machines, then a copper-colored (Heavy Machinery) subtitle on the next line, localized in all three languages.
+- All three liquids and seven gases have their own tank textures cropped exactly from the center 16x16 of their UI bar images, with matching localized entity names.
+- Heavy Water costs 64,000 DE per 1,000 mB from 8,000 mB Water, with no item ingredient: five times Saline's 12,800 DE. It takes 20 seconds in the small chamber or 2 seconds per multiblock cycle before batch scaling, without upgrades.
+- Heavy Water is tier 2, efficiency 2.0; Saline is tier 0, efficiency 1.0. Nuclear active cooling requires tier 2+, including addon coolants. Thermo accepts both. This does not increase fuel yield or conductor throughput, and invalid coolant does not itself stop combustion.
+- Verification passed: 12 reactor fuel/coolant checks, 13 fluid recipe checks and 41 chemistry checks; normal and minified script bundles passed. The latest recipe export was verified in Minecraft's development pack. Further in-game balance testing remains appropriate.
+
 
 
 The implemented reactor accepts utilitycraft:uranium_rod and utilitycraft:enriched_uranium_rod in the same item input (slot 21). It stores fuelType with fuelStored in nuclearData and derives capacity from the detected structure. Fuel types cannot mix: a different rod waits untouched until stored FU reaches zero, then loads on the next processing pass. No legacy fuel migration is included.
@@ -113,7 +140,7 @@ The Isotope Centrifuge is functional as a single-block gas machine. Its crafting
 - The standard I/O panel configures six relative faces in Default → custom liquid input/drain or gas input/output 1/2/input drain → Disabled order. Default allows passive access to the declared tanks, custom modes enable automatic transfers, and Disabled blocks that face. Existing UtilityCraft gas tanks can store both gases.
 - The interface contains the four resource bars, energy, progress, standard machine status, and Information, I/O, and Upgrades tabs. It has no material slots or process selector.
 - Two standard upgrade slots accept Speed and Energy upgrades. Processing uses Machine's shared speed and consumption boosts and completes multiple batches when input and output capacities permit.
-- Upstream HF production is implemented in the Chemical Converter. The Electrolyzer block crafting recipe remains deferred.
+- Upstream HF production is implemented in the Chemical Converter. The Electrolyzer now has a native UC Workbench/Crafter recipe.
 
 ### Heavy Water — Reaction Chamber
 
@@ -164,8 +191,8 @@ The Isotope Centrifuge is functional as a single-block gas machine. Its crafting
 
 ### Ports and Vent Panels
 
-- Item Ports insert rods and may later extract waste.
-- Fluid Ports insert coolant.
+- Item Ports insert rods. The selected liquid-waste design will use fluid extraction rather than a reactor item-output slot.
+- Fluid Ports currently insert coolant. Waste extraction and its I/O modes still need implementation.
 - Energy Ports connect internal storage to the network.
 - Ports must be compatible with Netherite casings and contain the utilitycraft:active state.
 - Vent Panels emit steam while the running reactor removes heat.
@@ -193,7 +220,7 @@ The item registry maps each rod to its fuel type and complete FU amount. Profile
 
 The existing uranium bar displays Type, Stored/Capacity, Percentage, Max Efficiency, Max Burn (FU/t) and Max Power (DE/t). Max Power is the peak for the installed assemblies/control coverage and the active fuel at ideal temperature, before energy-transfer limits. The main efficiency readout includes the fuel multiplier. The input's empty-slot overlay alternates both existing rod icons at one frame per second, using the same JSON UI flipbook pattern as UtilityCraft's autosieve.
 
-Waste remains deferred. The latest direction is a visible liquid-waste output with piped treatment into stabilized items; quantities, storage restrictions and treatment recipes are not implemented or finalized. Earlier direct spent-pellet proposals below are historical alternatives, not current runtime behavior.
+Waste is the next milestone, not implemented. The selected direction is a visible liquid-waste output with piped treatment into stabilized pellets. The Chemical Processor is the proposed treatment machine; amounts, energy cost, tank capacity and handling restrictions still need decisions. The former direct spent-pellet output is superseded.
 
 ## Fuel Summary — Implemented
 
@@ -680,53 +707,46 @@ The Nuclear Reactor will continue using the existing Netherite casing family in 
 - The centrifuge recipe is enabled with generic gas-tank extraction support.
 - Future deconversion may produce Depleted Uranium Dioxide, recover Hydrogen Fluoride, and enable dense shielding or heavy components.
 
-### Reactor Waste — Earlier Solid-Output Proposal
+### Reactor Waste — Selected Liquid Direction (Not Implemented)
 
-Superseded direction: defer waste while implementing fuels; evaluate liquid waste piped to treatment before producing stabilized pellets. The quantities and direct-slot behavior below have not been implemented.
+The user selected liquid reactor waste so automation includes transport and treatment before the material becomes an inventory item. Both fuel types will share the same generic waste. The former direct Spent Uranium Pellet output, stack-sized reactor buffer and Item Port extraction are superseded; their proposed pellet ratios are not approved for the liquid system.
 
-Rods are currently consumed without producing waste. The planned system will generate one generic Spent Uranium Pellet for every 250 FU burned:
+Proposed runtime behavior:
+
+- Generate waste proportionally to FU actually burned, not when rods are inserted.
+- Display all stored waste in a dedicated liquid bar; no hidden waste reservoir or reactor pellet-output slot.
+- Extract waste through fluid ports and pipes to treatment.
+- Limit combustion to the available waste capacity. A full waste tank stops additional fuel consumption and energy generation.
+- Preserve stored heat when combustion stops; cooling and thermal behavior must continue. A full tank must not instantly cool the reactor.
+
+The full-tank behavior and proportional generation are design recommendations discussed for this milestone; no runtime code has been added.
+
+### Proposed Treatment — Existing Chemical Processor
+
+Reuse the Chemical Processor's liquid input and item output without changing its slots or UI layout:
 
 ~~~text
-250 FU consumed
-→ 1 Spent Uranium Pellet
+Nuclear Reactor
+→ Liquid radioactive waste
+→ Fluid port / pipes
+→ Chemical Processor + energy
+→ Stabilized pellet
+→ Item storage
 ~~~
 
-This gives both fuels exactly the same waste ratio:
+The treatment machine choice and exact recipe remain proposed. The intended simple recipe uses only waste liquid and energy; no extra gas is needed solely to occupy a slot. Final liquid/pellet identifiers, amounts and energy cost are undecided.
 
-- 1 Uranium Fuel Rod = 250 FU = 1 Spent Uranium Pellet.
-- 1 Enriched Uranium Rod = 2,000 FU = 8 Spent Uranium Pellets.
-
-The reactor tracks activeFuelType for burn behavior and a separate numeric waste-progress counter. Waste generation does not depend on activeFuelType. A stack-sized output buffer connects to Item Ports, and fuel burn stops if that buffer becomes full.
+Verified implementation constraint: the Processor already supports an empty gas input, with a recipe keyed by gas type followed by liquid type and required_gas set to zero. Its current script nevertheless assumes output_gas exists when checking output compatibility, capacity and production. Before adding a liquid-to-item-only recipe, make gas output optional in those three places. Do not change the working enriched-UF6-to-oxide/HF recipe or add new slots.
 
 ### Waste Physical States
 
-The design contains two waste outputs; centrifuge gas waste is implemented and reactor item waste remains planned:
-
-| Stage | Material | State | Reason |
+| Stage | Material | State | Status |
 |---|---|---|---|
-| Reactor output | Spent Uranium Pellet | Item | Planned; generated proportionally from burned FU |
-| Enrichment output | Depleted Uranium Hexafluoride | Gas | Implemented with generic gas-tank storage |
+| Enrichment output | Depleted Uranium Hexafluoride | Gas | Implemented; existing UtilityCraft tanks support extraction/storage |
+| Reactor output | Generic radioactive waste (final name pending) | Liquid | Selected direction; generation, bar and extraction pending |
+| Treatment output | Stabilized pellet (final name pending) | Item | Proposed Chemical Processor recipe; not implemented |
 
-The Nuclear Reactor does not directly produce liquid or gaseous waste during normal operation. It outputs generic solid spent uranium. The Isotope Centrifuge separately outputs depleted UF6 gas into compatible existing gas storage.
-
-The current gameplay loop stops at item extraction:
-
-~~~text
-Reactor
-└─ Spent Uranium Pellets
-   └─ Item Port
-      └─ Ordinary item storage
-~~~
-
-Spent Uranium Pellets do not emit radiation during normal handling. Dedicated waste barrels are not required in the current scope.
-
-Future expansions may add additional states:
-
-| Deferred stage | Material | State |
-|---|---|---|
-| Reprocessing output | High-Level Nuclear Waste | Liquid |
-| Optional off-gas | Radioactive Off-Gas | Gas |
-| Final stabilized waste | Vitrified Nuclear Waste | Item |
+This is a gameplay abstraction, not a detailed simulation of real spent-fuel treatment. There is no approved conversion from waste back into usable fuel in this milestone. Dedicated waste containers, restrictions on disposal and future recovery remain separate decisions. The existing design rule limits radiation exposure to reactor meltdowns; no inventory-radiation system is implemented.
 
 ### Deferred: Fuel Reprocessing
 
@@ -763,9 +783,9 @@ Plutonium will not initially create a third primary reactor fuel. Planned uses i
 
 This makes reprocessing valuable without invalidating the two-fuel design.
 
-### Deferred: Waste Stabilization
+### Deferred: Advanced Vitrification (Separate from Initial Pellet Treatment)
 
-High-Level Nuclear Waste should be a fluid produced by reprocessing. It cannot be placed directly in the world or discarded through ordinary fluid outputs.
+This older advanced proposal concerns High-Level Nuclear Waste from future reprocessing, not the initial liquid reactor waste → stabilized pellet route. Its ingredients, machine choice and disposal restrictions below are unimplemented proposals.
 
 ~~~text
 High-Level Nuclear Waste + Glass / Stabilized Obsidian Dust
@@ -1001,11 +1021,14 @@ Steps 1-4 are implemented. Step 5 now uses the approved 20.4192 MDE rod target a
 - Press oxide into Enriched Uranium Pellets and complete rod crafting.
 - Balance HF recovery against existing centrifuge and Electrolyzer yields; preserve mandatory Depleted UF6 extraction.
 
-### Phase 6 — Waste
+### Phase 6 — Liquid Waste (Next; Not Implemented)
 
-- Generate one Spent Uranium Pellet for every 250 FU burned.
-- Add a stack-sized waste buffer and Item Port output.
-- Allow ordinary item storage because spent pellets do not emit radiation during routine handling.
+- Finalize liquid identity, mB per FU, visible tank capacity and extraction modes.
+- Generate waste from actual fuel consumption and stop further combustion when storage is full, while retaining heat/cooling.
+- Add a visible liquid output bar and fluid-port extraction.
+- Confirm Chemical Processor treatment and make its gas output optional without changing slots.
+- Define the stabilized pellet, batch quantity, energy cost and permitted storage/disposal behavior.
+- Keep fuel recovery and advanced vitrification outside this initial treatment milestone.
 
 ### Phase 7 — Meltdown Protection
 
@@ -1040,7 +1063,9 @@ Steps 1-4 are implemented. Step 5 now uses the approved 20.4192 MDE rod target a
 - What percentage of fluorine should be recoverable?
 - Heavy Water now consumes half as much liquid for equal cooling; review this balance in gameplay.
 - Should Spent Uranium Pellets compact into a larger spent-fuel item or block for storage?
-- How large should the reactor's internal waste buffer be?
+- How many mB of waste should each burned FU produce, and what capacity should the visible reactor waste tank have?
+- Should Chemical Processor treatment be adopted as proposed, and what liquid quantity, pellet count and energy cost should each batch use?
+- What extraction modes and container/disposal restrictions should liquid waste support?
 - What exact recipe and output count should produce Rubber Sheets?
 - How much radiation protection and durability should the Hazmat Suit provide?
 - What duration and status-effect thresholds should meltdown radiation use?

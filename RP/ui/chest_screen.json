@@ -19,17 +19,6 @@
         "operation": "insert_back",
         "value": [
           {
-            "requires": "($temp_container_title = 'entity.utilitycraft:chemical_converter.name')",
-            "$screen_content": "chemical_converter.utilitycraft_panel",
-            "$screen_bg_content": "common.screen_background"
-          }
-        ]
-      },
-      {
-        "array_name": "variables",
-        "operation": "insert_back",
-        "value": [
-          {
             "requires": "($temp_container_title = 'entity.utilitycraft:chemical_processor.name')",
             "$screen_content": "chemical_processor.utilitycraft_panel",
             "$screen_bg_content": "common.screen_background"
@@ -43,17 +32,6 @@
           {
             "requires": "($temp_container_title = 'entity.utilitycraft:isotope_centrifuge.name')",
             "$screen_content": "isotope_centrifuge.utilitycraft_panel",
-            "$screen_bg_content": "common.screen_background"
-          }
-        ]
-      },
-      {
-        "array_name": "variables",
-        "operation": "insert_back",
-        "value": [
-          {
-            "requires": "($temp_container_title = 'entity.utilitycraft:electrolyzer.name')",
-            "$screen_content": "electrolyzer.utilitycraft_panel",
             "$screen_bg_content": "common.screen_background"
           }
         ]

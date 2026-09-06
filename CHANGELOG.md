@@ -1,6 +1,8 @@
 # UtilityCraft: Heavy Machinery v0.5.3
 
 ## CHANGED
+- Moved Oxygen, Hydrogen, Sulfuric Acid and Heavy Water bar/tank definitions and assets, plus the complete Lead material family and processing/drop registrations, to UtilityCraft. Existing resource IDs and HM chemistry/coolant behavior are preserved.
+- Updated reactor documentation with the Fuel Integration checkpoint and selected liquid-waste direction, replacing the superseded direct-pellet plan and recording pending Chemical Processor treatment.
 - Registered Heavy Water as tier 2 with twice Saline Coolant efficiency. Nuclear active cooling now requires tier 2 or higher, including addon-registered coolants; Thermo Reactor still accepts both.
 - Reduced Heavy Water concentration to 64,000 DE per 1,000 mB while preserving its 8,000 mB water input and empty item slot. Registered it as coolant with twice the per-volume efficiency of Saline Coolant, without changing fuel yield or conductor limits.
 - Renamed the Creative Nuclear Machinery group to Machines with a copper-colored (Heavy Machinery) subtitle on a second line and grouped all five single-block chemistry machines together.
@@ -13,6 +15,7 @@
 - Uranium Ingots now press into Uranium Pellets; four pellets and two Steel Plates craft a fuel rod. Enriched Uranium Oxide presses into Enriched Uranium Pellets.
 
 ## ADDED
+- Migrated the Electrolyzer and Chemical Converter blocks, scripts, UI and assets into UtilityCraft. Heavy Machinery now registers HF electrolysis and HF/UF6 conversion recipes through the shared addon recipe APIs.
 - Added concise source/use descriptions for metal plates, dusts, sieve chunks, uranium intermediates/pellets and fluorite materials in all three supported locales.
 - Added brief crafting and reactor-use descriptions to both fuel rod tooltips in English, Spanish and Portuguese, using UtilityCraft item-description formatting.
 - The reactor empty fuel slot now alternates basic and enriched rod icons once per second using the existing autosieve flipbook pattern.

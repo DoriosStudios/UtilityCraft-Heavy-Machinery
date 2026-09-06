@@ -121,10 +121,8 @@
                             "name": "utilitycraft:itemGroup.machines"
                         },
                         "items": [
-                            "utilitycraft:electrolyzer",
                             "utilitycraft:isotope_centrifuge",
                             "utilitycraft:reaction_chamber",
-                            "utilitycraft:chemical_converter",
                             "utilitycraft:chemical_processor"
                         ]
                     },
@@ -166,15 +164,6 @@
                             "utilitycraft:raw_uranium_block",
                             "utilitycraft:tin_chunk",
                             "utilitycraft:deepslate_tin_chunk",
-                            "utilitycraft:raw_lead",
-                            "utilitycraft:raw_lead_block",
-                            "utilitycraft:lead_chunk",
-                            "utilitycraft:deepslate_lead_chunk",
-                            "utilitycraft:lead_dust",
-                            "utilitycraft:lead_ingot",
-                            "utilitycraft:lead_nugget",
-                            "utilitycraft:lead_plate",
-                            "utilitycraft:lead_block",
                             "utilitycraft:fluorite_crystal",
                             "utilitycraft:fluorite_dust",
                             "utilitycraft:rubber_sheet",

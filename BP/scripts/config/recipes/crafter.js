@@ -10,10 +10,6 @@ const crafterRecipeBatches = [
     "output": "utilitycraft:reaction_chamber",
     "amount": 1
   },
-  "lead_plate,gas_pipe,lead_plate,expert_chip,machine_case,expert_chip,lead_plate,energy_cell,lead_plate": {
-    "output": "utilitycraft:chemical_converter",
-    "amount": 1
-  },
   "lead_plate,gas_pipe,lead_plate,fluid_pipe,machine_case,fluid_pipe,lead_plate,energy_cell,lead_plate": {
     "output": "utilitycraft:chemical_processor",
     "amount": 1

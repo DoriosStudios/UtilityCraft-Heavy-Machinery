@@ -15,3 +15,6 @@ import './recipes_register/melter.js'
 
 import './fluids.js'
 import './coolants.js'
+
+import './recipes/electrolyzer.js';
+import './recipes/chemical_converter.js';

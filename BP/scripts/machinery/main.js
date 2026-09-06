@@ -15,12 +15,10 @@ import './machines/incinerator_controller.js'
 import './machines/electro_press_controller.js'
 import './machines/infuser_controller.js'
 import './machines/autosieve_controller.js'
-import './machines/electrolyzer.js'
 import './machines/isotope_centrifuge.js'
 import './machines/reaction_chamber_controller.js'
 import './machines/magmatic_chamber_controller.js'
 
 
 import './machines/reaction_chamber.js'
-import './machines/chemical_converter.js'
 import './machines/chemical_processor.js'
