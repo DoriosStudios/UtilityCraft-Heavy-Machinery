@@ -1,6 +1,10 @@
 # UtilityCraft: Heavy Machinery v0.5.3
 
 ## CHANGED
+- Registered Heavy Water as tier 2 with twice Saline Coolant efficiency. Nuclear active cooling now requires tier 2 or higher, including addon-registered coolants; Thermo Reactor still accepts both.
+- Reduced Heavy Water concentration to 64,000 DE per 1,000 mB while preserving its 8,000 mB water input and empty item slot. Registered it as coolant with twice the per-volume efficiency of Saline Coolant, without changing fuel yield or conductor limits.
+- Renamed the Creative Nuclear Machinery group to Machines with a copper-colored (Heavy Machinery) subtitle on a second line and grouped all five single-block chemistry machines together.
+- Replaced compact chemistry machine item descriptions with the Crusher-style accepted Speed/Energy upgrade glyphs in English, Spanish and Portuguese.
 - Rebalanced enriched fuel production to 20.4192 MDE per rod before upgrades/recycling, with cheaper early chemistry and adjusted Converter, Processor, Electrolyzer and Centrifuge rates. Chamber coolant rates remain unchanged.
 - Synchronized DoriosCore with UtilityCraft, preserving passive item IO, infinite energy transfer and consumed fluid/gas container fixes.
 - Liquid and gas bar tooltips now identify their resource category, including empty tanks.
@@ -9,6 +13,10 @@
 - Uranium Ingots now press into Uranium Pellets; four pellets and two Steel Plates craft a fuel rod. Enriched Uranium Oxide presses into Enriched Uranium Pellets.
 
 ## ADDED
+- Added concise source/use descriptions for metal plates, dusts, sieve chunks, uranium intermediates/pellets and fluorite materials in all three supported locales.
+- Added brief crafting and reactor-use descriptions to both fuel rod tooltips in English, Spanish and Portuguese, using UtilityCraft item-description formatting.
+- The reactor empty fuel slot now alternates basic and enriched rod icons once per second using the existing autosieve flipbook pattern.
+- Added basic/enriched reactor fuel profiles with one shared input, persistent fuel-type locking and fuel-bar type/maximum efficiency/burn/power details. Enriched output is unchanged; waste processing remains deferred.
 - Added a standalone Spanish fuel-tree dashboard with basic/enriched routes, recipe details, batch quantities and HF recycling connections.
 
 - Added the single-block Reaction Chamber, Chemical Converter, and Chemical Processor with temporary 16x16 face textures, four visible material stores each, standard I/O, Speed/Energy upgrades, and Workbench/Crafter recipes.
@@ -31,6 +39,8 @@
 - Added standard Speed and Energy upgrade support to the Electrolyzer, including multiple batches per update when upgraded throughput allows.
 
 ## FIXED
+- Gave all three liquid and seven gas tank entities their own 16x16 center-cropped bar textures and localized tank names, replacing water/steam placeholders.
+- Fixed cropped reactor fuel icons by arranging both flipbook frames horizontally, matching the autosieve atlas layout.
 - Restored the tracked Regolith data directory so watch mode starts on fresh checkouts.
 
 - Matched the small Reaction Chamber material layout to the multiblock: liquid input, item input, progress, item output, liquid output, centered horizontally.

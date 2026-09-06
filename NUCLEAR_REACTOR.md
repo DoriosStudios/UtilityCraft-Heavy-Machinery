@@ -62,18 +62,18 @@ This section describes shipped working code. Confirmed design decisions and sect
 | Area | Implemented now | Still pending |
 |---|---|---|
 | Materials | Lead chunks at 4% with tier 4 mesh; Fluorite Crystals at 1.5% with tier 5 mesh; crushing, smelting and pressing registrations | Further balance and final art |
-| Fuel fabrication | Both pellet/rod routes, rod Workbench/Crafting Table/Crafter recipes | Basic rod acceptance in reactor |
+| Fuel fabrication | Both pellet/rod routes, rod Workbench/Crafting Table/Crafter recipes | Waste treatment (deferred) |
 | Chemical line | Water/HF Electrolyzer, small/shared Reaction Chamber, Converter, Processor, Centrifuge, 80% HF-to-Fluorine recovery potential | Electrolyzer block crafting recipe; in-game balance pass |
 | Transport/UI | Visible typed tanks, standard liquid/gas tank compatibility, ordered I/O, Speed/Energy upgrades, fixed I/O tabs, Liquid/Gas hover labels | Artist replacement for temporary textures |
-| Reactor | Enriched rods only; 1,000 FU each; thermal efficiency, heat, cooling, burn controls and meltdown explosion | Two-fuel typed storage/profiles, spent pellets and output blocking |
-| Coolants | Saline Coolant works; Heavy Water can be produced and stored | Heavy Water reactor registration and moderation multipliers |
+| Reactor | Both rods accepted in slot 21; persisted fuel type, thermal efficiency, heat, cooling, burn controls and meltdown explosion | Waste storage/treatment and output blocking |
+| Coolants | Nuclear accepts Heavy Water / addon coolants tier 2+; Thermo accepts Saline and Heavy Water | Moderation multipliers (deferred) |
 | Accidents | Multiblock deactivation/controller resolution and component waterlogging | Radiation zones, loaded-controller break protection, Hazmat/Rubber integration |
 | Development | Matching DoriosCore copies in UC/HM; Regolith watch data directory; local fuel-tree dashboard | Release and further gameplay validation |
 
 The dashboard is [Fuel production trees](docs/fuel-trees.html). Its totals start from prepared materials and distinguish initial production from recycling.
 
 
-The implemented reactor currently accepts only utilitycraft:enriched_uranium_rod.
+The implemented reactor accepts utilitycraft:uranium_rod and utilitycraft:enriched_uranium_rod in the same item input (slot 21). It stores fuelType with fuelStored in nuclearData and derives capacity from the detected structure. Fuel types cannot mix: a different rod waits untouched until stored FU reaches zero, then loads on the next processing pass. No legacy fuel migration is included.
 
 | Property | Current value |
 |---|---:|
@@ -90,9 +90,11 @@ The implemented reactor currently accepts only utilitycraft:enriched_uranium_rod
 | Coolant capacity per empty block | 64,000 mB |
 | Energy transfer | 5% of capacity per tick |
 
-At ideal efficiency, each FU produces 190,000 DE. One properly controlled Fuel Assembly can produce up to 380,000 DE/t.
+At ideal efficiency, enriched fuel produces 190,000 DE per FU (190 MDE per rod); basic fuel produces 114,000 DE per FU (28.5 MDE per rod). One properly controlled Fuel Assembly can produce up to 380,000 DE/t.
 
-Saline Coolant is currently the only registered coolant and has a cooling efficiency of 1.0. Pellet and rod fabrication and the gas-processing chain are implemented. Reactor support for basic fuel and spent-fuel generation remain planned. Hydrogen, Oxygen, and Fluorine can now be produced by the Electrolyzer, and Heavy Water by the Reaction Chamber; Heavy Water coolant effects are not yet registered.
+Saline Coolant (tier 0) and Heavy Water (tier 2) are registered coolants, with efficiencies 1.0 and 2.0 respectively. Nuclear requires tier 2 or above; Thermo accepts either. Heavy Water consumes half the liquid for equal heat removal; installed conductors still limit cooling throughput. Pellet and rod fabrication and the gas-processing chain are implemented. Basic fuel support is implemented; waste generation/treatment remains deferred. Hydrogen, Oxygen, and Fluorine can now be produced by the Electrolyzer, and Heavy Water by the Reaction Chamber; Heavy Water cooling is implemented; neutron moderation is not.
+
+All three liquid and seven gas tank entities use dedicated 16x16 textures cropped from the center of their full UI bars, with localized entity names. Heavy Water, Sulfuric Acid and gases no longer borrow water/steam textures. Shared UtilityCraft tank geometry and fill animations remain unchanged.
 
 Complete 49-frame internal UI bar sets now exist for Sulfuric Acid, Heavy Water, Hydrogen, Oxygen, Fluorine, Hydrogen Fluoride, Natural UF6, Enriched UF6, and Depleted UF6. Hydrogen, Oxygen, and Fluorine have functional Electrolyzer outputs, and Hydrogen Fluoride is accepted as a gaseous input. All four gases support existing UtilityCraft gas tanks. Heavy Water has a Reaction Chamber recipe and support in existing liquid tanks. Natural, Enriched, and Depleted UF6 also have functional centrifuge storage and support in existing gas tanks. Sulfuric Acid has shared Reaction Chamber production, visible UI bars, and standard liquid-tank support.
 
@@ -115,9 +117,9 @@ The Isotope Centrifuge is functional as a single-block gas machine. Its crafting
 
 ### Heavy Water — Reaction Chamber
 
-- `empty|water`: 8,000 mB Water → 1,000 mB Heavy Water, with no item input and a base recipe cost of 4,096,000 DE.
+- `empty|water`: 8,000 mB Water → 1,000 mB Heavy Water, with no item input and a base recipe cost of 64,000 DE.
 - Batch size is bounded by input liquid as well as processing modules and output space; this also fixes the existing Saline Coolant recipe.
-- Heavy Water can be extracted into standard UtilityCraft liquid tanks. Its reactor cooling/moderation integration remains deferred.
+- Heavy Water can be extracted into standard UtilityCraft liquid tanks. It is registered as coolant with efficiency 2.0 and tier 2; moderation remains deferred.
 
 ## Reactor Components
 
@@ -183,66 +185,32 @@ Fuel Rod in the input slot
 
 The first accepted rod sets the active fuel type. Additional rods of that type may load normally. A different rod is not consumed while FU remains, but it may stay in the input slot and load automatically as soon as the current reserve reaches zero.
 
-### Typed Fuel Storage — Planned, Not Implemented
+### Typed Fuel Storage — Implemented
 
-Fuel is not represented as an item, liquid, or gas after loading. It uses a dedicated storage model:
+Fuel uses the existing persisted nuclearData record after loading: fuelType is uranium, enriched_uranium or empty; fuelStored is remaining FU; fuelCapacity comes from structure statistics. No additional material slot or hidden liquid/gas tank is added.
 
-~~~js
-{
-    type: uranium | enriched_uranium | empty,
-    amount: 0,
-    capacity: 0,
-}
-~~~
+The item registry maps each rod to its fuel type and complete FU amount. Profiles define its label, burn-rate multiplier and efficiency multiplier. A matching complete rod loads only if it fits. Mismatched rods remain in the shared input while the current fuel keeps burning. At zero FU the type resets to empty; the next pass can load another type.
 
-The item registry maps input items into a storage type and FU amount:
+The existing uranium bar displays Type, Stored/Capacity, Percentage, Max Efficiency, Max Burn (FU/t) and Max Power (DE/t). Max Power is the peak for the installed assemblies/control coverage and the active fuel at ideal temperature, before energy-transfer limits. The main efficiency readout includes the fuel multiplier. The input's empty-slot overlay alternates both existing rod icons at one frame per second, using the same JSON UI flipbook pattern as UtilityCraft's autosieve.
 
-~~~js
-{
-    itemId,
-    fuelType,
-    fuelUnits,
-}
-~~~
+Waste remains deferred. The latest direction is a visible liquid-waste output with piped treatment into stabilized items; quantities, storage restrictions and treatment recipes are not implemented or finalized. Earlier direct spent-pellet proposals below are historical alternatives, not current runtime behavior.
 
-The fuel-type registry defines runtime behavior:
+## Fuel Summary — Implemented
 
-~~~js
-{
-    burnRateMultiplier,
-    efficiencyMultiplier,
-    label,
-}
-~~~
+Enriched output remains unchanged. Current profile values:
 
-Storage rules:
-
-1. When type is empty, the first valid rod sets the type.
-2. A matching rod adds its FU if the complete rod fits within capacity.
-3. A mismatched rod remains untouched in the input slot.
-4. When amount reaches zero, type resets to empty.
-5. On the next loading pass, a waiting rod may establish the new type automatically.
-
-Waste uses a separate amount/progress field and remains generic. It is calculated from consumed FU, so switching fuel types never requires separate waste storage.
-
-## Fuel Summary — Proposed Next Milestone
-
-These profiles are NOT implemented. The current enriched rod still contains 1,000 FU and yields at most 190 MDE; the 2,000-FU proposal below would change that balance and must be reassessed before implementation.
-
-Initial proposed values:
-
-| Fuel | FU per rod | Maximum burn rate | Energy efficiency | Waste type |
+| Fuel | FU per rod | Maximum burn rate | Energy efficiency | Waste type (deferred) |
 |---|---:|---:|---:|---|
 | Uranium Fuel Rod | 250 FU | 35% | 60% | Spent Uranium Pellet |
-| Enriched Uranium Rod | 2,000 FU | 100% | 100% | Spent Uranium Pellet |
+| Enriched Uranium Rod | 1,000 FU | 100% | 100% | Spent Uranium Pellet |
 
-The Enriched Uranium Rod is eight times as dense and supports the reactor's complete structural burn rate. The basic rod is intentionally limited to 35% of that burn rate and converts each FU into only 60% as much energy.
+The Enriched Uranium Rod is four times as dense and supports the reactor's complete structural burn rate. The basic rod is intentionally limited to 35% of that burn rate and converts each FU into only 60% as much energy.
 
 For a standard reactor with four properly controlled Fuel Assemblies:
 
 | Fuel | Maximum fuel burn | Ideal maximum production |
 |---|---:|---:|
-| Uranium Fuel Rod | 2.8 FU/t | About 319,200 DE/t |
+| Uranium Fuel Rod | 2.8 FU/t | About 364,000 DE/t |
 | Enriched Uranium Rod | 8 FU/t | About 1,520,000 DE/t |
 
 The enriched route therefore provides approximately 4.76 times the maximum DE/t and substantially more total energy per item.
@@ -486,11 +454,11 @@ Values are initial gameplay balance. Yellowcake uses the existing utilitycraft:u
 | Chemical Converter | 1,600 DE/t | 8.192 MDE | 32,000 mB | Speed, Energy |
 | Chemical Processor | 1,280 DE/t | 8.192 MDE | 32,000 mB | Speed, Energy |
 
-At base rate, acid takes 10 seconds in the small chamber versus 1 second per multiblock processing cycle before batch scaling. Heavy Water takes 1,280 seconds in the small chamber, motivating industrial coolant production in the multiblock. Existing multiblock batching semantics are unchanged.
+At base rate, acid takes 10 seconds in the small chamber versus 1 second per multiblock processing cycle before batch scaling. Heavy Water takes 20 seconds in the small chamber versus 2 seconds per multiblock cycle before batch scaling. Existing multiblock batching semantics are unchanged.
 
 Each new machine has one runtime script. UI slots 0-2 hold energy, label, and progress; material slots are 3-6; upgrades are 7-8. Item I/O uses 9-14, liquid I/O 15-20, and gas I/O 21-26 where present. The small chamber has 21 inventory slots; Converter and Processor have 27.
 
-Uranium Ingots now press into Uranium Pellets instead of directly into rods. Enriched Uranium Oxide presses into Enriched Uranium Pellets. Four matching pellets plus two Steel Plates craft the respective rod through the Crafting Table, Workbench, or Crafter. Reactor fuel profiles remain separate work; the reactor still accepts only the enriched rod.
+Uranium Ingots now press into Uranium Pellets instead of directly into rods. Enriched Uranium Oxide presses into Enriched Uranium Pellets. Four matching pellets plus two Steel Plates craft the respective rod through the Crafting Table, Workbench, or Crafter. Both reactor fuel profiles are implemented; enriched yield remains unchanged.
 
 ### Recipe and Runtime Conventions
 
@@ -547,7 +515,22 @@ The interface has three gas bars, centered progress, and the Ultimate Crusher en
 
 The UtilityCraft Workbench crafting recipe uses one High-Speed Rotor, one Machine Case, two Lead Plates, two Expert Chips, two Netherite Plates, and one Energy Cell. The same recipe is registered with the Crafter.
 
-## Coolant and Moderation — Planned
+## Coolant and Moderation
+
+### Implemented Cooling Balance
+
+Heavy Water recipe balance is approved at 64,000 DE per 1,000 mB, five times Saline Coolant.
+
+| Coolant | Recipe per 1,000 mB | Base energy | Cooling efficiency | Liquid used for equal heat removal |
+|---|---|---:|---:|---:|
+| Saline Coolant | 2 Calcite Pebbles + 1,000 mB Water | 12,800 DE | 1.0 | 100% |
+| Heavy Water | 8,000 mB Water, no item | 64,000 DE | 2.0 | 50% |
+
+Saline Coolant remains tier 0; Heavy Water is tier 2. The Nuclear Reactor requires coolant tier >= 2 for active cooling; the Thermo Reactor retains its tier 0 minimum and accepts both. Addon-registered coolants at tier 2 or above work automatically, with no identifier whitelist. Water remains unregistered. Heavy Water costs five times as much per volume and 2.5 times the manufacturing energy for equivalent cooling, excluding supply/transport costs. The exchange is eight times the input water per output volume and longer production per batch. No fuel-yield bonus, second tank or new per-tick subsystem is added.
+
+### Earlier Moderation Proposal — Not Implemented
+
+The following moderation values are historical proposals, not the current coolant balance.
 
 The first version will not have a separate moderator tank. Every coolant will define:
 
@@ -697,7 +680,9 @@ The Nuclear Reactor will continue using the existing Netherite casing family in 
 - The centrifuge recipe is enabled with generic gas-tank extraction support.
 - Future deconversion may produce Depleted Uranium Dioxide, recover Hydrogen Fluoride, and enable dense shielding or heavy components.
 
-### Reactor Waste — Planned
+### Reactor Waste — Earlier Solid-Output Proposal
+
+Superseded direction: defer waste while implementing fuels; evaluate liquid waste piped to treatment before producing stabilized pellets. The quantities and direct-slot behavior below have not been implemented.
 
 Rods are currently consumed without producing waste. The planned system will generate one generic Spent Uranium Pellet for every 250 FU burned:
 
@@ -971,7 +956,7 @@ Recovered HF returns from the Chemical Processor to the Electrolyzer. One machin
 - Update reactor components and nuclear-machine recipes to use Lead.
 - Keep the existing Netherite casing family as the Nuclear Reactor shell.
 
-### Phase 2 — Two Fuels (fabrication implemented; reactor profiles next)
+### Phase 2 — Two Fuels (implemented; gameplay validation ongoing)
 
 - Register the Uranium Fuel Rod.
 - Add FU, burn-rate, and efficiency values to each fuel profile.
@@ -980,7 +965,7 @@ Recovered HF returns from the Chemical Processor to the Electrolyzer. One machin
 - Keep waste generic and coolant behavior shared between fuels.
 - Press Uranium Ingots into the existing Uranium Pellets and craft them with Steel Plates into the existing Uranium Rod.
 
-### Phase 3 — Coolants
+### Phase 3 — Coolants (both coolants implemented; moderation deferred)
 
 - Define Saline Coolant and Heavy Water.
 - Add cooling and moderation multipliers.
@@ -1053,7 +1038,7 @@ Steps 1-4 are implemented. Step 5 now uses the approved 20.4192 MDE rod target a
 - Will the centrifuge ratio remain 25/75?
 - Approved manufacturing target: 20.4192 MDE per enriched rod without upgrades/recycling. Reassess only when reactor fuel yields are changed.
 - What percentage of fluorine should be recoverable?
-- Will Heavy Water have a different consumption rate from Saline Coolant?
+- Heavy Water now consumes half as much liquid for equal cooling; review this balance in gameplay.
 - Should Spent Uranium Pellets compact into a larger spent-fuel item or block for storage?
 - How large should the reactor's internal waste buffer be?
 - What exact recipe and output count should produce Rubber Sheets?

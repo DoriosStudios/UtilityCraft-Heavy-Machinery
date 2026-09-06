@@ -7,7 +7,7 @@
 				"default": "entity_alphablend"
 			},
 			"textures": {
-				"default": "textures/entity/water_fluid"
+				"default": "textures/entity/heavy_water_fluid"
 			},
 			"geometry": {
 				"default": "geometry.utilitycraft_fluid_tank_entity"

@@ -1,5 +1,13 @@
 {
     "namespace": "nuclear_reactor",
+    "fuel_flipbook_animation": {
+        "anim_type": "flip_book",
+        "frame_count": 2,
+        "frame_step": 0,
+        "fps": 1,
+        "easing": "linear",
+        "initial_uv": [0, 0]
+    },
     "nuclear_reactor_top": {
         "type": "collection_panel",
         "anchor_from": "center",
@@ -85,7 +93,9 @@
                         {
                             "fuel_rod_image": {
                                 "type": "image",
-                                "texture": "textures/items/enriched_uranium_rod",
+                                "texture": "textures/ui/nuclear_fuels_flipbook",
+                                "uv_size": [16, 16],
+                                "uv": "@nuclear_reactor.fuel_flipbook_animation",
                                 "layer": 4,
                                 "alpha": 0.5,
                                 "anchor_from": "center",

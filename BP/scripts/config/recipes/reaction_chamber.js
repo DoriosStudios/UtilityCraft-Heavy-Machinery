@@ -19,7 +19,7 @@ export const reactionRecipes = {
             type: "heavy_water",
             amount: 1000
         },
-        cost: 4096000
+        cost: 64000
     },
     "utilitycraft:calcite_pebble|water": {
         // ───── INPUT ─────

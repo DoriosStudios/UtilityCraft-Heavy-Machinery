@@ -4,6 +4,10 @@ import * as DoriosLib from "DoriosLib/index.js";
 export const coolants = {}
 
 const coolantsRegister = {
+    "heavy_water": {
+        efficiency: 2,
+        tier: 2
+    },
     "saline_coolant": {
         efficiency: 1,
         tier: 0

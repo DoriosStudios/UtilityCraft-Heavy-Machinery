@@ -7,7 +7,7 @@
                 "default": "entity_alphablend"
             },
             "textures": {
-                "default": "textures/entity/steam_gas"
+                "default": "textures/entity/enriched_uranium_hexafluoride_gas"
             },
             "geometry": {
                 "default": "geometry.utilitycraft_gas_tank_entity"

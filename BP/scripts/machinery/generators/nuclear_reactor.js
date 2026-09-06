@@ -41,6 +41,7 @@ const config = {
 
     coolantCapacityPerEmptyBlock: 64_000,
     coolantPerKelvin: 10,
+    minimumCoolantTier: 2,
     conductorHeatDissipation: 0.05,
     thermalResponseTimeSeconds: 60,
 
@@ -48,6 +49,7 @@ const config = {
         state: 'off',
         power: 25,
         fuelStored: 0,
+        fuelType: 'empty',
         temperature: 300,
         producing: 0,
         activeRate: 0,
@@ -59,7 +61,6 @@ const config = {
 }
 
 const FUEL_INPUT_SLOT = 21
-const FUEL_ITEM = 'utilitycraft:enriched_uranium_rod'
 const POWER_INPUT_SLOT = 6
 const POWER_INPUT_ITEM = 'utilitycraft:arrow_right_0'
 const POWER_INPUT_MAX_LENGTH = 5
@@ -116,11 +117,14 @@ const GENERATOR_CONFIG = {
     missingEnergyWarning: '\u00A7c[Reactor] At least 1 Energy Cell is required.',
 }
 
+const FUEL_PROFILES = {
+    uranium: { label: 'Uranium', burnRateMultiplier: 0.35, efficiencyMultiplier: 0.60 },
+    enriched_uranium: { label: 'Enriched Uranium', burnRateMultiplier: 1, efficiencyMultiplier: 1 },
+}
+
 const NUCLEAR_FUELS = {
-    [FUEL_ITEM]: {
-        fuelUnits: config.fuelUnitsPerRod,
-        label: 'Enriched Uranium',
-    },
+    'utilitycraft:uranium_rod': { fuelType: 'uranium', fuelUnits: 250 },
+    'utilitycraft:enriched_uranium_rod': { fuelType: 'enriched_uranium', fuelUnits: config.fuelUnitsPerRod },
 }
 
 registerLinkNodeIO('utilitycraft:nuclear_reactor_controller', {
@@ -287,10 +291,13 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
         const coolantAmount = coolant.get()
         const powerFraction = clamp((data.power ?? 0) / 100, 0, 1)
         const tickDelta = Math.max(1, reactor.processingInterval ?? 1)
+        const fuelProfile = FUEL_PROFILES[data.fuelType]
         const maximumBurnRate = getMaximumBurnRate(data.fuelAssemblies, data.rodControls)
+            * (fuelProfile?.burnRateMultiplier ?? 0)
         const requestedBurn = maximumBurnRate * powerFraction * tickDelta
         const energyFreeSpace = energy.getFreeSpace()
         const operatingEfficiency = getTemperatureEfficiency(data.temperature)
+            * (fuelProfile?.efficiencyMultiplier ?? 0)
 
         data.controlEfficiency = getControlEfficiency(data.fuelAssemblies, data.rodControls)
         data.efficiency = operatingEfficiency
@@ -318,7 +325,11 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
         }
 
         const heatDissipation = (data.heatConductors ?? 0) * config.conductorHeatDissipation
-        const hasCoolant = Boolean(coolantData && coolantAmount > 0)
+        const hasCoolant = Boolean(
+            coolantData
+            && coolantData.tier >= config.minimumCoolantTier
+            && coolantAmount > 0,
+        )
         const maximumCoolantHeat = hasCoolant
             ? coolantAmount / config.coolantPerKelvin * coolantData.efficiency
             : 0
@@ -351,6 +362,8 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
             config.maximumTemperatureK,
         )
         data.efficiency = getTemperatureEfficiency(data.temperature)
+            * (fuelProfile?.efficiencyMultiplier ?? 0)
+        if (data.fuelStored <= 0) data.fuelType = 'empty'
 
         data.warning = getOperatingStatus({
             data,
@@ -375,16 +388,21 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
 })
 
 function loadFuelFromInput(container, data) {
+    if (data.fuelStored <= 0) data.fuelType = 'empty'
     const input = container?.getItem(FUEL_INPUT_SLOT)
     if (!input) return ''
 
     const fuel = NUCLEAR_FUELS[input.typeId]
     if (!fuel) return '\u00A7cInvalid Nuclear Fuel'
+    if (data.fuelStored > 0 && data.fuelType !== fuel.fuelType) {
+        return '\u00A7eWaiting for Current Fuel'
+    }
 
     const freeSpace = Math.max(0, (data.fuelCapacity ?? 0) - (data.fuelStored ?? 0))
     const rodsToLoad = Math.min(input.amount, Math.floor(freeSpace / fuel.fuelUnits))
     if (rodsToLoad <= 0) return ''
 
+    data.fuelType = fuel.fuelType
     data.fuelStored += rodsToLoad * fuel.fuelUnits
     const remaining = input.amount - rodsToLoad
     if (remaining <= 0) {
@@ -404,6 +422,9 @@ function getOperatingStatus({ data, working, fuelInputWarning, coolantType, cool
     if ((data.fuelStored ?? 0) <= 0) return '\u00A7eMissing Fuel'
     if (energyFreeSpace <= 0) return '\u00A7eEnergy Full'
     if (coolantType !== 'empty' && !coolantData) return '\u00A7cInvalid Coolant'
+    if (coolantType !== 'empty' && coolantData.tier < config.minimumCoolantTier) {
+        return '\u00A7cRequires Tier 2+ Coolant'
+    }
     if (working && coolantAmount <= 0) return '\u00A7cMissing Coolant'
     if (working) return '\u00A72Active'
     return '\u00A77Idle'
@@ -499,20 +520,35 @@ function updateReactorUI(data, reactor, coolant) {
         `\n\u00A7r\u00A7aPower \u00A7f${(data.power ?? 0).toFixed(2)}%%\n\u00A7r\u00A7aTemperature \u00A7f${(data.temperature ?? 0).toFixed(2)} K\n\u00A7r\u00A7aEfficiency \u00A7f${((data.efficiency ?? 0) * 100).toFixed(2)}%%\n\u00A7r\u00A7aOn Time \u00A7f${formatReactorOnTime(data)}`,
         `\n\u00A7r\u00A7eEnergy Information\n\n\u00A7r\u00A7bProducing \u00A7f${EnergyStorage.formatEnergyToText(data.producing ?? 0)}/t\n\u00A7r\u00A7bCapacity \u00A7f${reactor.energy.getPercent().toFixed(2)}%%\n\u00A7r\u00A7bStored \u00A7f${EnergyStorage.formatEnergyToText(storedEnergy)}`,
         `\n\u00A7r\u00A7eFuel Information\n\n\u00A7r\u00A7aStored \u00A7f${formatFuel(fuelStored)}\n\u00A7r\u00A7aCapacity \u00A7f${formatFuel(fuelCapacity)}\n\u00A7r\u00A7aFuel \u00A7f${fuelPercent.toFixed(2)}%%`,
-        `\n\u00A7r\u00A7eCoolant Information\n\n\u00A7r\u00A7aType \u00A7f${coolantName}\n\u00A7r\u00A7aStored \u00A7f${FluidStorage.formatFluid(coolantStored)} / ${FluidStorage.formatFluid(coolantCapacity)}\n\u00A7r\u00A7aCoolant \u00A7f${coolantPercent.toFixed(2)}%%`,
+        `\n\u00A7r\u00A7eCoolant Information\n\n\u00A7r\u00A77Required Tier: 2+\n\u00A7r\u00A7aType \u00A7f${coolantName}\n\u00A7r\u00A7aStored \u00A7f${FluidStorage.formatFluid(coolantStored)} / ${FluidStorage.formatFluid(coolantCapacity)}\n\u00A7r\u00A7aCoolant \u00A7f${coolantPercent.toFixed(2)}%%`,
     ])
 
-    updateFuelBar(reactor.container, fuelStored, fuelCapacity)
+    updateFuelBar(reactor.container, data)
     updateTemperatureBar(reactor.container, data.temperature)
 }
 
-function updateFuelBar(container, fuelStored, fuelCapacity) {
+function updateFuelBar(container, data) {
     if (!container) return
 
+    const fuelStored = data.fuelStored ?? 0
+    const fuelCapacity = data.fuelCapacity ?? 0
+    const profile = FUEL_PROFILES[data.fuelType]
+    const maximumEfficiency = config.maximumEfficiency * (profile?.efficiencyMultiplier ?? 0)
+    const maximumBurn = getMaximumBurnRate(data.fuelAssemblies, data.rodControls)
+        * (profile?.burnRateMultiplier ?? 0)
+    const maximumPower = maximumBurn * config.energyPerFuelUnit * maximumEfficiency
     const fraction = fuelCapacity > 0 ? clamp(fuelStored / fuelCapacity, 0, 1) : 0
     const frame = Math.floor(fraction * 42)
     const item = new ItemStack(`utilitycraft:uranium_bar_${String(frame).padStart(2, '0')}`, 1)
-    item.nameTag = `\u00A7rNuclear Fuel\n\u00A7r\u00A77  Stored: ${formatFuel(fuelStored)} / ${formatFuel(fuelCapacity)}\n\u00A7r\u00A77  Percentage: ${(fraction * 100).toFixed(2)}%`
+    item.nameTag = [
+        '\u00A7rNuclear Fuel',
+        `\u00A7r\u00A77  Type: ${profile?.label ?? 'Empty'}`,
+        `\u00A7r\u00A77  Stored: ${formatFuel(fuelStored)} / ${formatFuel(fuelCapacity)}`,
+        `\u00A7r\u00A77  Percentage: ${(fraction * 100).toFixed(2)}%`,
+        `\u00A7r\u00A77  Max Efficiency: ${(maximumEfficiency * 100).toFixed(2)}%`,
+        `\u00A7r\u00A77  Max Burn: ${formatFuel(maximumBurn)}/t`,
+        `\u00A7r\u00A77  Max Power: ${EnergyStorage.formatEnergyToText(maximumPower)}/t`,
+    ].join('\n')
     container.setItem(3, item)
 }
 
@@ -613,6 +649,7 @@ function getReactorData(entity) {
         ...stats,
     }
 
+    if (data.fuelStored <= 0) data.fuelType = 'empty'
     if (entity.getDynamicProperty('dorios:state') === 'off') data.state = 'off'
     return data
 }

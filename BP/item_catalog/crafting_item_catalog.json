@@ -117,12 +117,15 @@
                     },
                     {
                         "group_identifier": {
-                            "icon": "utilitycraft:isotope_centrifuge",
-                            "name": "utilitycraft:itemGroup.nuclear_machinery"
+                            "icon": "utilitycraft:electrolyzer",
+                            "name": "utilitycraft:itemGroup.machines"
                         },
                         "items": [
+                            "utilitycraft:electrolyzer",
                             "utilitycraft:isotope_centrifuge",
-                            "utilitycraft:electrolyzer"
+                            "utilitycraft:reaction_chamber",
+                            "utilitycraft:chemical_converter",
+                            "utilitycraft:chemical_processor"
                         ]
                     },
                     {
