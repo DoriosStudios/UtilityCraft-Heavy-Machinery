@@ -6,6 +6,10 @@ import * as DoriosLib from "DoriosLib/index.js";
  */
 const crafterRecipeBatches = [
   {
+    "lead_plate,high_speed_rotor,lead_plate,expert_chip,machine_case,expert_chip,netherite_plate,energy_cell,netherite_plate": {
+      output: "utilitycraft:isotope_centrifuge",
+      amount: 1,
+    },
     "bronze_plated_block,bronze_plated_block,air,bronze_plated_block,bronze_plated_block,air,air,air,air": {
       output: "utilitycraft:bronze_bricks",
       amount: 4,

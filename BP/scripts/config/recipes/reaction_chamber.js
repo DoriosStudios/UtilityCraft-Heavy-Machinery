@@ -1,5 +1,14 @@
 
 export const reactionRecipes = {
+    "empty|water": {
+        required_items: 0,
+        required_liquid: 8000,
+        output_liquid: {
+            type: "heavy_water",
+            amount: 1000
+        },
+        cost: 4096000
+    },
     "utilitycraft:calcite_pebble|water": {
         // ───── INPUT ─────
         required_items: 2,          // opcional (default 1)

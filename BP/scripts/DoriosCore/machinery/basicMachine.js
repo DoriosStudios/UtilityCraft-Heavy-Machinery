@@ -367,7 +367,7 @@ export class BasicMachine {
       const neighborLocation = OutputTracker.getNeighborLocation(this.block, direction);
       if (!neighborLocation) continue;
 
-      const outputIndices = getFluidOutputIndices(this.entity, { face: direction });
+      const outputIndices = getFluidOutputIndices(this.entity, { face: direction, automatic: true });
       for (const sourceIndex of outputIndices) {
         if (summary.fluidMoved >= maxFluid) break;
         summary.fluidMoved += transferFluid(this.entity, {
@@ -378,7 +378,7 @@ export class BasicMachine {
         });
       }
 
-      const inputIndices = getFluidInputIndices(this.entity, { face: direction });
+      const inputIndices = getFluidInputIndices(this.entity, { face: direction, automatic: true });
       if (inputIndices.length === 0 || summary.fluidMoved >= maxFluid) continue;
       const source = resolveFluidContainerAt(this.dimension, neighborLocation);
       if (!source) continue;
@@ -402,7 +402,7 @@ export class BasicMachine {
       const neighborLocation = OutputTracker.getNeighborLocation(this.block, direction);
       if (!neighborLocation) continue;
 
-      const outputIndices = getGasOutputIndices(this.entity, { face: direction });
+      const outputIndices = getGasOutputIndices(this.entity, { face: direction, automatic: true });
       for (const sourceIndex of outputIndices) {
         if (summary.gasMoved >= maxGas) break;
         summary.gasMoved += transferGas(this.entity, {
@@ -413,7 +413,7 @@ export class BasicMachine {
         });
       }
 
-      const inputIndices = getGasInputIndices(this.entity, { face: direction });
+      const inputIndices = getGasInputIndices(this.entity, { face: direction, automatic: true });
       if (inputIndices.length === 0 || summary.gasMoved >= maxGas) continue;
       const source = resolveGasContainerAt(this.dimension, neighborLocation);
       if (!source) continue;

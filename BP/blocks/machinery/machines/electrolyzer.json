@@ -15,10 +15,37 @@
 				}
 			},
 			"states": {
-				"utilitycraft:active": [0, 1]
+				"utilitycraft:on": [false, true]
 			}
 		},
 		"components": {
+			"utilitycraft:fluid_container": {},
+			"utilitycraft:electrolyzer": {
+				"entity": {
+					"type": "fluid_gas_machine",
+					"inventory_size": 21
+				},
+				"machine": {
+					"energy_cap": 4096000,
+					"energy_cost": 512000,
+					"fluid_cap": 64000,
+					"fluid_types": 1,
+					"gas_cap": 32000,
+					"gas_types": 3,
+					"rate_speed_base": 2560,
+					"overclock": false,
+					"upgrades": [6, 7]
+				}
+			},
+			"utilitycraft:machine_upgrades": [
+				{ "type": "speed", "slot": 6 },
+				{ "type": "energy", "slot": 7 }
+			],
+			"minecraft:tick": { "interval_range": [4, 4] },
+			"tag:dorios:machine": {},
+			"tag:dorios:energy": {},
+			"tag:dorios:fluid": {},
+			"tag:dorios:gas": {},
 			"minecraft:geometry": "minecraft:geometry.full_block",
 			"minecraft:material_instances": {
 				"*": {
@@ -58,7 +85,7 @@
 		},
 		"permutations": [
 			{
-				"condition": "q.block_state('utilitycraft:active') == 1",
+				"condition": "q.block_state('utilitycraft:on')",
 				"components": {
 					"minecraft:material_instances": {
 						"*": {

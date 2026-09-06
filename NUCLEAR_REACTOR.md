@@ -7,7 +7,7 @@ This is the living design document for the Nuclear Reactor and its fuel cycle. V
 ### Confirmed
 
 - The Nuclear Reactor is a Netherite-casing multiblock.
-- The Isotope Centrifuge will be a single-block machine.
+- The Isotope Centrifuge is a single-block machine.
 - There will be two primary fuel routes: the Uranium Fuel Rod and the Enriched Uranium Rod.
 - The existing Uranium Pellet and Enriched Uranium Pellet are the pressed intermediates used to craft the existing fuel rods.
 - Enrichment will use gases and Uranium Hexafluoride (UF6).
@@ -45,7 +45,7 @@ This is the living design document for the Nuclear Reactor and its fuel cycle. V
 - Enrichment will create depleted material that cannot be deleted automatically.
 - The reactor will eventually produce spent fuel instead of deleting consumed rods without a byproduct.
 - The current milestone includes Spent Uranium Pellet generation and extraction.
-- Depleted Uranium Hexafluoride remains part of the enrichment design, but its implementation and external storage are deferred until compatible generic gas storage exists.
+- Depleted Uranium Hexafluoride is produced by the Isotope Centrifuge and can be extracted into existing UtilityCraft gas tanks.
 - Reprocessing, plutonium extraction, liquid nuclear waste, and vitrification are deferred.
 
 ## Current Functional State
@@ -69,11 +69,32 @@ The implemented reactor currently accepts only utilitycraft:enriched_uranium_rod
 
 At ideal efficiency, each FU produces 190,000 DE. One properly controlled Fuel Assembly can produce up to 380,000 DE/t.
 
-Saline Coolant is currently the only registered coolant and has a cooling efficiency of 1.0. The basic fuel route, Heavy Water, gases, and waste described below are still in planning.
+Saline Coolant is currently the only registered coolant and has a cooling efficiency of 1.0. The basic fuel route, the remaining nuclear gases, and waste described below are still in planning. Hydrogen, Oxygen, and Fluorine can now be produced by the Electrolyzer, and Heavy Water by the Reaction Chamber; Heavy Water coolant effects are not yet registered.
 
-Complete 49-frame internal UI bar sets now exist for Sulfuric Acid, Heavy Water, Hydrogen, Oxygen, Fluorine, Hydrogen Fluoride, Natural UF6, Enriched UF6, and Depleted UF6. These are visual assets and hidden UI items only; they do not register the corresponding liquid or gas mechanics.
+Complete 49-frame internal UI bar sets now exist for Sulfuric Acid, Heavy Water, Hydrogen, Oxygen, Fluorine, Hydrogen Fluoride, Natural UF6, Enriched UF6, and Depleted UF6. Hydrogen, Oxygen, and Fluorine have functional Electrolyzer outputs, and Hydrogen Fluoride is accepted as a gaseous input. All four gases support existing UtilityCraft gas tanks. Heavy Water has a Reaction Chamber recipe and support in existing liquid tanks. Natural, Enriched, and Depleted UF6 also have functional centrifuge storage and support in existing gas tanks. Sulfuric Acid remains a visual asset and hidden UI item set only.
 
-The High-Speed Rotor now exists as a registered item. The Isotope Centrifuge and Electrolyzer now exist as placeable, horizontally orientable blocks with complete temporary six-face texture sets in both inactive and active states. Their interfaces, storage, recipes, and runtime processing logic remain pending.
+The Isotope Centrifuge is functional as a single-block gas machine. Its crafting recipe uses a High-Speed Rotor, and the machine separates Natural UF6 into Enriched and Depleted UF6. Its three visible gas tanks, standard I/O, Speed/Energy upgrades, and existing UtilityCraft tank support are implemented. Upstream Natural UF6 production and downstream fuel conversion remain pending.
+
+### Electrolyzer — First Functional Version
+
+- A normal single-block Machine using the standard UtilityCraft helper entity.
+- Exactly four resource stores, all displayed: one 64,000 mB liquid input, one 32,000 mB gas input, and two 32,000 mB gas outputs.
+- Storage types are unrestricted and clear naturally when empty. There are no alternate hidden reservoirs or machine-specific persistence.
+- Recipes use an `electrolyzerRecipes` object keyed by `liquidType|gasType`, with `empty` for an unused input and `required_liquid`, `required_gas`, `output1`, `output2`, and `cost` fields.
+- `water|empty`: 1,000 mB Water → 1,000 mB Hydrogen + 500 mB Oxygen, costing 512,000 DE.
+- `empty|hydrogen_fluoride_gas`: 1,000 mB Hydrogen Fluoride → 400 mB Hydrogen + 400 mB Fluorine, costing 1,024,000 DE. The unused input must be empty.
+- The block sets a base processing rate of 2,560 DE/t; the recipe carries no independent duration or process name.
+- Processing starts automatically after checking the input and both output types/capacities. It preserves progress if energy runs out or an output fills.
+- The standard I/O panel configures six relative faces in Default → custom liquid input/drain or gas input/output 1/2/input drain → Disabled order. Default allows passive access to the declared tanks, custom modes enable automatic transfers, and Disabled blocks that face. Existing UtilityCraft gas tanks can store both gases.
+- The interface contains the four resource bars, energy, progress, standard machine status, and Information, I/O, and Upgrades tabs. It has no material slots or process selector.
+- Two standard upgrade slots accept Speed and Energy upgrades. Processing uses Machine's shared speed and consumption boosts and completes multiple batches when input and output capacities permit.
+- The block crafting recipe and upstream HF production are deferred.
+
+### Heavy Water — Reaction Chamber
+
+- `empty|water`: 8,000 mB Water → 1,000 mB Heavy Water, with no item input and a base recipe cost of 4,096,000 DE.
+- Batch size is bounded by input liquid as well as processing modules and output space; this also fixes the existing Saline Coolant recipe.
+- Heavy Water can be extracted into standard UtilityCraft liquid tanks. Its reactor cooling/moderation integration remains deferred.
 
 ## Reactor Components
 
@@ -372,17 +393,17 @@ Initial recovery target: 75–90%. Fluorite starts the system and compensates fo
 
 ## Isotope Centrifuge
 
-The Isotope Centrifuge will be a single-block machine.
+The Isotope Centrifuge is a single-block machine.
 
 ### Storage
 
-- One input tank for Natural Uranium Hexafluoride Gas.
-- One output tank for Enriched Uranium Hexafluoride Gas.
-- One output tank for Depleted Uranium Hexafluoride Gas.
-- Internal energy storage.
-- One component slot for a High-Speed Rotor.
+- One 32,000 mB input tank for Natural Uranium Hexafluoride Gas.
+- One 32,000 mB output tank for Enriched Uranium Hexafluoride Gas.
+- One 32,000 mB output tank for Depleted Uranium Hexafluoride Gas.
+- Internal energy storage: 65,536,000 DE.
+- No item input or component slot; the High-Speed Rotor is a crafting ingredient only.
 
-### Proposed Operation
+### Implemented Operation
 
 ~~~text
 1,000 units of Natural UF6
@@ -395,14 +416,20 @@ This ratio is compressed for gameplay. The real process creates substantially mo
 
 | Property | Initial value |
 |---|---:|
-| Time per batch | 30–45 s |
-| Energy per batch | 15–20 MDE |
+| Base rate | 20,480 DE/t (40 seconds per batch without upgrades) |
+| Energy per batch | 16.384 MDE |
 | Coolant | None |
-| Required component | High-Speed Rotor |
+| Crafting component | High-Speed Rotor (no operating item requirement) |
 
-The High-Speed Rotor may reuse Netherite Plates and Heat Conductors. It is a generic high-speed rotating component that can later be reused by turbines, compressors, and pumps. It should initially be permanent because frequent wear could turn the process into tedious maintenance.
+The High-Speed Rotor may reuse Netherite Plates and Heat Conductors. It is a generic high-speed rotating component that can later be reused by turbines, compressors, and pumps. It is consumed when crafting the centrifuge and is not inserted into its interface.
 
-The machine stops if either output tank has no available space. Depleted gas must never disappear automatically. The two-output recipe will not be enabled until Depleted UF6 can be extracted into compatible generic gas storage.
+The machine stops if either output tank cannot fit a complete batch or contains an incompatible gas. Depleted gas is never discarded automatically. All three gases can be extracted into existing UtilityCraft gas tanks. Progress is retained while energy is missing or output space is insufficient.
+
+Recipes use an `isotopeCentrifugeRecipes` object keyed by gas type, with `required_gas`, `output1`, `output2`, and `cost`. The High-Speed Rotor is used only in the machine crafting recipe, not in the processing key. There are no per-recipe names, durations, or arrays.
+
+The interface has three gas bars, centered progress, and the Ultimate Crusher energy position. Its gas I/O modes are Default → Input → Output 1 → Output 2 → Drain Input → Disabled. Speed and Energy upgrades use the standard Machine system. Upgrade slots are excluded from item automation.
+
+The UtilityCraft Workbench crafting recipe uses one High-Speed Rotor, one Machine Case, two Lead Plates, two Expert Chips, two Netherite Plates, and one Energy Cell. The same recipe is registered with the Crafter.
 
 ## Coolant and Moderation
 
@@ -550,8 +577,8 @@ The Nuclear Reactor will continue using the existing Netherite casing family in 
 - Depleted Uranium Hexafluoride is the waste branch of isotope separation.
 - It has no productive recipe in the current scope.
 - Its purpose is to occupy an output and prevent enrichment from deleting depleted material for free.
-- Dedicated tanks and its external storage are deferred.
-- The centrifuge recipe must not be enabled until the gas can be extracted into compatible generic storage.
+- Dedicated tanks are deferred; existing UtilityCraft gas tanks support its external storage.
+- The centrifuge recipe is enabled with generic gas-tank extraction support.
 - Future deconversion may produce Depleted Uranium Dioxide, recover Hydrogen Fluoride, and enable dense shielding or heavy components.
 
 ### Reactor Waste
@@ -876,7 +903,7 @@ Hydrogen Fluoride recovered from enriched UF6 conversion returns to the Electrol
 
 ### Deferred Phase — Gas and Waste Storage
 
-- Add compatible generic gas storage before enabling Depleted UF6 output.
+- Generic gas storage and Depleted UF6 output are implemented; dedicated storage remains deferred.
 - Evaluate dedicated Lead-Lined Gas Tanks and Shielded Waste Barrels later; they are not required in the current scope.
 - Add a productive Depleted UF6 route only when its downstream materials have defined uses.
 
@@ -891,7 +918,7 @@ Hydrogen Fluoride recovered from enriched UF6 conversion returns to the Electrol
 ## Open Questions
 
 - Will the proposed 4% Lead Chunk and 1.5% Fluorite Crystal base Sieve chances remain after balance testing?
-- Which compatible generic gas-storage solution will unlock Depleted UF6 output?
+- Existing UtilityCraft gas tanks now support Depleted UF6; should dedicated storage be added later?
 - Will the centrifuge ratio remain 25/75?
 - How much total energy should one Enriched Uranium Rod cost to manufacture?
 - What percentage of fluorine should be recoverable?

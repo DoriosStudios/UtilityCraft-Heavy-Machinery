@@ -1,3 +1,45 @@
+# UtilityCraft: Heavy Machinery v0.5.3
+
+## ADDED
+
+- Added Isotope Centrifuge crafting with a High-Speed Rotor as a construction ingredient, including UtilityCraft Crafter support.
+
+- Added the functional single-block Isotope Centrifuge with three visible gas tanks, Speed/Energy upgrades, and standard I/O and Information panels.
+- Added Natural UF6 separation: 1,000 mB produces 250 mB Enriched UF6 and 750 mB Depleted UF6 for 16.384 MDE. Both outputs must fit and can be extracted into UtilityCraft's existing gas tanks.
+
+- Added Hydrogen Fluoride electrolysis: 1,000 mB gas produces 400 mB Hydrogen and 400 mB Fluorine for 1.024 MDE, using liquid/gas recipe keys and a visible gas input with I/O controls.
+- Added Heavy Water concentration to the Reaction Chamber: 8,000 mB Water produces 1,000 mB Heavy Water with no item input and a base recipe cost of 4.096 MDE.
+- Added Hydrogen Fluoride, Fluorine, and Heavy Water support in UtilityCraft's existing gas/liquid tanks.
+
+- Added the functional single-block Electrolyzer with one liquid input, one gas input, two gas outputs, energy and progress bars, and Information, I/O, and Upgrades panels.
+- Added automatic Water electrolysis: 1,000 mB Water produces 1,000 mB Hydrogen and 500 mB Oxygen for 512 kDE, with output compatibility checks and progress retained when energy runs out.
+- Added per-face Electrolyzer liquid input/drain and separate gas output routing, plus Hydrogen/Oxygen support in UtilityCraft's existing gas tanks.
+- Added standard Speed and Energy upgrade support to the Electrolyzer, including multiple batches per update when upgraded throughput allows.
+
+## FIXED
+
+- Positioned I/O resource tabs at the upper-left corner through UtilityCraft's shared control: gas first for the Isotope Centrifuge, and liquid followed by gas for the Electrolyzer, independent of panel height.
+
+- Fixed invalid nested I/O tab overrides causing Bedrock unknown-property errors in the Electrolyzer and Isotope Centrifuge screens.
+
+- Centered the Isotope Centrifuge progress arrow between its input and first output, with I/O tabs independent of panel height.
+
+- Reduced the Electrolyzer and Isotope Centrifuge I/O panel heights by 8 px.
+- Removed the Isotope Centrifuge rotor slot and operating requirement; the machine processes gas without item inputs.
+
+- Simplified Electrolyzer liquid and gas I/O labels to generic inputs, outputs, and input drains in all three languages.
+
+- Centered the Electrolyzer's two input bars, progress arrow, and two output bars; moved energy to the Ultimate Crusher's right-side position.
+
+- Limited Reaction Chamber batches by the available input liquid, preventing output generation without the full liquid cost.
+
+- Matched the Electrolyzer I/O Default label color to UtilityCraft's standard gray in all three languages.
+
+- Fixed Electrolyzer I/O modes to cycle from Default through custom routes to Disabled, matching UtilityCraft's passive access and explicit automatic transfer behavior.
+- Increased the Electrolyzer I/O panel height and shortened its mode labels to prevent overlap with the face buttons.
+
+---
+
 # UtilityCraft: Heavy Machinery v0.5.2
 
 ## ADDED

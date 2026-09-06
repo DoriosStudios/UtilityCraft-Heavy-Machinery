@@ -131,7 +131,7 @@ DoriosLib.registry.blockComponent('utilitycraft:reaction_chamber_controller', {
             return;
         }
 
-        if (inputFluidType !== "empty" && inputFluid.get() < reqFluid) {
+        if (reqFluid > 0 && inputFluid.get() < reqFluid) {
             updateUI(controller, [inputFluid, outputFluid], data, "§eNot Enough Fluid", recipe);
             controller.setProgress(0, { slot: 2 });
             return;
@@ -173,6 +173,9 @@ DoriosLib.registry.blockComponent('utilitycraft:reaction_chamber_controller', {
             data.processing.amount,
             inputItemId !== "empty"
                 ? Math.floor(totalItems / reqItems)
+                : Infinity,
+            reqFluid > 0
+                ? Math.floor(inputFluid.get() / reqFluid)
                 : Infinity,
             recipe.output_item
                 ? Math.floor(itemSpace / outItemAmt)

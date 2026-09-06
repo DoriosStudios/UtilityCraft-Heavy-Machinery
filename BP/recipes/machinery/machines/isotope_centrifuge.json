@@ -1,0 +1,44 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "utilitycraft:isotope_centrifuge"
+        },
+        "tags": [
+            "utilitycraft_workbench"
+        ],
+        "key": {
+            "L": {
+                "item": "utilitycraft:lead_plate"
+            },
+            "R": {
+                "item": "utilitycraft:high_speed_rotor"
+            },
+            "C": {
+                "item": "utilitycraft:expert_chip"
+            },
+            "M": {
+                "item": "utilitycraft:machine_case"
+            },
+            "N": {
+                "item": "utilitycraft:netherite_plate"
+            },
+            "E": {
+                "item": "utilitycraft:energy_cell"
+            }
+        },
+        "pattern": [
+            "LRL",
+            "CMC",
+            "NEN"
+        ],
+        "result": {
+            "item": "utilitycraft:isotope_centrifuge"
+        },
+        "unlock": [
+            {
+                "item": "utilitycraft:high_speed_rotor"
+            }
+        ]
+    }
+}
