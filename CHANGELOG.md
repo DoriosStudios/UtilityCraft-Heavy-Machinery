@@ -1,6 +1,10 @@
 # UtilityCraft: Heavy Machinery v0.5.3
 
 ## CHANGED
+- Moved the High-Speed Rotor out of Components and Modules into the Items tab as an ungrouped item.
+- Integrated all six Heavy Machinery creative tanks into UtilityCraft's shared Tanks group.
+- Consolidated Tin, Bronze, Steel and Netherite casings, ports and related building blocks into one Casings & Ports creative group.
+- Integrated Isotope Centrifuge, Reaction Chamber and Chemical Processor into UtilityCraft's shared Machines group instead of creating a separate Heavy Machinery group.
 - Moved Oxygen, Hydrogen, Sulfuric Acid and Heavy Water bar/tank definitions and assets, plus the complete Lead material family and processing/drop registrations, to UtilityCraft. Existing resource IDs and HM chemistry/coolant behavior are preserved.
 - Updated reactor documentation with the Fuel Integration checkpoint and selected liquid-waste direction, replacing the superseded direct-pellet plan and recording pending Chemical Processor treatment.
 - Registered Heavy Water as tier 2 with twice Saline Coolant efficiency. Nuclear active cooling now requires tier 2 or higher, including addon-registered coolants; Thermo Reactor still accepts both.

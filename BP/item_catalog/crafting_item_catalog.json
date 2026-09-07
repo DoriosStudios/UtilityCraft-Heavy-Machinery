@@ -7,8 +7,8 @@
                 "groups": [
                     {
                         "group_identifier": {
-                            "icon": "utilitycraft:tin_case",
-                            "name": "utilitycraft:itemGroup.tin_casing"
+                            "icon": "utilitycraft:steel_case",
+                            "name": "utilitycraft:itemGroup.casings_ports"
                         },
                         "items": [
                             "utilitycraft:tin_case",
@@ -18,7 +18,40 @@
                             "utilitycraft:tin_vent_panel",
                             "utilitycraft:tin_item_port",
                             "utilitycraft:tin_fluid_port",
-                            "utilitycraft:tin_energy_port"
+                            "utilitycraft:tin_energy_port",
+                            "utilitycraft:bronze_case",
+                            "utilitycraft:bronze_controller_case",
+                            "utilitycraft:bronze_bricks",
+                            "utilitycraft:bronze_plated_block",
+                            "utilitycraft:bronze_hazard_block",
+                            "utilitycraft:bronze_vent_panel",
+                            "utilitycraft:bronze_item_port",
+                            "utilitycraft:bronze_fluid_port",
+                            "utilitycraft:bronze_energy_port",
+                            "utilitycraft:tempered_bronze_glass",
+                            "utilitycraft:reinforced_bronze_glass",
+                            "utilitycraft:steel_case",
+                            "utilitycraft:controller_case",
+                            "utilitycraft:steel_bricks",
+                            "utilitycraft:steel_plated_block",
+                            "utilitycraft:steel_hazard_block",
+                            "utilitycraft:steel_vent_panel",
+                            "utilitycraft:steel_item_port",
+                            "utilitycraft:steel_fluid_port",
+                            "utilitycraft:steel_energy_port",
+                            "utilitycraft:tempered_steel_glass",
+                            "utilitycraft:reinforced_steel_glass",
+                            "utilitycraft:netherite_case",
+                            "utilitycraft:netherite_bricks",
+                            "utilitycraft:netherite_plated_block",
+                            "utilitycraft:stamped_netherite_plate",
+                            "utilitycraft:netherite_hazard_block",
+                            "utilitycraft:netherite_vent_panel",
+                            "utilitycraft:netherite_item_port",
+                            "utilitycraft:netherite_fluid_port",
+                            "utilitycraft:netherite_energy_port",
+                            "utilitycraft:tempered_netherite_glass",
+                            "utilitycraft:reinforced_netherite_glass"
                         ]
                     },
                     {
@@ -41,63 +74,6 @@
                     },
                     {
                         "group_identifier": {
-                            "icon": "utilitycraft:bronze_case",
-                            "name": "utilitycraft:itemGroup.bronze_casing"
-                        },
-                        "items": [
-                            "utilitycraft:bronze_case",
-                            "utilitycraft:bronze_controller_case",
-                            "utilitycraft:bronze_bricks",
-                            "utilitycraft:bronze_plated_block",
-                            "utilitycraft:bronze_hazard_block",
-                            "utilitycraft:bronze_vent_panel",
-                            "utilitycraft:bronze_item_port",
-                            "utilitycraft:bronze_fluid_port",
-                            "utilitycraft:bronze_energy_port",
-                            "utilitycraft:tempered_bronze_glass",
-                            "utilitycraft:reinforced_bronze_glass"
-                        ]
-                    },
-                    {
-                        "group_identifier": {
-                            "icon": "utilitycraft:steel_case",
-                            "name": "utilitycraft:itemGroup.steel_casing"
-                        },
-                        "items": [
-                            "utilitycraft:steel_case",
-                            "utilitycraft:controller_case",
-                            "utilitycraft:steel_bricks",
-                            "utilitycraft:steel_plated_block",
-                            "utilitycraft:steel_hazard_block",
-                            "utilitycraft:steel_vent_panel",
-                            "utilitycraft:steel_item_port",
-                            "utilitycraft:steel_fluid_port",
-                            "utilitycraft:steel_energy_port",
-                            "utilitycraft:tempered_steel_glass",
-                            "utilitycraft:reinforced_steel_glass"
-                        ]
-                    },
-                    {
-                        "group_identifier": {
-                            "icon": "utilitycraft:netherite_case",
-                            "name": "utilitycraft:itemGroup.netherite_casing"
-                        },
-                        "items": [
-                            "utilitycraft:netherite_case",
-                            "utilitycraft:netherite_bricks",
-                            "utilitycraft:netherite_plated_block",
-                            "utilitycraft:stamped_netherite_plate",
-                            "utilitycraft:netherite_hazard_block",
-                            "utilitycraft:netherite_vent_panel",
-                            "utilitycraft:netherite_item_port",
-                            "utilitycraft:netherite_fluid_port",
-                            "utilitycraft:netherite_energy_port",
-                            "utilitycraft:tempered_netherite_glass",
-                            "utilitycraft:reinforced_netherite_glass"
-                        ]
-                    },
-                    {
-                        "group_identifier": {
                             "icon": "utilitycraft:energy_cell",
                             "name": "utilitycraft:itemGroup.components_modules"
                         },
@@ -111,14 +87,12 @@
                             "utilitycraft:thermo_core",
                             "utilitycraft:rod_control",
                             "utilitycraft:fluid_controller",
-                            "utilitycraft:fuel_assemblies",
-                            "utilitycraft:high_speed_rotor"
+                            "utilitycraft:fuel_assemblies"
                         ]
                     },
                     {
                         "group_identifier": {
-                            "icon": "utilitycraft:electrolyzer",
-                            "name": "utilitycraft:itemGroup.machines"
+                            "name": "dorios:itemGroup.name.machines"
                         },
                         "items": [
                             "utilitycraft:isotope_centrifuge",
@@ -128,8 +102,7 @@
                     },
                     {
                         "group_identifier": {
-                            "icon": "utilitycraft:creative_saline_coolant_tank",
-                            "name": "utilitycraft:itemGroup.creative_tanks"
+                            "name": "dorios:itemGroup.name.tanks"
                         },
                         "items": [
                             "utilitycraft:creative_saline_coolant_tank",
@@ -198,6 +171,11 @@
                             "utilitycraft:darloonite_crystal",
                             "utilitycraft:charged_darloonite_crystal",
                             "utilitycraft:saline_coolant_bucket"
+                        ]
+                    },
+                    {
+                        "items": [
+                            "utilitycraft:high_speed_rotor"
                         ]
                     }
                 ]

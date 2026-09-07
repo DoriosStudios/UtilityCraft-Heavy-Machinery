@@ -148,13 +148,8 @@ tile.utilitycraft:creative_saline_coolant_tank.name=Creative Saline Coolant Tank
 item.utilitycraft:control_panel=Control Panel\n§o§9@UC: Heavy Machinery
 
 utilitycraft:itemGroup.controllers=Controllers
-utilitycraft:itemGroup.machines=Machines\n§n(Heavy Machinery)
-utilitycraft:itemGroup.tin_casing=Tin Casings and Ports
-utilitycraft:itemGroup.bronze_casing=Bronze Casings and Ports
-utilitycraft:itemGroup.steel_casing=Steel Casings and Ports
-utilitycraft:itemGroup.netherite_casing=Netherite Casings and Ports
+utilitycraft:itemGroup.casings_ports=Casings & Ports
 utilitycraft:itemGroup.components_modules=Components and Modules
-utilitycraft:itemGroup.creative_tanks=Creative Tanks
 utilitycraft:itemGroup.power_condenser_units=Power Condenser Units
 utilitycraft:itemGroup.materials_resources=Materials and Resources\n§6(Heavy Machinery)
 utilitycraft:itemGroup.utility_tools=Utility Tools

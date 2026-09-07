@@ -147,13 +147,8 @@ tile.utilitycraft:creative_saline_coolant_tank.name=Tanque Criativo de Líquido 
 item.utilitycraft:control_panel=Painel de Controle\n§o§9@UC: heavy Machinery
 
 utilitycraft:itemGroup.controllers=Controladores
-utilitycraft:itemGroup.machines=Máquinas\n§n(Heavy Machinery)
-utilitycraft:itemGroup.tin_casing=Carcaças e Portas de Estanho
-utilitycraft:itemGroup.bronze_casing=Carcaças e Portas de Bronze
-utilitycraft:itemGroup.steel_casing=Carcaças e Portas de Aço
-utilitycraft:itemGroup.netherite_casing=Carcaças e Portas de Netherita
+utilitycraft:itemGroup.casings_ports=Carcaças e Portas
 utilitycraft:itemGroup.components_modules=Componentes e Módulos
-utilitycraft:itemGroup.creative_tanks=Tanques Criativos
 utilitycraft:itemGroup.power_condenser_units=Unidades de Condensador de Energia
 utilitycraft:itemGroup.materials_resources=Materiais e Recursos\n§6(Heavy Machinery)
 utilitycraft:itemGroup.utility_tools=Ferramentas Utility
