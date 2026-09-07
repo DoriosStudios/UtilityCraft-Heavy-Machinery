@@ -13,7 +13,7 @@
 		"components": {
 			"utilitycraft:link_node_io": {},
 			"tag:dorios:link_node": {},
-			"tag:dorios:multiblock.case.tin": {}
+			"tag:dorios:multiblock.case.steel": {}
 		},
 		"permutations": [
 			{
@@ -21,7 +21,7 @@
 				"components": {
 					"tag:dorios:fluid": {},
 					"tag:dorios:link_node": {},
-					"tag:dorios:multiblock.case.tin": {}
+					"tag:dorios:multiblock.case.steel": {}
 				}
 			}
 		]

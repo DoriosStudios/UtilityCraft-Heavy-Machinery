@@ -1,6 +1,8 @@
 # UtilityCraft: Heavy Machinery v0.5.3
 
 ## CHANGED
+- Tin casings, glass, plated/hazard blocks, vents and all ports now use the same multiblock tier tags as their Steel counterparts, including active port states.
+- Shortened the tank and Power Condenser Information panels in all three locales to focus on setup, storage and routing.
 - Moved the High-Speed Rotor out of Components and Modules into the Items tab as an ungrouped item.
 - Integrated all six Heavy Machinery creative tanks into UtilityCraft's shared Tanks group.
 - Consolidated Tin, Bronze, Steel and Netherite casings, ports and related building blocks into one Casings & Ports creative group.
@@ -19,6 +21,8 @@
 - Uranium Ingots now press into Uranium Pellets; four pellets and two Steel Plates craft a fuel rod. Enriched Uranium Oxide presses into Enriched Uranium Pellets.
 
 ## ADDED
+- Added Liquid and Gas Tank Controllers with five freely typed tanks, centered storage bars, per-tank port inputs/outputs and all-tank default routing. Steel multiblocks require matching cells and ports, with 256,000 mB per cell shared across five tanks and no energy or processing modules.
+- Added Tin, Bronze, Steel and Netherite Gas Ports and Gas Cells, with purple accents, Workbench/Crafter recipes and localized creative entries.
 - Migrated the Electrolyzer and Chemical Converter blocks, scripts, UI and assets into UtilityCraft. Heavy Machinery now registers HF electrolysis and HF/UF6 conversion recipes through the shared addon recipe APIs.
 - Added concise source/use descriptions for metal plates, dusts, sieve chunks, uranium intermediates/pellets and fluorite materials in all three supported locales.
 - Added brief crafting and reactor-use descriptions to both fuel rod tooltips in English, Spanish and Portuguese, using UtilityCraft item-description formatting.
@@ -46,6 +50,7 @@
 - Added standard Speed and Energy upgrade support to the Electrolyzer, including multiple batches per update when upgraded throughput allows.
 
 ## FIXED
+- Removed the unused side panel from both tank controllers. Their Information tabs and the Power Condenser Information tab now match Storage Drive position and size; tank information describes structure, capacity and port routing in all three locales.
 - Gave all three liquid and seven gas tank entities their own 16x16 center-cropped bar textures and localized tank names, replacing water/steam placeholders.
 - Fixed cropped reactor fuel icons by arranging both flipbook frames horizontally, matching the autosieve atlas layout.
 - Restored the tracked Regolith data directory so watch mode starts on fresh checkouts.

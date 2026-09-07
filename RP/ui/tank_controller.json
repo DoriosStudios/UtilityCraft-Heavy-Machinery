@@ -1,6 +1,6 @@
 {
-    "namespace": "power_condenser",
-    "power_condenser_top": {
+    "namespace": "tank_controller",
+    "tank_controller_top": {
         "type": "collection_panel",
         "anchor_from": "center",
         "anchor_to": "center",
@@ -21,25 +21,52 @@
                 "machine_name@uc.machine_name": {}
             },
             {
-                "energy_bar@uc.big_energy_bar": {
+                "tank_0@uc.liquid_bar": {
+                    "$collection_index": 0,
+                    "$has_bg": false,
                     "offset": [
-                        54,
+                        -52.1,
                         0
                     ]
                 }
             },
             {
-                "machine_screen@uc.big_machine_screen": {}
+                "tank_1@uc.liquid_bar": {
+                    "$collection_index": 1,
+                    "$has_bg": false,
+                    "offset": [
+                        -27.1,
+                        0
+                    ]
+                }
             },
             {
-                "machine_description@uc.text_label": {
-                    "collection_index": 1,
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "$text_scale": 0.55,
+                "tank_2@uc.liquid_bar": {
+                    "$collection_index": 2,
+                    "$has_bg": false,
                     "offset": [
-                        14,
-                        12
+                        -2.1,
+                        0
+                    ]
+                }
+            },
+            {
+                "tank_3@uc.liquid_bar": {
+                    "$collection_index": 3,
+                    "$has_bg": false,
+                    "offset": [
+                        22.9,
+                        0
+                    ]
+                }
+            },
+            {
+                "tank_4@uc.liquid_bar": {
+                    "$collection_index": 4,
+                    "$has_bg": false,
+                    "offset": [
+                        47.9,
+                        0
                     ]
                 }
             },
@@ -47,7 +74,7 @@
                 "info_tab@uc.info_tab": {
                     "$right_machine_tabs_name": "$right_machine_tabs_name",
                     "$info_toggle_control_name": "$info_toggle_control_name",
-                    "$info_description": "ui.utilitycraft:info.power_condenser",
+                    "$info_description": "ui.utilitycraft:info.tank_controller",
                     "offset": [
                         0,
                         -52
@@ -60,7 +87,7 @@
             }
         ]
     },
-    "utility_panel": {
+    "utilitycraft_panel": {
         "type": "panel",
         "controls": [
             {
@@ -90,7 +117,7 @@
                                 "layer": 5,
                                 "controls": [
                                     {
-                                        "power_condenser_top@power_condenser.power_condenser_top": {}
+                                        "tank_controller_top@tank_controller.tank_controller_top": {}
                                     },
                                     {
                                         "inventory_panel_bottom_half_with_label@common.inventory_panel_bottom_half_with_label": {}

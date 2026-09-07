@@ -18,6 +18,7 @@
                             "utilitycraft:tin_vent_panel",
                             "utilitycraft:tin_item_port",
                             "utilitycraft:tin_fluid_port",
+                            "utilitycraft:tin_gas_port",
                             "utilitycraft:tin_energy_port",
                             "utilitycraft:bronze_case",
                             "utilitycraft:bronze_controller_case",
@@ -27,6 +28,7 @@
                             "utilitycraft:bronze_vent_panel",
                             "utilitycraft:bronze_item_port",
                             "utilitycraft:bronze_fluid_port",
+                            "utilitycraft:bronze_gas_port",
                             "utilitycraft:bronze_energy_port",
                             "utilitycraft:tempered_bronze_glass",
                             "utilitycraft:reinforced_bronze_glass",
@@ -38,6 +40,7 @@
                             "utilitycraft:steel_vent_panel",
                             "utilitycraft:steel_item_port",
                             "utilitycraft:steel_fluid_port",
+                            "utilitycraft:steel_gas_port",
                             "utilitycraft:steel_energy_port",
                             "utilitycraft:tempered_steel_glass",
                             "utilitycraft:reinforced_steel_glass",
@@ -49,6 +52,7 @@
                             "utilitycraft:netherite_vent_panel",
                             "utilitycraft:netherite_item_port",
                             "utilitycraft:netherite_fluid_port",
+                            "utilitycraft:netherite_gas_port",
                             "utilitycraft:netherite_energy_port",
                             "utilitycraft:tempered_netherite_glass",
                             "utilitycraft:reinforced_netherite_glass"
@@ -68,6 +72,8 @@
                             "utilitycraft:magmatic_chamber_controller",
                             "utilitycraft:nuclear_reactor_controller",
                             "utilitycraft:reaction_chamber_controller",
+                            "utilitycraft:liquid_tank_controller",
+                            "utilitycraft:gas_tank_controller",
                             "utilitycraft:power_condenser_controller",
                             "utilitycraft:thermo_reactor_controller"
                         ]
@@ -80,6 +86,7 @@
                         "items": [
                             "utilitycraft:energy_cell",
                             "utilitycraft:fluid_cell",
+                            "utilitycraft:gas_cell",
                             "utilitycraft:processing_module",
                             "utilitycraft:efficiency_module",
                             "utilitycraft:speed_module",

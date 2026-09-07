@@ -12,7 +12,7 @@
 			"minecraft:destructible_by_mining": {
 				"seconds_to_destroy": 1
 			},
-			"tag:dorios:multiblock.case.tin": {},
+			"tag:dorios:multiblock.case.steel": {},
 			"tag:dorios:vent_block": {}
 		}
 	}

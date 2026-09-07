@@ -6,6 +6,36 @@ import * as DoriosLib from "DoriosLib/index.js";
  */
 const crafterRecipeBatches = [
 {
+  "tin_plate,gas_pipe,tin_plate,gas_pipe,tin_case,gas_pipe,tin_plate,gas_pipe,tin_plate": {
+    "output": "utilitycraft:tin_gas_port",
+    "amount": 1
+  },
+  "tin_plate,gas_pipe,tin_plate,gas_pipe,bronze_case,gas_pipe,tin_plate,gas_pipe,tin_plate": {
+    "output": "utilitycraft:bronze_gas_port",
+    "amount": 1
+  },
+  "tin_plate,gas_pipe,tin_plate,gas_pipe,steel_case,gas_pipe,tin_plate,gas_pipe,tin_plate": {
+    "output": "utilitycraft:steel_gas_port",
+    "amount": 1
+  },
+  "tin_plate,gas_pipe,tin_plate,gas_pipe,netherite_case,gas_pipe,tin_plate,gas_pipe,tin_plate": {
+    "output": "utilitycraft:netherite_gas_port",
+    "amount": 1
+  },
+  "tin_plate,gas_pipe,tin_plate,expert_gas_tank,steel_gas_port,expert_gas_tank,tin_plate,gas_pipe,tin_plate": {
+    "output": "utilitycraft:gas_cell",
+    "amount": 1
+  },
+  "steel_plate,control_panel,steel_plate,fluid_cell,controller_case,fluid_cell,steel_plate,steel_fluid_port,steel_plate": {
+    "output": "utilitycraft:liquid_tank_controller",
+    "amount": 1
+  },
+  "steel_plate,control_panel,steel_plate,gas_cell,controller_case,gas_cell,steel_plate,steel_gas_port,steel_plate": {
+    "output": "utilitycraft:gas_tank_controller",
+    "amount": 1
+  }
+},
+{
   "steel_plate,fluid_pipe,steel_plate,glass,machine_case,glass,steel_plate,energy_cell,steel_plate": {
     "output": "utilitycraft:reaction_chamber",
     "amount": 1

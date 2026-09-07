@@ -22,3 +22,4 @@ import './machines/magmatic_chamber_controller.js'
 
 import './machines/reaction_chamber.js'
 import './machines/chemical_processor.js'
+import './machines/tank_controller.js'

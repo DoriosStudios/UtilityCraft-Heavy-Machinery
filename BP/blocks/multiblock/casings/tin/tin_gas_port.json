@@ -2,7 +2,7 @@
 	"format_version": "1.20.80",
 	"minecraft:block": {
 		"description": {
-			"identifier": "utilitycraft:tin_item_port",
+			"identifier": "utilitycraft:tin_gas_port",
 			"menu_category": {
 				"category": "construction"
 			},
@@ -19,7 +19,7 @@
 			{
 				"condition": "q.block_state('utilitycraft:active') == 1",
 				"components": {
-					"tag:dorios:item": {},
+					"tag:dorios:gas": {},
 					"tag:dorios:link_node": {},
 					"tag:dorios:multiblock.case.steel": {}
 				}

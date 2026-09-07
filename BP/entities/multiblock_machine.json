@@ -26,6 +26,26 @@
             }
         },
         "component_groups": {
+            "utilitycraft:liquid_storage": {
+                "minecraft:type_family": {
+                    "family": [
+                        "inanimate",
+                        "dorios:machine",
+                        "dorios:multiblock",
+                        "dorios:fluid_container"
+                    ]
+                }
+            },
+            "utilitycraft:gas_storage": {
+                "minecraft:type_family": {
+                    "family": [
+                        "inanimate",
+                        "dorios:machine",
+                        "dorios:multiblock",
+                        "dorios:gas_container"
+                    ]
+                }
+            },
             "despawn": {
                 "minecraft:instant_despawn": {}
             },
@@ -568,6 +588,20 @@
             }
         },
         "events": {
+            "utilitycraft:liquid_storage": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:liquid_storage"
+                    ]
+                }
+            },
+            "utilitycraft:gas_storage": {
+                "add": {
+                    "component_groups": [
+                        "utilitycraft:gas_storage"
+                    ]
+                }
+            },
             "despawn": {
                 "sequence": [
                     {

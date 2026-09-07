@@ -660,6 +660,48 @@
 		},
 		"utilitycraft_depleted_uranium_hexafluoride_gas": {
 			"textures": "textures/entity/depleted_uranium_hexafluoride_gas"
+		},
+		"utilitycraft_liquid_tank_controller_sides": {
+			"textures": "textures/blocks/multiblock/liquid_tank_controller/sides"
+		},
+		"utilitycraft_liquid_tank_controller_front": {
+			"textures": "textures/blocks/multiblock/liquid_tank_controller/front"
+		},
+		"utilitycraft_liquid_tank_controller_top": {
+			"textures": "textures/blocks/multiblock/liquid_tank_controller/top"
+		},
+		"utilitycraft_liquid_tank_controller_bottom": {
+			"textures": "textures/blocks/multiblock/liquid_tank_controller/bottom"
+		},
+		"utilitycraft_gas_tank_controller_sides": {
+			"textures": "textures/blocks/multiblock/gas_tank_controller/sides"
+		},
+		"utilitycraft_gas_tank_controller_front": {
+			"textures": "textures/blocks/multiblock/gas_tank_controller/front"
+		},
+		"utilitycraft_gas_tank_controller_top": {
+			"textures": "textures/blocks/multiblock/gas_tank_controller/top"
+		},
+		"utilitycraft_gas_tank_controller_bottom": {
+			"textures": "textures/blocks/multiblock/gas_tank_controller/bottom"
+		},
+		"utilitycraft_tin_gas_port": {
+			"textures": "textures/blocks/multiblock/tin/tin_gas_port"
+		},
+		"utilitycraft_bronze_gas_port": {
+			"textures": "textures/blocks/multiblock/bronze/bronze_gas_port"
+		},
+		"utilitycraft_steel_gas_port": {
+			"textures": "textures/blocks/multiblock/steel/steel_gas_port"
+		},
+		"utilitycraft_netherite_gas_port": {
+			"textures": "textures/blocks/multiblock/netherite/netherite_gas_port"
+		},
+		"utilitycraft_gas_cell_side": {
+			"textures": "textures/blocks/multiblock/gas_cell_side"
+		},
+		"utilitycraft_gas_cell_up": {
+			"textures": "textures/blocks/multiblock/gas_cell_up"
 		}
 	}
 }

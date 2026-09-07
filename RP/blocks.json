@@ -303,5 +303,30 @@
 	},
 	"utilitycraft:creative_depleted_uranium_hexafluoride_tank": {
 		"sound": "metal"
+	},
+	"utilitycraft:liquid_tank_controller": {
+		"sound": "metal"
+	},
+	"utilitycraft:gas_tank_controller": {
+		"sound": "metal"
+	},
+	"utilitycraft:tin_gas_port": {
+		"sound": "metal",
+		"textures": "utilitycraft_tin_gas_port"
+	},
+	"utilitycraft:bronze_gas_port": {
+		"sound": "metal",
+		"textures": "utilitycraft_bronze_gas_port"
+	},
+	"utilitycraft:steel_gas_port": {
+		"sound": "metal",
+		"textures": "utilitycraft_steel_gas_port"
+	},
+	"utilitycraft:netherite_gas_port": {
+		"sound": "metal",
+		"textures": "utilitycraft_netherite_gas_port"
+	},
+	"utilitycraft:gas_cell": {
+		"sound": "metal"
 	}
 }
