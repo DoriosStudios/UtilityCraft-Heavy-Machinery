@@ -27,6 +27,7 @@
                     "dorios:multiblock",
                     "dorios:energy_source",
                     "dorios:fluid_container",
+                    "dorios:gas_container",
                     "dorios:container"
                 ]
             },
@@ -38,7 +39,7 @@
             "minecraft:knockback_resistance": { "value": 1000, "max": 1000 },
             "minecraft:collision_box": { "height": 1, "width": 1 },
             "minecraft:inventory": {
-                "inventory_size": 22,
+                "inventory_size": 26,
                 "container_type": "container"
             },
             "minecraft:environment_sensor": {

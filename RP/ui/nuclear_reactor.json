@@ -6,78 +6,319 @@
         "frame_step": 0,
         "fps": 1,
         "easing": "linear",
-        "initial_uv": [0, 0]
+        "initial_uv": [
+            0,
+            0
+        ]
     },
-    "nuclear_reactor_top": {
+    "reactor_page": {
         "type": "collection_panel",
-        "anchor_from": "center",
-        "anchor_to": "center",
-        "size": [
-            162,
-            72
-        ],
-        "offset": [
-            -10,
-            -40
-        ],
         "collection_name": "container_items",
         "$item_collection_name": "container_items",
-        "$right_machine_tabs_name|default": "right_machine_tabs",
-        "$info_toggle_control_name|default": "info_toggle_button",
+        "size": [
+            162,
+            142
+        ],
+        "offset": [
+            0,
+            5
+        ],
         "controls": [
             {
-                "machine_name@uc.machine_name": {}
+                "coolant@uc.item_display_hover_large": {
+                    "collection_index": 2,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        2,
+                        5
+                    ],
+                    "size": [
+                        16,
+                        50
+                    ]
+                }
             },
             {
-                "energy_bar@uc.big_energy_bar": {
+                "coolant_border": {
+                    "type": "image",
+                    "texture": "textures/ui/liquid_border",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        2,
+                        6
+                    ],
+                    "size": [
+                        16,
+                        48
+                    ],
+                    "layer": 10
+                }
+            },
+            {
+                "uranium@uc.item_display_hover_large": {
+                    "collection_index": 3,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        30,
+                        5
+                    ],
+                    "size": [
+                        16,
+                        50
+                    ]
+                }
+            },
+            {
+                "temperature@uc.item_display_hover_large": {
+                    "collection_index": 4,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        116,
+                        5
+                    ],
+                    "size": [
+                        16,
+                        50
+                    ]
+                }
+            },
+            {
+                "energy_0@uc.item_display_hover_large": {
+                    "collection_index": 0,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        57,
+                        5
+                    ],
+                    "size": [
+                        16,
+                        50
+                    ]
+                }
+            },
+            {
+                "energy_1@uc.item_display_hover_large": {
+                    "collection_index": 0,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        73,
+                        5
+                    ],
+                    "size": [
+                        16,
+                        50
+                    ]
+                }
+            },
+            {
+                "energy_2@uc.item_display_hover_large": {
+                    "collection_index": 0,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        89,
+                        5
+                    ],
+                    "size": [
+                        16,
+                        50
+                    ]
+                }
+            },
+            {
+                "energy_border": {
+                    "type": "image",
+                    "texture": "textures/ui/big_energy_border",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        57,
+                        6
+                    ],
+                    "size": [
+                        48,
+                        48
+                    ],
+                    "layer": 10
+                }
+            },
+            {
+                "waste_border": {
+                    "type": "image",
+                    "texture": "textures/ui/liquid_border",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        144,
+                        6
+                    ],
+                    "size": [
+                        16,
+                        48
+                    ],
+                    "layer": 10
+                }
+            },
+            {
+                "waste@uc.item_display_hover_large": {
+                    "collection_index": 24,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        144,
+                        5
+                    ],
+                    "size": [
+                        16,
+                        50
+                    ]
+                }
+            },
+            {
+                "operation@uc.text_label": {
+                    "collection_index": 1,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        5,
+                        74
+                    ],
+                    "$text_scale": 0.55
+                }
+            },
+            {
+                "resources@uc.text_label": {
+                    "collection_index": 22,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        86,
+                        74
+                    ],
+                    "$text_scale": 0.55
+                }
+            },
+            {
+                "telemetry_screen": {
+                    "type": "image",
+                    "texture": "textures/ui/screen_thermo_bg",
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
                     "offset": [
                         0,
-                        0
-                    ]
+                        70
+                    ],
+                    "size": [
+                        162,
+                        72
+                    ],
+                    "keep_ratio": false,
+                    "nineslice_size": 2,
+                    "layer": 0
                 }
             },
             {
-                "panel@uc.machine_side_panel": {}
-            },
-            {
-                "panel@uc.machine_side_panel": {
+                "reactor_heading": {
+                    "type": "label",
+                    "text": "ui.hm.nr.reactor_information",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
                     "offset": [
-                        264,
-                        0
-                    ]
+                        3,
+                        60
+                    ],
+                    "size": [
+                        75,
+                        9
+                    ],
+                    "font_scale_factor": 0.75,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
                 }
             },
             {
-                "liquid_bar_0@uc.liquid_bar": {
-                    "$collection_index": 2,
-                    "$show_liquid_outline": true,
-                    "$liquid_outline_texture": "textures/ui/slots/input_extra_slot",
+                "tanks_heading": {
+                    "type": "label",
+                    "text": "ui.hm.nr.tanks_information",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
                     "offset": [
-                        -44,
-                        0
-                    ]
+                        84,
+                        60
+                    ],
+                    "size": [
+                        75,
+                        9
+                    ],
+                    "font_scale_factor": 0.75,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
                 }
-            },
+            }
+        ]
+    },
+    "fuel_page": {
+        "type": "collection_panel",
+        "collection_name": "container_items",
+        "$item_collection_name": "container_items",
+        "size": [
+            162,
+            142
+        ],
+        "offset": [
+            0,
+            5
+        ],
+        "controls": [
             {
-                "fuel_bar@uc.item_display_hover_large": {
-                    "collection_index": 3,
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
+                "fuel_automation_hint": {
+                    "type": "label",
+                    "text": "ui.hm.nr.fuel_automation_hint",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
                     "offset": [
-                        50,
-                        16
-                    ]
+                        0,
+                        1
+                    ],
+                    "size": [
+                        162,
+                        10
+                    ],
+                    "font_scale_factor": 0.58,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
                 }
             },
             {
-                "fuel_input@uc.input_slot": {
+                "fuel_slot@uc.input_slot": {
                     "collection_index": 21,
                     "$slot_background_texture": "textures/ui/slots/fuel_slot",
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
                     "offset": [
-                        -55,
-                        28
+                        18,
+                        21
                     ]
                 }
             },
@@ -85,82 +326,317 @@
                 "fuel_overlay@uc.function_panel": {
                     "collection_index": 21,
                     "type": "panel",
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
-                    "size": [16, 16],
-                    "offset": [-55, 29],
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "size": [
+                        16,
+                        16
+                    ],
+                    "offset": [
+                        19,
+                        22
+                    ],
                     "controls": [
                         {
                             "fuel_rod_image": {
                                 "type": "image",
                                 "texture": "textures/ui/nuclear_fuels_flipbook",
-                                "uv_size": [16, 16],
+                                "uv_size": [
+                                    16,
+                                    16
+                                ],
                                 "uv": "@nuclear_reactor.fuel_flipbook_animation",
                                 "layer": 4,
                                 "alpha": 0.5,
                                 "anchor_from": "center",
                                 "anchor_to": "center",
-                                "size": [16, 16]
+                                "size": [
+                                    16,
+                                    16
+                                ]
                             }
                         }
                     ]
                 }
             },
             {
-                "item_label@uc.text_label": {
-                    "collection_index": 1,
+                "basic_icon": {
+                    "type": "image",
+                    "texture": "textures/items/uranium_rod",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
-                    "size": [
-                        92,
-                        180
-                    ],
-                    "$text_scale": 0.55,
                     "offset": [
-                        -76,
-                        2
+                        52,
+                        13
+                    ],
+                    "size": [
+                        16,
+                        16
                     ]
                 }
             },
             {
-                "temperature_bar@uc.item_display_hover_large": {
-                    "collection_index": 4,
-                    "anchor_from": "top_middle",
-                    "anchor_to": "top_middle",
+                "basic_text": {
+                    "type": "label",
+                    "text": "ui.hm.nr.basic",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        72,
+                        13
+                    ],
+                    "size": [
+                        90,
+                        9
+                    ],
+                    "font_scale_factor": 0.58,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "enriched_icon": {
+                    "type": "image",
+                    "texture": "textures/items/enriched_uranium_rod",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        52,
+                        30
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "enriched_text": {
+                    "type": "label",
+                    "text": "ui.hm.nr.enriched",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        72,
+                        31
+                    ],
+                    "size": [
+                        90,
+                        9
+                    ],
+                    "font_scale_factor": 0.55,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "fuel_explanation": {
+                    "type": "label",
+                    "text": "ui.hm.nr.fuel_note",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        52,
+                        48
+                    ],
+                    "size": [
+                        110,
+                        10
+                    ],
+                    "font_scale_factor": 0.58,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "basic_value": {
+                    "type": "label",
+                    "text": "250 FU",
+                    "size": [
+                        90,
+                        7
+                    ],
+                    "offset": [
+                        72,
+                        23
+                    ],
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "font_scale_factor": 0.5,
+                    "color": [
+                        0.3,
+                        0.3,
+                        0.3
+                    ],
+                    "shadow": false
+                }
+            },
+            {
+                "enriched_value": {
+                    "type": "label",
+                    "text": "1,000 FU",
+                    "size": [
+                        90,
+                        7
+                    ],
+                    "offset": [
+                        72,
+                        40
+                    ],
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "font_scale_factor": 0.5,
+                    "color": [
+                        0.3,
+                        0.3,
+                        0.3
+                    ],
+                    "shadow": false
+                }
+            }
+        ]
+    },
+    "control_page": {
+        "type": "collection_panel",
+        "collection_name": "container_items",
+        "$item_collection_name": "container_items",
+        "size": [
+            162,
+            142
+        ],
+        "offset": [
+            0,
+            5
+        ],
+        "controls": [
+            {
+                "control_divider": {
+                    "type": "image",
+                    "texture": "textures/ui/black_background",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
                     "offset": [
                         81,
-                        14
-                    ]
+                        40
+                    ],
+                    "size": [
+                        1,
+                        98
+                    ],
+                    "alpha": 0.15,
+                    "layer": 0
                 }
             },
             {
-                "item_label@uc.text_label": {
+                "power_divider": {
+                    "type": "image",
+                    "texture": "textures/ui/black_background",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        88,
+                        117
+                    ],
+                    "size": [
+                        70,
+                        1
+                    ],
+                    "alpha": 0.15,
+                    "layer": 0
+                }
+            },
+            {
+                "entry_screen": {
+                    "type": "image",
+                    "texture": "textures/ui/black_background",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        4,
+                        42
+                    ],
+                    "size": [
+                        66,
+                        18
+                    ],
+                    "keep_ratio": false,
+                    "layer": 0,
+                    "alpha": 0.8
+                }
+            },
+            {
+                "instructions": {
+                    "type": "label",
+                    "text": "ui.hm.nr.control_hint",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        4,
+                        0
+                    ],
+                    "size": [
+                        154,
+                        26
+                    ],
+                    "font_scale_factor": 0.58,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "entry@uc.text_label": {
                     "collection_index": 6,
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
-                    "layer": 11,
-                    "$text_scale": 0.67,
                     "offset": [
-                        188,
-                        -5
-                    ]
+                        8,
+                        48
+                    ],
+                    "$text_scale": 0.75
                 }
             },
             {
-                "burn_rate_lock_icon": {
-                    "type": "image",
-                    "texture": "textures/ui/player_preview_border",
+                "power_hint": {
+                    "type": "label",
+                    "text": "ui.hm.nr.power",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
-                    "layer": 9,
+                    "offset": [
+                        110,
+                        124
+                    ],
                     "size": [
-                        73,
+                        48,
                         12
                     ],
-                    "offset": [
-                        186,
-                        18
-                    ]
+                    "font_scale_factor": 0.58,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
                 }
             },
             {
@@ -169,8 +645,8 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        242,
-                        132
+                        88,
+                        120
                     ]
                 }
             },
@@ -183,8 +659,8 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        194,
-                        32
+                        88,
+                        98
                     ]
                 }
             },
@@ -197,8 +673,8 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        234,
-                        32
+                        52,
+                        124
                     ]
                 }
             },
@@ -211,8 +687,8 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        194,
-                        52
+                        4,
+                        64
                     ]
                 }
             },
@@ -225,8 +701,8 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        214,
-                        52
+                        28,
+                        64
                     ]
                 }
             },
@@ -239,8 +715,8 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        234,
-                        52
+                        52,
+                        64
                     ]
                 }
             },
@@ -253,8 +729,8 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        194,
-                        72
+                        4,
+                        84
                     ]
                 }
             },
@@ -267,8 +743,8 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        214,
-                        72
+                        28,
+                        84
                     ]
                 }
             },
@@ -281,8 +757,8 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        234,
-                        72
+                        52,
+                        84
                     ]
                 }
             },
@@ -295,8 +771,8 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        194,
-                        92
+                        4,
+                        104
                     ]
                 }
             },
@@ -309,8 +785,8 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        214,
-                        92
+                        28,
+                        104
                     ]
                 }
             },
@@ -323,8 +799,8 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        234,
-                        92
+                        52,
+                        104
                     ]
                 }
             },
@@ -337,8 +813,8 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        194,
-                        112
+                        4,
+                        124
                     ]
                 }
             },
@@ -351,8 +827,8 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        214,
-                        112
+                        28,
+                        124
                     ]
                 }
             },
@@ -365,16 +841,166 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        234,
-                        112
+                        88,
+                        76
                     ]
                 }
             },
             {
-                "info_tab@uc.info_tab": {
-                    "$right_machine_tabs_name": "$right_machine_tabs_name",
-                    "$info_toggle_control_name": "$info_toggle_control_name",
-                    "$info_description": "ui.utilitycraft:info.nuclear_reactor"
+                "reset_hint": {
+                    "type": "label",
+                    "text": "ui.hm.nr.control_reset",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        110,
+                        102
+                    ],
+                    "size": [
+                        48,
+                        12
+                    ],
+                    "font_scale_factor": 0.58,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "apply_hint": {
+                    "type": "label",
+                    "text": "ui.hm.nr.control_apply",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        110,
+                        80
+                    ],
+                    "size": [
+                        48,
+                        12
+                    ],
+                    "font_scale_factor": 0.58,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "recommended_rate@uc.text_label": {
+                    "collection_index": 25,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        88,
+                        47
+                    ],
+                    "size": [
+                        70,
+                        20
+                    ],
+                    "$text_scale": 0.55
+                }
+            },
+            {
+                "current_rate@uc.text_label": {
+                    "collection_index": 23,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        4,
+                        29
+                    ],
+                    "$text_scale": 0.67
+                }
+            }
+        ]
+    },
+    "info_page": {
+        "type": "collection_panel",
+        "collection_name": "container_items",
+        "$item_collection_name": "container_items",
+        "size": [
+            162,
+            142
+        ],
+        "offset": [
+            0,
+            5
+        ],
+        "controls": [
+            {
+                "guide_scroll@common.scrolling_panel": {
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        162,
+                        142
+                    ],
+                    "$show_background": false,
+                    "$scrolling_content": "nuclear_reactor.info_guide_content",
+                    "$scroll_size": [
+                        4,
+                        138
+                    ],
+                    "$scrolling_pane_size": [
+                        162,
+                        142
+                    ],
+                    "$scrolling_pane_offset": [
+                        0,
+                        0
+                    ],
+                    "$scroll_view_port_size": [
+                        154,
+                        142
+                    ],
+                    "$scroll_view_port_max_size": [
+                        154,
+                        142
+                    ],
+                    "$scroll_view_port_offset": [
+                        0,
+                        0
+                    ],
+                    "$scrolling_pane_size_touch": [
+                        162,
+                        142
+                    ],
+                    "$scrolling_pane_offset_touch": [
+                        0,
+                        0
+                    ],
+                    "$scroll_view_port_size_touch": [
+                        154,
+                        142
+                    ],
+                    "$scroll_view_port_max_size_touch": [
+                        154,
+                        142
+                    ],
+                    "$scroll_view_port_offset_touch": [
+                        0,
+                        0
+                    ],
+                    "$scroll_size_touch": [
+                        4,
+                        138
+                    ],
+                    "$scroll_box_visible_touch": true,
+                    "$scroll_track_image_control": "common.empty_image"
                 }
             }
         ]
@@ -409,16 +1035,301 @@
                                 "layer": 5,
                                 "controls": [
                                     {
-                                        "nuclear_reactor_top@nuclear_reactor.nuclear_reactor_top": {}
+                                        "reactor_title@chest.chest_label": {
+                                            "text": "ui.hm.nr.title_reactor",
+                                            "localize": true,
+                                            "offset": [
+                                                7,
+                                                6
+                                            ],
+                                            "bindings": [
+                                                {
+                                                    "binding_type": "view",
+                                                    "source_control_name": "nr_reactor",
+                                                    "source_property_name": "#toggle_state",
+                                                    "target_property_name": "#visible",
+                                                    "resolve_sibling_scope": false
+                                                }
+                                            ]
+                                        }
                                     },
                                     {
-                                        "inventory_panel_bottom_half_with_label@common.inventory_panel_bottom_half_with_label": {}
+                                        "fuel_title@chest.chest_label": {
+                                            "text": "ui.hm.nr.title_fuel",
+                                            "localize": true,
+                                            "offset": [
+                                                7,
+                                                6
+                                            ],
+                                            "bindings": [
+                                                {
+                                                    "binding_type": "view",
+                                                    "source_control_name": "nr_fuel",
+                                                    "source_property_name": "#toggle_state",
+                                                    "target_property_name": "#visible",
+                                                    "resolve_sibling_scope": false
+                                                }
+                                            ]
+                                        }
                                     },
                                     {
-                                        "hotbar_grid@common.hotbar_grid_template": {}
+                                        "control_title@chest.chest_label": {
+                                            "text": "ui.hm.nr.title_control",
+                                            "localize": true,
+                                            "offset": [
+                                                7,
+                                                6
+                                            ],
+                                            "bindings": [
+                                                {
+                                                    "binding_type": "view",
+                                                    "source_control_name": "nr_control",
+                                                    "source_property_name": "#toggle_state",
+                                                    "target_property_name": "#visible",
+                                                    "resolve_sibling_scope": false
+                                                }
+                                            ]
+                                        }
                                     },
                                     {
-                                        "inventory_take_progress_icon_button@common.inventory_take_progress_icon_button": {}
+                                        "info_title@chest.chest_label": {
+                                            "text": "ui.hm.nr.title_info",
+                                            "localize": true,
+                                            "offset": [
+                                                7,
+                                                6
+                                            ],
+                                            "bindings": [
+                                                {
+                                                    "binding_type": "view",
+                                                    "source_control_name": "nr_info",
+                                                    "source_property_name": "#toggle_state",
+                                                    "target_property_name": "#visible",
+                                                    "resolve_sibling_scope": false
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "reactor_tab@uc.toggle_button": {
+                                            "anchor_from": "top_left",
+                                            "anchor_to": "top_left",
+                                            "offset": [
+                                                -19,
+                                                10
+                                            ],
+                                            "size": [
+                                                16,
+                                                16
+                                            ],
+                                            "$toggle_name": "nuclear_reactor_pages",
+                                            "$toggle_control_name": "nr_reactor",
+                                            "$toggle_group": true,
+                                            "$toggle_index": 0,
+                                            "$toggle_group_default_selected": 0,
+                                            "$toggle_default_state": true,
+                                            "$toggle_lost_reset": false,
+                                            "$toggle_size": [
+                                                16,
+                                                16
+                                            ],
+                                            "$toggle_layer": 12,
+                                            "$toggle_bg_layer": 10,
+                                            "$has_toggle_bg": true,
+                                            "$toggle_bg_texture": "textures/ui/toggle_button/left_bg",
+                                            "$toggle_unchecked": "textures/ui/toggle_button/nuclear_general_unchecked",
+                                            "$toggle_checked": "textures/ui/toggle_button/nuclear_general_checked",
+                                            "$toggle_unchecked_hover": "textures/ui/toggle_button/nuclear_general_unchecked_hover",
+                                            "$toggle_checked_hover": "textures/ui/toggle_button/nuclear_general_checked_hover",
+                                            "$toggle_hover_text": "ui.hm.nr.tab_reactor",
+                                            "$toggle_hover_text_localize": true,
+                                            "$toggle_checked_hover_text_from_hover": true
+                                        }
+                                    },
+                                    {
+                                        "reactor@nuclear_reactor.reactor_page": {
+                                            "bindings": [
+                                                {
+                                                    "binding_type": "view",
+                                                    "source_control_name": "nr_reactor",
+                                                    "source_property_name": "#toggle_state",
+                                                    "target_property_name": "#visible",
+                                                    "resolve_sibling_scope": false
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "fuel_tab@uc.toggle_button": {
+                                            "anchor_from": "top_left",
+                                            "anchor_to": "top_left",
+                                            "offset": [
+                                                -19,
+                                                37
+                                            ],
+                                            "size": [
+                                                16,
+                                                16
+                                            ],
+                                            "$toggle_name": "nuclear_reactor_pages",
+                                            "$toggle_control_name": "nr_fuel",
+                                            "$toggle_group": true,
+                                            "$toggle_index": 1,
+                                            "$toggle_group_default_selected": 0,
+                                            "$toggle_default_state": false,
+                                            "$toggle_lost_reset": false,
+                                            "$toggle_size": [
+                                                16,
+                                                16
+                                            ],
+                                            "$toggle_layer": 12,
+                                            "$toggle_bg_layer": 10,
+                                            "$has_toggle_bg": true,
+                                            "$toggle_bg_texture": "textures/ui/toggle_button/left_bg",
+                                            "$toggle_unchecked": "textures/ui/toggle_button/nuclear_fuel_unchecked",
+                                            "$toggle_checked": "textures/ui/toggle_button/nuclear_fuel_checked",
+                                            "$toggle_unchecked_hover": "textures/ui/toggle_button/nuclear_fuel_unchecked_hover",
+                                            "$toggle_checked_hover": "textures/ui/toggle_button/nuclear_fuel_checked_hover",
+                                            "$toggle_hover_text": "ui.hm.nr.tab_fuel",
+                                            "$toggle_hover_text_localize": true,
+                                            "$toggle_checked_hover_text_from_hover": true
+                                        }
+                                    },
+                                    {
+                                        "fuel@nuclear_reactor.fuel_page": {
+                                            "bindings": [
+                                                {
+                                                    "binding_type": "view",
+                                                    "source_control_name": "nr_fuel",
+                                                    "source_property_name": "#toggle_state",
+                                                    "target_property_name": "#visible",
+                                                    "resolve_sibling_scope": false
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "control_tab@uc.toggle_button": {
+                                            "anchor_from": "top_left",
+                                            "anchor_to": "top_left",
+                                            "offset": [
+                                                -19,
+                                                64
+                                            ],
+                                            "size": [
+                                                16,
+                                                16
+                                            ],
+                                            "$toggle_name": "nuclear_reactor_pages",
+                                            "$toggle_control_name": "nr_control",
+                                            "$toggle_group": true,
+                                            "$toggle_index": 2,
+                                            "$toggle_group_default_selected": 0,
+                                            "$toggle_default_state": false,
+                                            "$toggle_lost_reset": false,
+                                            "$toggle_size": [
+                                                16,
+                                                16
+                                            ],
+                                            "$toggle_layer": 12,
+                                            "$toggle_bg_layer": 10,
+                                            "$has_toggle_bg": true,
+                                            "$toggle_bg_texture": "textures/ui/toggle_button/left_bg",
+                                            "$toggle_unchecked": "textures/ui/toggle_button/nuclear_control_unchecked",
+                                            "$toggle_checked": "textures/ui/toggle_button/nuclear_control_checked",
+                                            "$toggle_unchecked_hover": "textures/ui/toggle_button/nuclear_control_unchecked_hover",
+                                            "$toggle_checked_hover": "textures/ui/toggle_button/nuclear_control_checked_hover",
+                                            "$toggle_hover_text": "ui.hm.nr.tab_control",
+                                            "$toggle_hover_text_localize": true,
+                                            "$toggle_checked_hover_text_from_hover": true
+                                        }
+                                    },
+                                    {
+                                        "control@nuclear_reactor.control_page": {
+                                            "bindings": [
+                                                {
+                                                    "binding_type": "view",
+                                                    "source_control_name": "nr_control",
+                                                    "source_property_name": "#toggle_state",
+                                                    "target_property_name": "#visible",
+                                                    "resolve_sibling_scope": false
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "info_tab@uc.toggle_button": {
+                                            "anchor_from": "top_left",
+                                            "anchor_to": "top_left",
+                                            "offset": [
+                                                179,
+                                                10
+                                            ],
+                                            "size": [
+                                                16,
+                                                16
+                                            ],
+                                            "$toggle_name": "nuclear_reactor_pages",
+                                            "$toggle_control_name": "nr_info",
+                                            "$toggle_group": true,
+                                            "$toggle_index": 3,
+                                            "$toggle_group_default_selected": 0,
+                                            "$toggle_default_state": false,
+                                            "$toggle_lost_reset": false,
+                                            "$toggle_size": [
+                                                16,
+                                                16
+                                            ],
+                                            "$toggle_layer": 12,
+                                            "$toggle_bg_layer": 10,
+                                            "$has_toggle_bg": true,
+                                            "$toggle_bg_texture": "textures/ui/toggle_button/right_bg",
+                                            "$toggle_unchecked": "textures/ui/toggle_button/info_unchecked",
+                                            "$toggle_checked": "textures/ui/toggle_button/info_checked",
+                                            "$toggle_unchecked_hover": "textures/ui/toggle_button/info_unchecked_hover",
+                                            "$toggle_checked_hover": "textures/ui/toggle_button/info_checked_hover",
+                                            "$toggle_hover_text": "ui.hm.nr.tab_info",
+                                            "$toggle_hover_text_localize": true,
+                                            "$toggle_checked_hover_text_from_hover": true
+                                        }
+                                    },
+                                    {
+                                        "info@nuclear_reactor.info_page": {
+                                            "bindings": [
+                                                {
+                                                    "binding_type": "view",
+                                                    "source_control_name": "nr_info",
+                                                    "source_property_name": "#toggle_state",
+                                                    "target_property_name": "#visible",
+                                                    "resolve_sibling_scope": false
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "fuel_inventory": {
+                                            "type": "panel",
+                                            "bindings": [
+                                                {
+                                                    "binding_type": "view",
+                                                    "source_control_name": "nr_fuel",
+                                                    "source_property_name": "#toggle_state",
+                                                    "target_property_name": "#visible",
+                                                    "resolve_sibling_scope": false
+                                                }
+                                            ],
+                                            "controls": [
+                                                {
+                                                    "inventory@common.inventory_panel_bottom_half_with_label": {}
+                                                },
+                                                {
+                                                    "hotbar@common.hotbar_grid_template": {}
+                                                },
+                                                {
+                                                    "take@common.inventory_take_progress_icon_button": {}
+                                                }
+                                            ]
+                                        }
                                     }
                                 ]
                             }
@@ -430,6 +1341,353 @@
                             "gamepad_cursor@common.gamepad_cursor_button": {}
                         }
                     ]
+                }
+            }
+        ]
+    },
+    "info_guide_content": {
+        "type": "panel",
+        "anchor_from": "top_left",
+        "anchor_to": "top_left",
+        "size": [
+            150,
+            304
+        ],
+        "controls": [
+            {
+                "reactor_description": {
+                    "type": "label",
+                    "text": "ui.hm.nr.info_description",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        148,
+                        20
+                    ],
+                    "font_scale_factor": 0.65,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "fuel_help": {
+                    "type": "label",
+                    "text": "ui.hm.nr.info_fuel",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        0,
+                        24
+                    ],
+                    "size": [
+                        148,
+                        20
+                    ],
+                    "font_scale_factor": 0.65,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "enriched_icon": {
+                    "type": "image",
+                    "texture": "textures/items/enriched_uranium_rod",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        2,
+                        50
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "enriched_details": {
+                    "type": "label",
+                    "text": "ui.hm.nr.info_enriched",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        24,
+                        48
+                    ],
+                    "size": [
+                        124,
+                        22
+                    ],
+                    "font_scale_factor": 0.65,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "uranium_icon": {
+                    "type": "image",
+                    "texture": "textures/items/uranium_rod",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        2,
+                        76
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "uranium_details": {
+                    "type": "label",
+                    "text": "ui.hm.nr.info_uranium",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        24,
+                        74
+                    ],
+                    "size": [
+                        124,
+                        22
+                    ],
+                    "font_scale_factor": 0.65,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "energy_per_fu": {
+                    "type": "label",
+                    "text": "ui.hm.nr.info_energy_per_fu",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        0,
+                        100
+                    ],
+                    "size": [
+                        148,
+                        28
+                    ],
+                    "font_scale_factor": 0.65,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "coolant_icon": {
+                    "type": "image",
+                    "texture": "textures/static/images/heavy_water",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        2,
+                        134
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "coolant_help": {
+                    "type": "label",
+                    "text": "ui.hm.nr.info_coolant",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        24,
+                        132
+                    ],
+                    "size": [
+                        124,
+                        28
+                    ],
+                    "font_scale_factor": 0.65,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "control_icon": {
+                    "type": "image",
+                    "texture": "textures/ui/toggle_button/nuclear_control_unchecked",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        2,
+                        166
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "control_help": {
+                    "type": "label",
+                    "text": "ui.hm.nr.info_control",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        24,
+                        164
+                    ],
+                    "size": [
+                        124,
+                        28
+                    ],
+                    "font_scale_factor": 0.65,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "temperature_warning": {
+                    "type": "label",
+                    "text": "ui.hm.nr.info_temperature_warning",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        0,
+                        196
+                    ],
+                    "size": [
+                        148,
+                        18
+                    ],
+                    "font_scale_factor": 0.65,
+                    "color": [
+                        0.65,
+                        0.08,
+                        0.08
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "waste_icon": {
+                    "type": "image",
+                    "texture": "textures/static/images/nuclear_waste_gas",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        2,
+                        220
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "waste_help": {
+                    "type": "label",
+                    "text": "ui.hm.nr.info_waste",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        24,
+                        218
+                    ],
+                    "size": [
+                        124,
+                        34
+                    ],
+                    "font_scale_factor": 0.65,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "warning_icon": {
+                    "type": "image",
+                    "texture": "textures/ui/warning_sign",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        2,
+                        258
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "waste_warning": {
+                    "type": "label",
+                    "text": "ui.hm.nr.info_waste_warning",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        24,
+                        256
+                    ],
+                    "size": [
+                        124,
+                        44
+                    ],
+                    "font_scale_factor": 0.65,
+                    "color": [
+                        0.65,
+                        0.08,
+                        0.08
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
                 }
             }
         ]

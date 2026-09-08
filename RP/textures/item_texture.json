@@ -2,6 +2,153 @@
 	"resource_pack_name": "UtilityCraft Heavy Machinery",
 	"texture_name": "atlas.items",
 	"texture_data": {
+		"utilitycraft:nuclear_waste_gas_00": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_00"
+		},
+		"utilitycraft:nuclear_waste_gas_01": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_01"
+		},
+		"utilitycraft:nuclear_waste_gas_02": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_02"
+		},
+		"utilitycraft:nuclear_waste_gas_03": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_03"
+		},
+		"utilitycraft:nuclear_waste_gas_04": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_04"
+		},
+		"utilitycraft:nuclear_waste_gas_05": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_05"
+		},
+		"utilitycraft:nuclear_waste_gas_06": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_06"
+		},
+		"utilitycraft:nuclear_waste_gas_07": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_07"
+		},
+		"utilitycraft:nuclear_waste_gas_08": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_08"
+		},
+		"utilitycraft:nuclear_waste_gas_09": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_09"
+		},
+		"utilitycraft:nuclear_waste_gas_10": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_10"
+		},
+		"utilitycraft:nuclear_waste_gas_11": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_11"
+		},
+		"utilitycraft:nuclear_waste_gas_12": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_12"
+		},
+		"utilitycraft:nuclear_waste_gas_13": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_13"
+		},
+		"utilitycraft:nuclear_waste_gas_14": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_14"
+		},
+		"utilitycraft:nuclear_waste_gas_15": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_15"
+		},
+		"utilitycraft:nuclear_waste_gas_16": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_16"
+		},
+		"utilitycraft:nuclear_waste_gas_17": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_17"
+		},
+		"utilitycraft:nuclear_waste_gas_18": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_18"
+		},
+		"utilitycraft:nuclear_waste_gas_19": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_19"
+		},
+		"utilitycraft:nuclear_waste_gas_20": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_20"
+		},
+		"utilitycraft:nuclear_waste_gas_21": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_21"
+		},
+		"utilitycraft:nuclear_waste_gas_22": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_22"
+		},
+		"utilitycraft:nuclear_waste_gas_23": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_23"
+		},
+		"utilitycraft:nuclear_waste_gas_24": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_24"
+		},
+		"utilitycraft:nuclear_waste_gas_25": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_25"
+		},
+		"utilitycraft:nuclear_waste_gas_26": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_26"
+		},
+		"utilitycraft:nuclear_waste_gas_27": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_27"
+		},
+		"utilitycraft:nuclear_waste_gas_28": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_28"
+		},
+		"utilitycraft:nuclear_waste_gas_29": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_29"
+		},
+		"utilitycraft:nuclear_waste_gas_30": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_30"
+		},
+		"utilitycraft:nuclear_waste_gas_31": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_31"
+		},
+		"utilitycraft:nuclear_waste_gas_32": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_32"
+		},
+		"utilitycraft:nuclear_waste_gas_33": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_33"
+		},
+		"utilitycraft:nuclear_waste_gas_34": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_34"
+		},
+		"utilitycraft:nuclear_waste_gas_35": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_35"
+		},
+		"utilitycraft:nuclear_waste_gas_36": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_36"
+		},
+		"utilitycraft:nuclear_waste_gas_37": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_37"
+		},
+		"utilitycraft:nuclear_waste_gas_38": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_38"
+		},
+		"utilitycraft:nuclear_waste_gas_39": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_39"
+		},
+		"utilitycraft:nuclear_waste_gas_40": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_40"
+		},
+		"utilitycraft:nuclear_waste_gas_41": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_41"
+		},
+		"utilitycraft:nuclear_waste_gas_42": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_42"
+		},
+		"utilitycraft:nuclear_waste_gas_43": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_43"
+		},
+		"utilitycraft:nuclear_waste_gas_44": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_44"
+		},
+		"utilitycraft:nuclear_waste_gas_45": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_45"
+		},
+		"utilitycraft:nuclear_waste_gas_46": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_46"
+		},
+		"utilitycraft:nuclear_waste_gas_47": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_47"
+		},
+		"utilitycraft:nuclear_waste_gas_48": {
+			"textures": "textures/ui/nuclear_waste_gas_bar/nuclear_waste_gas_48"
+		},
 		"utilitycraft:fluorine_gas_00": {
 			"textures": "textures/ui/fluorine_gas_bar/fluorine_gas_00"
 		},

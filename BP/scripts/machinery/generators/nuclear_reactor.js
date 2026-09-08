@@ -2,12 +2,14 @@ import { ItemStack, system } from '@minecraft/server'
 import {
     EnergyStorage,
     FluidStorage,
+    GasStorage,
     InterfaceManager,
     Multiblock,
     MultiblockGenerator,
     registerLinkNodeIO,
 } from 'DoriosCore/index.js'
 import { ensureFluidIOConfig } from 'DoriosCore/interfaces/fluidIO.js'
+import { ensureGasIOConfig } from 'DoriosCore/interfaces/gasIO.js'
 import { ensureItemIOConfig } from 'DoriosCore/interfaces/itemIO.js'
 import * as DoriosLib from 'DoriosLib/index.js'
 import { coolants } from 'config/coolants.js'
@@ -38,6 +40,8 @@ const config = {
     assembliesPerRodControl: 4,
     energyPerFuelUnit: 200_000,
     heatPerFuelUnit: 0.05,
+    wasteMbPerFuelUnit: 1,
+    wasteCapacityPerGasCell: 256_000,
 
     coolantCapacityPerEmptyBlock: 64_000,
     coolantPerKelvin: 10,
@@ -47,7 +51,7 @@ const config = {
 
     initialData: {
         state: 'off',
-        power: 25,
+        rate: 1,
         fuelStored: 0,
         fuelType: 'empty',
         temperature: 300,
@@ -57,14 +61,14 @@ const config = {
         efficiency: 0.10,
         startedAtMs: 0,
         warning: '',
+        wasteRemainder: 0,
     },
 }
 
 const FUEL_INPUT_SLOT = 21
-const POWER_INPUT_SLOT = 6
-const POWER_INPUT_ITEM = 'utilitycraft:arrow_right_0'
-const POWER_INPUT_MAX_LENGTH = 5
-const POWER_KEYPAD_BY_SLOT = {
+const RATE_INPUT_SLOT = 6
+const RATE_INPUT_ITEM = 'utilitycraft:arrow_right_0'
+const RATE_KEYPAD_BY_SLOT = {
     7: '7',
     8: '8',
     9: '9',
@@ -77,9 +81,9 @@ const POWER_KEYPAD_BY_SLOT = {
     16: '.',
     17: '0',
 }
-const POWER_ACCEPT_SLOT = 18
-const POWER_CANCEL_SLOT = 19
-const POWER_DELETE_SLOT = 20
+const RATE_ACCEPT_SLOT = 18
+const RATE_CANCEL_SLOT = 19
+const RATE_DELETE_SLOT = 20
 
 const GENERATOR_CONFIG = {
     entity: {
@@ -95,6 +99,10 @@ const GENERATOR_CONFIG = {
     },
     required_case: 'dorios:multiblock.case.netherite',
     requirements: {
+        gas_cell: {
+            amount: 1,
+            warning: '\u00A7c[Reactor] At least 1 Gas Cell is required for waste storage.',
+        },
         air: {
             amount: 1,
             warning: '\u00A7c[Reactor] At least 1 empty internal block is required for coolant storage.',
@@ -128,6 +136,12 @@ const NUCLEAR_FUELS = {
 }
 
 registerLinkNodeIO('utilitycraft:nuclear_reactor_controller', {
+    gases: {
+        anyInputIndices: [],
+        anyOutputIndices: [0],
+        inputs: [],
+        outputs: [{ id: 'waste', label: 'Waste', color: '\u00A76', indices: [0] }],
+    },
     items: {
         anyInputSlots: [FUEL_INPUT_SLOT],
         anyOutputSlots: [],
@@ -154,23 +168,23 @@ const nuclearReactorButtons = {
         },
     },
     accept: {
-        slot: POWER_ACCEPT_SLOT,
-        onPress: ({ entity }) => applyPowerSetpoint(entity),
+        slot: RATE_ACCEPT_SLOT,
+        onPress: ({ entity }) => applyBurnRate(entity),
     },
     cancel: {
-        slot: POWER_CANCEL_SLOT,
-        onPress: ({ entity }) => resetPowerInput(entity),
+        slot: RATE_CANCEL_SLOT,
+        onPress: ({ entity }) => resetRateInput(entity),
     },
     delete: {
-        slot: POWER_DELETE_SLOT,
-        onPress: ({ entity }) => deletePowerInput(entity),
+        slot: RATE_DELETE_SLOT,
+        onPress: ({ entity }) => deleteRateInput(entity),
     },
 }
 
-for (const slot of Object.keys(POWER_KEYPAD_BY_SLOT).map(Number)) {
+for (const slot of Object.keys(RATE_KEYPAD_BY_SLOT).map(Number)) {
     nuclearReactorButtons[`keypad_${slot}`] = {
         slot,
-        onPress: ({ entity }) => appendPowerInput(slot, entity),
+        onPress: ({ entity }) => appendRateInput(slot, entity),
     }
 }
 
@@ -181,7 +195,8 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
     onPlayerInteract(e) {
         return MultiblockGenerator.handlePlayerInteract(e, GENERATOR_CONFIG, {
             initializeEntity(entity) {
-                setPowerInputText(entity, `${config.initialData.power}`)
+                setRateInputText(entity, `${config.initialData.rate}`)
+                GasStorage.initializeMultiple(entity, 1)
                 FluidStorage.initializeMultiple(entity, 1)
                 InterfaceManager.ensureEntityInterfaces(entity)
             },
@@ -191,6 +206,7 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
                 const rodControls = components.rod_control ?? 0
                 const heatConductors = components.heat_conductor ?? 0
                 const emptyBlocks = components.air ?? 0
+                const gasCells = components.gas_cell ?? 0
                 const fuelCapacity = fuelAssemblies * config.fuelCapacityPerAssembly
                 const coolantCapacity = emptyBlocks * config.coolantCapacityPerEmptyBlock
                 const controlEfficiency = getControlEfficiency(fuelAssemblies, rodControls)
@@ -202,6 +218,7 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
                     rodControls,
                     heatConductors,
                     emptyBlocks,
+                    gasCells,
                     fuelCapacity,
                     coolantCapacity,
                     controlEfficiency,
@@ -216,17 +233,21 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
                 data.controlEfficiency = controlEfficiency
                 data.warning = '\u00A7eStopped'
                 saveReactorData(entity, data)
-                setPowerInputText(entity, `${data.power ?? config.initialData.power}`)
+                setRateInputText(entity, `${data.rate ?? config.initialData.rate}`)
 
                 const [coolant] = FluidStorage.initializeMultiple(entity, 1)
                 coolant.setCap(coolantCapacity)
+                const [waste] = GasStorage.initializeMultiple(entity, 1)
+                waste.setCap(gasCells * config.wasteCapacityPerGasCell)
 
                 ensureItemIOConfig(entity, 'utilitycraft:nuclear_reactor_controller')
                 ensureFluidIOConfig(entity, 'utilitycraft:nuclear_reactor_controller')
+                ensureGasIOConfig(entity, 'utilitycraft:nuclear_reactor_controller')
                 system.run(() => {
                     if (!entity.isValid) return
                     ensureItemIOConfig(entity, 'utilitycraft:nuclear_reactor_controller')
                     ensureFluidIOConfig(entity, 'utilitycraft:nuclear_reactor_controller')
+                    ensureGasIOConfig(entity, 'utilitycraft:nuclear_reactor_controller')
                     InterfaceManager.ensureEntityInterfaces(entity)
                 })
             },
@@ -234,6 +255,7 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
                 const fuelAssemblies = components.fuel_assemblies ?? 0
                 const rodControls = components.rod_control ?? 0
                 const emptyBlocks = components.air ?? 0
+                const gasCells = components.gas_cell ?? 0
                 const heatConductors = components.heat_conductor ?? 0
                 const controlEfficiency = getControlEfficiency(fuelAssemblies, rodControls)
                 const maximumBurnRate = getMaximumBurnRate(fuelAssemblies, rodControls)
@@ -252,9 +274,10 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
                     `\u00A77Rod Controls: \u00A7a${rodControls}`,
                     `\u00A77Control Efficiency: \u00A7a${(controlEfficiency * 100).toFixed(2)}%`,
                     `\u00A77Fuel Capacity: \u00A7a${formatFuel(fuelAssemblies * config.fuelCapacityPerAssembly)}`,
+                    `\u00A77Waste Capacity: \u00A76${GasStorage.formatGas(gasCells * config.wasteCapacityPerGasCell)} (${gasCells} Gas Cells)`,
                     `\u00A77Coolant Capacity: \u00A7b${FluidStorage.formatFluid(emptyBlocks * config.coolantCapacityPerEmptyBlock)}`,
                     `\u00A77Heat Dissipation: \u00A7b${(heatConductors * config.conductorHeatDissipation).toFixed(2)} K/t`,
-                    `\u00A77Maximum Production: \u00A7b${EnergyStorage.formatEnergyToText(maximumProduction)}/t`,
+                    `\u00A77Nominal Production: \u00A7b${EnergyStorage.formatEnergyToText(maximumProduction)}/t`,
                 ]
             },
         })
@@ -279,6 +302,8 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
 
         const data = getReactorData(entity)
         synchronizeReactorTimer(data)
+        const inputLabel = reactor.container?.getItem(RATE_INPUT_SLOT)?.nameTag ?? ''
+        if (!inputLabel.includes('FU/t')) setRateInputText(entity, `${data.rate}`)
         const container = reactor.container
         const fuelInputWarning = loadFuelFromInput(container, data)
 
@@ -286,15 +311,25 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
         coolant.setCap(data.coolantCapacity ?? 0)
         coolant.display(2)
 
+        // Fractional mB persist until they form a whole scoreboard unit.
+        const [waste] = GasStorage.initializeMultiple(entity, 1)
+        waste.setCap((data.gasCells ?? 0) * config.wasteCapacityPerGasCell)
+        ensureGasIOConfig(entity, 'utilitycraft:nuclear_reactor_controller')
+        // Preserve waste stored by the earlier development ID.
+        if (waste.getType() === 'uranium_waste_gas' || waste.getType() === 'nuclear_waste') waste.setType('nuclear_waste_gas')
+        const wasteType = waste.getType()
+        const wasteCompatible = wasteType === 'empty' || wasteType === 'nuclear_waste_gas'
+        const wastePending = Math.max(0, data.wasteRemainder ?? 0)
+        const wasteFreeSpace = wasteCompatible ? Math.max(0, waste.getFreeSpace() - wastePending) : 0
+
         const coolantType = coolant.getType()
         const coolantData = coolantType in coolants ? coolants[coolantType] : undefined
         const coolantAmount = coolant.get()
-        const powerFraction = clamp((data.power ?? 0) / 100, 0, 1)
         const tickDelta = Math.max(1, reactor.processingInterval ?? 1)
         const fuelProfile = FUEL_PROFILES[data.fuelType]
-        const maximumBurnRate = getMaximumBurnRate(data.fuelAssemblies, data.rodControls)
+        const nominalBurnRate = getMaximumBurnRate(data.fuelAssemblies, data.rodControls)
             * (fuelProfile?.burnRateMultiplier ?? 0)
-        const requestedBurn = maximumBurnRate * powerFraction * tickDelta
+        const requestedBurn = data.rate * tickDelta
         const energyFreeSpace = energy.getFreeSpace()
         const operatingEfficiency = getTemperatureEfficiency(data.temperature)
             * (fuelProfile?.efficiencyMultiplier ?? 0)
@@ -309,15 +344,23 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
         if (data.state !== 'off' && requestedBurn > 0 && data.fuelStored > 0 && energyFreeSpace > 0) {
             const maximumFuelByEnergy = energyFreeSpace
                 / (config.energyPerFuelUnit * operatingEfficiency)
-            const consumedFuel = Math.min(data.fuelStored, requestedBurn, maximumFuelByEnergy)
+            const maximumFuelByWaste = wasteFreeSpace / config.wasteMbPerFuelUnit
+            const consumedFuel = Math.min(data.fuelStored, requestedBurn, maximumFuelByEnergy, maximumFuelByWaste)
 
             if (consumedFuel > 0) {
+                const generatedWaste = wastePending + consumedFuel * config.wasteMbPerFuelUnit
+                const wholeWaste = Math.floor(generatedWaste + 1e-9)
+                if (wholeWaste > 0) waste.setType('nuclear_waste_gas')
+                const addedWaste = wholeWaste > 0 ? waste.add(wholeWaste) : 0
+                data.wasteRemainder = Math.max(0, generatedWaste - addedWaste)
                 data.fuelStored = Math.max(0, data.fuelStored - consumedFuel)
                 const producedEnergy = consumedFuel
                     * config.energyPerFuelUnit
                     * operatingEfficiency
                 energy.add(producedEnergy)
-                generatedHeat = consumedFuel * config.heatPerFuelUnit
+                // Overdriving installed assemblies/controls adds heat, not a burn cap.
+                const load = nominalBurnRate > 0 ? Math.max(1, consumedFuel / tickDelta / nominalBurnRate) : 1
+                generatedHeat = consumedFuel * config.heatPerFuelUnit * load
                 data.activeRate = consumedFuel / tickDelta
                 data.producing = producedEnergy / tickDelta
                 working = true
@@ -373,6 +416,7 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
             coolantData,
             coolantAmount,
             energyFreeSpace,
+            wasteFull: !wasteCompatible || waste.getFreeSpace() - (data.wasteRemainder ?? 0) <= 1e-9,
         })
 
         if (data.temperature >= config.meltdownTemperatureK) {
@@ -381,7 +425,8 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
             data.warning = '\u00A76Overheating!'
         }
 
-        updateReactorUI(data, reactor, coolant)
+        waste.display(24)
+        updateReactorUI(data, reactor, coolant, waste)
         reactor.displayEnergy()
         saveReactorData(entity, data)
     },
@@ -415,10 +460,11 @@ function loadFuelFromInput(container, data) {
     return ''
 }
 
-function getOperatingStatus({ data, working, fuelInputWarning, coolantType, coolantData, coolantAmount, energyFreeSpace }) {
+function getOperatingStatus({ data, working, fuelInputWarning, coolantType, coolantData, coolantAmount, energyFreeSpace, wasteFull }) {
     if (data.state === 'off') return '\u00A7eStopped'
+    if (wasteFull) return '\u00A7eWaste Full'
     if (fuelInputWarning) return fuelInputWarning
-    if ((data.power ?? 0) <= 0) return '\u00A7ePower Setpoint 0%'
+    if (data.rate <= 0) return '\u00A7eRate Setpoint 0 FU/t'
     if ((data.fuelStored ?? 0) <= 0) return '\u00A7eMissing Fuel'
     if (energyFreeSpace <= 0) return '\u00A7eEnergy Full'
     if (coolantType !== 'empty' && !coolantData) return '\u00A7cInvalid Coolant'
@@ -500,7 +546,7 @@ function getTemperatureEfficiency(temperature = config.ambientTemperatureK) {
         + (config.maximumEfficiency - config.minimumEfficiency) * shape
 }
 
-function updateReactorUI(data, reactor, coolant) {
+function updateReactorUI(data, reactor, coolant, waste) {
     const storedEnergy = reactor.energy.get()
     const fuelCapacity = data.fuelCapacity ?? 0
     const fuelStored = data.fuelStored ?? 0
@@ -516,13 +562,40 @@ function updateReactorUI(data, reactor, coolant) {
         : 0
 
     reactor.setLabel([
-        `\u00A7r\u00A77Status: ${data.warning || '\u00A77Idle'}\n\n\u00A7r\u00A7eReactor Information`,
-        `\n\u00A7r\u00A7aPower \u00A7f${(data.power ?? 0).toFixed(2)}%%\n\u00A7r\u00A7aTemperature \u00A7f${(data.temperature ?? 0).toFixed(2)} K\n\u00A7r\u00A7aEfficiency \u00A7f${((data.efficiency ?? 0) * 100).toFixed(2)}%%\n\u00A7r\u00A7aOn Time \u00A7f${formatReactorOnTime(data)}`,
-        `\n\u00A7r\u00A7eEnergy Information\n\n\u00A7r\u00A7bProducing \u00A7f${EnergyStorage.formatEnergyToText(data.producing ?? 0)}/t\n\u00A7r\u00A7bCapacity \u00A7f${reactor.energy.getPercent().toFixed(2)}%%\n\u00A7r\u00A7bStored \u00A7f${EnergyStorage.formatEnergyToText(storedEnergy)}`,
-        `\n\u00A7r\u00A7eFuel Information\n\n\u00A7r\u00A7aStored \u00A7f${formatFuel(fuelStored)}\n\u00A7r\u00A7aCapacity \u00A7f${formatFuel(fuelCapacity)}\n\u00A7r\u00A7aFuel \u00A7f${fuelPercent.toFixed(2)}%%`,
-        `\n\u00A7r\u00A7eCoolant Information\n\n\u00A7r\u00A77Required Tier: 2+\n\u00A7r\u00A7aType \u00A7f${coolantName}\n\u00A7r\u00A7aStored \u00A7f${FluidStorage.formatFluid(coolantStored)} / ${FluidStorage.formatFluid(coolantCapacity)}\n\u00A7r\u00A7aCoolant \u00A7f${coolantPercent.toFixed(2)}%%`,
-    ])
+        '\u00A7r' + (data.warning || '\u00A7eIdle'),
+        '',
+        '\u00A7r\u00A7cRate: \u00A7f' + formatFuel(data.rate) + '/t',
+        '\u00A7r\u00A7aTemperature: \u00A7f' + (data.temperature ?? 0).toFixed(0) + 'K',
+        '\u00A7r\u00A7aEfficiency: \u00A7f' + ((data.efficiency ?? 0) * 100).toFixed(1) + '%%',
+        '',
+        '\u00A7r\u00A7bProducing: \u00A7f' + EnergyStorage.formatEnergyToText(data.producing ?? 0) + '/t',
+        '\u00A7r\u00A7bCapacity: \u00A7f' + reactor.energy.getPercent().toFixed(1) + '%%',
+        '\u00A7r\u00A7bStored: \u00A7f' + EnergyStorage.formatEnergyToText(storedEnergy),
+        '',
+        '\u00A7r\u00A7aOn time: \u00A7f' + formatReactorOnTime(data),
+    ].join('\n'), 1)
+    // Extra display slots are never exposed as interactive inventory cells.
+    if (reactor.container.size > 23) {
+        reactor.setLabel([
+            '\u00A7r\u00A7eFuel Information',
+            '\u00A7r\u00A7aType: \u00A7f' + (FUEL_PROFILES[data.fuelType]?.label ?? 'Empty'),
+            '\u00A7r\u00A7aReserve: \u00A7f' + fuelPercent.toFixed(0) + '%%',
+            '',
+            '\u00A7r\u00A7eCoolant Information',
+            '\u00A7r\u00A7aType: \u00A7f' + coolantName,
+            '\u00A7r\u00A7aReserve: \u00A7f' + coolantPercent.toFixed(0) + '%%',
+            '',
+            '\u00A7r\u00A7eWaste Information',
+            '\u00A7r\u00A7aStored: \u00A7f' + GasStorage.formatGas(waste.get()),
+            '\u00A7r\u00A7aReserve: \u00A7f' + (waste.getCap() > 0 ? waste.get() / waste.getCap() * 100 : 0).toFixed(0) + '%%',
+        ].join('\n'), 22)
+        reactor.setLabel('\u00A7r\u00A78Current Rate: ' + formatFuel(data.rate) + '/t', 23)
+    }
 
+    if (reactor.container.size > 25) {
+        reactor.setLabel('\u00A7r\u00A78Recommended Rate:\n'
+            + formatFuel(getRecommendedRate(data, coolant)) + '/t', 25)
+    }
     updateFuelBar(reactor.container, data)
     updateTemperatureBar(reactor.container, data.temperature)
 }
@@ -534,9 +607,6 @@ function updateFuelBar(container, data) {
     const fuelCapacity = data.fuelCapacity ?? 0
     const profile = FUEL_PROFILES[data.fuelType]
     const maximumEfficiency = config.maximumEfficiency * (profile?.efficiencyMultiplier ?? 0)
-    const maximumBurn = getMaximumBurnRate(data.fuelAssemblies, data.rodControls)
-        * (profile?.burnRateMultiplier ?? 0)
-    const maximumPower = maximumBurn * config.energyPerFuelUnit * maximumEfficiency
     const fraction = fuelCapacity > 0 ? clamp(fuelStored / fuelCapacity, 0, 1) : 0
     const frame = Math.floor(fraction * 42)
     const item = new ItemStack(`utilitycraft:uranium_bar_${String(frame).padStart(2, '0')}`, 1)
@@ -544,10 +614,7 @@ function updateFuelBar(container, data) {
         '\u00A7rNuclear Fuel',
         `\u00A7r\u00A77  Type: ${profile?.label ?? 'Empty'}`,
         `\u00A7r\u00A77  Stored: ${formatFuel(fuelStored)} / ${formatFuel(fuelCapacity)}`,
-        `\u00A7r\u00A77  Percentage: ${(fraction * 100).toFixed(2)}%`,
         `\u00A7r\u00A77  Max Efficiency: ${(maximumEfficiency * 100).toFixed(2)}%`,
-        `\u00A7r\u00A77  Max Burn: ${formatFuel(maximumBurn)}/t`,
-        `\u00A7r\u00A77  Max Power: ${EnergyStorage.formatEnergyToText(maximumPower)}/t`,
     ].join('\n')
     container.setItem(3, item)
 }
@@ -567,58 +634,57 @@ function updateTemperatureBar(container, temperature) {
     container.setItem(4, item)
 }
 
-function appendPowerInput(slot, entity) {
+function appendRateInput(slot, entity) {
     if (!entity) return
 
-    const pressedValue = POWER_KEYPAD_BY_SLOT[slot]
+    const pressedValue = RATE_KEYPAD_BY_SLOT[slot]
     if (pressedValue === undefined) return
-    const currentText = getPowerInputText(entity)
+    const currentText = getRateInputText(entity)
     if (pressedValue === '.' && currentText.includes('.')) return
-    if (currentText.length >= POWER_INPUT_MAX_LENGTH) return
 
     const nextText = currentText === '0' && pressedValue !== '.'
         ? pressedValue
         : `${currentText}${pressedValue}`
-    setPowerInputText(entity, nextText || '0')
+    setRateInputText(entity, nextText || '0')
 }
 
-function getPowerInputText(entity) {
+function getRateInputText(entity) {
     const container = entity?.getComponent('inventory')?.container
     if (!container) return '0'
 
-    const label = container.getItem(POWER_INPUT_SLOT)?.nameTag ?? ''
+    const label = container.getItem(RATE_INPUT_SLOT)?.nameTag ?? ''
     const cleanLabel = label.replace(/\u00A7./g, '')
-    return cleanLabel.match(/([\d.]+)\s*%/)?.[1] || '0'
+    return cleanLabel.match(/([\d.eE+-]+)\s*FU\/t/)?.[1] || '0'
 }
 
-function setPowerInputText(entity, text = '0') {
+function setRateInputText(entity, text = '0') {
     if (!entity) return
 
     DoriosLib.entity.setNewItem(entity, {
-        slot: POWER_INPUT_SLOT,
-        typeId: POWER_INPUT_ITEM,
-        nameTag: `\n\u00A7r\u00A7fSet the burn rate for \nthe reactor!\n\n ${text || '0'}%%`,
+        slot: RATE_INPUT_SLOT,
+        typeId: RATE_INPUT_ITEM,
+        nameTag: `\u00A7r\u00A7f${text || '0'} FU/t`,
     })
 }
 
-function deletePowerInput(entity) {
-    const currentText = getPowerInputText(entity)
-    setPowerInputText(entity, currentText.length > 1 ? currentText.slice(0, -1) : '0')
+function deleteRateInput(entity) {
+    const currentText = getRateInputText(entity)
+    setRateInputText(entity, currentText.length > 1 ? currentText.slice(0, -1) : '0')
 }
 
-function resetPowerInput(entity) {
-    setPowerInputText(entity, '0')
+function resetRateInput(entity) {
+    setRateInputText(entity, '0')
 }
 
-function applyPowerSetpoint(entity) {
+function applyBurnRate(entity) {
     if (!entity) return
 
-    const parsed = Number.parseFloat(getPowerInputText(entity))
-    const power = Number.isFinite(parsed) ? clamp(parsed, 0, 100) : 0
+    const parsed = Number.parseFloat(getRateInputText(entity))
+    const rate = Number.isFinite(parsed) ? Math.max(0, parsed) : 0
     const data = getReactorData(entity)
-    data.power = power
+    data.rate = rate
     saveReactorData(entity, data)
-    setPowerInputText(entity, `${power}`)
+    setRateInputText(entity, `${rate}`)
 }
 
 function getReactorData(entity) {
@@ -642,6 +708,7 @@ function getReactorData(entity) {
         rodControls: 0,
         heatConductors: 0,
         emptyBlocks: 0,
+        gasCells: 0,
         fuelCapacity: 0,
         coolantCapacity: 0,
         maximumBurnRate: 0,
@@ -649,6 +716,14 @@ function getReactorData(entity) {
         ...stats,
     }
 
+    // Convert older percentage-based saves to their equivalent FU/t once.
+    if (!Number.isFinite(persisted.rate) && Number.isFinite(persisted.power)) {
+        data.rate = getMaximumBurnRate(data.fuelAssemblies, data.rodControls)
+            * (FUEL_PROFILES[data.fuelType]?.burnRateMultiplier ?? 1)
+            * clamp(persisted.power / 100, 0, 1)
+    }
+    data.rate = Number.isFinite(data.rate) ? Math.max(0, data.rate) : config.initialData.rate
+    delete data.power
     if (data.fuelStored <= 0) data.fuelType = 'empty'
     if (entity.getDynamicProperty('dorios:state') === 'off') data.state = 'off'
     return data
@@ -664,4 +739,15 @@ function formatFuel(amount = 0) {
 
 function clamp(value, minimum, maximum) {
     return Math.min(maximum, Math.max(minimum, Number(value) || 0))
+}
+
+/** Reference at ideal temperature with the coolant currently available; not a safety guarantee. */
+function getRecommendedRate(data, coolant) {
+    const nominal = getMaximumBurnRate(data.fuelAssemblies, data.rodControls)
+        * (FUEL_PROFILES[data.fuelType]?.burnRateMultiplier ?? 1)
+    const fluid = coolants[coolant.getType()]
+    if (!fluid || fluid.tier < config.minimumCoolantTier || coolant.get() <= 0) return 0
+    const cooling = Math.min((data.heatConductors ?? 0) * config.conductorHeatDissipation,
+        coolant.get() / config.coolantPerKelvin * fluid.efficiency)
+    return Math.max(0, Math.min(nominal, cooling / config.heatPerFuelUnit))
 }

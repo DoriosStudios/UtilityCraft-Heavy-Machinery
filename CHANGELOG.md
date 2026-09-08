@@ -1,6 +1,43 @@
 # UtilityCraft: Heavy Machinery v0.5.3
 
 ## CHANGED
+- Used the supplied 12x12 reactor sprite for General and restored the compact calculator gray casing across all toggle states.
+- Made the General and Control tab artwork more compact: a framed reactor core and a smaller calculator with 2x2 keys, centered across all four toggle states.
+- Enlarged Nuclear Reactor toggle artwork to a centered 16x16 area inside the 18x18 buttons; Fuel uses its original 16x16 item sprite without downscaling.
+- Added dedicated 18x18 General, Fuel and Control tab icons with all four native toggle states; retained Info artwork and updated the Control icon in the guide.
+- Added energy-per-FU and maximum fuel yields to Reactor Info and aligned iconless labels with the left edge.
+- Tightened Reactor Info section spacing and reduced scroll content height from 368 to 272 pixels without shrinking text or icons.
+- Expanded Reactor Info into a scrollable illustrated guide covering fuel yields and maximum efficiencies, Heavy Water cooling, rate/temperature control, gas-port waste extraction, and clearly marked planned radioactive-leak warnings. Added a 16x16 Nuclear Waste Gas guide sprite.
+- Added the standard empty gas-bar background to all 49 nuclear_waste_gas frames, replacing transparent gaps as the tank drains.
+- Raised all four Nuclear Reactor tabs by 20 pixels to start at the same height as normal machine Upgrade tabs, preserving their spacing.
+- Raised the Nuclear Reactor Recommended Rate label by 1 pixel.
+- Moved all four external Nuclear Reactor tab toggles 1 pixel inward toward the main panel.
+- Moved Recommended Rate from the Nuclear Fuel tooltip to Control, replacing the heat hint and aligning the new readout with the rate input.
+- Updated Control with a fuller burn-rate explanation, Current Rate above the input, a lower input baseline and the previous keypad spacing; removed the right-hand applied-rate heading/readout.
+- Redesigned Control into an aligned left-hand target display and complete calculator keypad, with the applied rate and Apply/Clear actions on the right and a separated start/stop control.
+- Changed Nuclear Reactor control from percentage power to a direct FU/t rate with no 100% or assembly burn cap. General now shows Rate; existing percentages migrate to equivalent rates. Fuel tooltips show actual, nominal and cooling-based recommended rates; overdriving adds heat. Fuel, energy and waste capacity still constrain consumption.
+- Reduced the Control input display height to 18 pixels and increased the input number font scale to 0.75.
+- Replaced the Reactor Control display machine-screen artwork with a plain dark rectangle.
+- Reorganized Reactor Control with a dark numeric display, applied-power readout, a bottom calculator keypad and labeled actions on the right.
+- Renamed the waste resource and its bar/tank assets to nuclear_waste; gas storage and the Waste output remain unchanged.
+- Replaced the custom Waste bar renderer with native GasStorage.display(24), aligned the fuel-mixing note with fuel icons, and lowered the supply hint by 1 pixel.
+- Added a Fuel-tab hint below the title explaining fuel supply through Item Ports and Item Pipes.
+- Aligned the Reactor fuel-mixing note to the left panel edge and matched its font scale to the item names (0.58).
+- Shortened the Reactor Fuel note to clarify that fuel types cannot be mixed and increased its font scale from 0.5 to 0.7.
+- Vertically centered the fuel icons, names and FU amounts as a group alongside the Reactor fuel slot.
+- Simplified the Reactor Fuel tab by removing the insertion and accepted-fuels headings, restoring the original empty-slot fuel flipbook, and moving the slot up 8 pixels and right 3 pixels.
+- Swapped Reactor Temperature and Waste bars: Temperature now sits beside Energy, with Waste at the far right.
+- Nuclear fuel now produces Nuclear Waste (1 mB/FU, 256,000 mB per Gas Cell; at least one Gas Cell is required). Full waste storage pauses burning until extracted through gas ports using Any Output or Waste; fractional mB persist. Added external gas-tank support.
+- Added the 49-level ochre Nuclear Waste bar to the Reactor UI, with gas-storage telemetry replacing mock values.
+- Removed the extra Uranium bar border; its original texture provides the frame.
+- Shortened telemetry headings to Reactor and Resources and prefixed each page title with Reactor while preserving native title sizing.
+- Styled Reactor telemetry with a standalone status, red Power label, cyan energy data including capacity, and green tank labels with white values and reset codes on each line.
+- Reorganized Reactor telemetry with separated status, operating data, energy and uptime; grouped tank data under yellow Fuel, Coolant and Waste headings.
+- Enlarged the Reactor Information and Tanks Information headings and shifted both 2 pixels left.
+- Added per-tab Reactor, Fuel, Control and Info titles using the original chest-title dimensions and font; removed the duplicate guide heading. Raised the Reactor bars and added Reactor Information / Tanks Information headings above the telemetry screen.
+- Removed Reactor bar headings and centered the shared Thermo screen texture behind the two telemetry columns, with lighter text for contrast.
+- Redesigned the Nuclear Reactor into Reactor, Fuel and Control tabs on the left and an in-panel Info tab on the right, reusing existing tab artwork. Removed side panels; only Fuel shows player inventory.
+- Split reactor telemetry into two columns, moved keypad controls to a dedicated page, and separated editable power from the applied setpoint. Liquid waste is visibly reserved until its mechanics are implemented.
 - Tin casings, glass, plated/hazard blocks, vents and all ports now use the same multiblock tier tags as their Steel counterparts, including active port states.
 - Shortened the tank and Power Condenser Information panels in all three locales to focus on setup, storage and routing.
 - Moved the High-Speed Rotor out of Components and Modules into the Items tab as an ungrouped item.
@@ -50,6 +87,11 @@
 - Added standard Speed and Energy upgrade support to the Electrolyzer, including multiple batches per update when upgraded throughput allows.
 
 ## FIXED
+- Removed the trailing _liquid suffix from liquid bar display names and renamed Nuclear Waste assets and storage IDs to nuclear_waste_gas.
+- Shortened the Nuclear Fuel tooltip to type, stored fuel/capacity and maximum efficiency, avoiding the 255-character nameTag limit.
+- Removed the literal newline escape from the Nuclear Reactor heat hint and updated the Info keypad instructions from percentage power to FU/t in all three locales.
+- Restored standard uc.text_label usage for Nuclear Reactor telemetry and power readouts, preserving the original telemetry (0.55) and keypad (0.67) text scales while removing custom inner controls and styling.
+
 - Removed the unused side panel from both tank controllers. Their Information tabs and the Power Condenser Information tab now match Storage Drive position and size; tank information describes structure, capacity and port routing in all three locales.
 - Gave all three liquid and seven gas tank entities their own 16x16 center-cropped bar textures and localized tank names, replacing water/steam placeholders.
 - Fixed cropped reactor fuel icons by arranging both flipbook frames horizontally, matching the autosieve atlas layout.
@@ -105,6 +147,7 @@
 - Added a complete Tin multiblock casing family with a casing, crystal, plated and hazard blocks, ventilation panel, and item, liquid, and energy ports.
 
 ## CHANGED
+- Used the supplied 12x12 reactor sprite for General and restored the compact calculator gray casing across all toggle states.
 
 - Reworked all planned nuclear liquid and gas UI bars with material-specific water, steam, lava, XP, milk, and bubble motifs derived from Ascendant Technology instead of flat single-color fills.
 - Updated Nuclear Reactor planning with Sieve-based Lead and Fluorite acquisition, final nuclear material names, deferred custom storage, meltdown-only radiation, Hazmat protection, Rubber Sheets, and fuel-route complexity.
@@ -140,6 +183,7 @@
 # UtilityCraft: Heavy Machinery v0.5.1
 
 ## CHANGED
+- Used the supplied 12x12 reactor sprite for General and restored the compact calculator gray casing across all toggle states.
 
 - Moved Link Node I/O interaction handling to the shared UtilityCraft runtime and removed the duplicate Heavy Machinery handler.
 - Updated the Behavior Pack and Resource Pack icons.
