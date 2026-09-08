@@ -6,10 +6,6 @@ const newRecipes = {
     "utilitycraft:tin_dust": { output: "utilitycraft:tin_ingot" },
     "utilitycraft:raw_tin": { output: "utilitycraft:tin_ingot" },
     "utilitycraft:raw_tin_block": { output: "utilitycraft:tin_block" },
-    "utilitycraft:deepslate_uranium_ore": { output: "utilitycraft:uranium_ingot" },
-    "utilitycraft:uranium_dust": { output: "utilitycraft:uranium_ingot" },
-    "utilitycraft:raw_uranium": { output: "utilitycraft:uranium_ingot" },
-    "utilitycraft:raw_uranium_block": { output: "utilitycraft:uranium_block" },
     // Bronze
     "utilitycraft:bronze_dust": { output: "utilitycraft:bronze_ingot" },
     "utilitycraft:brute_bronze": { output: "utilitycraft:bronze_ingot" },

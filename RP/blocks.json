@@ -12,10 +12,6 @@
 		"sound": "stone",
 		"textures": "utilitycraft_deepslate_tin_ore"
 	},
-	"utilitycraft:deepslate_uranium_ore": {
-		"sound": "stone",
-		"textures": "utilitycraft_deepslate_uranium_ore"
-	},
 	"utilitycraft:tin_crystal": {
 		"sound": "glass"
 	},
@@ -199,14 +195,6 @@
 	"utilitycraft:raw_tin_block": {
 		"sound": "metal",
 		"textures": "utilitycraft_raw_tin_block"
-	},
-	"utilitycraft:raw_uranium_block": {
-		"sound": "metal",
-		"textures": "utilitycraft_raw_uranium_block"
-	},
-	"utilitycraft:uranium_block": {
-		"sound": "metal",
-		"textures": "utilitycraft_uranium_block"
 	},
 	"utilitycraft:autosieve_controller": {
 		"sound": "metal"

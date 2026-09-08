@@ -298,9 +298,6 @@
 		"utilitycraft_deepslate_tin_ore": {
 			"textures": "textures/blocks/ores/deepslate_tin_ore"
 		},
-		"utilitycraft_deepslate_uranium_ore": {
-			"textures": "textures/blocks/ores/deepslate_uranium_ore"
-		},
 		"utilitycraft_tin_crystal": {
 			"textures": "textures/blocks/multiblock/tin/tin_crystal"
 		},
@@ -333,12 +330,6 @@
 		},
 		"utilitycraft_raw_tin_block": {
 			"textures": "textures/blocks/block_of_raw_tin"
-		},
-		"utilitycraft_raw_uranium_block": {
-			"textures": "textures/blocks/block_of_raw_uranium"
-		},
-		"utilitycraft_uranium_block": {
-			"textures": "textures/blocks/block_of_uranium"
 		},
 		"utilitycraft_controller_case": {
 			"textures": "textures/blocks/controller_case"
@@ -642,24 +633,6 @@
 		},
 		"utilitycraft_thermal_reactor_controller_down": {
 			"textures": "textures/blocks/multiblock/bronze/thermal_reactor_controller_down"
-		},
-		"utilitycraft_saline_coolant_fluid": {
-			"textures": "textures/entity/saline_coolant_fluid"
-		},
-		"utilitycraft_fluorine_gas": {
-			"textures": "textures/entity/fluorine_gas"
-		},
-		"utilitycraft_hydrogen_fluoride_gas": {
-			"textures": "textures/entity/hydrogen_fluoride_gas"
-		},
-		"utilitycraft_natural_uranium_hexafluoride_gas": {
-			"textures": "textures/entity/natural_uranium_hexafluoride_gas"
-		},
-		"utilitycraft_enriched_uranium_hexafluoride_gas": {
-			"textures": "textures/entity/enriched_uranium_hexafluoride_gas"
-		},
-		"utilitycraft_depleted_uranium_hexafluoride_gas": {
-			"textures": "textures/entity/depleted_uranium_hexafluoride_gas"
 		},
 		"utilitycraft_liquid_tank_controller_sides": {
 			"textures": "textures/blocks/multiblock/liquid_tank_controller/sides"

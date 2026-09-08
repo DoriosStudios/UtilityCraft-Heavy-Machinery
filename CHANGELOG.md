@@ -1,6 +1,15 @@
 # UtilityCraft: Heavy Machinery v0.5.3
 
+## ADDED
+- Added generic DoriosCore TemperatureStorage with persistent thermal capacity, internal HU/t generation, simultaneous hot/cold contacts, exact time-based heat exchange, and native temperature display independent of machine limits.
+
 ## CHANGED
+- Moved all remaining liquid/gas resource definitions and visual assets to UtilityCraft for reuse by other addons, including nuclear gases. Heavy Machinery retains its production/processing recipes, coolant behavior, Saline Coolant Bucket and Creative Tanks, consuming the same shared resource IDs.
+- Made the Nuclear Reactor General, Control and Fuel tab icons monochromatic across all four toggle states, preserving their sizes and shapes; Fuel uses separate toggle textures and retains the original colored item sprite.
+- Migrated Nuclear Reactor to the generic thermal model with structure-based heat capacity, passive cooling, finite coolant heat absorption and burn-rate-driven heat; retained machine-owned overheat/meltdown rules and existing stored temperatures.
+- Optimized Nuclear Reactor background updates: gate visual work on shouldUpdateUI, cache static structure/storage wrappers, batch resource writes, throttle vent particles, and keep keypad/power actions on InterfaceManager events.
+- Moved only basic Uranium materials, their textures/localized names, Creative entries, ore drops and basic recipes to UtilityCraft. Enriched/spent pellets, rods, uranium chemistry, machinery and all other materials remain in Heavy Machinery with unchanged identifiers. Retained Uranium sieve-drop registration in Heavy Machinery for normal and compressed Crushed Cobbled Deepslate, with unchanged amounts, chance and tier.
+- Renamed the Waste percentage label from Reserve to Filled to clarify tank occupancy.
 - Used the supplied 12x12 reactor sprite for General and restored the compact calculator gray casing across all toggle states.
 - Made the General and Control tab artwork more compact: a framed reactor core and a smaller calculator with 2x2 keys, centered across all four toggle states.
 - Enlarged Nuclear Reactor toggle artwork to a centered 16x16 area inside the 18x18 buttons; Fuel uses its original 16x16 item sprite without downscaling.

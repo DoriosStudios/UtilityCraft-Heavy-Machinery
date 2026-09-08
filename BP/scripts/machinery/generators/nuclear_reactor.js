@@ -1,8 +1,9 @@
-import { ItemStack, system } from '@minecraft/server'
+import { ItemStack, system, world } from '@minecraft/server'
 import {
     EnergyStorage,
     FluidStorage,
     GasStorage,
+    TemperatureStorage,
     InterfaceManager,
     Multiblock,
     MultiblockGenerator,
@@ -13,7 +14,7 @@ import { ensureGasIOConfig } from 'DoriosCore/interfaces/gasIO.js'
 import { ensureItemIOConfig } from 'DoriosCore/interfaces/itemIO.js'
 import * as DoriosLib from 'DoriosLib/index.js'
 import { coolants } from 'config/coolants.js'
-import { advanceReactorTemperature } from './reactorThermalModel.js'
+import { NUCLEAR_THERMAL, getNuclearHeatCapacity, getNuclearEfficiency, simulateNuclearReactor } from './nuclearSimulation.js'
 import {
     formatReactorOnTime,
     setReactorRunning,
@@ -39,15 +40,11 @@ const config = {
     burnRatePerAssembly: 2,
     assembliesPerRodControl: 4,
     energyPerFuelUnit: 200_000,
-    heatPerFuelUnit: 0.05,
     wasteMbPerFuelUnit: 1,
     wasteCapacityPerGasCell: 256_000,
 
     coolantCapacityPerEmptyBlock: 64_000,
-    coolantPerKelvin: 10,
     minimumCoolantTier: 2,
-    conductorHeatDissipation: 0.05,
-    thermalResponseTimeSeconds: 60,
 
     initialData: {
         state: 'off',
@@ -62,8 +59,13 @@ const config = {
         startedAtMs: 0,
         warning: '',
         wasteRemainder: 0,
+        coolantCreditMb: 0,
+        coolantCreditType: 'empty',
     },
 }
+
+const runtimeCache = new WeakMap()
+const statsCache = new WeakMap()
 
 const FUEL_INPUT_SLOT = 21
 const RATE_INPUT_SLOT = 6
@@ -163,6 +165,7 @@ const nuclearReactorButtons = {
         onPress: ({ entity }) => {
             if (!entity) return
             const data = getReactorData(entity)
+            if (data.meltdownPending) return
             setReactorRunning(data, data.state === 'off')
             saveReactorData(entity, data)
         },
@@ -190,6 +193,16 @@ for (const slot of Object.keys(RATE_KEYPAD_BY_SLOT).map(Number)) {
 
 InterfaceManager.registerInterface(NUCLEAR_REACTOR_INTERFACE_ID, { buttons: nuclearReactorButtons })
 InterfaceManager.linkBlockInterface('utilitycraft:nuclear_reactor_controller', NUCLEAR_REACTOR_INTERFACE_ID)
+InterfaceManager.linkEntityInterface('utilitycraft:nuclear_reactor', NUCLEAR_REACTOR_INTERFACE_ID)
+
+// Migrate legacy entry labels on UI-open, not by polling the keypad every tick.
+world.afterEvents.entityContainerOpened.subscribe(({ entity }) => {
+    if (entity?.typeId !== 'utilitycraft:nuclear_reactor') return
+    const container = entity.getComponent('minecraft:inventory')?.container
+    if (!(container?.getItem(RATE_INPUT_SLOT)?.nameTag ?? '').includes('FU/t')) {
+        setRateInputText(entity, String(getReactorData(entity).rate))
+    }
+})
 
 DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
     onPlayerInteract(e) {
@@ -225,8 +238,10 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
                     maximumBurnRate,
                     energyCap,
                     bounds: structure.bounds,
+                    heatCapacity: getNuclearHeatCapacity(structure.bounds, components),
                 }))
 
+                runtimeCache.delete(entity)
                 const data = getReactorData(entity)
                 setReactorRunning(data, false)
                 data.meltdownPending = false
@@ -276,7 +291,7 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
                     `\u00A77Fuel Capacity: \u00A7a${formatFuel(fuelAssemblies * config.fuelCapacityPerAssembly)}`,
                     `\u00A77Waste Capacity: \u00A76${GasStorage.formatGas(gasCells * config.wasteCapacityPerGasCell)} (${gasCells} Gas Cells)`,
                     `\u00A77Coolant Capacity: \u00A7b${FluidStorage.formatFluid(emptyBlocks * config.coolantCapacityPerEmptyBlock)}`,
-                    `\u00A77Heat Dissipation: \u00A7b${(heatConductors * config.conductorHeatDissipation).toFixed(2)} K/t`,
+                    `\u00A77Thermal Conductance: \u00A7b${(heatConductors * NUCLEAR_THERMAL.conductorConductance).toFixed(3)} HU/(t K)`,
                     `\u00A77Nominal Production: \u00A7b${EnergyStorage.formatEnergyToText(maximumProduction)}/t`,
                 ]
             },
@@ -301,133 +316,90 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
         energy.transferToNetwork(reactor.rate)
 
         const data = getReactorData(entity)
+        const runtime = getReactorRuntime(entity, data)
+        const { coolant, waste, temperature } = runtime
+        const tickDelta = Math.max(1, reactor.processingInterval ?? 1)
         synchronizeReactorTimer(data)
-        const inputLabel = reactor.container?.getItem(RATE_INPUT_SLOT)?.nameTag ?? ''
-        if (!inputLabel.includes('FU/t')) setRateInputText(entity, `${data.rate}`)
-        const container = reactor.container
-        const fuelInputWarning = loadFuelFromInput(container, data)
-
-        const [coolant] = FluidStorage.initializeMultiple(entity, 1)
-        coolant.setCap(data.coolantCapacity ?? 0)
-        coolant.display(2)
-
-        // Fractional mB persist until they form a whole scoreboard unit.
-        const [waste] = GasStorage.initializeMultiple(entity, 1)
-        waste.setCap((data.gasCells ?? 0) * config.wasteCapacityPerGasCell)
-        ensureGasIOConfig(entity, 'utilitycraft:nuclear_reactor_controller')
-        // Preserve waste stored by the earlier development ID.
-        if (waste.getType() === 'uranium_waste_gas' || waste.getType() === 'nuclear_waste') waste.setType('nuclear_waste_gas')
+        const fuelInputWarning = loadFuelFromInput(reactor.container, data)
+        const fuelProfile = FUEL_PROFILES[data.fuelType]
         const wasteType = waste.getType()
         const wasteCompatible = wasteType === 'empty' || wasteType === 'nuclear_waste_gas'
-        const wastePending = Math.max(0, data.wasteRemainder ?? 0)
-        const wasteFreeSpace = wasteCompatible ? Math.max(0, waste.getFreeSpace() - wastePending) : 0
-
-        const coolantType = coolant.getType()
-        const coolantData = coolantType in coolants ? coolants[coolantType] : undefined
+        const pendingWaste = Math.max(0, data.wasteRemainder ?? 0)
+        const wasteFreeSpace = wasteCompatible ? Math.max(0, waste.getFreeSpace() - pendingWaste) : 0
         const coolantAmount = coolant.get()
-        const tickDelta = Math.max(1, reactor.processingInterval ?? 1)
-        const fuelProfile = FUEL_PROFILES[data.fuelType]
-        const nominalBurnRate = getMaximumBurnRate(data.fuelAssemblies, data.rodControls)
-            * (fuelProfile?.burnRateMultiplier ?? 0)
-        const requestedBurn = data.rate * tickDelta
+        const storedCoolantType = coolant.getType()
+        // Credit is prepaid fractional mB. Switching fluid discards unused credit.
+        if (storedCoolantType !== 'empty' && storedCoolantType !== data.coolantCreditType) data.coolantCreditMb = 0
+        const coolantType = storedCoolantType === 'empty' && data.coolantCreditMb > 0
+            ? data.coolantCreditType : storedCoolantType
+        const coolantData = coolants[coolantType]
+        const validCoolant = coolantData?.tier >= config.minimumCoolantTier
+            && Number.isFinite(coolantData.efficiency) && coolantData.efficiency > 0
+        const heatPerMb = validCoolant ? NUCLEAR_THERMAL.coolantHeatPerMb * coolantData.efficiency : 0
         const energyFreeSpace = energy.getFreeSpace()
-        const operatingEfficiency = getTemperatureEfficiency(data.temperature)
-            * (fuelProfile?.efficiencyMultiplier ?? 0)
+        const result = simulateNuclearReactor({
+            temperature: temperature.get(),
+            heatCapacity: data.heatCapacity,
+            ticks: tickDelta,
+            running: data.state !== 'off' && !data.meltdownPending,
+            rate: data.rate,
+            nominalRate: data.maximumBurnRate * (fuelProfile?.burnRateMultiplier ?? 0),
+            fuelEfficiency: fuelProfile?.efficiencyMultiplier ?? 0,
+            fuel: Math.max(0, data.fuelStored),
+            energySpace: energyFreeSpace,
+            wasteSpace: wasteFreeSpace,
+            conductance: data.heatConductors * NUCLEAR_THERMAL.conductorConductance,
+            coolantHeatBudget: (coolantAmount + (data.coolantCreditMb ?? 0)) * heatPerMb,
+        }, config)
 
-        data.controlEfficiency = getControlEfficiency(data.fuelAssemblies, data.rodControls)
-        data.efficiency = operatingEfficiency
-        data.activeRate = 0
-        data.producing = 0
-        let working = false
-        let generatedHeat = 0
-
-        if (data.state !== 'off' && requestedBurn > 0 && data.fuelStored > 0 && energyFreeSpace > 0) {
-            const maximumFuelByEnergy = energyFreeSpace
-                / (config.energyPerFuelUnit * operatingEfficiency)
-            const maximumFuelByWaste = wasteFreeSpace / config.wasteMbPerFuelUnit
-            const consumedFuel = Math.min(data.fuelStored, requestedBurn, maximumFuelByEnergy, maximumFuelByWaste)
-
-            if (consumedFuel > 0) {
-                const generatedWaste = wastePending + consumedFuel * config.wasteMbPerFuelUnit
-                const wholeWaste = Math.floor(generatedWaste + 1e-9)
-                if (wholeWaste > 0) waste.setType('nuclear_waste_gas')
-                const addedWaste = wholeWaste > 0 ? waste.add(wholeWaste) : 0
-                data.wasteRemainder = Math.max(0, generatedWaste - addedWaste)
-                data.fuelStored = Math.max(0, data.fuelStored - consumedFuel)
-                const producedEnergy = consumedFuel
-                    * config.energyPerFuelUnit
-                    * operatingEfficiency
-                energy.add(producedEnergy)
-                // Overdriving installed assemblies/controls adds heat, not a burn cap.
-                const load = nominalBurnRate > 0 ? Math.max(1, consumedFuel / tickDelta / nominalBurnRate) : 1
-                generatedHeat = consumedFuel * config.heatPerFuelUnit * load
-                data.activeRate = consumedFuel / tickDelta
-                data.producing = producedEnergy / tickDelta
-                working = true
+        if (result.consumedFuel > 0) {
+            data.fuelStored = Math.max(0, data.fuelStored - result.consumedFuel)
+            energy.add(result.producedEnergy)
+            const totalWaste = pendingWaste + result.consumedFuel * config.wasteMbPerFuelUnit
+            const wholeWaste = Math.floor(totalWaste + 1e-9)
+            if (wholeWaste > 0) {
+                if (wasteType !== 'nuclear_waste_gas') waste.setType('nuclear_waste_gas')
+                data.wasteRemainder = Math.max(0, totalWaste - waste.add(wholeWaste))
+            } else data.wasteRemainder = totalWaste
+        }
+        if (result.coolantHeatRemoved > 0) {
+            const usedMb = result.coolantHeatRemoved / heatPerMb
+            const paidMb = Math.min(coolantAmount, Math.ceil(Math.max(0, usedMb - (data.coolantCreditMb ?? 0)) - 1e-9))
+            if (paidMb > 0) coolant.consume(paidMb)
+            data.coolantCreditMb = Math.max(0, (data.coolantCreditMb ?? 0) + paidMb - usedMb)
+            data.coolantCreditType = coolantType
+            if (data.state !== 'off' && system.currentTick >= runtime.nextSmokeTick) {
+                spawnReactorVentSmoke(entity)
+                runtime.nextSmokeTick = system.currentTick + 20
             }
         }
-
-        const heatDissipation = (data.heatConductors ?? 0) * config.conductorHeatDissipation
-        const hasCoolant = Boolean(
-            coolantData
-            && coolantData.tier >= config.minimumCoolantTier
-            && coolantAmount > 0,
-        )
-        const maximumCoolantHeat = hasCoolant
-            ? coolantAmount / config.coolantPerKelvin * coolantData.efficiency
-            : 0
-        const thermalStep = advanceReactorTemperature({
-            temperature: data.temperature,
-            ambientTemperature: config.ambientTemperatureK,
-            maximumTemperature: config.maximumTemperatureK,
-            idealTemperatureFraction: config.idealTemperatureFraction,
-            generatedHeat,
-            conductorCoolingAtIdeal: heatDissipation * tickDelta,
-            tickDelta,
-            hasCoolant,
-            maximumCoolantHeat,
-            responseTimeSeconds: config.thermalResponseTimeSeconds,
-        })
-        data.temperature = thermalStep.temperature
-
-        if (thermalStep.coolantHeatRemoved > 0) {
-            if (data.state !== 'off') spawnReactorVentSmoke(entity)
-            coolant.consume(
-                thermalStep.coolantHeatRemoved
-                    * config.coolantPerKelvin
-                    / coolantData.efficiency,
-            )
-        }
-
-        data.temperature = clamp(
-            data.temperature,
-            config.ambientTemperatureK,
-            config.maximumTemperatureK,
-        )
-        data.efficiency = getTemperatureEfficiency(data.temperature)
-            * (fuelProfile?.efficiencyMultiplier ?? 0)
+        data.temperature = result.temperature
+        temperature.set(result.temperature)
+        data.producing = result.producedEnergy / tickDelta
+        data.activeRate = result.consumedFuel / tickDelta
+        data.efficiency = getTemperatureEfficiency(result.temperature) * (fuelProfile?.efficiencyMultiplier ?? 0)
         if (data.fuelStored <= 0) data.fuelType = 'empty'
-
         data.warning = getOperatingStatus({
-            data,
-            working,
-            fuelInputWarning,
-            coolantType,
-            coolantData,
-            coolantAmount,
-            energyFreeSpace,
+            data, working: result.consumedFuel > 0, fuelInputWarning, coolantType, coolantData,
+            coolantAmount: coolant.get() + (data.coolantCreditMb ?? 0), energyFreeSpace,
             wasteFull: !wasteCompatible || waste.getFreeSpace() - (data.wasteRemainder ?? 0) <= 1e-9,
         })
-
-        if (data.temperature >= config.meltdownTemperatureK) {
+        if (result.meltdown) {
             triggerMeltdown(reactor, data)
-        } else if (data.temperature >= config.overheatWarningK) {
-            data.warning = '\u00A76Overheating!'
+            return
         }
+        if (data.temperature >= config.overheatWarningK) data.warning = '\u00A76Overheating!'
 
-        waste.display(24)
-        updateReactorUI(data, reactor, coolant, waste)
-        reactor.displayEnergy()
+        // No string formatting, display-slot reads/writes or UI items when closed.
+        if (reactor.shouldUpdateUI) {
+            coolant.shouldUpdateUI = true
+            waste.shouldUpdateUI = true
+            coolant.display(2)
+            waste.display(24)
+            temperature.display(4, { minimum: config.ambientTemperatureK, maximum: config.maximumTemperatureK, force: true })
+            updateReactorUI(data, reactor, coolant, waste)
+            reactor.displayEnergy()
+        }
         saveReactorData(entity, data)
     },
 })
@@ -468,7 +440,7 @@ function getOperatingStatus({ data, working, fuelInputWarning, coolantType, cool
     if ((data.fuelStored ?? 0) <= 0) return '\u00A7eMissing Fuel'
     if (energyFreeSpace <= 0) return '\u00A7eEnergy Full'
     if (coolantType !== 'empty' && !coolantData) return '\u00A7cInvalid Coolant'
-    if (coolantType !== 'empty' && coolantData.tier < config.minimumCoolantTier) {
+    if (coolantType !== 'empty' && coolantData?.tier < config.minimumCoolantTier) {
         return '\u00A7cRequires Tier 2+ Coolant'
     }
     if (working && coolantAmount <= 0) return '\u00A7cMissing Coolant'
@@ -526,24 +498,11 @@ function getMaximumBurnRate(fuelAssemblies = 0, rodControls = 0) {
 }
 
 function getTemperatureEfficiency(temperature = config.ambientTemperatureK) {
-    const temperatureSpan = Math.max(
-        1,
-        config.maximumTemperatureK - config.ambientTemperatureK,
-    )
-    const normalizedTemperature = clamp(
-        (temperature - config.ambientTemperatureK) / temperatureSpan,
-        0,
-        1,
-    )
-    const ideal = config.idealTemperatureFraction
-    const distance = Math.abs(normalizedTemperature - ideal) / ideal
-    const baseShape = Math.max(0, 1 - distance ** config.efficiencyGamma)
-    const shape = normalizedTemperature < ideal
-        ? baseShape ** config.coldEfficiencyAlpha
-        : baseShape ** config.hotEfficiencyAlpha
+    return getNuclearEfficiency(temperature, config)
+}
 
-    return config.minimumEfficiency
-        + (config.maximumEfficiency - config.minimumEfficiency) * shape
+function setLabelIfChanged(reactor, text, slot) {
+    if (reactor.container.getItem(slot)?.nameTag !== text) reactor.setLabel(text, slot)
 }
 
 function updateReactorUI(data, reactor, coolant, waste) {
@@ -561,7 +520,7 @@ function updateReactorUI(data, reactor, coolant, waste) {
         ? coolantStored / coolantCapacity * 100
         : 0
 
-    reactor.setLabel([
+    setLabelIfChanged(reactor, [
         '\u00A7r' + (data.warning || '\u00A7eIdle'),
         '',
         '\u00A7r\u00A7cRate: \u00A7f' + formatFuel(data.rate) + '/t',
@@ -576,7 +535,7 @@ function updateReactorUI(data, reactor, coolant, waste) {
     ].join('\n'), 1)
     // Extra display slots are never exposed as interactive inventory cells.
     if (reactor.container.size > 23) {
-        reactor.setLabel([
+        setLabelIfChanged(reactor, [
             '\u00A7r\u00A7eFuel Information',
             '\u00A7r\u00A7aType: \u00A7f' + (FUEL_PROFILES[data.fuelType]?.label ?? 'Empty'),
             '\u00A7r\u00A7aReserve: \u00A7f' + fuelPercent.toFixed(0) + '%%',
@@ -587,17 +546,16 @@ function updateReactorUI(data, reactor, coolant, waste) {
             '',
             '\u00A7r\u00A7eWaste Information',
             '\u00A7r\u00A7aStored: \u00A7f' + GasStorage.formatGas(waste.get()),
-            '\u00A7r\u00A7aReserve: \u00A7f' + (waste.getCap() > 0 ? waste.get() / waste.getCap() * 100 : 0).toFixed(0) + '%%',
+            '\u00A7r\u00A7aFilled: \u00A7f' + (waste.getCap() > 0 ? waste.get() / waste.getCap() * 100 : 0).toFixed(0) + '%%',
         ].join('\n'), 22)
-        reactor.setLabel('\u00A7r\u00A78Current Rate: ' + formatFuel(data.rate) + '/t', 23)
+        setLabelIfChanged(reactor, '\u00A7r\u00A78Current Rate: ' + formatFuel(data.rate) + '/t', 23)
     }
 
     if (reactor.container.size > 25) {
-        reactor.setLabel('\u00A7r\u00A78Recommended Rate:\n'
+        setLabelIfChanged(reactor, '\u00A7r\u00A78Recommended Rate:\n'
             + formatFuel(getRecommendedRate(data, coolant)) + '/t', 25)
     }
     updateFuelBar(reactor.container, data)
-    updateTemperatureBar(reactor.container, data.temperature)
 }
 
 function updateFuelBar(container, data) {
@@ -609,29 +567,18 @@ function updateFuelBar(container, data) {
     const maximumEfficiency = config.maximumEfficiency * (profile?.efficiencyMultiplier ?? 0)
     const fraction = fuelCapacity > 0 ? clamp(fuelStored / fuelCapacity, 0, 1) : 0
     const frame = Math.floor(fraction * 42)
-    const item = new ItemStack(`utilitycraft:uranium_bar_${String(frame).padStart(2, '0')}`, 1)
-    item.nameTag = [
+    const typeId = `utilitycraft:uranium_bar_${String(frame).padStart(2, '0')}`
+    const nameTag = [
         '\u00A7rNuclear Fuel',
         `\u00A7r\u00A77  Type: ${profile?.label ?? 'Empty'}`,
         `\u00A7r\u00A77  Stored: ${formatFuel(fuelStored)} / ${formatFuel(fuelCapacity)}`,
         `\u00A7r\u00A77  Max Efficiency: ${(maximumEfficiency * 100).toFixed(2)}%`,
     ].join('\n')
+    const previous = container.getItem(3)
+    if (previous?.typeId === typeId && previous.nameTag === nameTag) return
+    const item = new ItemStack(typeId, 1)
+    item.nameTag = nameTag
     container.setItem(3, item)
-}
-
-function updateTemperatureBar(container, temperature) {
-    if (!container) return
-
-    const fraction = clamp(
-        (temperature - config.ambientTemperatureK)
-            / (config.maximumTemperatureK - config.ambientTemperatureK),
-        0,
-        1,
-    )
-    const frame = Math.floor(fraction * 31)
-    const item = new ItemStack(`utilitycraft:temperature_${String(frame).padStart(2, '0')}`, 1)
-    item.nameTag = `\u00A7r\u00A7f${temperature.toFixed(2)} K`
-    container.setItem(4, item)
 }
 
 function appendRateInput(slot, entity) {
@@ -685,20 +632,19 @@ function applyBurnRate(entity) {
     data.rate = rate
     saveReactorData(entity, data)
     setRateInputText(entity, `${rate}`)
+    DoriosLib.entity.setNewItem(entity, {
+        slot: 23, typeId: 'utilitycraft:arrow_indicator_90',
+        nameTag: '\u00A7r\u00A78Current Rate: ' + formatFuel(rate) + '/t',
+    })
 }
 
 function getReactorData(entity) {
     let persisted = {}
-    let stats = {}
+    const stats = getReactorStats(entity)
 
     try {
         const rawData = entity.getDynamicProperty('nuclearData')
         if (rawData) persisted = JSON.parse(rawData)
-    } catch { }
-
-    try {
-        const rawStats = entity.getDynamicProperty('nuclearStats')
-        if (rawStats) stats = JSON.parse(rawStats)
     } catch { }
 
     const data = {
@@ -730,7 +676,10 @@ function getReactorData(entity) {
 }
 
 function saveReactorData(entity, data) {
-    entity.setDynamicProperty('nuclearData', JSON.stringify(data))
+    const state = { ...data }
+    for (const key of Object.keys(getReactorStats(entity))) delete state[key]
+    const serialized = JSON.stringify(state)
+    if (entity.getDynamicProperty('nuclearData') !== serialized) entity.setDynamicProperty('nuclearData', serialized)
 }
 
 function formatFuel(amount = 0) {
@@ -741,13 +690,57 @@ function clamp(value, minimum, maximum) {
     return Math.min(maximum, Math.max(minimum, Number(value) || 0))
 }
 
-/** Reference at ideal temperature with the coolant currently available; not a safety guarantee. */
+/** Reference equilibrium near ideal temperature; assumes continued coolant supply. */
 function getRecommendedRate(data, coolant) {
-    const nominal = getMaximumBurnRate(data.fuelAssemblies, data.rodControls)
-        * (FUEL_PROFILES[data.fuelType]?.burnRateMultiplier ?? 1)
+    const nominal = data.maximumBurnRate * (FUEL_PROFILES[data.fuelType]?.burnRateMultiplier ?? 1)
     const fluid = coolants[coolant.getType()]
-    if (!fluid || fluid.tier < config.minimumCoolantTier || coolant.get() <= 0) return 0
-    const cooling = Math.min((data.heatConductors ?? 0) * config.conductorHeatDissipation,
-        coolant.get() / config.coolantPerKelvin * fluid.efficiency)
-    return Math.max(0, Math.min(nominal, cooling / config.heatPerFuelUnit))
+    const delta = (config.maximumTemperatureK - config.ambientTemperatureK) * config.idealTemperatureFraction
+    const conductance = data.heatConductors * NUCLEAR_THERMAL.conductorConductance
+    const passive = conductance * NUCLEAR_THERMAL.passiveCoolingFraction * delta
+    const active = fluid?.tier >= config.minimumCoolantTier && coolant.get() > 0
+        ? Math.min(conductance * delta, coolant.get() * NUCLEAR_THERMAL.coolantHeatPerMb * fluid.efficiency) : 0
+    return Math.max(0, Math.min(nominal, (passive + active) / NUCLEAR_THERMAL.heatPerFuelUnit))
+}
+
+function getReactorStats(entity) {
+    const raw = entity.getDynamicProperty('nuclearStats')
+    const cached = statsCache.get(entity)
+    if (cached && cached.raw === raw) return cached.value
+    let value = {}
+    try { if (raw) value = JSON.parse(raw) } catch { }
+    value.maximumBurnRate = getMaximumBurnRate(value.fuelAssemblies ?? 0, value.rodControls ?? 0)
+    if (!(value.heatCapacity > 0)) {
+        value.heatCapacity = getNuclearHeatCapacity(value.bounds, {
+            fuel_assemblies: value.fuelAssemblies ?? 0,
+            rod_control: value.rodControls ?? 0,
+            heat_conductor: value.heatConductors ?? 0,
+            gas_cell: value.gasCells ?? 0,
+        })
+    }
+    statsCache.set(entity, { raw, value })
+    return value
+}
+
+function getReactorRuntime(entity, data) {
+    let runtime = runtimeCache.get(entity)
+    if (!runtime) {
+        const [coolant] = FluidStorage.initializeMultiple(entity, 1)
+        const [waste] = GasStorage.initializeMultiple(entity, 1)
+        const temperature = new TemperatureStorage(entity, 0, {
+            initialTemperature: data.temperature,
+            heatCapacity: data.heatCapacity,
+        })
+        runtime = { coolant, waste, temperature, stats: null, nextSmokeTick: 0 }
+        runtimeCache.set(entity, runtime)
+        const type = waste.getType()
+        if (type === 'uranium_waste_gas' || type === 'nuclear_waste') waste.setType('nuclear_waste_gas')
+    }
+    const stats = getReactorStats(entity)
+    if (runtime.stats !== stats) {
+        runtime.coolant.setCap(data.coolantCapacity)
+        runtime.waste.setCap(data.gasCells * config.wasteCapacityPerGasCell)
+        if (runtime.temperature.getHeatCapacity() !== data.heatCapacity) runtime.temperature.setHeatCapacity(data.heatCapacity)
+        runtime.stats = stats
+    }
+    return runtime
 }
