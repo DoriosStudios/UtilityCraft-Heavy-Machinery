@@ -1,6 +1,6 @@
 import { EnergyStorage, FluidStorage, Multiblock, MultiblockMachine, registerLinkNodeIO } from "DoriosCore/index.js"
 import * as DoriosLib from "DoriosLib/index.js";
-import { reactionRecipes } from 'config/recipes/reaction_chamber.js'
+import { reactionRecipes } from 'config/recipes/reactionChamber.js'
 
 const INPUT_LIQUID_SLOT = 3
 const OUTPUT_LIQUID_SLOT = 4

@@ -4,6 +4,7 @@
 - Added generic DoriosCore TemperatureStorage with persistent thermal capacity, internal HU/t generation, simultaneous hot/cold contacts, exact time-based heat exchange, and native temperature display independent of machine limits.
 
 ## CHANGED
+- Standardized all Heavy Machinery JavaScript filenames and the recipe registration directory to camelCase, updating imports and test references.
 - Moved all remaining liquid/gas resource definitions and visual assets to UtilityCraft for reuse by other addons, including nuclear gases. Heavy Machinery retains its production/processing recipes, coolant behavior, Saline Coolant Bucket and Creative Tanks, consuming the same shared resource IDs.
 - Made the Nuclear Reactor General, Control and Fuel tab icons monochromatic across all four toggle states, preserving their sizes and shapes; Fuel uses separate toggle textures and retains the original colored item sprite.
 - Migrated Nuclear Reactor to the generic thermal model with structure-based heat capacity, passive cooling, finite coolant heat absorption and burn-rate-driven heat; retained machine-owned overheat/meltdown rules and existing stored temperatures.

@@ -1,6 +1,6 @@
 import * as DoriosLib from "DoriosLib/index.js";
 import { Machine, GasStorage, registerIOInterface } from "DoriosCore/index.js";
-import { isotopeCentrifugeRecipes } from "config/recipes/isotope_centrifuge.js";
+import { isotopeCentrifugeRecipes } from "config/recipes/isotopeCentrifuge.js";
 
 registerIOInterface("utilitycraft:isotope_centrifuge", {
     items: {

@@ -6,15 +6,15 @@ import './recipes/infuser.js'
 import './recipes/sieve.js'
 import './recipes/melter.js'
 
-import './recipes_register/sieve.js'
-import './recipes_register/crusher.js'
-import './recipes_register/furnace.js'
-import './recipes_register/press.js'
-import './recipes_register/infuser.js'
-import './recipes_register/melter.js'
+import './recipesRegister/sieve.js'
+import './recipesRegister/crusher.js'
+import './recipesRegister/furnace.js'
+import './recipesRegister/press.js'
+import './recipesRegister/infuser.js'
+import './recipesRegister/melter.js'
 
 import './fluids.js'
 import './coolants.js'
 
 import './recipes/electrolyzer.js';
-import './recipes/chemical_converter.js';
+import './recipes/chemicalConverter.js';

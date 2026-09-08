@@ -2,24 +2,20 @@
 //1234567891011121314151617181920
 
 // Multiblock Machines
-// import './machinery/multiblock_creator.js'
-// import './machinery/multiblock_machines/crusher_controller.js'
-// import './machinery/multiblock_machines/power_condenser_controller.js'
-// import './machinery/multiblock_machines/thermo_reactor_controller.js'
 
-import './generators/power_condenser.js'
-import './generators/thermo_reactor.js'
-import './generators/nuclear_reactor.js'
-import './machines/crusher_controller.js'
-import './machines/incinerator_controller.js'
-import './machines/electro_press_controller.js'
-import './machines/infuser_controller.js'
-import './machines/autosieve_controller.js'
-import './machines/isotope_centrifuge.js'
-import './machines/reaction_chamber_controller.js'
-import './machines/magmatic_chamber_controller.js'
+import './generators/powerCondenser.js'
+import './generators/thermoReactor.js'
+import './generators/nuclearReactor.js'
+import './machines/crusherController.js'
+import './machines/incineratorController.js'
+import './machines/electroPressController.js'
+import './machines/infuserController.js'
+import './machines/autosieveController.js'
+import './machines/isotopeCentrifuge.js'
+import './machines/reactionChamberController.js'
+import './machines/magmaticChamberController.js'
 
 
-import './machines/reaction_chamber.js'
-import './machines/chemical_processor.js'
-import './machines/tank_controller.js'
+import './machines/reactionChamber.js'
+import './machines/chemicalProcessor.js'
+import './machines/tankController.js'

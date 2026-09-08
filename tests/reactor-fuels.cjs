@@ -38,7 +38,7 @@ const context = { ...thermal, TemperatureStorage, ItemStack, worldLoaded: true,
     formatReactorOnTime: () => '00:00:00', synchronizeReactorTimer() {}, spawnReactorVentSmoke() {},
     setReactorRunning(data, running) { data.state = running ? 'on' : 'off'; data.startedAtMs = running ? 1 : 0; },
 };
-const source = fs.readFileSync(path.join(root, 'BP/scripts/machinery/generators/nuclear_reactor.js'), 'utf8')
+const source = fs.readFileSync(path.join(root, 'BP/scripts/machinery/generators/nuclearReactor.js'), 'utf8')
     .replace(/^import[\s\S]*?from ['"][^'"]+['"]\r?\n/gm, '');
 vm.createContext(context);
 vm.runInContext(source + '\nglobalThis.api = { config, getReactorData, getRecommendedRate, loadFuelFromInput, updateFuelBar };', context);
