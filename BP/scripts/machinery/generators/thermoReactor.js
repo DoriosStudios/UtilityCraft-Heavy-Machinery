@@ -1,3 +1,4 @@
+import { runtimes } from '../../HeavyCore/runtimes.js'
 import { EnergyStorage, FluidStorage, GasStorage, TemperatureStorage, InterfaceManager, Multiblock, MultiblockGenerator, registerLinkNodeIO } from "DoriosCore/index.js"
 import { ensureGasIOConfig } from 'DoriosCore/interfaces/gasIO.js'
 import * as DoriosLib from "DoriosLib/index.js";
@@ -39,6 +40,8 @@ const config = {
         rate: 100,
         temperature: 300,
         efficiency: 0.1,
+        producing: 0,
+        activeRate: 0,
         startedAtMs: 0,
         warning: '',
         lavaCreditMb: 0,
@@ -55,8 +58,6 @@ const CORE_TMIN_K = config.ambientTemperatureK;
 const CORE_TCAP_K = config.maximumTemperatureK;
 const WARN_OVERHEAT_K = 1000;
 const WARN_DANGER_K = config.meltdownTemperatureK;
-const runtimeCache = new WeakMap();
-const statsCache = new WeakMap();
 
 const COOLANT_TIER = 0
 const THERMO_REACTOR_INPUT_SLOT = 6;
@@ -201,15 +202,15 @@ DoriosLib.registry.blockComponent('utilitycraft:thermo_reactor', {
                     bounds: structure.bounds
                 }))
 
-                runtimeCache.delete(entity)
+                runtimes.delete(entity.id)
                 const data = getReactorInfo(entity)
                 setReactorRunning(data, false)
                 data.meltdownPending = false
                 saveReactorInfo(entity, data)
                 setThermoReactorInputText(entity, String(data.rate))
-                const runtime = getThermoRuntime(entity, data)
-                if (runtime.coolant.get() === 0) runtime.coolant.setType('empty')
-                if (runtime.lava.getType() === 'empty') runtime.lava.setType('lava')
+                const stores = createThermoStorages(entity, data)
+                if (stores.coolant.get() === 0) stores.coolant.setType('empty')
+                if (stores.lava.getType() === 'empty') stores.lava.setType('lava')
                 ensureGasIOConfig(entity, 'utilitycraft:thermo_reactor_controller')
             },
             successMessages: ({ components, energyCap }) => {
@@ -246,8 +247,8 @@ DoriosLib.registry.blockComponent('utilitycraft:thermo_reactor', {
         reactor.setRate(entity.getDynamicProperty('dorios:rateSpeed') ?? 0)
         energy.transferToNetwork(reactor.rate)
         const data = getReactorInfo(entity)
-        const runtime = getThermoRuntime(entity, data)
-        const { lava, coolant, exhaust, temperature } = runtime
+        const stores = createThermoStorages(entity, data)
+        const { lava, coolant, exhaust, temperature } = stores
         synchronizeReactorTimer(data)
         const currentTemperature = temperature.get()
         // Settle only floating-point cooling residue; hot stopped reactors still cool normally.
@@ -263,7 +264,7 @@ DoriosLib.registry.blockComponent('utilitycraft:thermo_reactor', {
             data.warning = getThermoStatus(data, {}, 0, 0, false, 0,
                 exhaust.get() > 0 && exhaust.getType() !== outputType,
                 exhaust.getFreeSpace() - data.exhaustCreditMb <= 1e-9)
-            displayThermoReactor(data, reactor, runtime)
+            displayThermoReactor(data, reactor, stores)
             saveReactorInfo(entity, data)
             return
         }
@@ -303,9 +304,9 @@ DoriosLib.registry.blockComponent('utilitycraft:thermo_reactor', {
             if (paid > 0) lava.consume(paid)
             data.lavaCreditMb = Math.max(0, data.lavaCreditMb + paid - result.consumedLava)
             energy.add(result.producedEnergy)
-            if (system.currentTick >= runtime.nextSoundTick) {
+            if (system.currentTick >= data.nextSoundTick) {
                 entity.dimension.playSound('block.campfire.crackle', entity.location)
-                runtime.nextSoundTick = system.currentTick + 30
+                data.nextSoundTick = system.currentTick + 30
             }
         }
         if (result.coolantHeatRemoved > 0) {
@@ -323,9 +324,9 @@ DoriosLib.registry.blockComponent('utilitycraft:thermo_reactor', {
             if (coolant.get() === 0) coolant.setType('empty')
             data.coolantCreditMb = Math.max(0, data.coolantCreditMb + paid - used)
             data.coolantCreditType = coolantType
-            if (data.state !== 'off' && system.currentTick >= runtime.nextSmokeTick) {
+            if (data.state !== 'off' && system.currentTick >= data.nextSmokeTick) {
                 spawnReactorVentSmoke(entity)
-                runtime.nextSmokeTick = system.currentTick + 20
+                data.nextSmokeTick = system.currentTick + 20
             }
         }
         temperature.set(result.temperature)
@@ -337,7 +338,7 @@ DoriosLib.registry.blockComponent('utilitycraft:thermo_reactor', {
         data.warning = getThermoStatus(data, result, availableFuel, energyFreeSpace,
             validCoolant, coolant.get() + data.coolantCreditMb,
             !outputCompatible, exhaust.getFreeSpace() - data.exhaustCreditMb <= 1e-9)
-        displayThermoReactor(data, reactor, runtime)
+        displayThermoReactor(data, reactor, stores)
         saveReactorInfo(entity, data)
     }
 })
@@ -461,29 +462,35 @@ function getThermoRecommendedRate(data, coolant, exhaust) {
  * derived structure stats required by the tick simulation.
  *
  * @param {Entity} entity Reactor controller entity.
- * @returns {Object} Current reactor runtime data.
+ * @returns {Object} Cached reactor data, loaded from dynamic properties on first use.
  */
 function getReactorInfo(entity) {
+    const cached = runtimes.get(entity.id)
+    if (cached) {
+        if (entity.getDynamicProperty('dorios:state') === 'off') cached.state = 'off'
+        return cached
+    }
     let saved = {}
     try { saved = JSON.parse(entity.getDynamicProperty('reactorData') || '{}') } catch { }
     const data = { ...config.initialReactorData, ...saved, ...getThermoStats(entity) }
     data.rate = Number.isFinite(data.rate) ? Math.max(0, data.rate) : config.initialReactorData.rate
     if (entity.getDynamicProperty('dorios:state') === 'off') data.state = 'off'
+    ensureGasIOConfig(entity, 'utilitycraft:thermo_reactor_controller')
+    data.nextSoundTick = 0
+    data.nextSmokeTick = 0
+    runtimes.set(entity.id, data)
     return data
 }
 
 function saveReactorInfo(entity, data) {
-    const state = { ...data }
-    for (const key of Object.keys(getThermoStats(entity))) delete state[key]
-    delete state.fs_t
+    const state = {}
+    for (const key of Object.keys(config.initialReactorData)) state[key] = data[key]
     const serialized = JSON.stringify(state)
     if (entity.getDynamicProperty('reactorData') !== serialized) entity.setDynamicProperty('reactorData', serialized)
 }
 
 function getThermoStats(entity) {
     const raw = entity.getDynamicProperty('reactorStats')
-    const cached = statsCache.get(entity)
-    if (cached && cached.raw === raw) return cached.value
     let saved = {}
     try { if (raw) saved = JSON.parse(raw) } catch { }
     const value = { lavaCapacity: 0, coolantCapacity: 0, exhaustCapacity: 0, gasCells: 0, energyCap: 0, ...saved }
@@ -495,31 +502,20 @@ function getThermoStats(entity) {
         gas_cell: value.gasCells,
         fluid_cell: value.lavaCapacity / config.lavaCapacityPerFluidCell,
     })
-    statsCache.set(entity, { raw, value })
     return value
 }
 
-function getThermoRuntime(entity, data) {
-    let runtime = runtimeCache.get(entity)
-    if (!runtime) {
-        const [coolant, lava] = FluidStorage.initializeMultiple(entity, 2)
-        if (coolant.get() === 0) coolant.setType('empty')
-        if (lava.getType() === 'empty') lava.setType('lava')
-        const [exhaust] = GasStorage.initializeMultiple(entity, 1)
-        ensureGasIOConfig(entity, 'utilitycraft:thermo_reactor_controller')
-        const temperature = new TemperatureStorage(entity, 0, { initialTemperature: data.temperature, heatCapacity: data.heatCapacity })
-        runtime = { coolant, lava, exhaust, temperature, stats: null, nextSmokeTick: 0, nextSoundTick: 0 }
-        runtimeCache.set(entity, runtime)
-    }
-    const stats = getThermoStats(entity)
-    if (runtime.stats !== stats) {
-        runtime.exhaust.setCap(data.exhaustCapacity)
-        runtime.coolant.setCap(data.coolantCapacity)
-        runtime.lava.setCap(data.lavaCapacity)
-        if (runtime.temperature.getHeatCapacity() !== data.heatCapacity) runtime.temperature.setHeatCapacity(data.heatCapacity)
-        runtime.stats = stats
-    }
-    return runtime
+function createThermoStorages(entity, data) {
+    const [coolant, lava] = FluidStorage.initializeMultiple(entity, 2)
+    if (coolant.get() === 0) coolant.setType('empty')
+    if (lava.getType() === 'empty') lava.setType('lava')
+    const [exhaust] = GasStorage.initializeMultiple(entity, 1)
+    const temperature = new TemperatureStorage(entity, 0, { initialTemperature: data.temperature, heatCapacity: data.heatCapacity })
+    if (exhaust.getCap() !== data.exhaustCapacity) exhaust.setCap(data.exhaustCapacity)
+    if (coolant.getCap() !== data.coolantCapacity) coolant.setCap(data.coolantCapacity)
+    if (lava.getCap() !== data.lavaCapacity) lava.setCap(data.lavaCapacity)
+    if (temperature.getHeatCapacity() !== data.heatCapacity) temperature.setHeatCapacity(data.heatCapacity)
+    return { coolant, lava, exhaust, temperature }
 }
 
 function getThermoStatus(data, result, fuel, energySpace, validCoolant, coolantAmount, incompatibleOutput, outputFull) {
@@ -553,8 +549,8 @@ function triggerThermoMeltdown(reactor, data) {
     })
 }
 
-function displayThermoReactor(data, reactor, runtime) {
-    const { lava, coolant, exhaust, temperature } = runtime
+function displayThermoReactor(data, reactor, stores) {
+    const { lava, coolant, exhaust, temperature } = stores
     if (reactor.shouldUpdateUI) {
         coolant.shouldUpdateUI = true
         lava.shouldUpdateUI = true

@@ -768,7 +768,7 @@
                     "v.gas_width = q.has_property('utilitycraft:width') ? math.max(0.0, q.property('utilitycraft:width') - 0.125) : 0.0;",
                     "v.gas_height = q.has_property('utilitycraft:height') ? math.max(0.0, q.property('utilitycraft:height') - 0.125) : 0.0;",
                     "v.gas_depth = q.has_property('utilitycraft:depth') ? math.max(0.0, q.property('utilitycraft:depth') - 0.125) : 0.0;",
-                    "v.gas_type = q.has_property('utilitycraft:gas_type') ? (q.property('utilitycraft:gas_type') == 'steam' ? 0 : q.property('utilitycraft:gas_type') == 'heated_saline_coolant_gas' ? 1 : q.property('utilitycraft:gas_type') == 'hydrogen_gas' ? 2 : q.property('utilitycraft:gas_type') == 'methane_gas' ? 3 : q.property('utilitycraft:gas_type') == 'oxygen_gas' ? 4 : q.property('utilitycraft:gas_type') == 'fluorine_gas' ? 5 : q.property('utilitycraft:gas_type') == 'hydrogen_fluoride_gas' ? 6 : q.property('utilitycraft:gas_type') == 'natural_uranium_hexafluoride_gas' ? 7 : q.property('utilitycraft:gas_type') == 'enriched_uranium_hexafluoride_gas' ? 8 : q.property('utilitycraft:gas_type') == 'depleted_uranium_hexafluoride_gas' ? 9 : q.property('utilitycraft:gas_type') == 'nuclear_waste_gas' ? 10 : 0) : 0.0;",
+                    "v.gas_type = q.has_property('utilitycraft:gas_type') ? math.clamp(q.property('utilitycraft:gas_type'), 0, 10) : 0.0;",
                     "v.gas_speed = q.has_property('utilitycraft:speed') ? q.property('utilitycraft:speed') : 0.0;",
                     "v.gas_opacity = q.has_property('utilitycraft:opacity') ? q.property('utilitycraft:opacity') : 0.0;"
                 ],

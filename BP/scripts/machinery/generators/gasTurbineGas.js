@@ -5,6 +5,7 @@ const GAS_ID = 'utilitycraft:gas_turbine_gas';
 const GAS_KEY = 'hm:turbineGasVisual';
 const OWNER_KEY = 'hm:turbineOwner';
 const live = new WeakMap();
+const visualTypes = Object.keys(TURBINE_GAS_VISUALS);
 
 export function getTurbineGasVisualType(type) {
     return Object.prototype.hasOwnProperty.call(TURBINE_GAS_VISUALS, type) ? type : DEFAULT_TURBINE_GAS_VISUAL;
@@ -57,7 +58,7 @@ export function syncTurbineGas(owner, stats, type, amount, capacity, speed = 0) 
             return;
         }
     }
-    const visualType = getTurbineGasVisualType(type);
+    const visualType = visualTypes.indexOf(getTurbineGasVisualType(type));
     try {
         if (cache.type !== visualType) {
             entity.setProperty('utilitycraft:gas_type', visualType);

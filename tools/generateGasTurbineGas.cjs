@@ -30,7 +30,7 @@ const write=(file,data)=>{fs.mkdirSync(path.dirname(path.join(root,file)),{recur
 const visual=JSON.parse(fs.readFileSync(path.join(root,'BP/entities/gas_turbine_rotor.json'),'utf8'));
 const entity=visual['minecraft:entity'];entity.description.identifier='utilitycraft:gas_turbine_gas';
 entity.description.properties=Object.fromEntries(['width','height','depth'].map(key=>['utilitycraft:'+key,{type:'int',range:[1,197],default:1,client_sync:true}]));
-entity.description.properties['utilitycraft:gas_type']={type:'enum',values:gases.map(([key])=>key),default:context.defaultGas,client_sync:true};
+entity.description.properties['utilitycraft:gas_type']={type:'int',range:[0,gases.length-1],default:gases.findIndex(([key])=>key===context.defaultGas),client_sync:true};
 entity.description.properties['utilitycraft:opacity']={type:'float',range:[0,1],default:0,client_sync:true};
 entity.description.properties['utilitycraft:speed']={type:'float',range:[0,4],default:0,client_sync:true};
 entity.components['minecraft:type_family'].family=['inanimate','utilitycraft:gas_turbine_gas_visual'];
@@ -50,9 +50,8 @@ write('RP/render_controllers/gas_turbine_gas.json',{format_version:'1.8.0',rende
 write('RP/animations/gas_turbine_gas.animation.json',{format_version:'1.8.0',animations:{'animation.utilitycraft.gas_turbine.gas':{loop:true,bones:{gas:{position:[0,1,0],scale:['v.gas_width','v.gas_height','v.gas_depth']}}}}});
 const scripts={initialize:['v.gas_width = 0.0;','v.gas_height = 0.0;','v.gas_depth = 0.0;','v.gas_type = 0.0;','v.gas_opacity = 0.0;'],pre_animation:[],animate:['gas']};
 for(const name of['width','height','depth'])scripts.pre_animation.push("v.gas_"+name+" = q.has_property('utilitycraft:"+name+"') ? math.max(0.0, q.property('utilitycraft:"+name+"') - 0.125) : 0.0;");
-// Enum properties return their string value in Molang, not their array index.
-const gasIndex=gases.map(([key],index)=>"q.property('utilitycraft:gas_type') == '"+key+"' ? "+index+" : ").join('')+'0';
-scripts.pre_animation.push("v.gas_type = q.has_property('utilitycraft:gas_type') ? ("+gasIndex+") : 0.0;");
+// The script sends the numeric index used by texture and particle arrays.
+scripts.pre_animation.push("v.gas_type = q.has_property('utilitycraft:gas_type') ? math.clamp(q.property('utilitycraft:gas_type'), 0, "+(gases.length-1)+") : 0.0;");
 scripts.pre_animation.push("v.gas_speed = q.has_property('utilitycraft:speed') ? q.property('utilitycraft:speed') : 0.0;");
 scripts.pre_animation.push("v.gas_opacity = q.has_property('utilitycraft:opacity') ? q.property('utilitycraft:opacity') : 0.0;");
 

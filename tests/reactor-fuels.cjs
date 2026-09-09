@@ -21,7 +21,8 @@ const { TemperatureStorage } = load('BP/scripts/DoriosCore/machinery/temperature
 let handler, openHandler, buttons, runtime, explosions = 0, deactivations = 0;
 const events = [];
 const fluids = { heavy_water: { efficiency: 2, tier: 2 }, saline_coolant: { efficiency: 1, tier: 0 }, custom: { efficiency: 4, tier: 3 } };
-const context = { ...thermal, TemperatureStorage, ItemStack, worldLoaded: true,
+let entityIds = 0;
+const context = { runtimes: new Map(), ...thermal, TemperatureStorage, ItemStack, worldLoaded: true,
     world: { afterEvents: { entityContainerOpened: { subscribe(fn) { openHandler = fn; } } } },
     system: { currentTick: 0, run(fn) { fn(); } },
     EnergyStorage: { formatEnergyToText: String },
@@ -62,7 +63,7 @@ function setup({ data = {}, open = false, interval = 4, coolantType = 'heavy_wat
     const items = new Map(), reads = [], writes = [];
     const container = { size: 26, getItem(slot) { reads.push(slot); return items.get(slot); },
         setItem(slot, item) { writes.push(slot); if (item) items.set(slot, item); else items.delete(slot); } };
-    const entity = { typeId: 'utilitycraft:nuclear_reactor', isValid: true, container, initializations: 0,
+    const entity = { id: 'nuclear-' + (++entityIds), typeId: 'utilitycraft:nuclear_reactor', isValid: true, container, initializations: 0,
         coolant: tank(coolantType, coolant, 64000), waste: tank('nuclear_waste_gas', waste, 256000),
         getDynamicProperty: k => values.get(k), setDynamicProperty: (k, v) => values.set(k, v),
         getProperty: () => open ? 1 : 0,
@@ -98,11 +99,11 @@ test('both fuel types retain values, overflow and mixing protections', () => {
     assert.ok(x.read().fuelStored < 1000);
 });
 
-test('closed UI performs no UI slot reads/writes and initializes stores once', () => {
+test('closed UI performs no UI slot reads/writes and creates stores per update', () => {
     const x = setup(); x.tick(); x.tick();
     assert.deepEqual([...new Set(x.reads)], [21]); assert.equal(x.writes.length, 0);
     assert.equal(x.entity.coolant.displays, 0); assert.equal(x.entity.waste.displays, 0);
-    assert.equal(x.entity.initializations, 2); assert.equal(x.entity.coolant.capWrites, 1);
+    assert.equal(x.entity.initializations, 4); assert.equal(x.entity.coolant.capWrites, 0);
     assert.ok(x.energy.value > 0); assert.ok(x.read().temperature !== 1000);
     assert.equal(x.read().bounds, undefined); assert.equal(x.read().heatCapacity, undefined);
     assert.equal(x.read().fuelAssemblies, undefined);
@@ -235,7 +236,7 @@ test('changed structure refreshes capacity without resetting stored temperature'
     const x = setup(); x.tick();
     const old = new TemperatureStorage(x.entity).get();
     const stats = JSON.parse(x.values.get('nuclearStats')); stats.heatCapacity = 300; stats.gasCells = 2;
-    x.values.set('nuclearStats', JSON.stringify(stats)); x.tick();
+    x.values.set('nuclearStats', JSON.stringify(stats)); context.runtimes.delete(x.entity.id); x.tick();
     near(new TemperatureStorage(x.entity).getHeatCapacity(), 300);
     assert.ok(Math.abs(new TemperatureStorage(x.entity).get() - old) < 10);
     near(x.entity.waste.cap, 512000);
@@ -259,4 +260,35 @@ test('Nuclear skips cold stopped simulation, keeps UI/export and resumes on rest
 
 test('cold stopped Nuclear still accepts fuel without consuming it',()=>{
  const x=setup({data:{state:'off',temperature:300,fuelStored:0,fuelType:'empty'}});x.items.set(21,{typeId:'utilitycraft:enriched_uranium_rod',amount:1});x.tick();near(x.read().fuelStored,1000);near(x.energy.value,0);near(x.entity.waste.value,0);near(x.read().efficiency,config.minimumEfficiency);
+});
+
+
+test('Nuclear reuses data by entity ID and restores persisted state after cache loss', () => {
+    const x = setup(); x.tick();
+    const data = context.api.getReactorData(x.entity);
+    assert.strictEqual(context.api.getReactorData({ ...x.entity }), data);
+    assert.equal(data.entity, undefined); assert.equal(data.coolant, undefined);
+    assert.equal(data.temperature instanceof TemperatureStorage, false);
+    const before = x.read();
+    context.runtimes.delete(x.entity.id);
+    const restored = context.api.getReactorData(x.entity);
+    assert.notStrictEqual(restored, data);
+    for (const key of ['fuelStored', 'fuelType', 'wasteRemainder', 'coolantCreditMb', 'temperature']) assert.equal(restored[key], before[key]);
+    assert.equal(restored.nextSmokeTick, 0);
+    assert.equal(before.nextSmokeTick, undefined);
+    buttons.power.onPress({ entity: x.entity });
+    assert.equal(restored.state, 'off'); assert.equal(x.read().state, 'off');
+    x.entity.setDynamicProperty('dorios:state', 'off'); restored.state = 'on';
+    assert.equal(context.api.getReactorData(x.entity).state, 'off');
+});
+
+test('Nuclear reads saved data and stats once while cached, with independent machine entries', () => {
+    const x = setup(), y = setup({ data: { rate: 0.25 } });
+    const counts = new Map(), read = x.entity.getDynamicProperty;
+    x.entity.getDynamicProperty = key => { counts.set(key, (counts.get(key) ?? 0) + 1); return read(key); };
+    const data = context.api.getReactorData(x.entity);
+    for (let i = 0; i < 5; i++) assert.strictEqual(context.api.getReactorData(x.entity), data);
+    assert.equal(counts.get('nuclearData'), 1); assert.equal(counts.get('nuclearStats'), 1);
+    assert.notStrictEqual(context.api.getReactorData(y.entity), data);
+    assert.equal(context.api.getReactorData(y.entity).rate, 0.25);
 });

@@ -35,21 +35,12 @@
                     "client_sync": true
                 },
                 "utilitycraft:gas_type": {
-                    "type": "enum",
-                    "values": [
-                        "steam",
-                        "heated_saline_coolant_gas",
-                        "hydrogen_gas",
-                        "methane_gas",
-                        "oxygen_gas",
-                        "fluorine_gas",
-                        "hydrogen_fluoride_gas",
-                        "natural_uranium_hexafluoride_gas",
-                        "enriched_uranium_hexafluoride_gas",
-                        "depleted_uranium_hexafluoride_gas",
-                        "nuclear_waste_gas"
+                    "type": "int",
+                    "range": [
+                        0,
+                        10
                     ],
-                    "default": "steam",
+                    "default": 0,
                     "client_sync": true
                 },
                 "utilitycraft:opacity": {

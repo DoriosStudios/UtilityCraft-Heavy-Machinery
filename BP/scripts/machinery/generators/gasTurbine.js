@@ -1,3 +1,4 @@
+import { runtimes } from '../../HeavyCore/runtimes.js';
 import { world, ItemStack } from '@minecraft/server';
 import * as DoriosLib from 'DoriosLib/index.js';
 import { EnergyStorage, GasStorage, InterfaceManager, Multiblock, MultiblockGenerator, registerLinkNodeIO } from 'DoriosCore/index.js';
@@ -8,7 +9,7 @@ import { syncTurbineGas, removeTurbineGas } from './gasTurbineGas.js';
 const STATE_KEY = 'hm:gasTurbine';
 const STATS_KEY = 'hm:gasTurbineStructure';
 const INTERFACE_ID = 'uc_heavy_machinery:gas_turbine_controls';
-const runtime = new WeakMap();
+const initialState = { version: 2, enabled: false, rate: 1, speed: 0, progress: 0, fuelType: 'empty' };
 const config = {
     entity: { identifier: 'utilitycraft:gas_turbine', name: 'gas_turbine', inventory_size: 26 },
     generator: { energy_cap: 1, gas_cap: 1, gas_types: 1, rate_speed_base: 0 },
@@ -28,35 +29,25 @@ registerLinkNodeIO('utilitycraft:gas_turbine_controller', {
     },
 });
 
-function getRuntime(entity) {
-    let data = runtime.get(entity);
-    const raw = entity.getDynamicProperty(STATS_KEY);
-    if (!data) {
-        data = { gas: GasStorage.initializeSingle(entity), statsRaw: undefined, stats: undefined };
-        runtime.set(entity, data);
-    }
-    if (raw !== data.statsRaw) {
-        data.statsRaw = raw;
-        try { data.stats = raw ? JSON.parse(raw) : undefined; } catch { data.stats = undefined; }
-    }
+export function getTurbineState(entity) {
+    let data = runtimes.get(entity.id);
+    if (data) return data;
+    let saved = {}, stats;
+    try { saved = JSON.parse(entity.getDynamicProperty(STATE_KEY) ?? '{}') ?? {}; } catch {}
+    try { stats = JSON.parse(entity.getDynamicProperty(STATS_KEY) ?? 'null'); } catch {}
+    data = { ...initialState, ...saved, stats };
+    // Preserve physical RPM when loading the previous multiplier model.
+    if (saved.version !== 2) data.speed = Math.max(0, Math.min(1, (saved.speed ?? 0) * (saved.rotorMultiplier ?? 1) * 150 / GAS_TURBINE.rotorRpm));
+    data.version = 2;
+    delete data.rotorMultiplier;
+    runtimes.set(entity.id, data);
     return data;
 }
 
-export function getTurbineState(entity) {
-    const fallback = { version: 2, enabled: false, rate: 1, speed: 0, progress: 0, fuelType: 'empty' };
-    try {
-        const saved = JSON.parse(entity.getDynamicProperty(STATE_KEY) ?? '{}');
-        const state = { ...fallback, ...saved };
-        // Preserve physical RPM when loading the previous 150 RPM multiplier model.
-        if (saved.version !== 2) state.speed = Math.max(0, Math.min(1, (saved.speed ?? 0) * (saved.rotorMultiplier ?? 1) * 150 / GAS_TURBINE.rotorRpm));
-        state.version = 2;
-        delete state.rotorMultiplier;
-        return state;
-    } catch { return fallback; }
-}
-
 function saveState(entity, state) {
-    const raw = JSON.stringify(state);
+    const saved = {};
+    for (const key of Object.keys(initialState)) saved[key] = state[key];
+    const raw = JSON.stringify(saved);
     if (entity.getDynamicProperty(STATE_KEY) !== raw) entity.setDynamicProperty(STATE_KEY, raw);
 }
 function writeLabel(entity, slot, text) {
@@ -82,8 +73,8 @@ const buttons = {
         const value = Number(input(entity));
         if (!Number.isFinite(value) || value < 0) return;
         const state = getTurbineState(entity);
-        const data = getRuntime(entity);
-        state.rate = Math.min(value, getTurbineMaxRate(data.stats?.maxRate, data.gas.getType()));
+        const gas = GasStorage.initializeSingle(entity);
+        state.rate = Math.min(value, getTurbineMaxRate(state.stats?.maxRate, gas.getType()));
         saveState(entity, state); writeInput(entity, String(state.rate));
         writeLabel(entity, 23, '\u00a7r\u00a78Current Rate: ' + state.rate.toFixed(2) + ' mB/t');
     } },
@@ -129,6 +120,7 @@ export function activateTurbine({ entity, components, structure, energyCap, play
     if (gas.get() > stats.gasCapacity) return fail('Drain excess gas before reducing the structure size.');
     gas.setCap(stats.gasCapacity);
     entity.setDynamicProperty(STATS_KEY, JSON.stringify(stats));
+    runtimes.delete(entity.id);
     entity.setDynamicProperty('dorios:rateSpeed', energyCap / config.multiblock.transfer_rate_ratio);
     const state = getTurbineState(entity);
     state.enabled = false; state.speed = 0; state.rate = Math.min(state.rate, getTurbineMaxRate(stats.maxRate, gas.getType()));
@@ -144,7 +136,8 @@ export function tickTurbine(block) {
     const turbine = new MultiblockGenerator(block, config);
     if (!turbine.valid) return;
     const { entity, energy, processingInterval: ticks } = turbine;
-    const cache = getRuntime(entity), stats = cache.stats, gas = cache.gas;
+    const state = getTurbineState(entity), stats = state.stats;
+    const gas = GasStorage.initializeSingle(entity);
     gas.shouldUpdateUI = turbine.shouldUpdateUI;
     if (entity.getDynamicProperty('dorios:state') !== 'on' || !entity.getDynamicProperty('dorios:bounds') || !stats) {
         removeTurbineVisuals(entity);
@@ -157,7 +150,6 @@ export function tickTurbine(block) {
     }
     turbine.processIO();
     energy.transferToNetwork((entity.getDynamicProperty('dorios:rateSpeed') ?? 0) * ticks);
-    const state = getTurbineState(entity);
     const fuelType = gas.getType(), fuel = TURBINE_GASES[fuelType];
     if (fuelType !== state.fuelType) { state.progress = 0; state.fuelType = fuelType; }
     const maxRate = getTurbineMaxRate(stats.maxRate, fuelType);
@@ -203,7 +195,7 @@ function invalidateTurbineInterior(block, player) {
     if (!block?.dimension) return;
     for (const owner of block.dimension.getEntities({ type: 'utilitycraft:gas_turbine' })) {
         if (owner.getDynamicProperty('dorios:state') !== 'on') continue;
-        const bounds = getRuntime(owner).stats?.bounds;
+        const bounds = getTurbineState(owner).stats?.bounds;
         if (!bounds || !['x', 'y', 'z'].every(axis => block.location[axis] >= bounds.min[axis] && block.location[axis] <= bounds.max[axis])) continue;
         removeTurbineVisuals(owner);
         const state = getTurbineState(owner); state.enabled = false; state.speed = 0; saveState(owner, state);

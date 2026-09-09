@@ -11,6 +11,8 @@
 - Added generic DoriosCore TemperatureStorage with persistent thermal capacity, internal HU/t generation, simultaneous hot/cold contacts, exact time-based heat exchange, and native temperature display independent of machine limits.
 
 ## CHANGED
+- Simplified Nuclear, Thermal and Gas Turbine data caching through one generic HeavyCore map keyed by entity ID. State remains persisted in dynamic properties, reloads lazily after unload/restart, and rescans refresh cached stats. Storage instances are created per update.
+
 - Standardized all Heavy Machinery block tick intervals to 4 ticks, reducing redundant controller callbacks while preserving scheduler-driven machine throughput.
 - Thermal and Nuclear reactors skip thermal simulation while switched off at ambient temperature; energy export, nuclear fuel loading and open UI updates remain available. Hot reactors continue cooling and restart resumes simulation.
 - Restricted the Gas Turbine to Steam and Heated Saline Coolant; removed Hydrogen/Methane conversion and turbine-only visuals, and renamed its gas tab Working Gas. Existing unsupported gas remains available to drain. UC Gas Generators retain their fuels.
@@ -134,6 +136,8 @@
 - Added standard Speed and Energy upgrade support to the Electrolyzer, including multiple batches per update when upgraded throughput allows.
 
 ## FIXED
+- Fixed Gas Turbine visual entity loading by using an integer gas texture index instead of enum names exceeding Bedrock's 32-character limit. Preserved all gas textures, particles and Steam fallback.
+
 - Removed the rejected explicit bind_to_actor=true field from turbine particle timelines, using default actor binding so all three gas animations can load.
 - Fixed turbine gas texture selection by explicitly mapping synchronized gas enum names to numeric texture indices; Methane and Hydrogen no longer use an invalid string in the texture-array calculation.
 - Fixed opaque Gas Turbine gas visuals by baking transparency levels into each gas texture instead of relying on render-controller alpha; preserved full-volume sizing and repeated 16x16 pixels.

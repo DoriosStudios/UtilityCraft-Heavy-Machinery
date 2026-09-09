@@ -52,14 +52,15 @@ function setup({ui=false,interval=4,gasAmount=200,gasType='heated_saline_coolant
     const block={owner,dimension,location:owner.location};let buttons,handler,ioConfig;
     const Multiblock={EntityManager:{getControllerEntityFromBlock:b=>b?.owner,getEntityFromBlock:b=>b?.owner},DeactivationManager:{deactivateEntity(e){e.setDynamicProperty('dorios:state','off');e.setDynamicProperty('dorios:bounds',undefined);},handleBreakController(b){this.deactivateEntity(b.owner);b.owner.remove();}}};
     class MultiblockGenerator {constructor(b){this.valid=!!b.owner?.isValid;this.entity=b.owner;this.energy=new EnergyStorage(b.owner);this.processingInterval=interval;this.shouldUpdateUI=ui;}processIO(){counters.io++;}displayEnergy(){counters.energyDisplay++;}static handlePlayerInteract(e,c,h){return h.onActivate({entity:owner,structure:{bounds},components:{air:17,energy_cell:1},energyCap:cap});}}
-    const context=vm.createContext({...math,...rotor,...gasVisual,world,ItemStack,GasStorage,EnergyStorage,Multiblock,MultiblockGenerator,Math,Number,Object,JSON,WeakMap,
+    const runtimes=new Map();
+    const context=vm.createContext({runtimes,...math,...rotor,...gasVisual,world,ItemStack,GasStorage,EnergyStorage,Multiblock,MultiblockGenerator,Math,Number,Object,JSON,WeakMap,
         InterfaceManager:{registerInterface(id,config){buttons=config.buttons;},linkBlockInterface(){},linkEntityInterface(){},ensureEntityInterfaces(){}},
         registerLinkNodeIO(id,config){ioConfig=config;},DoriosLib:{registry:{blockComponent(id,h){handler=h;}},entity:{getEquipment(){return {typeId:'utilitycraft:wrench'};}}}});
     const api=load('gasTurbine.js',context,['tickTurbine','activateTurbine','getTurbineState','hasRotorClearance']);
     owner.setDynamicProperty('dorios:state','on');owner.setDynamicProperty('dorios:bounds',JSON.stringify(bounds));
     api.activateTurbine({entity:owner,components:{air:17,energy_cell:1},structure:{bounds},energyCap:cap});
     owner.writes=0;buttons.power.onPress({entity:owner});
-    return {owner,block,api,buttons,handler,ioConfig,world,entities,callbacks,intervals,rotor,gasVisual,gasSystem,blocks,counters,dimension,tick:()=>api.tickTurbine(block),state:()=>api.getTurbineState(owner)};
+    return {runtimes,owner,block,api,buttons,handler,ioConfig,world,entities,callbacks,intervals,rotor,gasVisual,gasSystem,blocks,counters,dimension,tick:()=>api.tickTurbine(block),state:()=>api.getTurbineState(owner)};
 }
 
 test('capacity uses only air; structural volume controls maximum burn rate',()=>{
@@ -217,9 +218,9 @@ test('gas fills the complete inset volume and only opacity changes with tank con
 test('gas switching selects each visual and unknown gas falls back to Steam',()=>{
     const x=setup(),v=x.world.getEntity(x.owner.getDynamicProperty('hm:turbineGasVisual'));
     for(const type of Object.keys(visualConfig.TURBINE_GAS_VISUALS)){
-        x.gasVisual.syncTurbineGas(x.owner,stats(),type,100,100);assert.equal(v.getProperty('utilitycraft:gas_type'),type);near(v.getProperty('utilitycraft:opacity'),visualConfig.TURBINE_GAS_VISUALS[type].maxOpacity);
+        x.gasVisual.syncTurbineGas(x.owner,stats(),type,100,100);assert.equal(v.getProperty('utilitycraft:gas_type'),Object.keys(visualConfig.TURBINE_GAS_VISUALS).indexOf(type));near(v.getProperty('utilitycraft:opacity'),visualConfig.TURBINE_GAS_VISUALS[type].maxOpacity);
     }
-    x.gasVisual.syncTurbineGas(x.owner,stats(),'third_party_gas',100,100);assert.equal(v.getProperty('utilitycraft:gas_type'),'steam');near(v.getProperty('utilitycraft:opacity'),.6);
+    x.gasVisual.syncTurbineGas(x.owner,stats(),'third_party_gas',100,100);assert.equal(v.getProperty('utilitycraft:gas_type'),0);near(v.getProperty('utilitycraft:opacity'),.6);
 });
 test('steady gas opacity does not repeat property writes and persists through reload',()=>{
     const x=setup(),id=x.owner.getDynamicProperty('hm:turbineGasVisual'),v=x.world.getEntity(id);
@@ -256,7 +257,7 @@ test('gas shell has six faces with axis-specific UV repetition and a fixed inset
         assert.equal(c.color,undefined);assert(c.textures[0].includes('v.gas_type * 65'));assert(c.textures[0].includes('math.clamp(v.gas_opacity, 0.0, 1.0)'));assert.deepEqual(c.uv_anim.offset,[.0625,.0625]);
     }
     const client=JSON.parse(fs.readFileSync(path.join(rp,'entity/gas_turbine_gas.json'),'utf8'))['minecraft:client_entity'].description;
-    assert.deepEqual(gasDefinition.description.properties['utilitycraft:gas_type'].values,Object.keys(visualConfig.TURBINE_GAS_VISUALS));
+    assert.deepEqual(gasDefinition.description.properties['utilitycraft:gas_type'],{type:'int',range:[0,Object.keys(visualConfig.TURBINE_GAS_VISUALS).length-1],default:0,client_sync:true});
     for(const texture of Object.values(client.textures))assert(fs.existsSync(path.join(rp,texture+'.png')));
     const mat=JSON.parse(fs.readFileSync(path.join(rp,'materials/entity.material'),'utf8')).materials['hm_turbine_gas:entity_alphablend'];
     assert.equal(mat.samplerStates[0].textureWrap,'Repeat');assert(mat['+defines'].includes('USE_UV_ANIM'));
@@ -304,12 +305,12 @@ test('gas PNGs preserve source colors and encode monotonic transparency for ever
 });
 
 
-test('client maps synchronized gas enum strings to the correct texture at every opacity level',()=>{
+test('client maps synchronized gas integers to the correct texture at every opacity level',()=>{
     const rp=path.resolve(__dirname,'../RP');
     const client=JSON.parse(fs.readFileSync(path.join(rp,'entity/gas_turbine_gas.json'),'utf8'))['minecraft:client_entity'].description;
     const controllers=JSON.parse(fs.readFileSync(path.join(rp,'render_controllers/gas_turbine_gas.json'),'utf8')).render_controllers;
     for(const type of Object.keys(visualConfig.TURBINE_GAS_VISUALS))for(let level=0;level<=64;level++){
-        const properties={'utilitycraft:gas_type':type,'utilitycraft:opacity':level/64,'utilitycraft:width':3,'utilitycraft:height':5,'utilitycraft:depth':7};
+        const properties={'utilitycraft:gas_type':Object.keys(visualConfig.TURBINE_GAS_VISUALS).indexOf(type),'utilitycraft:opacity':level/64,'utilitycraft:width':3,'utilitycraft:height':5,'utilitycraft:depth':7};
         const context=vm.createContext({v:{},q:{has_property:key=>key in properties,property:key=>properties[key]},math:{max:Math.max,ceil:Math.ceil,clamp:(x,a,b)=>Math.min(b,Math.max(a,x))}});
         for(const expression of client.scripts.pre_animation)vm.runInContext(expression,context);
         assert.equal(typeof context.v.gas_type,'number');
@@ -434,7 +435,7 @@ test('changing gas clamps saved rate and updates the Control maximum',()=>{
 
 test('legacy saved RPM migrates once and native rotation never exceeds 240 RPM',()=>{
     const x=setup();x.owner.setDynamicProperty('hm:gasTurbine',JSON.stringify({enabled:true,rate:1,speed:.8,rotorMultiplier:1.25,progress:.4}));
-    const state=x.state();near(state.speed*240,.8*1.25*150);assert.equal(state.version,2);near(state.progress,.4);assert.equal(state.rotorMultiplier,undefined);
+    x.runtimes.delete(x.owner.id);const state=x.state();near(state.speed*240,.8*1.25*150);assert.equal(state.version,2);near(state.progress,.4);assert.equal(state.rotorMultiplier,undefined);
     x.owner.setDynamicProperty('hm:gasTurbine',JSON.stringify(state));near(x.state().speed,state.speed);
     x.rotor.setTurbineRotorSpeed(x.owner,stats(),4);const rotor=x.world.getEntity(x.owner.getDynamicProperty('hm:turbineRotor'));assert.equal(rotor.getProperty('utilitycraft:speed'),1);
     const client=JSON.parse(fs.readFileSync(path.resolve(__dirname,'../RP/entity/gas_turbine_rotor.json'),'utf8'))['minecraft:client_entity'].description;
@@ -452,7 +453,7 @@ test('formation reports the gas-specific maximum to the activating player',()=>{
 test('removed combustible gases preserve stored gas, produce no energy and allow draining',()=>{
  for(const gasType of ['hydrogen_gas','methane_gas']){
   const x=setup({gasType,ui:true});x.owner.setDynamicProperty('hm:gasTurbine',JSON.stringify({version:2,enabled:true,rate:1,speed:1,progress:.7,fuelType:gasType}));
-  x.tick();assert.equal(x.owner.gas.value,200);assert.equal(x.owner.energy.value,0);assert(x.state().speed<1);assert(x.owner.items.get(1).nameTag.includes('Unsupported Gas'));assert(x.ioConfig.gases.anyOutputIndices.includes(0));
+  x.runtimes.delete(x.owner.id);x.tick();assert.equal(x.owner.gas.value,200);assert.equal(x.owner.energy.value,0);assert(x.state().speed<1);assert(x.owner.items.get(1).nameTag.includes('Unsupported Gas'));assert(x.ioConfig.gases.anyOutputIndices.includes(0));
  }
  assert.deepEqual(Object.keys(math.TURBINE_GASES),['steam','heated_saline_coolant_gas']);
 });
@@ -470,7 +471,7 @@ test('visual registry covers gas tank textures from both packs independently of 
  for(const gasType of [...Object.keys(visualConfig.TURBINE_GAS_VISUALS),'addon_unknown_gas']){
   const x=setup({gasType});for(let i=0;i<20;i++)x.tick();
   const visual=x.world.getEntity(x.owner.getDynamicProperty('hm:turbineGasVisual'));assert(visual);assert(visual.getProperty('utilitycraft:opacity')>0);
-  assert.equal(visual.getProperty('utilitycraft:gas_type'),visualConfig.TURBINE_GAS_VISUALS[gasType]?gasType:'steam');assert.equal(x.owner.gas.type,gasType);
+  assert.equal(visual.getProperty('utilitycraft:gas_type'),Math.max(0,Object.keys(visualConfig.TURBINE_GAS_VISUALS).indexOf(gasType)));assert.equal(x.owner.gas.type,gasType);
   if(!math.TURBINE_GASES[gasType]){assert.equal(x.owner.energy.value,0);assert.equal(x.owner.gas.value,200);assert.equal(x.state().speed,0);}
  }
 });
@@ -481,4 +482,13 @@ test('unknown-gas fallback caches the resolved visual and empty contents remain 
  for(let i=0;i<10;i++)x.gasVisual.syncTurbineGas(x.owner,stats(),'different_unknown_gas',100,100);assert.equal(writes,0);
  x.gasVisual.syncTurbineGas(x.owner,stats(),'different_unknown_gas',0,100);assert.equal(v.getProperty('utilitycraft:opacity'),0);
  assert.equal(x.gasVisual.getTurbineGasOpacity('empty',100,100),0);
+});
+
+
+test('Turbine shares button state, restores progress after cache loss and keeps stores out of cache',()=>{
+ const x=setup();x.tick();const data=x.state(),saved=JSON.parse(x.owner.getDynamicProperty('hm:gasTurbine'));
+ assert.strictEqual(x.api.getTurbineState({...x.owner}),data);assert.equal(data.entity,undefined);assert.equal(data.gas,undefined);assert.equal(saved.stats,undefined);
+ x.runtimes.clear();const restored=x.state();assert.notStrictEqual(restored,data);for(const key of ['enabled','rate','speed','progress','fuelType'])assert.equal(restored[key],saved[key]);
+ x.buttons.power.onPress({entity:x.owner});assert.equal(restored.enabled,false);assert.equal(JSON.parse(x.owner.getDynamicProperty('hm:gasTurbine')).enabled,false);
+ const rotorId=x.owner.getDynamicProperty('hm:turbineRotor');x.tick();assert.equal(x.owner.getDynamicProperty('hm:turbineRotor'),rotorId);
 });

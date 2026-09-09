@@ -41,13 +41,13 @@ Run node --test tests/gas-turbine.cjs. Tests cover rates, startup, scheduler equ
 
 ## Gas volume visual
 
-The separate utilitycraft:gas_turbine_gas entity covers the full interior with a 1/16-block inset from every face. It does not rise or shrink as the tank empties. Its alpha is maxOpacity * sqrt(stored / capacity), rounded to 0.001; zero contents hides it. The maxOpacity and texture paths are in TURBINE_GAS_VISUALS, independent of TURBINE_GASES energy conversion. Maximum alpha per face is 0.6, except Hydrogen at 0.8. The client explicitly maps each synchronized gas enum string to its texture-array index, then selects a baked PNG alpha level, rounded up to the nearest 1/64; full tanks select level 39 (155/255 alpha), for fully opaque source pixels.
+The separate utilitycraft:gas_turbine_gas entity covers the full interior with a 1/16-block inset from every face. It does not rise or shrink as the tank empties. Its alpha is maxOpacity * sqrt(stored / capacity), rounded to 0.001; zero contents hides it. The maxOpacity and texture paths are in TURBINE_GAS_VISUALS, independent of TURBINE_GASES energy conversion. Maximum alpha per face is 0.6, except Hydrogen at 0.8. The script synchronizes an integer gas index (0-10), avoiding the 32-character enum value limit. The client uses that index directly and selects a baked PNG alpha level, rounded up to the nearest 1/64; full tanks select level 39 (155/255 alpha), for fully opaque source pixels.
 
 Only six outer faces are drawn, split into three render controllers so X/Y/Z faces each repeat their UVs with the corresponding dimensions. The original 16x16 UC sprite repeats once per block. The builder preserves its RGB pixels and multiplies its existing alpha into 65 local PNG variants per gas. The material derives from entity_alphablend, enables UV animation and requests point sampling with Repeat wrapping. It disables depth writes. Transparency comes directly from texture alpha: render-controller color alpha was not effective in the in-game test and is no longer used. Repetition was confirmed in game; the baked-alpha correction still needs a visual check. This is an outer shell, not a voxel simulation, and overlapping visible faces compound their opacity.
 
 The entity persists while hidden to avoid respawning during intermittent supply. Property writes occur only when quantized opacity or gas type changes. Unloaded-center retries are throttled; a failed visual definition does not stop electricity generation. Both direct controller events and shared deactivation remove the visual. No DoriosCore changes are required.
 
-After adding gas types or changing source sprites/texture paths, run node tools/generateGasTurbineGas.cjs to regenerate the texture variants, client texture array and synchronized enum. Source sprites are read from the neighboring UtilityCraft/RP directory; UC_RESOURCE_PACK can override that path. Generated textures are included in HM, so normal pack builds do not need to run this tool. Changing maxOpacity alone needs only the script export. Export BP and RP and reopen the world to register the new entity and material.
+After adding gas types or changing source sprites/texture paths, run node tools/generateGasTurbineGas.cjs to regenerate the texture variants, client texture array and synchronized integer range. Source sprites are read from the neighboring UtilityCraft/RP directory; UC_RESOURCE_PACK can override that path. Generated textures are included in HM, so normal pack builds do not need to run this tool. Changing maxOpacity alone needs only the script export. Export BP and RP and reopen the world to register the new entity and material.
 
 ## Sparse gas flow particles
 
@@ -73,7 +73,7 @@ the generator also accepts machine-local HM textures. It bakes 65 opacity levels
 per texture and matching particle tints. Rebuild with node tools/generateGasTurbineGas.cjs.
 
 Unknown types resolve to DEFAULT_TURBINE_GAS_VISUAL (Steam) before synchronizing
-the visual enum. This does not modify the stored gas type or TURBINE_GASES: only
+the visual registry. This does not modify the stored gas type or TURBINE_GASES: only
 Steam and Heated Saline Coolant power the turbine. Unsupported gas remains visible
 while stationary and can be drained. Particles still follow actual rotor speed.
 

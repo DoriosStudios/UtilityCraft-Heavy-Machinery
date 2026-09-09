@@ -1,3 +1,4 @@
+import { runtimes } from '../../HeavyCore/runtimes.js'
 import { ItemStack, system, world } from '@minecraft/server'
 import {
     EnergyStorage,
@@ -58,14 +59,12 @@ const config = {
         efficiency: 0.10,
         startedAtMs: 0,
         warning: '',
+        meltdownPending: false,
         wasteRemainder: 0,
         coolantCreditMb: 0,
         coolantCreditType: 'empty',
     },
 }
-
-const runtimeCache = new WeakMap()
-const statsCache = new WeakMap()
 
 const FUEL_INPUT_SLOT = 21
 const RATE_INPUT_SLOT = 6
@@ -241,7 +240,7 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
                     heatCapacity: getNuclearHeatCapacity(structure.bounds, components),
                 }))
 
-                runtimeCache.delete(entity)
+                runtimes.delete(entity.id)
                 const data = getReactorData(entity)
                 setReactorRunning(data, false)
                 data.meltdownPending = false
@@ -316,8 +315,8 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
         energy.transferToNetwork(reactor.rate)
 
         const data = getReactorData(entity)
-        const runtime = getReactorRuntime(entity, data)
-        const { coolant, waste, temperature } = runtime
+        const stores = createReactorStorages(entity, data)
+        const { coolant, waste, temperature } = stores
         const tickDelta = Math.max(1, reactor.processingInterval ?? 1)
         synchronizeReactorTimer(data)
         const fuelInputWarning = loadFuelFromInput(reactor.container, data)
@@ -332,7 +331,7 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
             data.activeRate = 0
             data.efficiency = config.minimumEfficiency * (fuelProfile?.efficiencyMultiplier ?? 0)
             data.warning = '\u00A7eStopped'
-            displayNuclearReactor(data, reactor, runtime)
+            displayNuclearReactor(data, reactor, stores)
             saveReactorData(entity, data)
             return
         }
@@ -382,9 +381,9 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
             if (paidMb > 0) coolant.consume(paidMb)
             data.coolantCreditMb = Math.max(0, (data.coolantCreditMb ?? 0) + paidMb - usedMb)
             data.coolantCreditType = coolantType
-            if (data.state !== 'off' && system.currentTick >= runtime.nextSmokeTick) {
+            if (data.state !== 'off' && system.currentTick >= data.nextSmokeTick) {
                 spawnReactorVentSmoke(entity)
-                runtime.nextSmokeTick = system.currentTick + 20
+                data.nextSmokeTick = system.currentTick + 20
             }
         }
         data.temperature = result.temperature
@@ -405,7 +404,7 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
         if (data.temperature >= config.overheatWarningK) data.warning = '\u00A76Overheating!'
 
         // No string formatting, display-slot reads/writes or UI items when closed.
-        displayNuclearReactor(data, reactor, runtime)
+        displayNuclearReactor(data, reactor, stores)
         saveReactorData(entity, data)
     },
 })
@@ -645,6 +644,11 @@ function applyBurnRate(entity) {
 }
 
 function getReactorData(entity) {
+    const cached = runtimes.get(entity.id)
+    if (cached) {
+        if (entity.getDynamicProperty('dorios:state') === 'off') cached.state = 'off'
+        return cached
+    }
     let persisted = {}
     const stats = getReactorStats(entity)
 
@@ -678,12 +682,14 @@ function getReactorData(entity) {
     delete data.power
     if (data.fuelStored <= 0) data.fuelType = 'empty'
     if (entity.getDynamicProperty('dorios:state') === 'off') data.state = 'off'
+    data.nextSmokeTick = 0
+    runtimes.set(entity.id, data)
     return data
 }
 
 function saveReactorData(entity, data) {
-    const state = { ...data }
-    for (const key of Object.keys(getReactorStats(entity))) delete state[key]
+    const state = {}
+    for (const key of Object.keys(config.initialData)) state[key] = data[key]
     const serialized = JSON.stringify(state)
     if (entity.getDynamicProperty('nuclearData') !== serialized) entity.setDynamicProperty('nuclearData', serialized)
 }
@@ -710,8 +716,6 @@ function getRecommendedRate(data, coolant) {
 
 function getReactorStats(entity) {
     const raw = entity.getDynamicProperty('nuclearStats')
-    const cached = statsCache.get(entity)
-    if (cached && cached.raw === raw) return cached.value
     let value = {}
     try { if (raw) value = JSON.parse(raw) } catch { }
     value.maximumBurnRate = getMaximumBurnRate(value.fuelAssemblies ?? 0, value.rodControls ?? 0)
@@ -723,36 +727,24 @@ function getReactorStats(entity) {
             gas_cell: value.gasCells ?? 0,
         })
     }
-    statsCache.set(entity, { raw, value })
     return value
 }
 
-function getReactorRuntime(entity, data) {
-    let runtime = runtimeCache.get(entity)
-    if (!runtime) {
-        const [coolant] = FluidStorage.initializeMultiple(entity, 1)
-        const [waste] = GasStorage.initializeMultiple(entity, 1)
-        const temperature = new TemperatureStorage(entity, 0, {
-            initialTemperature: data.temperature,
-            heatCapacity: data.heatCapacity,
-        })
-        runtime = { coolant, waste, temperature, stats: null, nextSmokeTick: 0 }
-        runtimeCache.set(entity, runtime)
-        const type = waste.getType()
-        if (type === 'uranium_waste_gas' || type === 'nuclear_waste') waste.setType('nuclear_waste_gas')
-    }
-    const stats = getReactorStats(entity)
-    if (runtime.stats !== stats) {
-        runtime.coolant.setCap(data.coolantCapacity)
-        runtime.waste.setCap(data.gasCells * config.wasteCapacityPerGasCell)
-        if (runtime.temperature.getHeatCapacity() !== data.heatCapacity) runtime.temperature.setHeatCapacity(data.heatCapacity)
-        runtime.stats = stats
-    }
-    return runtime
+function createReactorStorages(entity, data) {
+    const [coolant] = FluidStorage.initializeMultiple(entity, 1)
+    const [waste] = GasStorage.initializeMultiple(entity, 1)
+    const temperature = new TemperatureStorage(entity, 0, { initialTemperature: data.temperature, heatCapacity: data.heatCapacity })
+    const type = waste.getType()
+    if (type === 'uranium_waste_gas' || type === 'nuclear_waste') waste.setType('nuclear_waste_gas')
+    if (coolant.getCap() !== data.coolantCapacity) coolant.setCap(data.coolantCapacity)
+    const wasteCapacity = data.gasCells * config.wasteCapacityPerGasCell
+    if (waste.getCap() !== wasteCapacity) waste.setCap(wasteCapacity)
+    if (temperature.getHeatCapacity() !== data.heatCapacity) temperature.setHeatCapacity(data.heatCapacity)
+    return { coolant, waste, temperature }
 }
 
-function displayNuclearReactor(data, reactor, runtime) {
-    const { coolant, waste, temperature } = runtime
+function displayNuclearReactor(data, reactor, stores) {
+    const { coolant, waste, temperature } = stores
     if (reactor.shouldUpdateUI) {
         coolant.shouldUpdateUI = true
         waste.shouldUpdateUI = true

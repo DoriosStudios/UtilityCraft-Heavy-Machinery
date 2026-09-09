@@ -5,7 +5,8 @@ class ItemStack{constructor(typeId,amount=1){this.typeId=typeId;this.amount=amou
 const thermal=load('BP/scripts/machinery/generators/thermoSimulation.js');
 const {TemperatureStorage}=load('BP/scripts/DoriosCore/machinery/temperatureStorage.js',{'@minecraft/server':{ItemStack}});
 let handler,buttons,opened,runtime,activation,explosions=0,deactivations=0;const pending=[];
-const context={...thermal,TemperatureStorage,worldLoaded:true,system:{currentTick:0},
+let entityIds=0;
+const context={runtimes:new Map(),...thermal,TemperatureStorage,worldLoaded:true,system:{currentTick:0},
  world:{afterEvents:{entityContainerOpened:{subscribe(fn){opened=fn;}}}},
  EnergyStorage:{formatEnergyToText:String},GasStorage:{initializeMultiple:e=>[e.exhaust],formatGas:String},ensureGasIOConfig(){},FluidStorage:{initializeMultiple(e){e.inits++;return[e.coolant,e.lava];},formatFluid:String},
  InterfaceManager:{registerInterface(id,def){buttons=def.buttons;},linkBlockInterface(){},linkEntityInterface(){},ensureEntityInterfaces(){}},registerLinkNodeIO(){},
@@ -23,14 +24,14 @@ function tank(type,value,cap){return{type,value,cap,capWrites:0,displays:0,get()
 function setup({data={},stats={},interval=4,open=false,lava=10000,coolant=10000,type='saline_coolant',gas=0,gasType='empty'}={}){
  const values=new Map([['reactorData',JSON.stringify({state:'on',rate:1,temperature:700,...data})],['reactorStats',JSON.stringify({lavaCapacity:256000,coolantCapacity:64000,exhaustCapacity:256000,gasCells:1,heatDissipation:0.1,heatCapacity:120,...stats})]]);
  const items=new Map(),reads=[],writes=[];const container={getItem(slot){reads.push(slot);return items.get(slot);},setItem(slot,item){writes.push(slot);items.set(slot,item);}};
- const entity={typeId:'utilitycraft:thermo_reactor',isValid:true,container,inits:0,exhaust:tank(gasType,gas,256000),coolant:tank(type,coolant,64000),lava:tank('lava',lava,256000),getDynamicProperty:k=>values.get(k),setDynamicProperty:(k,v)=>values.set(k,v),getComponent:()=>({container}),getProperty:()=>open?1:0,location:{x:0,y:0,z:0},dimension:{playSound(){}}};
+ const entity={id:'thermo-'+(++entityIds),typeId:'utilitycraft:thermo_reactor',isValid:true,container,inits:0,exhaust:tank(gasType,gas,256000),coolant:tank(type,coolant,64000),lava:tank('lava',lava,256000),getDynamicProperty:k=>values.get(k),setDynamicProperty:(k,v)=>values.set(k,v),getComponent:()=>({container}),getProperty:()=>open?1:0,location:{x:0,y:0,z:0},dimension:{playSound(){}}};
  const energy={value:0,cap:1e12,get(){return this.value;},getFreeSpace(){return this.cap-this.value;},getPercent(){return this.value/this.cap*100;},add(v){this.value+=v;},transferToNetwork(){}};
  const r={valid:true,entity,container,energy,processingInterval:interval,shouldUpdateUI:open,setRate(v){this.rate=v*interval;},displayEnergy(){},setLabel(text,slot=1){const item=new ItemStack('utilitycraft:arrow_indicator_90');item.nameTag=text;container.setItem(slot,item);},block:{},dimension:{createExplosion(){explosions++;}}};
  return{entity,reactor:r,energy,items,reads,writes,values,read:()=>JSON.parse(values.get('reactorData')),tick(){runtime=r;context.system.currentTick+=interval;handler.onTick({block:{}});}};
 }
 function input(overrides={}){return{temperature:700,heatCapacity:120,ticks:80,running:true,rate:1,fuel:1000,energySpace:1e12,conductance:0.4,coolantHeatBudget:400000,...overrides};}
 
-test('Thermo closed UI does no inventory work and caches storage/capacities',()=>{const x=setup();x.tick();x.tick();assert.equal(x.reads.length,0);assert.equal(x.writes.length,0);assert.equal(x.entity.inits,1);assert.equal(x.entity.lava.capWrites,1);assert.equal(x.entity.lava.displays,0);assert.equal(x.entity.exhaust.displays,0);assert.equal(x.entity.exhaust.capWrites,1);assert.ok(x.energy.value>0);assert.ok(x.read().temperature!==700);assert.equal(x.read().heatCapacity,undefined);assert.equal(x.read().heatDissipation,undefined);});
+test('Thermo closed UI does no inventory work and creates stores per update without redundant capacity writes',()=>{const x=setup();x.tick();x.tick();assert.equal(x.reads.length,0);assert.equal(x.writes.length,0);assert.equal(x.entity.inits,2);assert.equal(x.entity.lava.capWrites,0);assert.equal(x.entity.lava.displays,0);assert.equal(x.entity.exhaust.displays,0);assert.equal(x.entity.exhaust.capWrites,0);assert.ok(x.energy.value>0);assert.ok(x.read().temperature!==700);assert.equal(x.read().heatCapacity,undefined);assert.equal(x.read().heatDissipation,undefined);});
 test('Thermo open UI uses native temperature/fluids and unchanged label layout',()=>{const x=setup({open:true});x.tick();assert.ok(x.items.get(4).typeId.startsWith('utilitycraft:temperature_'));assert.ok(x.items.get(1).nameTag.includes('Producing:'));assert.ok(x.items.get(22).nameTag.includes('Fuel Information'));assert.ok(x.items.get(23).nameTag.includes('mB/t'));assert.ok(x.items.get(25).nameTag.includes('Recommended Rate:'));assert.equal(x.entity.coolant.displays,1);assert.equal(x.entity.lava.displays,1);assert.equal(x.entity.exhaust.displays,1);assert.ok(x.items.get(22).nameTag.includes("Gas Information"));});
 test('Thermo buttons operate by callback without simulation',()=>{const x=setup({open:true,data:{state:'off'}});opened({entity:x.entity});buttons.cancel.onPress({entity:x.entity});buttons.keypad_7.onPress({entity:x.entity});buttons.keypad_16.onPress({entity:x.entity});buttons.keypad_11.onPress({entity:x.entity});buttons.accept.onPress({entity:x.entity});near(x.read().rate,7.5);buttons.delete.onPress({entity:x.entity});buttons.power.onPress({entity:x.entity});assert.equal(x.read().state,'on');assert.equal(x.energy.value,0);assert.equal(Object.keys(buttons).length,15);});
 test('Thermo migrates old temperature/conductors and restores authoritative storage',()=>{const x=setup({data:{state:'off',temperature:900},stats:{heatCapacity:undefined}});const data=context.api.getReactorInfo(x.entity);near(data.heatConductors,2);near(data.conductance,0.4);x.tick();near(new TemperatureStorage(x.entity).get(),x.read().temperature);new TemperatureStorage(x.entity).set(800);x.tick();near(x.read().temperature,300+500*Math.exp(-0.408*4/data.heatCapacity));});
@@ -117,4 +118,21 @@ test('all HM ticking blocks use the shared four-tick callback cadence',()=>{
  let count=0;function scan(value){if(!value||typeof value!=='object')return;for(const [key,item]of Object.entries(value)){if(key==='minecraft:tick'){assert.deepEqual(item.interval_range,[4,4]);count++;}else scan(item);}}
  function visit(dir){for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())visit(file);else if(file.endsWith('.json'))scan(JSON.parse(fs.readFileSync(file)));}}
  visit(path.join(root,'BP/blocks'));assert(count>=16);
+});
+
+
+test('Thermo restores fractions from DP after cache loss without resetting tanks or temperature',()=>{
+ const x=setup({data:{rate:.03}});x.tick();const data=context.api.getReactorInfo(x.entity),before=x.read(),temperature=new TemperatureStorage(x.entity).get();
+ assert.strictEqual(context.api.getReactorInfo({...x.entity}),data);assert.equal(data.entity,undefined);assert.equal(data.lava,undefined);
+ context.runtimes.delete(x.entity.id);const restored=context.api.getReactorInfo(x.entity);assert.notStrictEqual(restored,data);
+ for(const key of ['lavaCreditMb','coolantCreditMb','exhaustCreditMb','exhaustCreditType','temperature','rate'])assert.equal(restored[key],before[key]);
+ near(new TemperatureStorage(x.entity).get(),temperature);assert.equal(restored.nextSoundTick,0);assert.equal(before.nextSoundTick,undefined);
+ buttons.power.onPress({entity:x.entity});assert.equal(restored.state,'off');assert.equal(x.read().state,'off');
+});
+
+test('Thermo reads state and structural DP only when loading its runtime',()=>{
+ const x=setup(),counts=new Map(),read=x.entity.getDynamicProperty;
+ x.entity.getDynamicProperty=key=>{counts.set(key,(counts.get(key)??0)+1);return read(key);};
+ const data=context.api.getReactorInfo(x.entity);for(let i=0;i<5;i++)assert.strictEqual(context.api.getReactorInfo(x.entity),data);
+ assert.equal(counts.get('reactorData'),1);assert.equal(counts.get('reactorStats'),1);
 });
