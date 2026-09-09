@@ -240,3 +240,23 @@ test('changed structure refreshes capacity without resetting stored temperature'
     assert.ok(Math.abs(new TemperatureStorage(x.entity).get() - old) < 10);
     near(x.entity.waste.cap, 512000);
 });
+
+
+test('Nuclear skips cold stopped simulation, keeps UI/export and resumes on restart or heat change',()=>{
+ const original=context.simulateNuclearReactor;let calls=0;context.simulateNuclearReactor=(...args)=>{calls++;return original(...args);};
+ try {
+  for(const open of [false,true]){
+   const x=setup({open,data:{state:'off',temperature:300,producing:100,activeRate:5}});let exports=0;x.energy.transferToNetwork=()=>{exports++;};
+   x.tick();x.tick();assert.equal(calls,0);assert.equal(exports,2);near(x.read().temperature,300);near(x.read().producing,0);near(x.read().activeRate,0);near(x.entity.coolant.value,10000);
+   if(open)assert(x.items.get(1).nameTag.includes('Stopped'));else assert.equal(x.writes.length,0);
+   buttons.power.onPress({entity:x.entity});x.tick();assert(calls>0);assert(x.energy.value>0);calls=0;
+  }
+  const hot=setup({data:{state:'off',temperature:300}});hot.tick();new TemperatureStorage(hot.entity).set(500);hot.tick();assert.equal(calls,1);assert(hot.read().temperature<500);assert(hot.read().temperature>300);
+  calls=0;const residue=setup({data:{state:'off',temperature:300.0000005}});residue.tick();assert.equal(calls,0);assert.equal(new TemperatureStorage(residue.entity).get(),300);
+ } finally {context.simulateNuclearReactor=original;}
+});
+
+
+test('cold stopped Nuclear still accepts fuel without consuming it',()=>{
+ const x=setup({data:{state:'off',temperature:300,fuelStored:0,fuelType:'empty'}});x.items.set(21,{typeId:'utilitycraft:enriched_uranium_rod',amount:1});x.tick();near(x.read().fuelStored,1000);near(x.energy.value,0);near(x.entity.waste.value,0);near(x.read().efficiency,config.minimumEfficiency);
+});

@@ -322,6 +322,20 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
         synchronizeReactorTimer(data)
         const fuelInputWarning = loadFuelFromInput(reactor.container, data)
         const fuelProfile = FUEL_PROFILES[data.fuelType]
+        const currentTemperature = temperature.get()
+        // Settle only floating-point cooling residue; hot stopped reactors still cool normally.
+        if (data.state === 'off' && !data.meltdownPending
+            && Math.abs(currentTemperature - config.ambientTemperatureK) <= 1e-6) {
+            if (currentTemperature !== config.ambientTemperatureK) temperature.set(config.ambientTemperatureK)
+            data.temperature = config.ambientTemperatureK
+            data.producing = 0
+            data.activeRate = 0
+            data.efficiency = config.minimumEfficiency * (fuelProfile?.efficiencyMultiplier ?? 0)
+            data.warning = '\u00A7eStopped'
+            displayNuclearReactor(data, reactor, runtime)
+            saveReactorData(entity, data)
+            return
+        }
         const wasteType = waste.getType()
         const wasteCompatible = wasteType === 'empty' || wasteType === 'nuclear_waste_gas'
         const pendingWaste = Math.max(0, data.wasteRemainder ?? 0)
@@ -338,7 +352,7 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
         const heatPerMb = validCoolant ? NUCLEAR_THERMAL.coolantHeatPerMb * coolantData.efficiency : 0
         const energyFreeSpace = energy.getFreeSpace()
         const result = simulateNuclearReactor({
-            temperature: temperature.get(),
+            temperature: currentTemperature,
             heatCapacity: data.heatCapacity,
             ticks: tickDelta,
             running: data.state !== 'off' && !data.meltdownPending,
@@ -391,15 +405,7 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
         if (data.temperature >= config.overheatWarningK) data.warning = '\u00A76Overheating!'
 
         // No string formatting, display-slot reads/writes or UI items when closed.
-        if (reactor.shouldUpdateUI) {
-            coolant.shouldUpdateUI = true
-            waste.shouldUpdateUI = true
-            coolant.display(2)
-            waste.display(24)
-            temperature.display(4, { minimum: config.ambientTemperatureK, maximum: config.maximumTemperatureK, force: true })
-            updateReactorUI(data, reactor, coolant, waste)
-            reactor.displayEnergy()
-        }
+        displayNuclearReactor(data, reactor, runtime)
         saveReactorData(entity, data)
     },
 })
@@ -743,4 +749,17 @@ function getReactorRuntime(entity, data) {
         runtime.stats = stats
     }
     return runtime
+}
+
+function displayNuclearReactor(data, reactor, runtime) {
+    const { coolant, waste, temperature } = runtime
+    if (reactor.shouldUpdateUI) {
+        coolant.shouldUpdateUI = true
+        waste.shouldUpdateUI = true
+        coolant.display(2)
+        waste.display(24)
+        temperature.display(4, { minimum: config.ambientTemperatureK, maximum: config.maximumTemperatureK, force: true })
+        updateReactorUI(data, reactor, coolant, waste)
+        reactor.displayEnergy()
+    }
 }

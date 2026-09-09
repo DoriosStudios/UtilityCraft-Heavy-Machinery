@@ -1,0 +1,20 @@
+{
+    "materials": {
+        "version": "1.0.0",
+        "hm_turbine_gas:entity_alphablend": {
+            "+defines": [
+                "USE_UV_ANIM"
+            ],
+            "+states": [
+                "DisableDepthWrite"
+            ],
+            "samplerStates": [
+                {
+                    "samplerIndex": 0,
+                    "textureFilter": "Point",
+                    "textureWrap": "Repeat"
+                }
+            ]
+        }
+    }
+}

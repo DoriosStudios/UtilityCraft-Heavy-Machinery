@@ -22,8 +22,8 @@
                 "pre_animation": [
                     "v.turbine_height = q.has_property('utilitycraft:height') ? q.property('utilitycraft:height') : 0.0;",
                     "v.turbine_radius = q.has_property('utilitycraft:radius') ? q.property('utilitycraft:radius') : 0.0;",
-                    "v.turbine_speed = q.has_property('utilitycraft:speed') ? q.property('utilitycraft:speed') : 0.0;",
-                    "v.turbine_angle = math.mod(v.turbine_angle + q.delta_time * v.turbine_speed * 720.0, 360.0);"
+                    "v.turbine_speed = q.has_property('utilitycraft:speed') ? math.clamp(q.property('utilitycraft:speed'), 0.0, 1.0) : 0.0;",
+                    "v.turbine_angle = math.mod(v.turbine_angle - q.delta_time * v.turbine_speed * 1440.0, 360.0);"
                 ],
                 "animate": [
                     "rotor"

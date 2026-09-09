@@ -58,7 +58,7 @@ function hasRotorProperties(rotor) {
 
 export function setTurbineRotorSpeed(owner, stats, speed) {
     const rotor = ensureTurbineRotor(owner, stats);
-    const value = Math.round(Math.max(0, Math.min(4, speed)) * 1000) / 1000;
+    const value = Math.round(Math.max(0, Math.min(1, speed)) * 1000) / 1000;
     if (rotor && rotor.getProperty('utilitycraft:speed') !== value) rotor.setProperty('utilitycraft:speed', value);
 }
 

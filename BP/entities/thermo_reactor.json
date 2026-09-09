@@ -46,7 +46,8 @@
 					"dorios:machine",
 					"dorios:multiblock",
 					"dorios:energy_source",
-					"dorios:fluid_container"
+					"dorios:fluid_container",
+					"dorios:gas_container"
 				]
 			},
 			"minecraft:fire_immune": true,

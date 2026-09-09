@@ -212,7 +212,7 @@
                         40,
                         9
                     ],
-                    "font_scale_factor": 0.58,
+                    "font_scale_factor": 0.75,
                     "color": [
                         0.22,
                         0.22,
@@ -370,134 +370,6 @@
                 }
             },
             {
-                "hydrogen_icon": {
-                    "type": "image",
-                    "texture": "textures/static/images/hydrogen_gas",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        52,
-                        40
-                    ],
-                    "size": [
-                        16,
-                        16
-                    ]
-                }
-            },
-            {
-                "hydrogen_name": {
-                    "type": "label",
-                    "text": "ui.hm.gt.hydrogen",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        72,
-                        40
-                    ],
-                    "size": [
-                        90,
-                        8
-                    ],
-                    "font_scale_factor": 0.58,
-                    "color": [
-                        0.22,
-                        0.22,
-                        0.22
-                    ],
-                    "shadow": false,
-                    "text_alignment": "left"
-                }
-            },
-            {
-                "hydrogen_value": {
-                    "type": "label",
-                    "text": "ui.hm.gt.hydrogen_value",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        72,
-                        49
-                    ],
-                    "size": [
-                        90,
-                        8
-                    ],
-                    "font_scale_factor": 0.5,
-                    "color": [
-                        0.22,
-                        0.22,
-                        0.22
-                    ],
-                    "shadow": false,
-                    "text_alignment": "left"
-                }
-            },
-            {
-                "methane_icon": {
-                    "type": "image",
-                    "texture": "textures/static/images/methane_gas",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        52,
-                        60
-                    ],
-                    "size": [
-                        16,
-                        16
-                    ]
-                }
-            },
-            {
-                "methane_name": {
-                    "type": "label",
-                    "text": "ui.hm.gt.methane",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        72,
-                        60
-                    ],
-                    "size": [
-                        90,
-                        8
-                    ],
-                    "font_scale_factor": 0.58,
-                    "color": [
-                        0.22,
-                        0.22,
-                        0.22
-                    ],
-                    "shadow": false,
-                    "text_alignment": "left"
-                }
-            },
-            {
-                "methane_value": {
-                    "type": "label",
-                    "text": "ui.hm.gt.methane_value",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        72,
-                        69
-                    ],
-                    "size": [
-                        90,
-                        8
-                    ],
-                    "font_scale_factor": 0.5,
-                    "color": [
-                        0.22,
-                        0.22,
-                        0.22
-                    ],
-                    "shadow": false,
-                    "text_alignment": "left"
-                }
-            },
-            {
                 "fuel_heading": {
                     "type": "label",
                     "text": "ui.hm.gt.fuel_heading",
@@ -505,7 +377,7 @@
                     "anchor_to": "top_left",
                     "offset": [
                         0,
-                        83
+                        78
                     ],
                     "size": [
                         162,
@@ -529,13 +401,13 @@
                     "anchor_to": "top_left",
                     "offset": [
                         0,
-                        97
+                        91
                     ],
                     "size": [
                         162,
                         24
                     ],
-                    "font_scale_factor": 0.65,
+                    "font_scale_factor": 0.58,
                     "color": [
                         0.22,
                         0.22,
@@ -553,13 +425,77 @@
                     "anchor_to": "top_left",
                     "offset": [
                         0,
-                        124
+                        119
                     ],
                     "size": [
                         162,
                         18
                     ],
                     "font_scale_factor": 0.58,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "heated_saline_icon": {
+                    "type": "image",
+                    "texture": "textures/static/images/heated_saline_coolant_gas",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        52,
+                        40
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "heated_saline_name": {
+                    "type": "label",
+                    "text": "ui.hm.gt.heated_saline_name",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        72,
+                        40
+                    ],
+                    "size": [
+                        90,
+                        8
+                    ],
+                    "font_scale_factor": 0.5,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "heated_saline_value": {
+                    "type": "label",
+                    "text": "ui.hm.gt.heated_saline_value",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        72,
+                        48
+                    ],
+                    "size": [
+                        90,
+                        8
+                    ],
+                    "font_scale_factor": 0.5,
                     "color": [
                         0.22,
                         0.22,
@@ -1406,7 +1342,7 @@
         "anchor_to": "top_left",
         "size": [
             150,
-            224
+            211
         ],
         "controls": [
             {
@@ -1421,7 +1357,7 @@
                     ],
                     "size": [
                         148,
-                        26
+                        20
                     ],
                     "font_scale_factor": 0.65,
                     "color": [
@@ -1434,18 +1370,34 @@
                 }
             },
             {
+                "structure_icon": {
+                    "type": "image",
+                    "texture": "textures/blocks/multiblock/bronze/bronze_plated_block",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        2,
+                        26
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
                 "structure_heading": {
                     "type": "label",
                     "text": "ui.hm.gt.structure_heading",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        0,
-                        32
+                        24,
+                        24
                     ],
                     "size": [
-                        148,
-                        10
+                        124,
+                        9
                     ],
                     "font_scale_factor": 0.75,
                     "color": [
@@ -1464,12 +1416,12 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        0,
-                        46
+                        24,
+                        35
                     ],
                     "size": [
-                        148,
-                        44
+                        124,
+                        30
                     ],
                     "font_scale_factor": 0.65,
                     "color": [
@@ -1489,11 +1441,11 @@
                     "anchor_to": "top_left",
                     "offset": [
                         0,
-                        96
+                        69
                     ],
                     "size": [
                         148,
-                        10
+                        9
                     ],
                     "font_scale_factor": 0.75,
                     "color": [
@@ -1506,18 +1458,34 @@
                 }
             },
             {
-                "fuel_details": {
-                    "type": "label",
-                    "text": "ui.hm.gt.fuel_details",
+                "steam_icon": {
+                    "type": "image",
+                    "texture": "textures/static/images/steam",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        0,
-                        110
+                        2,
+                        82
                     ],
                     "size": [
-                        148,
-                        36
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "steam_name": {
+                    "type": "label",
+                    "text": "ui.hm.gt.steam",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        24,
+                        82
+                    ],
+                    "size": [
+                        124,
+                        8
                     ],
                     "font_scale_factor": 0.65,
                     "color": [
@@ -1530,18 +1498,98 @@
                 }
             },
             {
+                "steam_value": {
+                    "type": "label",
+                    "text": "ui.hm.gt.steam_value",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        24,
+                        90
+                    ],
+                    "size": [
+                        124,
+                        8
+                    ],
+                    "font_scale_factor": 0.58,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "ports_icon": {
+                    "type": "image",
+                    "texture": "textures/blocks/multiblock/bronze/bronze_gas_port",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        2,
+                        124
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "fuel_details": {
+                    "type": "label",
+                    "text": "ui.hm.gt.fuel_details",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        24,
+                        122
+                    ],
+                    "size": [
+                        124,
+                        32
+                    ],
+                    "font_scale_factor": 0.65,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "control_icon": {
+                    "type": "image",
+                    "texture": "textures/ui/toggle_button/nuclear_control_unchecked",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        2,
+                        160
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
                 "control_heading": {
                     "type": "label",
                     "text": "ui.hm.gt.control_heading",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        0,
-                        152
+                        24,
+                        158
                     ],
                     "size": [
-                        148,
-                        10
+                        124,
+                        9
                     ],
                     "font_scale_factor": 0.75,
                     "color": [
@@ -1560,14 +1608,78 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        0,
-                        166
+                        24,
+                        169
                     ],
                     "size": [
-                        148,
-                        50
+                        124,
+                        38
                     ],
                     "font_scale_factor": 0.65,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "heated_saline_icon": {
+                    "type": "image",
+                    "texture": "textures/static/images/heated_saline_coolant_gas",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        2,
+                        102
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "heated_saline_name": {
+                    "type": "label",
+                    "text": "ui.hm.gt.heated_saline_name",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        24,
+                        102
+                    ],
+                    "size": [
+                        124,
+                        8
+                    ],
+                    "font_scale_factor": 0.65,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "heated_saline_value": {
+                    "type": "label",
+                    "text": "ui.hm.gt.heated_saline_value",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        24,
+                        110
+                    ],
+                    "size": [
+                        124,
+                        8
+                    ],
+                    "font_scale_factor": 0.58,
                     "color": [
                         0.22,
                         0.22,

@@ -274,24 +274,6 @@
 	"utilitycraft:isotope_centrifuge": {
 		"sound": "metal"
 	},
-	"utilitycraft:creative_saline_coolant_tank": {
-		"sound": "metal"
-	},
-	"utilitycraft:creative_fluorine_tank": {
-		"sound": "metal"
-	},
-	"utilitycraft:creative_hydrogen_fluoride_tank": {
-		"sound": "metal"
-	},
-	"utilitycraft:creative_natural_uranium_hexafluoride_tank": {
-		"sound": "metal"
-	},
-	"utilitycraft:creative_enriched_uranium_hexafluoride_tank": {
-		"sound": "metal"
-	},
-	"utilitycraft:creative_depleted_uranium_hexafluoride_tank": {
-		"sound": "metal"
-	},
 	"utilitycraft:liquid_tank_controller": {
 		"sound": "metal"
 	},

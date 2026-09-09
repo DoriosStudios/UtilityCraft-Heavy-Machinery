@@ -1,0 +1,157 @@
+{
+    "format_version": "1.10.0",
+    "animation_controllers": {
+        "controller.animation.utilitycraft.gas_turbine.flow": {
+            "initial_state": "idle",
+            "states": {
+                "idle": {
+                    "transitions": [
+                        {
+                            "flow_steam": "v.gas_speed > 0.02 && v.gas_opacity > 0.0 && v.gas_type == 0"
+                        },
+                        {
+                            "flow_heated_saline_coolant_gas": "v.gas_speed > 0.02 && v.gas_opacity > 0.0 && v.gas_type == 1"
+                        },
+                        {
+                            "flow_hydrogen_gas": "v.gas_speed > 0.02 && v.gas_opacity > 0.0 && v.gas_type == 2"
+                        },
+                        {
+                            "flow_methane_gas": "v.gas_speed > 0.02 && v.gas_opacity > 0.0 && v.gas_type == 3"
+                        },
+                        {
+                            "flow_oxygen_gas": "v.gas_speed > 0.02 && v.gas_opacity > 0.0 && v.gas_type == 4"
+                        },
+                        {
+                            "flow_fluorine_gas": "v.gas_speed > 0.02 && v.gas_opacity > 0.0 && v.gas_type == 5"
+                        },
+                        {
+                            "flow_hydrogen_fluoride_gas": "v.gas_speed > 0.02 && v.gas_opacity > 0.0 && v.gas_type == 6"
+                        },
+                        {
+                            "flow_natural_uranium_hexafluoride_gas": "v.gas_speed > 0.02 && v.gas_opacity > 0.0 && v.gas_type == 7"
+                        },
+                        {
+                            "flow_enriched_uranium_hexafluoride_gas": "v.gas_speed > 0.02 && v.gas_opacity > 0.0 && v.gas_type == 8"
+                        },
+                        {
+                            "flow_depleted_uranium_hexafluoride_gas": "v.gas_speed > 0.02 && v.gas_opacity > 0.0 && v.gas_type == 9"
+                        },
+                        {
+                            "flow_nuclear_waste_gas": "v.gas_speed > 0.02 && v.gas_opacity > 0.0 && v.gas_type == 10"
+                        }
+                    ]
+                },
+                "flow_steam": {
+                    "animations": [
+                        "flow_steam"
+                    ],
+                    "transitions": [
+                        {
+                            "idle": "!(v.gas_speed > 0.02 && v.gas_opacity > 0.0) || v.gas_type != 0"
+                        }
+                    ]
+                },
+                "flow_heated_saline_coolant_gas": {
+                    "animations": [
+                        "flow_heated_saline_coolant_gas"
+                    ],
+                    "transitions": [
+                        {
+                            "idle": "!(v.gas_speed > 0.02 && v.gas_opacity > 0.0) || v.gas_type != 1"
+                        }
+                    ]
+                },
+                "flow_hydrogen_gas": {
+                    "animations": [
+                        "flow_hydrogen_gas"
+                    ],
+                    "transitions": [
+                        {
+                            "idle": "!(v.gas_speed > 0.02 && v.gas_opacity > 0.0) || v.gas_type != 2"
+                        }
+                    ]
+                },
+                "flow_methane_gas": {
+                    "animations": [
+                        "flow_methane_gas"
+                    ],
+                    "transitions": [
+                        {
+                            "idle": "!(v.gas_speed > 0.02 && v.gas_opacity > 0.0) || v.gas_type != 3"
+                        }
+                    ]
+                },
+                "flow_oxygen_gas": {
+                    "animations": [
+                        "flow_oxygen_gas"
+                    ],
+                    "transitions": [
+                        {
+                            "idle": "!(v.gas_speed > 0.02 && v.gas_opacity > 0.0) || v.gas_type != 4"
+                        }
+                    ]
+                },
+                "flow_fluorine_gas": {
+                    "animations": [
+                        "flow_fluorine_gas"
+                    ],
+                    "transitions": [
+                        {
+                            "idle": "!(v.gas_speed > 0.02 && v.gas_opacity > 0.0) || v.gas_type != 5"
+                        }
+                    ]
+                },
+                "flow_hydrogen_fluoride_gas": {
+                    "animations": [
+                        "flow_hydrogen_fluoride_gas"
+                    ],
+                    "transitions": [
+                        {
+                            "idle": "!(v.gas_speed > 0.02 && v.gas_opacity > 0.0) || v.gas_type != 6"
+                        }
+                    ]
+                },
+                "flow_natural_uranium_hexafluoride_gas": {
+                    "animations": [
+                        "flow_natural_uranium_hexafluoride_gas"
+                    ],
+                    "transitions": [
+                        {
+                            "idle": "!(v.gas_speed > 0.02 && v.gas_opacity > 0.0) || v.gas_type != 7"
+                        }
+                    ]
+                },
+                "flow_enriched_uranium_hexafluoride_gas": {
+                    "animations": [
+                        "flow_enriched_uranium_hexafluoride_gas"
+                    ],
+                    "transitions": [
+                        {
+                            "idle": "!(v.gas_speed > 0.02 && v.gas_opacity > 0.0) || v.gas_type != 8"
+                        }
+                    ]
+                },
+                "flow_depleted_uranium_hexafluoride_gas": {
+                    "animations": [
+                        "flow_depleted_uranium_hexafluoride_gas"
+                    ],
+                    "transitions": [
+                        {
+                            "idle": "!(v.gas_speed > 0.02 && v.gas_opacity > 0.0) || v.gas_type != 9"
+                        }
+                    ]
+                },
+                "flow_nuclear_waste_gas": {
+                    "animations": [
+                        "flow_nuclear_waste_gas"
+                    ],
+                    "transitions": [
+                        {
+                            "idle": "!(v.gas_speed > 0.02 && v.gas_opacity > 0.0) || v.gas_type != 10"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

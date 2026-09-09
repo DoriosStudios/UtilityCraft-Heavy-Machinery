@@ -64,3 +64,9 @@ export function simulateThermoReactor(input, config) {
     }
     return { temperature, consumedLava, producedEnergy, coolantHeatRemoved, meltdown }
 }
+
+// Cooling strength remains in the shared coolant registry. Outputs conserve removed HU.
+export const THERMO_COOLANT_OUTPUTS = Object.freeze({
+    water: 'steam', heavy_water: 'steam', saline_coolant: 'heated_saline_coolant_gas',
+});
+export const THERMO_OUTPUT_HEAT = Object.freeze({ steam: 8, heated_saline_coolant_gas: 16 });

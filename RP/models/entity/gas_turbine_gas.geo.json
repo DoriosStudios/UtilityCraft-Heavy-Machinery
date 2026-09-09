@@ -1,0 +1,185 @@
+{
+    "format_version": "1.12.0",
+    "minecraft:geometry": [
+        {
+            "description": {
+                "identifier": "geometry.utilitycraft.gas_turbine_gas_x",
+                "texture_width": 16,
+                "texture_height": 16,
+                "visible_bounds_width": 202,
+                "visible_bounds_height": 202,
+                "visible_bounds_offset": [
+                    0,
+                    99,
+                    0
+                ]
+            },
+            "bones": [
+                {
+                    "name": "gas",
+                    "pivot": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "cubes": [
+                        {
+                            "origin": [
+                                -8,
+                                0,
+                                -8
+                            ],
+                            "size": [
+                                16,
+                                16,
+                                16
+                            ],
+                            "uv": {
+                                "west": {
+                                    "uv": [
+                                        0,
+                                        0
+                                    ],
+                                    "uv_size": [
+                                        16,
+                                        16
+                                    ]
+                                },
+                                "east": {
+                                    "uv": [
+                                        0,
+                                        0
+                                    ],
+                                    "uv_size": [
+                                        16,
+                                        16
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "description": {
+                "identifier": "geometry.utilitycraft.gas_turbine_gas_y",
+                "texture_width": 16,
+                "texture_height": 16,
+                "visible_bounds_width": 202,
+                "visible_bounds_height": 202,
+                "visible_bounds_offset": [
+                    0,
+                    99,
+                    0
+                ]
+            },
+            "bones": [
+                {
+                    "name": "gas",
+                    "pivot": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "cubes": [
+                        {
+                            "origin": [
+                                -8,
+                                0,
+                                -8
+                            ],
+                            "size": [
+                                16,
+                                16,
+                                16
+                            ],
+                            "uv": {
+                                "up": {
+                                    "uv": [
+                                        0,
+                                        0
+                                    ],
+                                    "uv_size": [
+                                        16,
+                                        16
+                                    ]
+                                },
+                                "down": {
+                                    "uv": [
+                                        0,
+                                        0
+                                    ],
+                                    "uv_size": [
+                                        16,
+                                        16
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "description": {
+                "identifier": "geometry.utilitycraft.gas_turbine_gas_z",
+                "texture_width": 16,
+                "texture_height": 16,
+                "visible_bounds_width": 202,
+                "visible_bounds_height": 202,
+                "visible_bounds_offset": [
+                    0,
+                    99,
+                    0
+                ]
+            },
+            "bones": [
+                {
+                    "name": "gas",
+                    "pivot": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "cubes": [
+                        {
+                            "origin": [
+                                -8,
+                                0,
+                                -8
+                            ],
+                            "size": [
+                                16,
+                                16,
+                                16
+                            ],
+                            "uv": {
+                                "north": {
+                                    "uv": [
+                                        0,
+                                        0
+                                    ],
+                                    "uv_size": [
+                                        16,
+                                        16
+                                    ]
+                                },
+                                "south": {
+                                    "uv": [
+                                        0,
+                                        0
+                                    ],
+                                    "uv_size": [
+                                        16,
+                                        16
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

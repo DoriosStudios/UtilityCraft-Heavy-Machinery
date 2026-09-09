@@ -50,8 +50,8 @@
             },
             "minecraft:tick": {
                 "interval_range": [
-                    2,
-                    2
+                    4,
+                    4
                 ]
             },
             "utilitycraft:thermo_reactor": {},

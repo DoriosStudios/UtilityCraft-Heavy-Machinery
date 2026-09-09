@@ -1,11 +1,31 @@
 # UtilityCraft: Heavy Machinery v0.5.3
 
 ## ADDED
+- Added independent turbine visual coverage for all 11 UC/HM gases, with Steam texture fallback for unknown gases. Gas identity is preserved; only Steam and Heated Saline Coolant generate energy.
+- Added Thermal Reactor heat recovery: Water/Heavy Water produce Steam and Saline Coolant produces Heated Saline Coolant based on heat actually removed. Gas Cells provide 256,000 mB each; a full or incompatible output blocks active cooling. Added native gas output/IO, the General gas bar and updated illustrated guides.
+- Gas Turbines now accept Heated Saline Coolant at 512 DE/mB and 1.25x impulse, with matching gas volume, particles and guide icons.
+- Added sparse client-side turbine gas streaks matching each gas, with emission frequency and orbital motion tied to rotor speed. Short-lived particles stay inside the structure and fade out; emission stops at rest or with an empty tank.
+- Added an experimental full-volume gas visual to the Gas Turbine: one inset entity with six faces, per-block repeated UC gas textures and reserve-based opacity configurable per gas. Empty tanks hide the shell; deactivation and controller removal clean it up.
 - Added the bronze Gas Turbine multiblock: Steam/Hydrogen/Methane inputs, gas capacity from empty interior blocks, Energy Cells, configurable mB/t, progressive rotor startup and native gas/energy ports.
 - Added an automatically sized vertical rotor entity with two animated vertical curved blades, lifecycle cleanup, a four-tab turbine UI, controller crafting recipe and the supplied four-face controller textures.
 - Added generic DoriosCore TemperatureStorage with persistent thermal capacity, internal HU/t generation, simultaneous hot/cold contacts, exact time-based heat exchange, and native temperature display independent of machine limits.
 
 ## CHANGED
+- Standardized all Heavy Machinery block tick intervals to 4 ticks, reducing redundant controller callbacks while preserving scheduler-driven machine throughput.
+- Thermal and Nuclear reactors skip thermal simulation while switched off at ambient temperature; energy export, nuclear fuel loading and open UI updates remain available. Hot reactors continue cooling and restart resumes simulation.
+- Restricted the Gas Turbine to Steam and Heated Saline Coolant; removed Hydrogen/Methane conversion and turbine-only visuals, and renamed its gas tab Working Gas. Existing unsupported gas remains available to drain. UC Gas Generators retain their fuels.
+- Reversed gas particle orbital motion to follow the reversed turbine rotor, preserving the increased emission frequency.
+- Tripled Gas Turbine particle emission frequency for every gas, retaining speed scaling, particle lifetime and idle/empty shutoff.
+- Reversed Gas Turbine rotor rotation while preserving RPM, acceleration and energy generation.
+- Reduced Thermal Reactor direct generation from 2,000 to 1,500 DE/mB before efficiency (25% less), with turbine heat recovery providing the combined-cycle benefit. Existing structures must be rescanned with Gas Cells. Empty coolant tanks can accept a different coolant; fractional fuel/coolant/gas accounting survives scheduler changes.
+- Replaced fixed per-gas turbine RPM with flow-dependent rotation capped at 240 RPM. Steam/Hydrogen/Methane impulse is 1/1.25/1.5, so higher-impulse gas reaches the cap at lower mB/t; Control clamps to each gas limit. Preserved independent DE/mB yields, smooth startup/coasting, UI gating and legacy saved RPM through migration. Updated gas labels and guides.
+- Increased turbine rotor rotation by 25% (150 base RPM) and kept the RPM readout aligned with the animation, preserving gas multipliers, intake and energy output.
+- Reworked Gas Turbine Info into compact illustrated sections matching the reactor guides, with bronze casing/Gas Port/Control icons and individual gas icons, yields and speed multipliers. Reduced section gaps while retaining readable body text and scrolling.
+- Enlarged the Gas Turbine General Rotor heading and prefixed the dynamic RPM nameTag with a formatting reset followed by dark gray (section-sign r, then 8).
+- Replaced turbine gas-texture streaks with the animated vanilla falling-dust sprite used by Vein Miner, tinted from each gas palette; retained sparse emission and speed-dependent orbital motion.
+- Moved the six Creative Saline Coolant and nuclear gas tank blocks, Creative entries and names into UtilityCraft, preserving identifiers and removing duplicate ownership from Heavy Machinery.
+- Refreshed turbine Methane opacity textures from UtilityCraft's current green sprite.
+- Increased Gas Turbine gas opacity from 25% to 60% maximum for Steam/Methane and 80% for Hydrogen, retaining density changes as the tank empties.
 - Added a configurable gas table to the turbine with per-gas DE/mB and rotor speed multipliers, including Steam. Updated gas intake/drain labels, RPM readouts and the gas guide.
 - Replaced the turbine rotor with two opposing vertical curved scoops and a dedicated 32x32 texture using the Steel palette; preserved structure-based scaling and gradual spin-up/coasting.
 - Added a persistent lower-left energy indicator to both reactors using UtilityCraft's energy icon and the existing energy-slot hover text, without drawing the energy bar or duplicating runtime logic.
@@ -114,6 +134,9 @@
 - Added standard Speed and Energy upgrade support to the Electrolyzer, including multiple batches per update when upgraded throughput allows.
 
 ## FIXED
+- Removed the rejected explicit bind_to_actor=true field from turbine particle timelines, using default actor binding so all three gas animations can load.
+- Fixed turbine gas texture selection by explicitly mapping synchronized gas enum names to numeric texture indices; Methane and Hydrogen no longer use an invalid string in the texture-array calculation.
+- Fixed opaque Gas Turbine gas visuals by baking transparency levels into each gas texture instead of relying on render-controller alpha; preserved full-volume sizing and repeated 16x16 pixels.
 - Filtered multiblock entity resolution and deactivation to live dorios:multiblock controllers, preventing hide events from targeting players, dropped items or visual rotors. Applied the same targeted fix to the workspace addon copies of DoriosCore that register multiblock listeners.
 - Removed the unnecessary Gas Turbine controller client entity; only the separate rotor has visual resources. Guarded unsynchronized rotor properties in animations and reject unloaded BP property definitions without repeated script errors or orphaned rotors.
 - Removed the trailing _liquid suffix from liquid bar display names and renamed Nuclear Waste assets and storage IDs to nuclear_waste_gas.

@@ -110,19 +110,6 @@
                     },
                     {
                         "group_identifier": {
-                            "name": "dorios:itemGroup.name.tanks"
-                        },
-                        "items": [
-                            "utilitycraft:creative_saline_coolant_tank",
-                            "utilitycraft:creative_fluorine_tank",
-                            "utilitycraft:creative_hydrogen_fluoride_tank",
-                            "utilitycraft:creative_natural_uranium_hexafluoride_tank",
-                            "utilitycraft:creative_enriched_uranium_hexafluoride_tank",
-                            "utilitycraft:creative_depleted_uranium_hexafluoride_tank"
-                        ]
-                    },
-                    {
-                        "group_identifier": {
                             "icon": "utilitycraft:basic_power_condenser_unit",
                             "name": "utilitycraft:itemGroup.power_condenser_units"
                         },

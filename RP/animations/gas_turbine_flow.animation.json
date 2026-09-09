@@ -1,0 +1,126 @@
+{
+    "format_version": "1.8.0",
+    "animations": {
+        "animation.utilitycraft.gas_turbine.flow_steam": {
+            "loop": true,
+            "animation_length": 0.4,
+            "anim_time_update": "q.anim_time + q.delta_time * math.clamp(v.gas_speed, 0.0, 1.5) * 3.0",
+            "particle_effects": {
+                "0.0": {
+                    "effect": "flow_steam",
+                    "pre_effect_script": "v.flow_speed = math.clamp(q.property('utilitycraft:speed'), 0.0, 2.0); v.flow_radius = math.min(q.property('utilitycraft:width'), q.property('utilitycraft:depth')) * 0.5 - 0.35; v.flow_height = q.property('utilitycraft:height');"
+                }
+            }
+        },
+        "animation.utilitycraft.gas_turbine.flow_heated_saline_coolant_gas": {
+            "loop": true,
+            "animation_length": 0.4,
+            "anim_time_update": "q.anim_time + q.delta_time * math.clamp(v.gas_speed, 0.0, 1.5) * 3.0",
+            "particle_effects": {
+                "0.0": {
+                    "effect": "flow_heated_saline_coolant_gas",
+                    "pre_effect_script": "v.flow_speed = math.clamp(q.property('utilitycraft:speed'), 0.0, 2.0); v.flow_radius = math.min(q.property('utilitycraft:width'), q.property('utilitycraft:depth')) * 0.5 - 0.35; v.flow_height = q.property('utilitycraft:height');"
+                }
+            }
+        },
+        "animation.utilitycraft.gas_turbine.flow_hydrogen_gas": {
+            "loop": true,
+            "animation_length": 0.4,
+            "anim_time_update": "q.anim_time + q.delta_time * math.clamp(v.gas_speed, 0.0, 1.5) * 3.0",
+            "particle_effects": {
+                "0.0": {
+                    "effect": "flow_hydrogen_gas",
+                    "pre_effect_script": "v.flow_speed = math.clamp(q.property('utilitycraft:speed'), 0.0, 2.0); v.flow_radius = math.min(q.property('utilitycraft:width'), q.property('utilitycraft:depth')) * 0.5 - 0.35; v.flow_height = q.property('utilitycraft:height');"
+                }
+            }
+        },
+        "animation.utilitycraft.gas_turbine.flow_methane_gas": {
+            "loop": true,
+            "animation_length": 0.4,
+            "anim_time_update": "q.anim_time + q.delta_time * math.clamp(v.gas_speed, 0.0, 1.5) * 3.0",
+            "particle_effects": {
+                "0.0": {
+                    "effect": "flow_methane_gas",
+                    "pre_effect_script": "v.flow_speed = math.clamp(q.property('utilitycraft:speed'), 0.0, 2.0); v.flow_radius = math.min(q.property('utilitycraft:width'), q.property('utilitycraft:depth')) * 0.5 - 0.35; v.flow_height = q.property('utilitycraft:height');"
+                }
+            }
+        },
+        "animation.utilitycraft.gas_turbine.flow_oxygen_gas": {
+            "loop": true,
+            "animation_length": 0.4,
+            "anim_time_update": "q.anim_time + q.delta_time * math.clamp(v.gas_speed, 0.0, 1.5) * 3.0",
+            "particle_effects": {
+                "0.0": {
+                    "effect": "flow_oxygen_gas",
+                    "pre_effect_script": "v.flow_speed = math.clamp(q.property('utilitycraft:speed'), 0.0, 2.0); v.flow_radius = math.min(q.property('utilitycraft:width'), q.property('utilitycraft:depth')) * 0.5 - 0.35; v.flow_height = q.property('utilitycraft:height');"
+                }
+            }
+        },
+        "animation.utilitycraft.gas_turbine.flow_fluorine_gas": {
+            "loop": true,
+            "animation_length": 0.4,
+            "anim_time_update": "q.anim_time + q.delta_time * math.clamp(v.gas_speed, 0.0, 1.5) * 3.0",
+            "particle_effects": {
+                "0.0": {
+                    "effect": "flow_fluorine_gas",
+                    "pre_effect_script": "v.flow_speed = math.clamp(q.property('utilitycraft:speed'), 0.0, 2.0); v.flow_radius = math.min(q.property('utilitycraft:width'), q.property('utilitycraft:depth')) * 0.5 - 0.35; v.flow_height = q.property('utilitycraft:height');"
+                }
+            }
+        },
+        "animation.utilitycraft.gas_turbine.flow_hydrogen_fluoride_gas": {
+            "loop": true,
+            "animation_length": 0.4,
+            "anim_time_update": "q.anim_time + q.delta_time * math.clamp(v.gas_speed, 0.0, 1.5) * 3.0",
+            "particle_effects": {
+                "0.0": {
+                    "effect": "flow_hydrogen_fluoride_gas",
+                    "pre_effect_script": "v.flow_speed = math.clamp(q.property('utilitycraft:speed'), 0.0, 2.0); v.flow_radius = math.min(q.property('utilitycraft:width'), q.property('utilitycraft:depth')) * 0.5 - 0.35; v.flow_height = q.property('utilitycraft:height');"
+                }
+            }
+        },
+        "animation.utilitycraft.gas_turbine.flow_natural_uranium_hexafluoride_gas": {
+            "loop": true,
+            "animation_length": 0.4,
+            "anim_time_update": "q.anim_time + q.delta_time * math.clamp(v.gas_speed, 0.0, 1.5) * 3.0",
+            "particle_effects": {
+                "0.0": {
+                    "effect": "flow_natural_uranium_hexafluoride_gas",
+                    "pre_effect_script": "v.flow_speed = math.clamp(q.property('utilitycraft:speed'), 0.0, 2.0); v.flow_radius = math.min(q.property('utilitycraft:width'), q.property('utilitycraft:depth')) * 0.5 - 0.35; v.flow_height = q.property('utilitycraft:height');"
+                }
+            }
+        },
+        "animation.utilitycraft.gas_turbine.flow_enriched_uranium_hexafluoride_gas": {
+            "loop": true,
+            "animation_length": 0.4,
+            "anim_time_update": "q.anim_time + q.delta_time * math.clamp(v.gas_speed, 0.0, 1.5) * 3.0",
+            "particle_effects": {
+                "0.0": {
+                    "effect": "flow_enriched_uranium_hexafluoride_gas",
+                    "pre_effect_script": "v.flow_speed = math.clamp(q.property('utilitycraft:speed'), 0.0, 2.0); v.flow_radius = math.min(q.property('utilitycraft:width'), q.property('utilitycraft:depth')) * 0.5 - 0.35; v.flow_height = q.property('utilitycraft:height');"
+                }
+            }
+        },
+        "animation.utilitycraft.gas_turbine.flow_depleted_uranium_hexafluoride_gas": {
+            "loop": true,
+            "animation_length": 0.4,
+            "anim_time_update": "q.anim_time + q.delta_time * math.clamp(v.gas_speed, 0.0, 1.5) * 3.0",
+            "particle_effects": {
+                "0.0": {
+                    "effect": "flow_depleted_uranium_hexafluoride_gas",
+                    "pre_effect_script": "v.flow_speed = math.clamp(q.property('utilitycraft:speed'), 0.0, 2.0); v.flow_radius = math.min(q.property('utilitycraft:width'), q.property('utilitycraft:depth')) * 0.5 - 0.35; v.flow_height = q.property('utilitycraft:height');"
+                }
+            }
+        },
+        "animation.utilitycraft.gas_turbine.flow_nuclear_waste_gas": {
+            "loop": true,
+            "animation_length": 0.4,
+            "anim_time_update": "q.anim_time + q.delta_time * math.clamp(v.gas_speed, 0.0, 1.5) * 3.0",
+            "particle_effects": {
+                "0.0": {
+                    "effect": "flow_nuclear_waste_gas",
+                    "pre_effect_script": "v.flow_speed = math.clamp(q.property('utilitycraft:speed'), 0.0, 2.0); v.flow_radius = math.min(q.property('utilitycraft:width'), q.property('utilitycraft:depth')) * 0.5 - 0.35; v.flow_height = q.property('utilitycraft:height');"
+                }
+            }
+        }
+    }
+}

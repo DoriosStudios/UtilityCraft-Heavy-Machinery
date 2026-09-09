@@ -244,6 +244,38 @@
                     ],
                     "layer": 10
                 }
+            },
+            {
+                "exhaust@uc.item_display_hover_large": {
+                    "collection_index": 24,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        112,
+                        5
+                    ],
+                    "size": [
+                        16,
+                        50
+                    ]
+                }
+            },
+            {
+                "exhaust_border": {
+                    "type": "image",
+                    "texture": "textures/ui/liquid_border",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        112,
+                        6
+                    ],
+                    "size": [
+                        16,
+                        48
+                    ],
+                    "layer": 10
+                }
             }
         ]
     },
@@ -411,7 +443,7 @@
                     "anchor_to": "top_left",
                     "offset": [
                         0,
-                        66
+                        60
                     ],
                     "size": [
                         162,
@@ -434,7 +466,7 @@
                     "anchor_to": "top_left",
                     "offset": [
                         18,
-                        80
+                        78
                     ],
                     "size": [
                         16,
@@ -450,7 +482,7 @@
                     "anchor_to": "top_left",
                     "offset": [
                         18,
-                        81
+                        79
                     ],
                     "size": [
                         16,
@@ -467,7 +499,7 @@
                     "anchor_to": "top_left",
                     "offset": [
                         52,
-                        80
+                        81
                     ],
                     "size": [
                         16,
@@ -483,7 +515,7 @@
                     "anchor_to": "top_left",
                     "offset": [
                         72,
-                        80
+                        81
                     ],
                     "size": [
                         90,
@@ -531,7 +563,7 @@
                     "anchor_to": "top_left",
                     "offset": [
                         52,
-                        103
+                        102
                     ],
                     "size": [
                         16,
@@ -547,7 +579,7 @@
                     "anchor_to": "top_left",
                     "offset": [
                         72,
-                        103
+                        102
                     ],
                     "size": [
                         90,
@@ -571,7 +603,7 @@
                     "anchor_to": "top_left",
                     "offset": [
                         72,
-                        113
+                        111
                     ],
                     "size": [
                         90,
@@ -595,13 +627,77 @@
                     "anchor_to": "top_left",
                     "offset": [
                         52,
-                        127
+                        126
                     ],
                     "size": [
                         110,
-                        15
+                        16
                     ],
                     "font_scale_factor": 0.58,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "water_icon": {
+                    "type": "image",
+                    "texture": "textures/static/images/water",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        52,
+                        60
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "water_name": {
+                    "type": "label",
+                    "text": "ui.hm.tr.water_name",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        72,
+                        60
+                    ],
+                    "size": [
+                        90,
+                        9
+                    ],
+                    "font_scale_factor": 0.58,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "water_value": {
+                    "type": "label",
+                    "text": "ui.hm.tr.water_value",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        72,
+                        69
+                    ],
+                    "size": [
+                        90,
+                        8
+                    ],
+                    "font_scale_factor": 0.5,
                     "color": [
                         0.22,
                         0.22,
@@ -1463,11 +1559,11 @@
         "anchor_to": "top_left",
         "size": [
             150,
-            286
+            388
         ],
         "controls": [
             {
-                "reactor_description": {
+                "reactor_description_details": {
                     "type": "label",
                     "text": "ui.hm.tr.info_description",
                     "anchor_from": "top_left",
@@ -1555,9 +1651,9 @@
                 }
             },
             {
-                "saline_icon": {
+                "water_icon": {
                     "type": "image",
-                    "texture": "textures/static/images/saline_coolant",
+                    "texture": "textures/static/images/water",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
@@ -1571,9 +1667,9 @@
                 }
             },
             {
-                "saline_details": {
+                "water_details": {
                     "type": "label",
-                    "text": "ui.hm.tr.info_saline",
+                    "text": "ui.hm.tr.info_water",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
@@ -1622,7 +1718,7 @@
                     ],
                     "size": [
                         124,
-                        26
+                        32
                     ],
                     "font_scale_factor": 0.65,
                     "color": [
@@ -1635,18 +1731,98 @@
                 }
             },
             {
-                "coolant_supply": {
+                "saline_icon": {
+                    "type": "image",
+                    "texture": "textures/static/images/saline_coolant",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        2,
+                        158
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "saline_details": {
+                    "type": "label",
+                    "text": "ui.hm.tr.info_saline",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        24,
+                        156
+                    ],
+                    "size": [
+                        124,
+                        32
+                    ],
+                    "font_scale_factor": 0.65,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "coolant_details": {
                     "type": "label",
                     "text": "ui.hm.tr.info_coolant",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
                         0,
-                        150
+                        192
                     ],
                     "size": [
                         148,
-                        28
+                        36
+                    ],
+                    "font_scale_factor": 0.65,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "exhaust_icon": {
+                    "type": "image",
+                    "texture": "textures/static/images/heated_saline_coolant_gas",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        2,
+                        234
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "exhaust_details": {
+                    "type": "label",
+                    "text": "ui.hm.tr.info_exhaust",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        24,
+                        232
+                    ],
+                    "size": [
+                        124,
+                        40
                     ],
                     "font_scale_factor": 0.65,
                     "color": [
@@ -1666,7 +1842,7 @@
                     "anchor_to": "top_left",
                     "offset": [
                         2,
-                        184
+                        278
                     ],
                     "size": [
                         16,
@@ -1682,7 +1858,7 @@
                     "anchor_to": "top_left",
                     "offset": [
                         24,
-                        182
+                        276
                     ],
                     "size": [
                         124,
@@ -1706,7 +1882,7 @@
                     "anchor_to": "top_left",
                     "offset": [
                         0,
-                        218
+                        312
                     ],
                     "size": [
                         148,
@@ -1730,7 +1906,7 @@
                     "anchor_to": "top_left",
                     "offset": [
                         2,
-                        248
+                        342
                     ],
                     "size": [
                         16,
@@ -1739,18 +1915,18 @@
                 }
             },
             {
-                "warning": {
+                "warning_details": {
                     "type": "label",
                     "text": "ui.hm.tr.info_warning",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
                         24,
-                        246
+                        340
                     ],
                     "size": [
                         124,
-                        36
+                        44
                     ],
                     "font_scale_factor": 0.65,
                     "color": [
