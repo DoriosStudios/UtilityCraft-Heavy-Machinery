@@ -6,6 +6,11 @@ import * as DoriosLib from "DoriosLib/index.js";
  */
 const crafterRecipeBatches = [
 {
+    "bronze_plate,control_panel,bronze_plate,charged_darloonite_crystal,bronze_controller_case,charged_darloonite_crystal,bronze_plate,advanced_gas_generator,bronze_plate": {
+      output: "utilitycraft:gas_turbine_controller",
+      amount: 1,
+    },
+
   "tin_plate,gas_pipe,tin_plate,gas_pipe,tin_case,gas_pipe,tin_plate,gas_pipe,tin_plate": {
     "output": "utilitycraft:tin_gas_port",
     "amount": 1

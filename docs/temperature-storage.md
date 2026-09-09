@@ -4,7 +4,7 @@ Generic thermal body in DoriosCore. Import from `DoriosCore/index.js`.
 No reactor thresholds, fuel/coolant rules, automatic ambient contact or physical
 minimum/maximum temperature are imposed. Finite numeric inputs, nonnegative elapsed
 time/conductance and strictly positive capacity are required for valid arithmetic.
-Nuclear Reactor uses this storage and solver; Thermo retains its existing model.
+Nuclear and Thermo Reactors both use this storage and solver with their own thermal balance.
 
 ## Units and model
 

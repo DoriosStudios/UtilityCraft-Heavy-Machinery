@@ -316,5 +316,8 @@
 	},
 	"utilitycraft:gas_cell": {
 		"sound": "metal"
+	},
+	"utilitycraft:gas_turbine_controller": {
+		"sound": "copper"
 	}
 }

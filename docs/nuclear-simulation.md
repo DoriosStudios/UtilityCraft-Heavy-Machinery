@@ -2,7 +2,8 @@
 
 Nuclear uses DoriosCore `TemperatureStorage` for persisted K/capacity and its native
 display. `nuclearSimulation.js` uses the same pure `advanceTemperature` solver for
-in-memory calculations. Thermo keeps `reactorThermalModel.js` unchanged.
+in-memory calculations. Nuclear and Thermo share only the finite thermal exchange
+integrator in `reactorHeatExchange.js`, with separate machine-specific balances.
 
 ## Initial thermal balance
 

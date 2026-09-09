@@ -75,7 +75,8 @@
                             "utilitycraft:liquid_tank_controller",
                             "utilitycraft:gas_tank_controller",
                             "utilitycraft:power_condenser_controller",
-                            "utilitycraft:thermo_reactor_controller"
+                            "utilitycraft:thermo_reactor_controller",
+                            "utilitycraft:gas_turbine_controller"
                         ]
                     },
                     {

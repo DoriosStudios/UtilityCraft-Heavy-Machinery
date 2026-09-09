@@ -317,7 +317,7 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        18,
+                        10,
                         21
                     ]
                 }
@@ -333,7 +333,7 @@
                         16
                     ],
                     "offset": [
-                        19,
+                        11,
                         22
                     ],
                     "controls": [
@@ -366,7 +366,7 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        52,
+                        36,
                         13
                     ],
                     "size": [
@@ -382,11 +382,11 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        72,
+                        56,
                         13
                     ],
                     "size": [
-                        90,
+                        76,
                         9
                     ],
                     "font_scale_factor": 0.58,
@@ -406,7 +406,7 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        52,
+                        36,
                         30
                     ],
                     "size": [
@@ -422,11 +422,11 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        72,
+                        56,
                         31
                     ],
                     "size": [
-                        90,
+                        76,
                         9
                     ],
                     "font_scale_factor": 0.55,
@@ -446,11 +446,11 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        52,
+                        36,
                         48
                     ],
                     "size": [
-                        110,
+                        96,
                         10
                     ],
                     "font_scale_factor": 0.58,
@@ -468,11 +468,11 @@
                     "type": "label",
                     "text": "250 FU",
                     "size": [
-                        90,
+                        76,
                         7
                     ],
                     "offset": [
-                        72,
+                        56,
                         23
                     ],
                     "anchor_from": "top_left",
@@ -491,11 +491,11 @@
                     "type": "label",
                     "text": "1,000 FU",
                     "size": [
-                        90,
+                        76,
                         7
                     ],
                     "offset": [
-                        72,
+                        56,
                         40
                     ],
                     "anchor_from": "top_left",
@@ -507,6 +507,21 @@
                         0.3
                     ],
                     "shadow": false
+                }
+            },
+            {
+                "uranium@uc.item_display_hover_large": {
+                    "collection_index": 3,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        136,
+                        9
+                    ],
+                    "size": [
+                        16,
+                        50
+                    ]
                 }
             }
         ]
@@ -524,42 +539,6 @@
             5
         ],
         "controls": [
-            {
-                "control_divider": {
-                    "type": "image",
-                    "texture": "textures/ui/black_background",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        81,
-                        40
-                    ],
-                    "size": [
-                        1,
-                        98
-                    ],
-                    "alpha": 0.15,
-                    "layer": 0
-                }
-            },
-            {
-                "power_divider": {
-                    "type": "image",
-                    "texture": "textures/ui/black_background",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        88,
-                        117
-                    ],
-                    "size": [
-                        70,
-                        1
-                    ],
-                    "alpha": 0.15,
-                    "layer": 0
-                }
-            },
             {
                 "entry_screen": {
                     "type": "image",
@@ -616,41 +595,6 @@
                 }
             },
             {
-                "power_hint": {
-                    "type": "label",
-                    "text": "ui.hm.nr.power",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        110,
-                        124
-                    ],
-                    "size": [
-                        48,
-                        12
-                    ],
-                    "font_scale_factor": 0.58,
-                    "color": [
-                        0.22,
-                        0.22,
-                        0.22
-                    ],
-                    "shadow": false,
-                    "text_alignment": "left"
-                }
-            },
-            {
-                "start_button@uc.machine_button": {
-                    "$index": 5,
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        88,
-                        120
-                    ]
-                }
-            },
-            {
                 "cancel@uc.machine_button": {
                     "$index": 19,
                     "$default_texture": "textures/ui/buttons/cancel",
@@ -659,8 +603,8 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        88,
-                        98
+                        76,
+                        84
                     ]
                 }
             },
@@ -841,57 +785,9 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        88,
-                        76
+                        76,
+                        64
                     ]
-                }
-            },
-            {
-                "reset_hint": {
-                    "type": "label",
-                    "text": "ui.hm.nr.control_reset",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        110,
-                        102
-                    ],
-                    "size": [
-                        48,
-                        12
-                    ],
-                    "font_scale_factor": 0.58,
-                    "color": [
-                        0.22,
-                        0.22,
-                        0.22
-                    ],
-                    "shadow": false,
-                    "text_alignment": "left"
-                }
-            },
-            {
-                "apply_hint": {
-                    "type": "label",
-                    "text": "ui.hm.nr.control_apply",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        110,
-                        80
-                    ],
-                    "size": [
-                        48,
-                        12
-                    ],
-                    "font_scale_factor": 0.58,
-                    "color": [
-                        0.22,
-                        0.22,
-                        0.22
-                    ],
-                    "shadow": false,
-                    "text_alignment": "left"
                 }
             },
             {
@@ -920,6 +816,61 @@
                         29
                     ],
                     "$text_scale": 0.67
+                }
+            },
+            {
+                "temperature@uc.item_display_hover_large": {
+                    "collection_index": 4,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        142,
+                        92
+                    ],
+                    "size": [
+                        16,
+                        50
+                    ]
+                }
+            },
+            {
+                "temperature_heading": {
+                    "type": "label",
+                    "text": "ui.hm.nr.current_temperature",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        106,
+                        108
+                    ],
+                    "size": [
+                        36,
+                        8
+                    ],
+                    "font_scale_factor": 0.55,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "center"
+                }
+            },
+            {
+                "temperature_value@uc.centered_text_label": {
+                    "collection_index": 4,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        98,
+                        118
+                    ],
+                    "size": [
+                        52,
+                        8
+                    ],
+                    "$text_scale": 0.55
                 }
             }
         ]
@@ -1073,6 +1024,25 @@
                                         }
                                     },
                                     {
+                                        "coolant_title@chest.chest_label": {
+                                            "text": "ui.hm.nr.title_coolant",
+                                            "localize": true,
+                                            "offset": [
+                                                7,
+                                                6
+                                            ],
+                                            "bindings": [
+                                                {
+                                                    "binding_type": "view",
+                                                    "source_control_name": "nr_coolant",
+                                                    "source_property_name": "#toggle_state",
+                                                    "target_property_name": "#visible",
+                                                    "resolve_sibling_scope": false
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
                                         "control_title@chest.chest_label": {
                                             "text": "ui.hm.nr.title_control",
                                             "localize": true,
@@ -1209,7 +1179,7 @@
                                         }
                                     },
                                     {
-                                        "control_tab@uc.toggle_button": {
+                                        "coolant_tab@uc.toggle_button": {
                                             "anchor_from": "top_left",
                                             "anchor_to": "top_left",
                                             "offset": [
@@ -1221,9 +1191,58 @@
                                                 16
                                             ],
                                             "$toggle_name": "nuclear_reactor_pages",
-                                            "$toggle_control_name": "nr_control",
+                                            "$toggle_control_name": "nr_coolant",
                                             "$toggle_group": true,
                                             "$toggle_index": 2,
+                                            "$toggle_group_default_selected": 0,
+                                            "$toggle_default_state": false,
+                                            "$toggle_lost_reset": false,
+                                            "$toggle_size": [
+                                                16,
+                                                16
+                                            ],
+                                            "$toggle_layer": 12,
+                                            "$toggle_bg_layer": 10,
+                                            "$has_toggle_bg": true,
+                                            "$toggle_bg_texture": "textures/ui/toggle_button/left_bg",
+                                            "$toggle_unchecked": "textures/ui/toggle_button/fluid_unchecked",
+                                            "$toggle_checked": "textures/ui/toggle_button/fluid_checked",
+                                            "$toggle_unchecked_hover": "textures/ui/toggle_button/fluid_unchecked_hover",
+                                            "$toggle_checked_hover": "textures/ui/toggle_button/fluid_checked_hover",
+                                            "$toggle_hover_text": "ui.hm.nr.tab_coolant",
+                                            "$toggle_hover_text_localize": true,
+                                            "$toggle_checked_hover_text_from_hover": true
+                                        }
+                                    },
+                                    {
+                                        "coolant@nuclear_reactor.coolant_page": {
+                                            "bindings": [
+                                                {
+                                                    "binding_type": "view",
+                                                    "source_control_name": "nr_coolant",
+                                                    "source_property_name": "#toggle_state",
+                                                    "target_property_name": "#visible",
+                                                    "resolve_sibling_scope": false
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "control_tab@uc.toggle_button": {
+                                            "anchor_from": "top_left",
+                                            "anchor_to": "top_left",
+                                            "offset": [
+                                                -19,
+                                                91
+                                            ],
+                                            "size": [
+                                                16,
+                                                16
+                                            ],
+                                            "$toggle_name": "nuclear_reactor_pages",
+                                            "$toggle_control_name": "nr_control",
+                                            "$toggle_group": true,
+                                            "$toggle_index": 3,
                                             "$toggle_group_default_selected": 0,
                                             "$toggle_default_state": false,
                                             "$toggle_lost_reset": false,
@@ -1272,7 +1291,7 @@
                                             "$toggle_name": "nuclear_reactor_pages",
                                             "$toggle_control_name": "nr_info",
                                             "$toggle_group": true,
-                                            "$toggle_index": 3,
+                                            "$toggle_index": 4,
                                             "$toggle_group_default_selected": 0,
                                             "$toggle_default_state": false,
                                             "$toggle_lost_reset": false,
@@ -1327,6 +1346,105 @@
                                                 },
                                                 {
                                                     "take@common.inventory_take_progress_icon_button": {}
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "power_action": {
+                                            "type": "panel",
+                                            "anchor_from": "bottom_left",
+                                            "anchor_to": "bottom_left",
+                                            "offset": [
+                                                179,
+                                                -10
+                                            ],
+                                            "size": [
+                                                16,
+                                                16
+                                            ],
+                                            "controls": [
+                                                {
+                                                    "background": {
+                                                        "type": "image",
+                                                        "texture": "textures/ui/toggle_button/right_bg",
+                                                        "size": [
+                                                            24,
+                                                            24
+                                                        ],
+                                                        "layer": 10
+                                                    }
+                                                },
+                                                {
+                                                    "power@uc.machine_button": {
+                                                        "$index": 5,
+                                                        "anchor_from": "center",
+                                                        "anchor_to": "center",
+                                                        "offset": [
+                                                            0,
+                                                            0
+                                                        ],
+                                                        "size": [
+                                                            16,
+                                                            16
+                                                        ],
+                                                        "$button_size": [
+                                                            16,
+                                                            16
+                                                        ],
+                                                        "layer": 12
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "energy_indicator": {
+                                            "type": "collection_panel",
+                                            "collection_name": "container_items",
+                                            "$item_collection_name": "container_items",
+                                            "anchor_from": "bottom_left",
+                                            "anchor_to": "bottom_left",
+                                            "offset": [
+                                                -19,
+                                                -10
+                                            ],
+                                            "size": [
+                                                16,
+                                                16
+                                            ],
+                                            "controls": [
+                                                {
+                                                    "background": {
+                                                        "type": "image",
+                                                        "texture": "textures/ui/toggle_button/left_bg",
+                                                        "size": [
+                                                            24,
+                                                            24
+                                                        ],
+                                                        "layer": 10
+                                                    }
+                                                },
+                                                {
+                                                    "energy_icon": {
+                                                        "type": "image",
+                                                        "texture": "textures/ui/energy_icon",
+                                                        "size": [
+                                                            16,
+                                                            16
+                                                        ],
+                                                        "layer": 12
+                                                    }
+                                                },
+                                                {
+                                                    "energy_hover@uc.slot_button": {
+                                                        "collection_index": 0,
+                                                        "size": [
+                                                            16,
+                                                            16
+                                                        ],
+                                                        "layer": 13
+                                                    }
                                                 }
                                             ]
                                         }
@@ -1509,7 +1627,7 @@
             {
                 "coolant_icon": {
                     "type": "image",
-                    "texture": "textures/static/images/heavy_water",
+                    "texture": "textures/ui/toggle_button/fluid_unchecked",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
@@ -1681,6 +1799,253 @@
                         44
                     ],
                     "font_scale_factor": 0.65,
+                    "color": [
+                        0.65,
+                        0.08,
+                        0.08
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            }
+        ]
+    },
+    "coolant_page": {
+        "type": "collection_panel",
+        "collection_name": "container_items",
+        "$item_collection_name": "container_items",
+        "size": [
+            162,
+            142
+        ],
+        "offset": [
+            0,
+            5
+        ],
+        "controls": [
+            {
+                "coolant_requirement": {
+                    "type": "label",
+                    "text": "ui.hm.nr.coolant_requirement",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        0,
+                        1
+                    ],
+                    "size": [
+                        162,
+                        10
+                    ],
+                    "font_scale_factor": 0.58,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "coolant@uc.item_display_hover_large": {
+                    "collection_index": 2,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        18,
+                        20
+                    ],
+                    "size": [
+                        16,
+                        50
+                    ]
+                }
+            },
+            {
+                "coolant_border": {
+                    "type": "image",
+                    "texture": "textures/ui/liquid_border",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        18,
+                        21
+                    ],
+                    "size": [
+                        16,
+                        48
+                    ],
+                    "layer": 10
+                }
+            },
+            {
+                "heavy_water_icon": {
+                    "type": "image",
+                    "texture": "textures/static/images/heavy_water",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        52,
+                        22
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "heavy_water_name": {
+                    "type": "label",
+                    "text": "ui.hm.nr.coolant_heavy_water",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        72,
+                        22
+                    ],
+                    "size": [
+                        90,
+                        9
+                    ],
+                    "font_scale_factor": 0.58,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "heavy_water_tier": {
+                    "type": "label",
+                    "text": "ui.hm.nr.coolant_tier",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        72,
+                        32
+                    ],
+                    "size": [
+                        90,
+                        8
+                    ],
+                    "font_scale_factor": 0.5,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "coolant_supply": {
+                    "type": "label",
+                    "text": "ui.hm.nr.coolant_supply",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        52,
+                        48
+                    ],
+                    "size": [
+                        110,
+                        25
+                    ],
+                    "font_scale_factor": 0.58,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "cooling_heading": {
+                    "type": "label",
+                    "text": "ui.hm.nr.cooling_heading",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        0,
+                        82
+                    ],
+                    "size": [
+                        162,
+                        10
+                    ],
+                    "font_scale_factor": 0.65,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "cooling_help": {
+                    "type": "label",
+                    "text": "ui.hm.nr.cooling_help",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        0,
+                        96
+                    ],
+                    "size": [
+                        162,
+                        23
+                    ],
+                    "font_scale_factor": 0.65,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "control_icon": {
+                    "type": "image",
+                    "texture": "textures/ui/toggle_button/nuclear_control_unchecked",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        0,
+                        124
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "cooling_warning": {
+                    "type": "label",
+                    "text": "ui.hm.nr.cooling_warning",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        22,
+                        122
+                    ],
+                    "size": [
+                        140,
+                        20
+                    ],
+                    "font_scale_factor": 0.58,
                     "color": [
                         0.65,
                         0.08,

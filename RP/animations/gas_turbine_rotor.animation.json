@@ -1,0 +1,43 @@
+{
+    "format_version": "1.8.0",
+    "animations": {
+        "animation.utilitycraft.gas_turbine.rotor": {
+            "loop": true,
+            "bones": {
+                "rotor": {
+                    "rotation": [
+                        0,
+                        "v.turbine_angle",
+                        0
+                    ]
+                },
+                "shaft": {
+                    "scale": [
+                        1,
+                        "v.turbine_height",
+                        1
+                    ]
+                },
+                "upper_bearing": {
+                    "position": [
+                        0,
+                        "v.turbine_height * 16.0 - 2.5",
+                        0
+                    ]
+                },
+                "blades": {
+                    "position": [
+                        0,
+                        3,
+                        0
+                    ],
+                    "scale": [
+                        "v.turbine_radius",
+                        "math.max(0.0, v.turbine_height - 0.375)",
+                        "v.turbine_radius"
+                    ]
+                }
+            }
+        }
+    }
+}

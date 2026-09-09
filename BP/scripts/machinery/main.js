@@ -19,3 +19,5 @@ import './machines/magmaticChamberController.js'
 import './machines/reactionChamber.js'
 import './machines/chemicalProcessor.js'
 import './machines/tankController.js'
+
+import './generators/gasTurbine.js'

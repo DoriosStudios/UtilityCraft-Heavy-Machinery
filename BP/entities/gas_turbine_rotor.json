@@ -1,0 +1,88 @@
+{
+    "format_version": "1.21.20",
+    "minecraft:entity": {
+        "description": {
+            "identifier": "utilitycraft:gas_turbine_rotor",
+            "is_spawnable": false,
+            "is_summonable": true,
+            "is_experimental": false,
+            "properties": {
+                "utilitycraft:height": {
+                    "type": "int",
+                    "range": [
+                        1,
+                        197
+                    ],
+                    "default": 2,
+                    "client_sync": true
+                },
+                "utilitycraft:radius": {
+                    "type": "float",
+                    "range": [
+                        0.1,
+                        100.0
+                    ],
+                    "default": 0.65,
+                    "client_sync": true
+                },
+                "utilitycraft:speed": {
+                    "type": "float",
+                    "range": [
+                        0.0,
+                        4.0
+                    ],
+                    "default": 0.0,
+                    "client_sync": true
+                }
+            }
+        },
+        "components": {
+            "minecraft:type_family": {
+                "family": [
+                    "inanimate",
+                    "utilitycraft:gas_turbine_visual"
+                ]
+            },
+            "minecraft:physics": {
+                "has_gravity": false,
+                "has_collision": false
+            },
+            "minecraft:pushable": {
+                "is_pushable": false,
+                "is_pushable_by_piston": false
+            },
+            "minecraft:collision_box": {
+                "width": 0,
+                "height": 0
+            },
+            "minecraft:damage_sensor": {
+                "triggers": [
+                    {
+                        "cause": "all",
+                        "deals_damage": false
+                    }
+                ]
+            },
+            "minecraft:spell_effects": {
+                "add_effects": [
+                    {
+                        "visible": false,
+                        "effect": "invisibility",
+                        "duration": "infinite"
+                    }
+                ]
+            },
+            "minecraft:renders_when_invisible": {},
+            "minecraft:health": {
+                "value": 1,
+                "max": 1
+            },
+            "minecraft:knockback_resistance": {
+                "value": 1,
+                "max": 1
+            },
+            "minecraft:fire_immune": true,
+            "minecraft:body_rotation_blocked": {}
+        }
+    }
+}

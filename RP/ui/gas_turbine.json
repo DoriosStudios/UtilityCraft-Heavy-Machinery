@@ -1,5 +1,5 @@
 {
-    "namespace": "thermo_reactor",
+    "namespace": "gas_turbine",
     "reactor_page": {
         "type": "collection_panel",
         "collection_name": "container_items",
@@ -14,12 +14,12 @@
         ],
         "controls": [
             {
-                "coolant@uc.item_display_hover_large": {
+                "gas@uc.item_display_hover_large": {
                     "collection_index": 2,
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        2,
+                        18,
                         5
                     ],
                     "size": [
@@ -29,13 +29,13 @@
                 }
             },
             {
-                "coolant_border": {
+                "gas_border": {
                     "type": "image",
                     "texture": "textures/ui/liquid_border",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        2,
+                        18,
                         6
                     ],
                     "size": [
@@ -46,42 +46,12 @@
                 }
             },
             {
-                "lava@uc.item_display_hover_large": {
-                    "collection_index": 3,
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        30,
-                        5
-                    ],
-                    "size": [
-                        16,
-                        50
-                    ]
-                }
-            },
-            {
-                "temperature@uc.item_display_hover_large": {
-                    "collection_index": 4,
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        136,
-                        5
-                    ],
-                    "size": [
-                        16,
-                        50
-                    ]
-                }
-            },
-            {
                 "energy_0@uc.item_display_hover_large": {
                     "collection_index": 0,
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        57,
+                        58,
                         5
                     ],
                     "size": [
@@ -96,7 +66,7 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        73,
+                        74,
                         5
                     ],
                     "size": [
@@ -111,7 +81,7 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        89,
+                        90,
                         5
                     ],
                     "size": [
@@ -127,7 +97,7 @@
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        57,
+                        58,
                         6
                     ],
                     "size": [
@@ -183,7 +153,7 @@
             {
                 "reactor_heading": {
                     "type": "label",
-                    "text": "ui.hm.tr.reactor_information",
+                    "text": "ui.hm.gt.reactor_information",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
@@ -207,7 +177,7 @@
             {
                 "tanks_heading": {
                     "type": "label",
-                    "text": "ui.hm.tr.tanks_information",
+                    "text": "ui.hm.gt.tanks_information",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
@@ -229,20 +199,39 @@
                 }
             },
             {
-                "lava_border": {
-                    "type": "image",
-                    "texture": "textures/ui/liquid_border",
+                "rotor_heading": {
+                    "type": "label",
+                    "text": "ui.hm.gt.rotor_heading",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        30,
-                        6
+                        120,
+                        15
                     ],
                     "size": [
-                        16,
-                        48
+                        40,
+                        9
                     ],
-                    "layer": 10
+                    "font_scale_factor": 0.58,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "rotor_value@uc.text_label": {
+                    "collection_index": 4,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        120,
+                        29
+                    ],
+                    "$text_scale": 0.65
                 }
             }
         ]
@@ -263,7 +252,7 @@
             {
                 "fuel_automation_hint": {
                     "type": "label",
-                    "text": "ui.hm.tr.fuel_automation_hint",
+                    "text": "ui.hm.gt.fuel_automation_hint",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
@@ -272,47 +261,7 @@
                     ],
                     "size": [
                         162,
-                        10
-                    ],
-                    "font_scale_factor": 0.58,
-                    "color": [
-                        0.22,
-                        0.22,
-                        0.22
-                    ],
-                    "shadow": false,
-                    "text_alignment": "left"
-                }
-            },
-            {
-                "basic_icon": {
-                    "type": "image",
-                    "texture": "textures/static/images/lava",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        52,
-                        22
-                    ],
-                    "size": [
-                        16,
                         16
-                    ]
-                }
-            },
-            {
-                "basic_text": {
-                    "type": "label",
-                    "text": "ui.hm.tr.basic",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        72,
-                        22
-                    ],
-                    "size": [
-                        90,
-                        9
                     ],
                     "font_scale_factor": 0.58,
                     "color": [
@@ -325,60 +274,13 @@
                 }
             },
             {
-                "fuel_explanation": {
-                    "type": "label",
-                    "text": "ui.hm.tr.fuel_note",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        52,
-                        48
-                    ],
-                    "size": [
-                        110,
-                        10
-                    ],
-                    "font_scale_factor": 0.58,
-                    "color": [
-                        0.22,
-                        0.22,
-                        0.22
-                    ],
-                    "shadow": false,
-                    "text_alignment": "left"
-                }
-            },
-            {
-                "basic_value": {
-                    "type": "label",
-                    "text": "ui.hm.tr.fuel_value",
-                    "size": [
-                        90,
-                        7
-                    ],
-                    "offset": [
-                        72,
-                        32
-                    ],
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "font_scale_factor": 0.5,
-                    "color": [
-                        0.3,
-                        0.3,
-                        0.3
-                    ],
-                    "shadow": false
-                }
-            },
-            {
-                "lava@uc.item_display_hover_large": {
-                    "collection_index": 3,
+                "gas@uc.item_display_hover_large": {
+                    "collection_index": 2,
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
                         18,
-                        9
+                        20
                     ],
                     "size": [
                         16,
@@ -387,14 +289,14 @@
                 }
             },
             {
-                "lava_border": {
+                "gas_border": {
                     "type": "image",
                     "texture": "textures/ui/liquid_border",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
                         18,
-                        10
+                        21
                     ],
                     "size": [
                         16,
@@ -404,14 +306,206 @@
                 }
             },
             {
-                "coolant_heading": {
+                "steam_icon": {
+                    "type": "image",
+                    "texture": "textures/static/images/steam",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        52,
+                        20
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "steam_name": {
                     "type": "label",
-                    "text": "ui.hm.tr.coolant_heading",
+                    "text": "ui.hm.gt.steam",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        72,
+                        20
+                    ],
+                    "size": [
+                        90,
+                        8
+                    ],
+                    "font_scale_factor": 0.58,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "steam_value": {
+                    "type": "label",
+                    "text": "ui.hm.gt.steam_value",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        72,
+                        29
+                    ],
+                    "size": [
+                        90,
+                        8
+                    ],
+                    "font_scale_factor": 0.5,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "hydrogen_icon": {
+                    "type": "image",
+                    "texture": "textures/static/images/hydrogen_gas",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        52,
+                        40
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "hydrogen_name": {
+                    "type": "label",
+                    "text": "ui.hm.gt.hydrogen",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        72,
+                        40
+                    ],
+                    "size": [
+                        90,
+                        8
+                    ],
+                    "font_scale_factor": 0.58,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "hydrogen_value": {
+                    "type": "label",
+                    "text": "ui.hm.gt.hydrogen_value",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        72,
+                        49
+                    ],
+                    "size": [
+                        90,
+                        8
+                    ],
+                    "font_scale_factor": 0.5,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "methane_icon": {
+                    "type": "image",
+                    "texture": "textures/static/images/methane_gas",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        52,
+                        60
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "methane_name": {
+                    "type": "label",
+                    "text": "ui.hm.gt.methane",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        72,
+                        60
+                    ],
+                    "size": [
+                        90,
+                        8
+                    ],
+                    "font_scale_factor": 0.58,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "methane_value": {
+                    "type": "label",
+                    "text": "ui.hm.gt.methane_value",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        72,
+                        69
+                    ],
+                    "size": [
+                        90,
+                        8
+                    ],
+                    "font_scale_factor": 0.5,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "fuel_heading": {
+                    "type": "label",
+                    "text": "ui.hm.gt.fuel_heading",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
                         0,
-                        66
+                        83
                     ],
                     "size": [
                         162,
@@ -428,68 +522,20 @@
                 }
             },
             {
-                "coolant@uc.item_display_hover_large": {
-                    "collection_index": 2,
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        18,
-                        80
-                    ],
-                    "size": [
-                        16,
-                        50
-                    ]
-                }
-            },
-            {
-                "coolant_border": {
-                    "type": "image",
-                    "texture": "textures/ui/liquid_border",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        18,
-                        81
-                    ],
-                    "size": [
-                        16,
-                        48
-                    ],
-                    "layer": 10
-                }
-            },
-            {
-                "saline_icon": {
-                    "type": "image",
-                    "texture": "textures/static/images/saline_coolant",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        52,
-                        80
-                    ],
-                    "size": [
-                        16,
-                        16
-                    ]
-                }
-            },
-            {
-                "saline_name": {
+                "fuel_storage": {
                     "type": "label",
-                    "text": "ui.hm.tr.coolant_saline",
+                    "text": "ui.hm.gt.fuel_storage",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        72,
-                        80
+                        0,
+                        97
                     ],
                     "size": [
-                        90,
-                        9
+                        162,
+                        24
                     ],
-                    "font_scale_factor": 0.58,
+                    "font_scale_factor": 0.65,
                     "color": [
                         0.22,
                         0.22,
@@ -500,106 +546,18 @@
                 }
             },
             {
-                "saline_value": {
+                "fuel_drain": {
                     "type": "label",
-                    "text": "ui.hm.tr.coolant_standard",
+                    "text": "ui.hm.gt.fuel_drain",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        72,
-                        90
+                        0,
+                        124
                     ],
                     "size": [
-                        90,
-                        8
-                    ],
-                    "font_scale_factor": 0.5,
-                    "color": [
-                        0.22,
-                        0.22,
-                        0.22
-                    ],
-                    "shadow": false,
-                    "text_alignment": "left"
-                }
-            },
-            {
-                "heavy_water_icon": {
-                    "type": "image",
-                    "texture": "textures/static/images/heavy_water",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        52,
-                        103
-                    ],
-                    "size": [
-                        16,
-                        16
-                    ]
-                }
-            },
-            {
-                "heavy_water_name": {
-                    "type": "label",
-                    "text": "ui.hm.tr.coolant_heavy_water",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        72,
-                        103
-                    ],
-                    "size": [
-                        90,
-                        9
-                    ],
-                    "font_scale_factor": 0.58,
-                    "color": [
-                        0.22,
-                        0.22,
-                        0.22
-                    ],
-                    "shadow": false,
-                    "text_alignment": "left"
-                }
-            },
-            {
-                "heavy_water_value": {
-                    "type": "label",
-                    "text": "ui.hm.tr.coolant_efficiency",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        72,
-                        113
-                    ],
-                    "size": [
-                        90,
-                        8
-                    ],
-                    "font_scale_factor": 0.5,
-                    "color": [
-                        0.22,
-                        0.22,
-                        0.22
-                    ],
-                    "shadow": false,
-                    "text_alignment": "left"
-                }
-            },
-            {
-                "coolant_explanation": {
-                    "type": "label",
-                    "text": "ui.hm.tr.coolant_note",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        52,
-                        127
-                    ],
-                    "size": [
-                        110,
-                        15
+                        162,
+                        18
                     ],
                     "font_scale_factor": 0.58,
                     "color": [
@@ -648,7 +606,7 @@
             {
                 "instructions": {
                     "type": "label",
-                    "text": "ui.hm.tr.control_hint",
+                    "text": "ui.hm.gt.control_hint",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
@@ -906,32 +864,17 @@
                 }
             },
             {
-                "temperature@uc.item_display_hover_large": {
-                    "collection_index": 4,
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        142,
-                        92
-                    ],
-                    "size": [
-                        16,
-                        50
-                    ]
-                }
-            },
-            {
-                "temperature_heading": {
+                "rotor_heading": {
                     "type": "label",
-                    "text": "ui.hm.tr.current_temperature",
+                    "text": "ui.hm.gt.rotor_speed",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        106,
+                        108,
                         108
                     ],
                     "size": [
-                        36,
+                        50,
                         8
                     ],
                     "font_scale_factor": 0.55,
@@ -945,12 +888,12 @@
                 }
             },
             {
-                "temperature_value@uc.centered_text_label": {
+                "rotor_value@uc.centered_text_label": {
                     "collection_index": 4,
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        98,
+                        107,
                         118
                     ],
                     "size": [
@@ -988,7 +931,7 @@
                         142
                     ],
                     "$show_background": false,
-                    "$scrolling_content": "thermo_reactor.info_guide_content",
+                    "$scrolling_content": "gas_turbine.info_guide_content",
                     "$scroll_size": [
                         4,
                         138
@@ -1074,7 +1017,7 @@
                                 "controls": [
                                     {
                                         "reactor_title@chest.chest_label": {
-                                            "text": "ui.hm.tr.title_reactor",
+                                            "text": "ui.hm.gt.title_reactor",
                                             "localize": true,
                                             "offset": [
                                                 7,
@@ -1083,7 +1026,7 @@
                                             "bindings": [
                                                 {
                                                     "binding_type": "view",
-                                                    "source_control_name": "tr_reactor",
+                                                    "source_control_name": "gt_reactor",
                                                     "source_property_name": "#toggle_state",
                                                     "target_property_name": "#visible",
                                                     "resolve_sibling_scope": false
@@ -1093,7 +1036,7 @@
                                     },
                                     {
                                         "fuel_title@chest.chest_label": {
-                                            "text": "ui.hm.tr.title_fuel",
+                                            "text": "ui.hm.gt.title_fuel",
                                             "localize": true,
                                             "offset": [
                                                 7,
@@ -1102,7 +1045,7 @@
                                             "bindings": [
                                                 {
                                                     "binding_type": "view",
-                                                    "source_control_name": "tr_fuel",
+                                                    "source_control_name": "gt_fuel",
                                                     "source_property_name": "#toggle_state",
                                                     "target_property_name": "#visible",
                                                     "resolve_sibling_scope": false
@@ -1112,7 +1055,7 @@
                                     },
                                     {
                                         "control_title@chest.chest_label": {
-                                            "text": "ui.hm.tr.title_control",
+                                            "text": "ui.hm.gt.title_control",
                                             "localize": true,
                                             "offset": [
                                                 7,
@@ -1121,7 +1064,7 @@
                                             "bindings": [
                                                 {
                                                     "binding_type": "view",
-                                                    "source_control_name": "tr_control",
+                                                    "source_control_name": "gt_control",
                                                     "source_property_name": "#toggle_state",
                                                     "target_property_name": "#visible",
                                                     "resolve_sibling_scope": false
@@ -1131,7 +1074,7 @@
                                     },
                                     {
                                         "info_title@chest.chest_label": {
-                                            "text": "ui.hm.tr.title_info",
+                                            "text": "ui.hm.gt.title_info",
                                             "localize": true,
                                             "offset": [
                                                 7,
@@ -1140,7 +1083,7 @@
                                             "bindings": [
                                                 {
                                                     "binding_type": "view",
-                                                    "source_control_name": "tr_info",
+                                                    "source_control_name": "gt_info",
                                                     "source_property_name": "#toggle_state",
                                                     "target_property_name": "#visible",
                                                     "resolve_sibling_scope": false
@@ -1160,8 +1103,8 @@
                                                 16,
                                                 16
                                             ],
-                                            "$toggle_name": "thermo_reactor_pages",
-                                            "$toggle_control_name": "tr_reactor",
+                                            "$toggle_name": "gas_turbine_pages",
+                                            "$toggle_control_name": "gt_reactor",
                                             "$toggle_group": true,
                                             "$toggle_index": 0,
                                             "$toggle_group_default_selected": 0,
@@ -1179,17 +1122,17 @@
                                             "$toggle_checked": "textures/ui/toggle_button/nuclear_general_checked",
                                             "$toggle_unchecked_hover": "textures/ui/toggle_button/nuclear_general_unchecked_hover",
                                             "$toggle_checked_hover": "textures/ui/toggle_button/nuclear_general_checked_hover",
-                                            "$toggle_hover_text": "ui.hm.tr.tab_reactor",
+                                            "$toggle_hover_text": "ui.hm.gt.tab_reactor",
                                             "$toggle_hover_text_localize": true,
                                             "$toggle_checked_hover_text_from_hover": true
                                         }
                                     },
                                     {
-                                        "reactor@thermo_reactor.reactor_page": {
+                                        "reactor@gas_turbine.reactor_page": {
                                             "bindings": [
                                                 {
                                                     "binding_type": "view",
-                                                    "source_control_name": "tr_reactor",
+                                                    "source_control_name": "gt_reactor",
                                                     "source_property_name": "#toggle_state",
                                                     "target_property_name": "#visible",
                                                     "resolve_sibling_scope": false
@@ -1209,8 +1152,8 @@
                                                 16,
                                                 16
                                             ],
-                                            "$toggle_name": "thermo_reactor_pages",
-                                            "$toggle_control_name": "tr_fuel",
+                                            "$toggle_name": "gas_turbine_pages",
+                                            "$toggle_control_name": "gt_fuel",
                                             "$toggle_group": true,
                                             "$toggle_index": 1,
                                             "$toggle_group_default_selected": 0,
@@ -1224,21 +1167,21 @@
                                             "$toggle_bg_layer": 10,
                                             "$has_toggle_bg": true,
                                             "$toggle_bg_texture": "textures/ui/toggle_button/left_bg",
-                                            "$toggle_unchecked": "textures/ui/toggle_button/fluid_unchecked",
-                                            "$toggle_checked": "textures/ui/toggle_button/fluid_checked",
-                                            "$toggle_unchecked_hover": "textures/ui/toggle_button/fluid_unchecked_hover",
-                                            "$toggle_checked_hover": "textures/ui/toggle_button/fluid_checked_hover",
-                                            "$toggle_hover_text": "ui.hm.tr.tab_fuel",
+                                            "$toggle_unchecked": "textures/ui/toggle_button/gas_unchecked",
+                                            "$toggle_checked": "textures/ui/toggle_button/gas_checked",
+                                            "$toggle_unchecked_hover": "textures/ui/toggle_button/gas_unchecked_hover",
+                                            "$toggle_checked_hover": "textures/ui/toggle_button/gas_checked_hover",
+                                            "$toggle_hover_text": "ui.hm.gt.tab_fuel",
                                             "$toggle_hover_text_localize": true,
                                             "$toggle_checked_hover_text_from_hover": true
                                         }
                                     },
                                     {
-                                        "fuel@thermo_reactor.fuel_page": {
+                                        "fuel@gas_turbine.fuel_page": {
                                             "bindings": [
                                                 {
                                                     "binding_type": "view",
-                                                    "source_control_name": "tr_fuel",
+                                                    "source_control_name": "gt_fuel",
                                                     "source_property_name": "#toggle_state",
                                                     "target_property_name": "#visible",
                                                     "resolve_sibling_scope": false
@@ -1258,8 +1201,8 @@
                                                 16,
                                                 16
                                             ],
-                                            "$toggle_name": "thermo_reactor_pages",
-                                            "$toggle_control_name": "tr_control",
+                                            "$toggle_name": "gas_turbine_pages",
+                                            "$toggle_control_name": "gt_control",
                                             "$toggle_group": true,
                                             "$toggle_index": 2,
                                             "$toggle_group_default_selected": 0,
@@ -1277,17 +1220,17 @@
                                             "$toggle_checked": "textures/ui/toggle_button/nuclear_control_checked",
                                             "$toggle_unchecked_hover": "textures/ui/toggle_button/nuclear_control_unchecked_hover",
                                             "$toggle_checked_hover": "textures/ui/toggle_button/nuclear_control_checked_hover",
-                                            "$toggle_hover_text": "ui.hm.tr.tab_control",
+                                            "$toggle_hover_text": "ui.hm.gt.tab_control",
                                             "$toggle_hover_text_localize": true,
                                             "$toggle_checked_hover_text_from_hover": true
                                         }
                                     },
                                     {
-                                        "control@thermo_reactor.control_page": {
+                                        "control@gas_turbine.control_page": {
                                             "bindings": [
                                                 {
                                                     "binding_type": "view",
-                                                    "source_control_name": "tr_control",
+                                                    "source_control_name": "gt_control",
                                                     "source_property_name": "#toggle_state",
                                                     "target_property_name": "#visible",
                                                     "resolve_sibling_scope": false
@@ -1307,8 +1250,8 @@
                                                 16,
                                                 16
                                             ],
-                                            "$toggle_name": "thermo_reactor_pages",
-                                            "$toggle_control_name": "tr_info",
+                                            "$toggle_name": "gas_turbine_pages",
+                                            "$toggle_control_name": "gt_info",
                                             "$toggle_group": true,
                                             "$toggle_index": 3,
                                             "$toggle_group_default_selected": 0,
@@ -1326,17 +1269,17 @@
                                             "$toggle_checked": "textures/ui/toggle_button/info_checked",
                                             "$toggle_unchecked_hover": "textures/ui/toggle_button/info_unchecked_hover",
                                             "$toggle_checked_hover": "textures/ui/toggle_button/info_checked_hover",
-                                            "$toggle_hover_text": "ui.hm.tr.tab_info",
+                                            "$toggle_hover_text": "ui.hm.gt.tab_info",
                                             "$toggle_hover_text_localize": true,
                                             "$toggle_checked_hover_text_from_hover": true
                                         }
                                     },
                                     {
-                                        "info@thermo_reactor.info_page": {
+                                        "info@gas_turbine.info_page": {
                                             "bindings": [
                                                 {
                                                     "binding_type": "view",
-                                                    "source_control_name": "tr_info",
+                                                    "source_control_name": "gt_info",
                                                     "source_property_name": "#toggle_state",
                                                     "target_property_name": "#visible",
                                                     "resolve_sibling_scope": false
@@ -1463,13 +1406,13 @@
         "anchor_to": "top_left",
         "size": [
             150,
-            286
+            224
         ],
         "controls": [
             {
-                "reactor_description": {
+                "description": {
                     "type": "label",
-                    "text": "ui.hm.tr.info_description",
+                    "text": "ui.hm.gt.info_description",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
@@ -1478,110 +1421,6 @@
                     ],
                     "size": [
                         148,
-                        24
-                    ],
-                    "font_scale_factor": 0.65,
-                    "color": [
-                        0.22,
-                        0.22,
-                        0.22
-                    ],
-                    "shadow": false,
-                    "text_alignment": "left"
-                }
-            },
-            {
-                "lava_icon": {
-                    "type": "image",
-                    "texture": "textures/static/images/lava",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        2,
-                        30
-                    ],
-                    "size": [
-                        16,
-                        16
-                    ]
-                }
-            },
-            {
-                "lava_details": {
-                    "type": "label",
-                    "text": "ui.hm.tr.info_lava",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        24,
-                        28
-                    ],
-                    "size": [
-                        124,
-                        30
-                    ],
-                    "font_scale_factor": 0.65,
-                    "color": [
-                        0.22,
-                        0.22,
-                        0.22
-                    ],
-                    "shadow": false,
-                    "text_alignment": "left"
-                }
-            },
-            {
-                "energy_details": {
-                    "type": "label",
-                    "text": "ui.hm.tr.info_energy",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        0,
-                        62
-                    ],
-                    "size": [
-                        148,
-                        24
-                    ],
-                    "font_scale_factor": 0.65,
-                    "color": [
-                        0.22,
-                        0.22,
-                        0.22
-                    ],
-                    "shadow": false,
-                    "text_alignment": "left"
-                }
-            },
-            {
-                "saline_icon": {
-                    "type": "image",
-                    "texture": "textures/static/images/saline_coolant",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        2,
-                        92
-                    ],
-                    "size": [
-                        16,
-                        16
-                    ]
-                }
-            },
-            {
-                "saline_details": {
-                    "type": "label",
-                    "text": "ui.hm.tr.info_saline",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        24,
-                        90
-                    ],
-                    "size": [
-                        124,
                         26
                     ],
                     "font_scale_factor": 0.65,
@@ -1595,58 +1434,42 @@
                 }
             },
             {
-                "heavy_water_icon": {
-                    "type": "image",
-                    "texture": "textures/static/images/heavy_water",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        2,
-                        122
-                    ],
-                    "size": [
-                        16,
-                        16
-                    ]
-                }
-            },
-            {
-                "heavy_water_details": {
+                "structure_heading": {
                     "type": "label",
-                    "text": "ui.hm.tr.info_heavy_water",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        24,
-                        120
-                    ],
-                    "size": [
-                        124,
-                        26
-                    ],
-                    "font_scale_factor": 0.65,
-                    "color": [
-                        0.22,
-                        0.22,
-                        0.22
-                    ],
-                    "shadow": false,
-                    "text_alignment": "left"
-                }
-            },
-            {
-                "coolant_supply": {
-                    "type": "label",
-                    "text": "ui.hm.tr.info_coolant",
+                    "text": "ui.hm.gt.structure_heading",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
                         0,
-                        150
+                        32
                     ],
                     "size": [
                         148,
-                        28
+                        10
+                    ],
+                    "font_scale_factor": 0.75,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "structure_details": {
+                    "type": "label",
+                    "text": "ui.hm.gt.structure_details",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        0,
+                        46
+                    ],
+                    "size": [
+                        148,
+                        44
                     ],
                     "font_scale_factor": 0.65,
                     "color": [
@@ -1659,104 +1482,96 @@
                 }
             },
             {
-                "control_icon": {
-                    "type": "image",
-                    "texture": "textures/ui/toggle_button/nuclear_control_unchecked",
+                "fuel_heading": {
+                    "type": "label",
+                    "text": "ui.hm.gt.fuel_heading",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
-                        2,
-                        184
+                        0,
+                        96
                     ],
                     "size": [
-                        16,
-                        16
-                    ]
+                        148,
+                        10
+                    ],
+                    "font_scale_factor": 0.75,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "fuel_details": {
+                    "type": "label",
+                    "text": "ui.hm.gt.fuel_details",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        0,
+                        110
+                    ],
+                    "size": [
+                        148,
+                        36
+                    ],
+                    "font_scale_factor": 0.65,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "control_heading": {
+                    "type": "label",
+                    "text": "ui.hm.gt.control_heading",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        0,
+                        152
+                    ],
+                    "size": [
+                        148,
+                        10
+                    ],
+                    "font_scale_factor": 0.75,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
                 }
             },
             {
                 "control_details": {
                     "type": "label",
-                    "text": "ui.hm.tr.info_control",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        24,
-                        182
-                    ],
-                    "size": [
-                        124,
-                        32
-                    ],
-                    "font_scale_factor": 0.65,
-                    "color": [
-                        0.22,
-                        0.22,
-                        0.22
-                    ],
-                    "shadow": false,
-                    "text_alignment": "left"
-                }
-            },
-            {
-                "mass_details": {
-                    "type": "label",
-                    "text": "ui.hm.tr.info_mass",
+                    "text": "ui.hm.gt.control_details",
                     "anchor_from": "top_left",
                     "anchor_to": "top_left",
                     "offset": [
                         0,
-                        218
+                        166
                     ],
                     "size": [
                         148,
-                        24
+                        50
                     ],
                     "font_scale_factor": 0.65,
                     "color": [
                         0.22,
                         0.22,
                         0.22
-                    ],
-                    "shadow": false,
-                    "text_alignment": "left"
-                }
-            },
-            {
-                "warning_icon": {
-                    "type": "image",
-                    "texture": "textures/ui/warning_sign",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        2,
-                        248
-                    ],
-                    "size": [
-                        16,
-                        16
-                    ]
-                }
-            },
-            {
-                "warning": {
-                    "type": "label",
-                    "text": "ui.hm.tr.info_warning",
-                    "anchor_from": "top_left",
-                    "anchor_to": "top_left",
-                    "offset": [
-                        24,
-                        246
-                    ],
-                    "size": [
-                        124,
-                        36
-                    ],
-                    "font_scale_factor": 0.65,
-                    "color": [
-                        0.65,
-                        0.08,
-                        0.08
                     ],
                     "shadow": false,
                     "text_alignment": "left"

@@ -675,6 +675,18 @@
 		},
 		"utilitycraft_gas_cell_up": {
 			"textures": "textures/blocks/multiblock/gas_cell_up"
+		},
+		"utilitycraft_gas_turbine_top": {
+			"textures": "textures/blocks/multiblock/gas_turbine/top"
+		},
+		"utilitycraft_gas_turbine_bottom": {
+			"textures": "textures/blocks/multiblock/gas_turbine/bottom"
+		},
+		"utilitycraft_gas_turbine_front": {
+			"textures": "textures/blocks/multiblock/gas_turbine/front"
+		},
+		"utilitycraft_gas_turbine_side": {
+			"textures": "textures/blocks/multiblock/gas_turbine/side"
 		}
 	}
 }

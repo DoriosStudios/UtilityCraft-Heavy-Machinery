@@ -1,9 +1,26 @@
 # UtilityCraft: Heavy Machinery v0.5.3
 
 ## ADDED
+- Added the bronze Gas Turbine multiblock: Steam/Hydrogen/Methane inputs, gas capacity from empty interior blocks, Energy Cells, configurable mB/t, progressive rotor startup and native gas/energy ports.
+- Added an automatically sized vertical rotor entity with two animated vertical curved blades, lifecycle cleanup, a four-tab turbine UI, controller crafting recipe and the supplied four-face controller textures.
 - Added generic DoriosCore TemperatureStorage with persistent thermal capacity, internal HU/t generation, simultaneous hot/cold contacts, exact time-based heat exchange, and native temperature display independent of machine limits.
 
 ## CHANGED
+- Added a configurable gas table to the turbine with per-gas DE/mB and rotor speed multipliers, including Steam. Updated gas intake/drain labels, RPM readouts and the gas guide.
+- Replaced the turbine rotor with two opposing vertical curved scoops and a dedicated 32x32 texture using the Steel palette; preserved structure-based scaling and gradual spin-up/coasting.
+- Added a persistent lower-left energy indicator to both reactors using UtilityCraft's energy icon and the existing energy-slot hover text, without drawing the energy bar or duplicating runtime logic.
+- Top-aligned Apply and Clear with the first two keypad rows in both reactor Control tabs.
+- Moved Power to a persistent lower-right side button in both reactor UIs, outside tab navigation, reusing the existing action index; removed the Control copy and kept Apply/Clear bottom-aligned.
+- Centered the Nuclear Fuel slot, rod information and live uranium reserve bar as one horizontal group, reusing General's fuel display while retaining the inventory.
+- Added a Nuclear Coolant tab between Fuel and Control with the fluid IO icon, live tank bar, Heavy Water/Tier 2+ requirements and concise cooling/supply guidance; Info now refers players to this tab.
+- Moved both reactor Control action columns next to the keypad using the same column spacing, removing the intervening divider.
+- Bottom-aligned both reactor Control action buttons with keypad spacing, moved temperature bars to the right, and centered Current T/readouts between the buttons and bars.
+- Added Current T and a live kelvin readout above the temperature bar in both Control tabs, reusing the existing bar hover text without script changes.
+- Replaced Apply, Clear and Start/stop captions in both reactor Control tabs with a live temperature bar using the same display slot as General; kept all action buttons and scripts unchanged.
+- Removed player inventory from Thermo's Fuel & Coolant tab and added the live coolant bar, accepted coolant icons and cooling/supply explanations below the lava section.
+- Redesigned Thermo Reactor with Nuclear-style General, Fuel & Coolant, Control and scrollable Info tabs; used the fluid IO icon for Fuel & Coolant, split telemetry into two columns, and added current/recommended mB/t readouts and a lava/coolant guide.
+- Migrated Thermo Reactor to TemperatureStorage with structure-based thermal capacity, passive cooling, finite coolant exchange, and machine-owned meltdown handling. Preserved existing temperatures and event-driven InterfaceManager controls.
+- Optimized Thermo background updates with shouldUpdateUI gating, cached structure/storage wrappers, batched resource writes, prepaid fractional lava/coolant, and throttled effects; removed unused form and legacy thermal paths.
 - Standardized all Heavy Machinery JavaScript filenames and the recipe registration directory to camelCase, updating imports and test references.
 - Moved all remaining liquid/gas resource definitions and visual assets to UtilityCraft for reuse by other addons, including nuclear gases. Heavy Machinery retains its production/processing recipes, coolant behavior, Saline Coolant Bucket and Creative Tanks, consuming the same shared resource IDs.
 - Made the Nuclear Reactor General, Control and Fuel tab icons monochromatic across all four toggle states, preserving their sizes and shapes; Fuel uses separate toggle textures and retains the original colored item sprite.
@@ -97,6 +114,8 @@
 - Added standard Speed and Energy upgrade support to the Electrolyzer, including multiple batches per update when upgraded throughput allows.
 
 ## FIXED
+- Filtered multiblock entity resolution and deactivation to live dorios:multiblock controllers, preventing hide events from targeting players, dropped items or visual rotors. Applied the same targeted fix to the workspace addon copies of DoriosCore that register multiblock listeners.
+- Removed the unnecessary Gas Turbine controller client entity; only the separate rotor has visual resources. Guarded unsynchronized rotor properties in animations and reject unloaded BP property definitions without repeated script errors or orphaned rotors.
 - Removed the trailing _liquid suffix from liquid bar display names and renamed Nuclear Waste assets and storage IDs to nuclear_waste_gas.
 - Shortened the Nuclear Fuel tooltip to type, stored fuel/capacity and maximum efficiency, avoiding the 255-character nameTag limit.
 - Removed the literal newline escape from the Nuclear Reactor heat hint and updated the Info keypad instructions from percentage power to FU/t in all three locales.
@@ -157,6 +176,8 @@
 - Added a complete Tin multiblock casing family with a casing, crystal, plated and hazard blocks, ventilation panel, and item, liquid, and energy ports.
 
 ## CHANGED
+- Updated the four Utility Exo Armor item icons with the supplied artwork.
+- Updated the supplied Fluorite crystal/dust, Enriched Uranium Oxide, Spent Uranium Pellet and Rubber Sheet textures. Rubber Sheet remains available without a crafting recipe.
 - Used the supplied 12x12 reactor sprite for General and restored the compact calculator gray casing across all toggle states.
 
 - Reworked all planned nuclear liquid and gas UI bars with material-specific water, steam, lava, XP, milk, and bubble motifs derived from Ascendant Technology instead of flat single-color fills.

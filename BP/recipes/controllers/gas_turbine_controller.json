@@ -1,0 +1,41 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "utilitycraft:gas_turbine_controller"
+        },
+        "tags": [
+            "utilitycraft_workbench"
+        ],
+        "key": {
+            "P": {
+                "item": "utilitycraft:bronze_plate"
+            },
+            "T": {
+                "item": "utilitycraft:charged_darloonite_crystal"
+            },
+            "S": {
+                "item": "utilitycraft:bronze_controller_case"
+            },
+            "X": {
+                "item": "utilitycraft:advanced_gas_generator"
+            },
+            "R": {
+                "item": "utilitycraft:control_panel"
+            }
+        },
+        "pattern": [
+            "PRP",
+            "TST",
+            "PXP"
+        ],
+        "result": {
+            "item": "utilitycraft:gas_turbine_controller"
+        },
+        "unlock": [
+            {
+                "item": "utilitycraft:bronze_controller_case"
+            }
+        ]
+    }
+}

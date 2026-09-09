@@ -1,9 +1,8 @@
-import { EnergyStorage, FluidStorage, InterfaceManager, Multiblock, MultiblockGenerator, registerLinkNodeIO } from "DoriosCore/index.js"
+import { EnergyStorage, FluidStorage, TemperatureStorage, InterfaceManager, Multiblock, MultiblockGenerator, registerLinkNodeIO } from "DoriosCore/index.js"
 import * as DoriosLib from "DoriosLib/index.js";
-import { ModalFormData } from '@minecraft/server-ui'
-import { ItemStack } from '@minecraft/server'
+import { system, world } from '@minecraft/server'
 import { coolants } from 'config/coolants.js'
-import { advanceReactorTemperature } from './reactorThermalModel.js'
+import { THERMO_THERMAL, getThermoHeatCapacity, getThermoEfficiency, simulateThermoReactor } from './thermoSimulation.js'
 import {
     formatReactorOnTime,
     setReactorRunning,
@@ -12,21 +11,26 @@ import {
 } from './reactorRuntime.js'
 
 // #region Config
-/** @type ThermoReactorConfig */
 const config = {
+    ambientTemperatureK: 300,
+    maximumTemperatureK: 1273.15, // efficiency/display scale, not a temperature clamp
+    meltdownTemperatureK: 1200,
+    idealTemperatureFraction: 0.5,
+    minimumEfficiency: 0.10,
+    maximumEfficiency: 0.80,
+    efficiencyGamma: 5,
+    coldEfficiencyAlpha: 1.6,
+    hotEfficiencyAlpha: 1.2,
+
     // Settings / Limits
     maxCoreTemperatureK: 1200,       // K
     maxPressurePSI: 300,            // PSI
 
     // Component rates
     ventReleaseRate: 40,             // mB/tick per vent block
-    conductorHeatDissipation: 0.05,     // K/tick per conductor block
-    thermalResponseTimeSeconds: 60,
 
     // Conversion factors
-    coolantPerKelvin: 50,              // mB/K
     pressurePerSteam: 0.0001,            // PSI/mB
-    heatPerLavaUnit: 0.008,              // K/mB
     energyPerLavaUnit: 2000,          // DE/mB
 
     // Capacities
@@ -41,32 +45,21 @@ const config = {
         temperature: 300,
         efficiency: 0.1,
         startedAtMs: 0,
-        warning: ''
+        warning: '',
+        lavaCreditMb: 0,
+        coolantCreditMb: 0,
+        coolantCreditType: 'empty',
+        meltdownPending: false
     }
 }
 
-/**
- * Core temperature constants.
- * - CORE_TMIN_K: logic floor (K)
- * - CORE_TCAP_K: absolute cap (K) — cannot exceed
- * - CORE_TIDEAL_FRAC: ideal temp as fraction of supported span (0..1)
- * - WARN_*: UI thresholds
- */
-const CORE_TMIN_K = 300;
-const CORE_TCAP_K = 1273.15;
-const CORE_TIDEAL_FRAC = 0.5;
+// The scale is visual; safety decisions belong to this reactor.
+const CORE_TMIN_K = config.ambientTemperatureK;
+const CORE_TCAP_K = config.maximumTemperatureK;
 const WARN_OVERHEAT_K = 1000;
-const WARN_DANGER_K = 1200;
-
-/**
- * Efficiency shaping (temperature-only).
- * EFF_MIN..MAX ∈ [0,1]; GAMMA/ALPHA tune bowl sharpness and asymmetry.
- */
-const EFF_MIN = 0.10;
-const EFF_MAX = 0.80;
-const EFF_GAMMA = 5.0;
-const EFF_ALPHA_COLD = 1.6;
-const EFF_ALPHA_HOT = 1.2;
+const WARN_DANGER_K = config.meltdownTemperatureK;
+const runtimeCache = new WeakMap();
+const statsCache = new WeakMap();
 
 const COOLANT_TIER = 0
 const THERMO_REACTOR_INPUT_SLOT = 6;
@@ -134,8 +127,9 @@ const thermoReactorButtons = {
         onPress: ({ entity }) => {
             if (!entity) return;
             const data = getReactorInfo(entity);
+            if (data.meltdownPending) return;
             setReactorRunning(data, String(data.state).toLowerCase() === "off");
-            entity.setDynamicProperty("reactorData", JSON.stringify(data));
+            saveReactorInfo(entity, data);
         },
     },
     accept: {
@@ -161,6 +155,13 @@ for (const slot of Object.keys(THERMO_REACTOR_KEYPAD_BY_SLOT).map(Number)) {
 
 InterfaceManager.registerInterface(THERMO_REACTOR_INTERFACE_ID, { buttons: thermoReactorButtons });
 InterfaceManager.linkBlockInterface("utilitycraft:thermo_reactor_controller", THERMO_REACTOR_INTERFACE_ID);
+InterfaceManager.linkEntityInterface("utilitycraft:thermo_reactor", THERMO_REACTOR_INTERFACE_ID);
+world.afterEvents.entityContainerOpened.subscribe(({ entity }) => {
+    if (entity?.typeId !== 'utilitycraft:thermo_reactor') return;
+    const item = entity.getComponent('minecraft:inventory')?.container?.getItem(THERMO_REACTOR_INPUT_SLOT);
+    if (!(item?.nameTag ?? '').includes('mB/t')) setThermoReactorInputText(entity, String(getReactorInfo(entity).rate));
+    else if (item.nameTag.includes('\n')) setThermoReactorInputText(entity, getThermoReactorInputText(entity));
+});
 
 DoriosLib.registry.blockComponent('utilitycraft:thermo_reactor', {
     onPlayerInteract(e) {
@@ -170,11 +171,6 @@ DoriosLib.registry.blockComponent('utilitycraft:thermo_reactor', {
                     'dorios:rateSpeed',
                     energyCap / settings.multiblock.transfer_rate_ratio
                 )
-                DoriosLib.entity.setNewItem(entity, {
-                    slot: THERMO_REACTOR_INPUT_SLOT,
-                    typeId: THERMO_REACTOR_INPUT_ITEM,
-                    nameTag: '\n\u00A7r\u00A7fSet the burn rate for\n the reactor!\n\n 0 mB/t',
-                })
                 InterfaceManager.ensureEntityInterfaces(entity)
                 const lavaCapacity =
                     (components['fluid_cell'] ?? 0) * config.lavaCapacityPerFluidCell
@@ -182,7 +178,7 @@ DoriosLib.registry.blockComponent('utilitycraft:thermo_reactor', {
                 const coolantCapacity = internalVolume * config.coolantCapacityPerEmptyBlock
                 const steamCapacity = internalVolume * config.steamCapacityPerEmptyBlock
                 const heatDissipation =
-                    (components['heat_conductor'] ?? 0) * config.conductorHeatDissipation
+                    (components['heat_conductor'] ?? 0) * THERMO_THERMAL.conductorConductance
                 const ventRate =
                     (components['vent'] ?? 0) * config.ventReleaseRate
 
@@ -190,21 +186,23 @@ DoriosLib.registry.blockComponent('utilitycraft:thermo_reactor', {
                     lavaCapacity,
                     coolantCapacity,
                     steamCapacity,
-                    heatDissipation,
+                    heatConductors: components.heat_conductor ?? 0,
+                    conductance: heatDissipation,
+                    heatCapacity: getThermoHeatCapacity(structure.bounds, components),
                     ventRate,
                     energyCap,
                     bounds: structure.bounds
                 }))
 
-                const fluids = FluidStorage.initializeMultiple(entity, 2)
-                if (fluids[0].type == "empty") {
-                    fluids[0].setType("saline_coolant")
-                    fluids[0].setCap(coolantCapacity)
-                }
-                if (fluids[1].type == "empty") {
-                    fluids[1].setType("lava")
-                    fluids[1].setCap(lavaCapacity)
-                }
+                runtimeCache.delete(entity)
+                const data = getReactorInfo(entity)
+                setReactorRunning(data, false)
+                data.meltdownPending = false
+                saveReactorInfo(entity, data)
+                setThermoReactorInputText(entity, String(data.rate))
+                const runtime = getThermoRuntime(entity, data)
+                if (runtime.coolant.getType() === 'empty') runtime.coolant.setType('saline_coolant')
+                if (runtime.lava.getType() === 'empty') runtime.lava.setType('lava')
             },
             successMessages: ({ components, energyCap }) => {
                 const lavaCapacity =
@@ -213,7 +211,7 @@ DoriosLib.registry.blockComponent('utilitycraft:thermo_reactor', {
                 const coolantCapacity = internalVolume * config.coolantCapacityPerEmptyBlock
                 const steamCapacity = internalVolume * config.steamCapacityPerEmptyBlock
                 const heatDissipation =
-                    (components['heat_conductor'] ?? 0) * config.conductorHeatDissipation
+                    (components['heat_conductor'] ?? 0) * THERMO_THERMAL.conductorConductance
                 const ventRate =
                     (components['vent'] ?? 0) * config.ventReleaseRate
 
@@ -228,7 +226,7 @@ DoriosLib.registry.blockComponent('utilitycraft:thermo_reactor', {
                     `\u00A77Lava Capacity: \u00A7b${FluidStorage.formatFluid(lavaCapacity)}`,
                     `\u00A77Coolant Capacity: \u00A7b${FluidStorage.formatFluid(coolantCapacity)}`,
                     `\u00A77Steam Capacity: \u00A7b${FluidStorage.formatFluid(steamCapacity)}`,
-                    `\u00A77Heat Dissipation: \u00A7b${heatDissipation.toFixed(2)} K\u00B0/t`,
+                    `\u00A77Thermal Conductance: \u00A7b${heatDissipation.toFixed(3)} HU/(t K)`,
                     `\u00A77Steam Venting: \u00A7b${FluidStorage.formatFluid(ventRate)}/t`,
                     `\u00A77Max Pressure: \u00A7b${config.maxPressurePSI} PSI`,
                     `\u00A77Max Heat: \u00A7b${config.maxCoreTemperatureK} K\u00B0`,
@@ -244,150 +242,71 @@ DoriosLib.registry.blockComponent('utilitycraft:thermo_reactor', {
         const reactor = new MultiblockGenerator(block, GENERATOR_CONFIG);
         if (!reactor.valid) return;
         const { entity, energy } = reactor
-        const newRate = entity.getDynamicProperty("dorios:rateSpeed");
-        reactor.setRate(newRate);
-
-        energy.transferToNetwork(reactor.rate);
-        const data = getReactorInfo(entity);
-        synchronizeReactorTimer(data);
-
-        const fluids = FluidStorage.initializeMultiple(entity, 2);
-        fluids.forEach(fluid => fluid.display(fluid.index + 2))
-
-        let lava = null; let coolant = null; let coolantData = null;
-
-        let coolantAmount = 0; let fuel = 0;
-        fluids.forEach(f => {
-            if (!f) return;
-
-            if (f.type === "lava") {
-                fuel = f.get();
-                lava = f;
-                f.setCap(data.lavaCapacity)
-                return;
+        reactor.setRate(entity.getDynamicProperty('dorios:rateSpeed') ?? 0)
+        energy.transferToNetwork(reactor.rate)
+        const data = getReactorInfo(entity)
+        const runtime = getThermoRuntime(entity, data)
+        const { lava, coolant, temperature } = runtime
+        synchronizeReactorTimer(data)
+        const ticks = Math.max(1, reactor.processingInterval ?? 1)
+        const lavaType = lava.getType()
+        const lavaAmount = lavaType === 'lava' ? lava.get() : 0
+        if (lavaType !== 'empty' && lavaType !== 'lava') data.lavaCreditMb = 0
+        const coolantAmount = coolant.get()
+        const storedType = coolant.getType()
+        if (storedType !== 'empty' && storedType !== data.coolantCreditType) data.coolantCreditMb = 0
+        const coolantType = storedType === 'empty' && data.coolantCreditMb > 0 ? data.coolantCreditType : storedType
+        const fluid = coolants[coolantType]
+        const validCoolant = fluid?.tier >= COOLANT_TIER && Number.isFinite(fluid.efficiency) && fluid.efficiency > 0
+        const heatPerMb = validCoolant ? THERMO_THERMAL.coolantHeatPerMb * fluid.efficiency : 0
+        const availableFuel = lavaAmount + data.lavaCreditMb
+        const energyFreeSpace = energy.getFreeSpace()
+        const result = simulateThermoReactor({
+            temperature: temperature.get(), heatCapacity: data.heatCapacity, ticks,
+            running: data.state !== 'off' && !data.meltdownPending, rate: data.rate,
+            fuel: availableFuel, energySpace: energyFreeSpace,
+            conductance: data.conductance,
+            coolantHeatBudget: (coolantAmount + data.coolantCreditMb) * heatPerMb,
+        }, config)
+        if (result.consumedLava > 0) {
+            const paid = Math.min(lavaAmount, Math.ceil(Math.max(0, result.consumedLava - data.lavaCreditMb) - 1e-9))
+            if (paid > 0) lava.consume(paid)
+            data.lavaCreditMb = Math.max(0, data.lavaCreditMb + paid - result.consumedLava)
+            energy.add(result.producedEnergy)
+            if (system.currentTick >= runtime.nextSoundTick) {
+                entity.dimension.playSound('block.campfire.crackle', entity.location)
+                runtime.nextSoundTick = system.currentTick + 30
             }
-
-            if (f.type in coolants && f.get() > 0) {
-                coolant = f;
-                coolantAmount = f.get()
-                coolantData = coolants[f.type];
-                f.setCap(data.coolantCapacity)
-            }
-        });
-
-        const f = Math.max(1, reactor.processingInterval ?? 1);
-        let working = false;
-        let generatedHeat = 0;
-
-        const tMin = CORE_TMIN_K;
-        const tMax = CORE_TCAP_K;
-        const tSpan = Math.max(1, tMax - tMin);
-
-        data.temperature = Math.max(tMin, data.temperature ?? tMin);
-
-        const tNorm = Math.min(1, Math.max(0, (data.temperature - tMin) / tSpan));
-        const tIdeal = CORE_TIDEAL_FRAC;
-        const tDist = Math.abs(tNorm - tIdeal) / tIdeal;
-
-        const baseShape = Math.max(0, 1 - Math.pow(tDist, EFF_GAMMA));
-        const shape = tNorm < tIdeal
-            ? Math.pow(baseShape, EFF_ALPHA_COLD)
-            : Math.pow(baseShape, EFF_ALPHA_HOT);
-
-        data.efficiency = EFF_MIN + (EFF_MAX - EFF_MIN) * shape;
-
-        const energyFreeSpace = energy.getFreeSpace();
-
-        if (fuel > 0 && data.state !== "off" && energyFreeSpace > 0) {
-            const maxFuelByStorage =
-                energyFreeSpace / Math.max(1e-9, config.energyPerLavaUnit * data.efficiency);
-            const rate = Math.min(fuel, data.rate * f, maxFuelByStorage);
-            if (rate > 0) {
-                lava.consume(rate)
-                fireLoop(entity, f);
-                const waste = 1 - data.efficiency;
-                const energyProduced = rate * config.energyPerLavaUnit * data.efficiency;
-                const rawHeat = rate * config.heatPerLavaUnit * (1 + waste);
-                generatedHeat = rawHeat;
-
-                energy.add(energyProduced);
-                data.producing = energyProduced / f;
-                working = true;
-                data.warning = undefined;
-            }
-        } else {
-            if (data.state !== "off") {
-                if (fuel <= 0) {
-                    data.warning = "§eMissing Fuel!";
-                } else if (energyFreeSpace <= 0) {
-                    data.warning = "§eEnergy Full";
-                }
-            }
-            data.producing = 0;
         }
-
-        const hasCoolant = Boolean(coolant && coolantData?.tier >= COOLANT_TIER && coolantAmount > 0)
-        const maximumCoolantHeat = hasCoolant
-            ? coolantAmount / config.coolantPerKelvin * coolantData.efficiency
-            : 0
-        const thermalStep = advanceReactorTemperature({
-            temperature: data.temperature,
-            ambientTemperature: tMin,
-            maximumTemperature: tMax,
-            idealTemperatureFraction: CORE_TIDEAL_FRAC,
-            generatedHeat,
-            conductorCoolingAtIdeal: (data.heatDissipation ?? 0) * f,
-            tickDelta: f,
-            hasCoolant,
-            maximumCoolantHeat,
-            responseTimeSeconds: config.thermalResponseTimeSeconds,
-        })
-        data.temperature = thermalStep.temperature
-
-        if (thermalStep.coolantHeatRemoved > 0) {
-            if (data.state !== "off") spawnReactorVentSmoke(entity)
-            coolant.consume(
-                thermalStep.coolantHeatRemoved
-                    * config.coolantPerKelvin
-                    / coolantData.efficiency,
-            )
-        } else if (working && !hasCoolant) {
-            data.warning = "§cMissing Coolant!";
-        }
-
-        data.temperature = Math.min(CORE_TCAP_K, Math.max(CORE_TMIN_K, data.temperature));
-
-        if (data.temperature >= WARN_DANGER_K - 100) {
-            data.warning = "§cCore overheating!";
-            if (data.temperature >= WARN_DANGER_K) {
-                setReactorRunning(data, false)
-                data.temperature = 1000
-                Multiblock.DeactivationManager.deactivateMultiblock(block, undefined, { blockId: 'minecraft:water' })
-                DoriosLib.time.runAfterSeconds(4, () => {
-                    if (!entity) return
-                    const bounds = data.bounds
-                    if (bounds) {
-                        const center = Multiblock.EntityManager.getCenter(bounds.min, bounds.max)
-                        const radius = (Multiblock.EntityManager.getVolume(bounds) ** (1 / 3)) * 0.4
-                        reactor.dimension.createExplosion({ x: center.x + 0.5, y: center.y + 0.5, z: center.z + 0.5 }, radius, { causesFire: true, breaksBlocks: true, allowUnderwater: true })
-                    } else {
-                        reactor.dimension.createExplosion(entity.location, 4, { causesFire: true, breaksBlocks: true, allowUnderwater: true })
-                    }
-                })
+        if (result.coolantHeatRemoved > 0) {
+            const used = result.coolantHeatRemoved / heatPerMb
+            const paid = Math.min(coolantAmount, Math.ceil(Math.max(0, used - data.coolantCreditMb) - 1e-9))
+            if (paid > 0) coolant.consume(paid)
+            data.coolantCreditMb = Math.max(0, data.coolantCreditMb + paid - used)
+            data.coolantCreditType = coolantType
+            if (data.state !== 'off' && system.currentTick >= runtime.nextSmokeTick) {
+                spawnReactorVentSmoke(entity)
+                runtime.nextSmokeTick = system.currentTick + 20
             }
-
-        } else if (data.temperature >= WARN_OVERHEAT_K) {
-            data.warning ??= "§6Overheating!";
         }
-
-        if (working && (coolant?.get() ?? 0) > 0 && (data.warning ?? "") === "") {
-            data.warning = "§2Active";
+        temperature.set(result.temperature)
+        data.temperature = result.temperature
+        data.efficiency = getThermoEfficiency(result.temperature, config)
+        data.producing = result.producedEnergy / ticks
+        data.activeRate = result.consumedLava / ticks
+        if (result.meltdown) { triggerThermoMeltdown(reactor, data); return }
+        data.warning = getThermoStatus(data, result, availableFuel, energyFreeSpace,
+            validCoolant, coolant.get() + data.coolantCreditMb)
+        if (reactor.shouldUpdateUI) {
+            coolant.shouldUpdateUI = true
+            lava.shouldUpdateUI = true
+            coolant.display(2)
+            lava.display(3)
+            temperature.display(4, { minimum: CORE_TMIN_K, maximum: CORE_TCAP_K, force: true })
+            updateReactorInfoItem(data, reactor, lava, coolant)
+            reactor.displayEnergy()
         }
-
-        if (data.state === "off") data.warning = "§eStopped";
-
-        updateReactorInfoItem(data, reactor);
-        reactor.displayEnergy();
+        saveReactorInfo(entity, data)
     }
 })
 
@@ -423,7 +342,7 @@ function setThermoReactorInputText(entity, text = '0') {
     DoriosLib.entity.setNewItem(entity, {
         slot: THERMO_REACTOR_INPUT_SLOT,
         typeId: THERMO_REACTOR_INPUT_ITEM,
-        nameTag: `\n\u00A7r\u00A7fSet the burn rate for \nthe reactor!\n\n ${text || '0'} mB/t`,
+        nameTag: `\u00A7r\u00A7f${text || '0'} mB/t`,
     });
 }
 
@@ -448,8 +367,9 @@ function applyThermoReactorBurnRate(entity) {
 
     const data = getReactorInfo(entity);
     data.rate = parsed;
-    entity.setDynamicProperty("reactorData", JSON.stringify(data));
+    saveReactorInfo(entity, data);
     setThermoReactorInputText(entity, `${parsed}`);
+    DoriosLib.entity.setNewItem(entity, { slot: 23, typeId: 'utilitycraft:arrow_indicator_90', nameTag: '\u00A7r\u00A78Current Rate: ' + parsed.toFixed(2) + ' mB/t' });
 }
 
 /**
@@ -458,82 +378,46 @@ function applyThermoReactorBurnRate(entity) {
  * @param {Object} data 
  * @param {MultiblockGenerator} reactor 
  */
-function formatReactorEtaSeconds(seconds) {
-    if (!Number.isFinite(seconds) || seconds <= 0) return '--:--:--';
-
-    const safeSeconds = Math.floor(seconds);
-    const hours = Math.floor(safeSeconds / 3600);
-    const minutes = Math.floor((safeSeconds % 3600) / 60);
-    const secs = safeSeconds % 60;
-    return [hours, minutes, secs].map(value => String(value).padStart(2, '0')).join(':');
+function updateReactorInfoItem(data, reactor, lavaTank, coolantTank) {
+    const energy = reactor.energy
+    const label = (slot, lines) => {
+        const text = Array.isArray(lines) ? lines.join('\n') : lines
+        if (reactor.container.getItem(slot)?.nameTag !== text) reactor.setLabel(text, slot)
+    }
+    label(1, [
+        '\u00A7r' + (data.warning || '\u00A7eIdle'), '',
+        '\u00A7r\u00A7cRate: \u00A7f' + data.rate.toFixed(2) + ' mB/t',
+        '\u00A7r\u00A7aTemperature: \u00A7f' + data.temperature.toFixed(0) + 'K',
+        '\u00A7r\u00A7aEfficiency: \u00A7f' + (data.efficiency * 100).toFixed(1) + '%%', '',
+        '\u00A7r\u00A7bProducing: \u00A7f' + EnergyStorage.formatEnergyToText(data.producing ?? 0) + '/t',
+        '\u00A7r\u00A7bCapacity: \u00A7f' + energy.getPercent().toFixed(1) + '%%',
+        '\u00A7r\u00A7bStored: \u00A7f' + EnergyStorage.formatEnergyToText(energy.get()), '',
+        '\u00A7r\u00A7aOn time: \u00A7f' + formatReactorOnTime(data),
+    ])
+    const name = tank => tank.getType() === 'empty' ? 'None' : DoriosLib.text.formatIdentifier(tank.getType())
+    const percent = (amount, capacity) => capacity > 0 ? (amount / capacity * 100).toFixed(0) : '0'
+    label(22, [
+        '\u00A7r\u00A7eFuel Information',
+        '\u00A7r\u00A7aType: \u00A7f' + name(lavaTank),
+        '\u00A7r\u00A7aStored: \u00A7f' + FluidStorage.formatFluid(lavaTank.get()),
+        '\u00A7r\u00A7aReserve: \u00A7f' + percent(lavaTank.get(), data.lavaCapacity) + '%%', '',
+        '\u00A7r\u00A7eCoolant Information',
+        '\u00A7r\u00A7aType: \u00A7f' + name(coolantTank),
+        '\u00A7r\u00A7aStored: \u00A7f' + FluidStorage.formatFluid(coolantTank.get()),
+        '\u00A7r\u00A7aReserve: \u00A7f' + percent(coolantTank.get(), data.coolantCapacity) + '%%',
+    ])
+    label(23, '\u00A7r\u00A78Current Rate: ' + data.rate.toFixed(2) + ' mB/t')
+    label(25, '\u00A7r\u00A78Recommended Rate:\n' + getThermoRecommendedRate(data, coolantTank).toFixed(2) + ' mB/t')
 }
 
-function updateReactorInfoItem(data, reactor) {
-    const energy = reactor.energy;
-    const tanks = [new FluidStorage(reactor.entity, 0), new FluidStorage(reactor.entity, 1)];
-
-    const lavaTank = tanks.find(tank => tank.getType() === 'lava');
-    const coolantTank = tanks.find(tank => tank.getType() !== 'lava' && tank.getType() !== 'empty' && tank.get() > 0)
-        ?? tanks.find(tank => tank.getType() !== 'lava' && tank.getType() !== 'empty');
-
-    const storedEnergy = energy.get();
-    const energyCap = energy.getCap();
-    const fuelStored = lavaTank?.get() ?? 0;
-    const fuelName = lavaTank ? DoriosLib.text.formatIdentifier(lavaTank.getType()) : 'None';
-    const coolantStored = coolantTank?.get() ?? 0;
-    const coolantName = coolantTank ? DoriosLib.text.formatIdentifier(coolantTank.getType()) : 'None';
-    const fuelPercent = (data.lavaCapacity ?? 0) > 0 ? ((fuelStored / (data.lavaCapacity ?? 0)) * 100).toFixed(2) : '0.00';
-    const coolantPercent = (data.coolantCapacity ?? 0) > 0 ? ((coolantStored / (data.coolantCapacity ?? 0)) * 100).toFixed(2) : '0.00';
-    const burnRate = data.rate ?? 0;
-    const statusText = data.warning || (data.state === 'off' ? '§eStopped' : '§7Idle');
-
-    reactor.setLabel([
-        `§r§7Status: ${statusText}
-
-§r§eReactor Information`,
-        `
-§r§cBurn Rate §f${burnRate.toFixed(2)} mB/t
-§r§aTemperature §f${(data.temperature ?? 0).toFixed(2)} K
-§r§aEfficiency §f${((data.efficiency ?? 0) * 100).toFixed(2)}%%
-§r§aOn Time §f${formatReactorOnTime(data)}`,
-        `
-§r§eEnergy Information
-
-§r§bProducing §f${EnergyStorage.formatEnergyToText(data.producing ?? 0)}/t
-§r§bCapacity §f${energy.getPercent().toFixed(2)}%%
-§r§bStored §f${EnergyStorage.formatEnergyToText(storedEnergy)}`,
-        `
-§r§eFuel Information
-
-§r§aType §f${fuelName}
-§r§aStored §f${FluidStorage.formatFluid(fuelStored)} / ${FluidStorage.formatFluid(data.lavaCapacity ?? 0)}
-§r§aFuel §f${fuelPercent}%%`,
-        `
-§r§eCoolant Information
-
-§r§aType §f${coolantName}
-§r§aStored §f${FluidStorage.formatFluid(coolantStored)} / ${FluidStorage.formatFluid(data.coolantCapacity ?? 0)}
-§r§aCoolant §f${coolantPercent}%%`
-    ]);
-
-    const container = reactor.container;
-    if (container) {
-        const temp = data.temperature ?? CORE_TMIN_K;
-        const segment = Math.floor(
-            (temp - CORE_TMIN_K) / (CORE_TCAP_K - CORE_TMIN_K) * 31
-        );
-
-        let name = "utilitycraft:temperature_";
-        if (segment < 10) name += "0";
-        name += segment;
-
-        const bar = new ItemStack(name);
-        bar.nameTag = `§r§f${temp.toFixed(2)} K`;
-
-        container.setItem(4, bar);
-    }
-
-    reactor.entity.setDynamicProperty("reactorData", JSON.stringify(data));
+/** Reference at ideal temperature; assumes a continuous coolant supply. */
+function getThermoRecommendedRate(data, coolant) {
+    const delta = (CORE_TCAP_K - CORE_TMIN_K) * config.idealTemperatureFraction
+    const passive = data.conductance * THERMO_THERMAL.passiveCoolingFraction * delta
+    const fluid = coolants[coolant.getType()]
+    const active = fluid?.tier >= COOLANT_TIER && Number.isFinite(fluid.efficiency) && fluid.efficiency > 0 && coolant.get() > 0
+        ? Math.min(data.conductance * delta, coolant.get() * THERMO_THERMAL.coolantHeatPerMb * fluid.efficiency) : 0
+    return (passive + active) / (THERMO_THERMAL.heatPerLavaUnit * (2 - config.maximumEfficiency))
 }
 
 /**
@@ -544,122 +428,82 @@ function updateReactorInfoItem(data, reactor) {
  * @returns {Object} Current reactor runtime data.
  */
 function getReactorInfo(entity) {
-    try {
-        const rawData = entity.getDynamicProperty('reactorData');
-        const data = rawData ? JSON.parse(rawData) : config.initialReactorData;
-
-        const rawStats = entity.getDynamicProperty('reactorStats')
-        const stats = rawStats ? JSON.parse(rawStats) : {
-            lavaCapacity: 0,
-            coolantCapacity: 0,
-            steamCapacity: 0,
-            heatDissipation: 0,
-            ventRate: 0,
-            energyCap: 0
-        };
-        if (entity.getDynamicProperty('dorios:state') == 'off') data.state = 'off'
-        return { ...data, ...stats };
-    } catch {
-        return { ...config.initialReactorData, lavaCapacity: 0, coolantCapacity: 0, steamCapacity: 0, heatDissipation: 0, ventRate: 0, energyCap: 0 };
-    }
+    let saved = {}
+    try { saved = JSON.parse(entity.getDynamicProperty('reactorData') || '{}') } catch { }
+    const data = { ...config.initialReactorData, ...saved, ...getThermoStats(entity) }
+    data.rate = Number.isFinite(data.rate) ? Math.max(0, data.rate) : config.initialReactorData.rate
+    if (entity.getDynamicProperty('dorios:state') === 'off') data.state = 'off'
+    return data
 }
 
-
-/**
- * Show a modal to configure reactor burn rate and on/off state.
- * Reads current values from the entity (data.rate, data.state) and writes them back.
- * @param {Entity} entity - Reactor entity that holds the data.
- * @param {Player} player - Player to show the form to.
- */
-async function showBurnRateConfigForm(entity, player) {
-    // Read current reactor data
-    const data = (typeof getReactorInfo === "function" ? getReactorInfo(entity) : {}) || {};
-    const currentRate = Number(data.rate) || 0.1;
-    const currentEnabled =
-        typeof data.state === "string" ? data.state.toLowerCase() !== "off" : !!data.state;
-
-    // Build form
-    const form = new ModalFormData()
-        .title("Reactor Burn Rate")
-        .textField(
-            `Burn rate (mB/t)\nFaster burn = more power & heat.\nSet a rate your cooling can sustain. e.g. 10`,
-            `Set a burn rate: 100`,
-            { defaultValue: `${currentRate}` }
-        )
-        .toggle("Enabled (on/off)", { defaultValue: currentEnabled });
-
-    // Show and handle response
-    const res = await form.show(player);
-    if (res.canceled) return;
-
-    const [rateInput, enabledToggle] = res.formValues;
-
-    // Parse and validate
-    let parsed = parseFloat(String(rateInput).replace(",", "."));
-    if (!Number.isFinite(parsed) || parsed <= 0) {
-        parsed = 0
-    }
-
-    // Write back
-    data.rate = parsed;
-    data.state = enabledToggle ? "on" : "off";
-
-    if (typeof setReactorInfo === "function") {
-        setReactorInfo(entity, data);
-    } else if (typeof updateReactorInfo === "function") {
-        updateReactorInfo(entity, data);
-    } else if (entity.setDynamicProperty) {
-        // Fallback if you store data as a dynamic property
-        entity.setDynamicProperty("reactorData", JSON.stringify(data));
-    }
+function saveReactorInfo(entity, data) {
+    const state = { ...data }
+    for (const key of Object.keys(getThermoStats(entity))) delete state[key]
+    delete state.fs_t
+    const serialized = JSON.stringify(state)
+    if (entity.getDynamicProperty('reactorData') !== serialized) entity.setDynamicProperty('reactorData', serialized)
 }
 
-/**
- * Spawns "campfire_tall_smoke_particle" on ~50% of vent blocks, chosen at random.
- * 8 -> 4, 7 -> 3, etc.
- * @param {import('@minecraft/server').Entity} entity
- * @param {number} [ratio=0.5] Fraction of vents to use (0..1)
- * @param {boolean} [center=true] If true, spawns at block centers (+0.5)
- */
-const PERIOD = 30; // 2 s
-
-/**
- * Plays the reactor burn loop sound at a fixed interval while fuel is burning.
- *
- * @param {Entity} e Reactor controller entity.
- * @param {number} f Tick delta used by the simulation.
- */
-function fireLoop(e, f) {
-    let t = (Number(e.getDynamicProperty('fs_t')) || 0) + f;
-    if (t >= PERIOD) { e.dimension.playSound('block.campfire.crackle', e.location); t %= PERIOD; }
-    e.setDynamicProperty('fs_t', t);
+function getThermoStats(entity) {
+    const raw = entity.getDynamicProperty('reactorStats')
+    const cached = statsCache.get(entity)
+    if (cached && cached.raw === raw) return cached.value
+    let saved = {}
+    try { if (raw) saved = JSON.parse(raw) } catch { }
+    const value = { lavaCapacity: 0, coolantCapacity: 0, steamCapacity: 0, ventRate: 0, energyCap: 0, ...saved }
+    // Legacy conductors were stored as 0.05 K/t per block.
+    value.heatConductors ??= Math.max(0, (value.heatDissipation ?? 0) / 0.05)
+    value.conductance = value.heatConductors * THERMO_THERMAL.conductorConductance
+    if (!(value.heatCapacity > 0)) value.heatCapacity = getThermoHeatCapacity(value.bounds, {
+        thermo_core: 1, heat_conductor: value.heatConductors,
+        fluid_cell: value.lavaCapacity / config.lavaCapacityPerFluidCell,
+    })
+    statsCache.set(entity, { raw, value })
+    return value
 }
 
-/**
- * Thermo Reactor configuration.
- *
- * Conventions:
- * - Simulation runs per game tick.
- * - mB = milliBuckets (volume), PSI = pressure, K = kelvin (temperature).
- * - Units are documented in JSDoc rather than in property names.
- *
- * @typedef {Object} ThermoReactorConfig
- *
- * @property {number} baseLavaBurnRate  Base lava consumption per tick when Speed=1. Units: mB/tick.
- * @property {number} maxCoreTemperatureK  Maximum supported core temperature before meltdown. Units: K.
- * @property {number} maxPressurePSI  Maximum supported pressure before explosion. Units: PSI.
- *
- * @property {number} ventReleaseRate  Steam/pressure vented by a single vent block per tick. Units: mB/tick.
- * @property {number} conductorHeatDissipation  Heat dissipated by a single heat conductor per tick. Units: K/tick.
- *
- * @property {number} coolantPerKelvin  Coolant required to dissipate 1 K of heat. Units: mB/K.
- * @property {number} pressurePerSteam  Pressure generated by steam. Units: PSI/mB.
- * @property {number} heatPerLavaUnit  Heat generated by burning 1 mB of lava. Units: K/mB.
- * @property {number} energyPerLavaUnit  Energy generated from burning 1 mB of lava. Units: DE/mB.
- *
- * @property {number} coolantCapacityPerEmptyBlock  Coolant storage capacity added per empty block. Units: mB.
- * @property {number} steamCapacityPerEmptyBlock  Steam storage capacity added per empty block. Units: mB.
- * @property {number} lavaCapacityPerFluidCell  Lava storage capacity per fluid cell. Units: mB.
- * 
- * @property {Object} initialReactorData  Initial values for each stat.
- */
+function getThermoRuntime(entity, data) {
+    let runtime = runtimeCache.get(entity)
+    if (!runtime) {
+        const [coolant, lava] = FluidStorage.initializeMultiple(entity, 2)
+        const temperature = new TemperatureStorage(entity, 0, { initialTemperature: data.temperature, heatCapacity: data.heatCapacity })
+        runtime = { coolant, lava, temperature, stats: null, nextSmokeTick: 0, nextSoundTick: 0 }
+        runtimeCache.set(entity, runtime)
+    }
+    const stats = getThermoStats(entity)
+    if (runtime.stats !== stats) {
+        runtime.coolant.setCap(data.coolantCapacity)
+        runtime.lava.setCap(data.lavaCapacity)
+        if (runtime.temperature.getHeatCapacity() !== data.heatCapacity) runtime.temperature.setHeatCapacity(data.heatCapacity)
+        runtime.stats = stats
+    }
+    return runtime
+}
+
+function getThermoStatus(data, result, fuel, energySpace, validCoolant, coolantAmount) {
+    if (data.temperature >= WARN_DANGER_K - 100) return '\u00A7cCore overheating!'
+    if (data.temperature >= WARN_OVERHEAT_K) return '\u00A76Overheating!'
+    if (data.state === 'off') return '\u00A7eStopped'
+    if (data.rate <= 0) return '\u00A7eRate Setpoint 0 mB/t'
+    if (fuel <= 0) return '\u00A7eMissing Fuel!'
+    if (energySpace <= 0) return '\u00A7eEnergy Full'
+    if (!validCoolant || coolantAmount <= 0) return '\u00A7cMissing Coolant!'
+    return result.consumedLava > 0 ? '\u00A72Active' : '\u00A77Idle'
+}
+
+function triggerThermoMeltdown(reactor, data) {
+    if (data.meltdownPending) return
+    data.meltdownPending = true
+    setReactorRunning(data, false)
+    data.warning = '\u00A7cCore meltdown!'
+    saveReactorInfo(reactor.entity, data)
+    Multiblock.DeactivationManager.deactivateMultiblock(reactor.block, undefined, GENERATOR_CONFIG.deactivateConfig)
+    const location = reactor.entity.location
+    const bounds = data.bounds
+    DoriosLib.time.runAfterSeconds(4, () => {
+        const center = bounds ? Multiblock.EntityManager.getCenter(bounds.min, bounds.max) : location
+        const radius = bounds ? Multiblock.EntityManager.getVolume(bounds) ** (1 / 3) * 0.4 : 4
+        reactor.dimension.createExplosion({ x: center.x + 0.5, y: center.y + 0.5, z: center.z + 0.5 }, radius,
+            { causesFire: true, breaksBlocks: true, allowUnderwater: true })
+    })
+}
