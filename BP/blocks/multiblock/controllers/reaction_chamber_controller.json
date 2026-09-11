@@ -20,19 +20,19 @@
             "minecraft:geometry": "minecraft:geometry.full_block",
             "minecraft:material_instances": {
                 "*": {
-                    "texture": "utilitycraft_matter_condenser_controller_side",
+                    "texture": "utilitycraft_reaction_chamber_controller_side",
                     "render_method": "alpha_test"
                 },
                 "north": {
-                    "texture": "utilitycraft_matter_condenser_controller_north",
+                    "texture": "utilitycraft_reaction_chamber_controller_north",
                     "render_method": "alpha_test"
                 },
                 "up": {
-                    "texture": "utilitycraft_matter_condenser_controller_up",
+                    "texture": "utilitycraft_reaction_chamber_controller_up",
                     "render_method": "alpha_test"
                 },
                 "down": {
-                    "texture": "utilitycraft_matter_condenser_controller_down",
+                    "texture": "utilitycraft_reaction_chamber_controller_down",
                     "render_method": "alpha_test"
                 }
             },

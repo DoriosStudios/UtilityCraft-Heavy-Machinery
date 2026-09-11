@@ -21,3 +21,5 @@ import './machines/chemicalProcessor.js'
 import './machines/tankController.js'
 
 import './generators/gasTurbine.js'
+
+import './generators/combustionChamber.js'

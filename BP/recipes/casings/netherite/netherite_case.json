@@ -1,0 +1,35 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "utilitycraft:netherite_case"
+        },
+        "tags": [
+            "utilitycraft_workbench"
+        ],
+        "key": {
+            "P": {
+                "item": "utilitycraft:netherite_plate"
+            },
+            "D": {
+                "item": "utilitycraft:stabilized_obsidian_dust"
+            },
+            "T": {
+                "item": "utilitycraft:lead_block"
+            }
+        },
+        "pattern": [
+            "PDP",
+            "DTD",
+            "PDP"
+        ],
+        "result": {
+            "item": "utilitycraft:netherite_case"
+        },
+        "unlock": [
+            {
+                "item": "utilitycraft:netherite_plate"
+            }
+        ]
+    }
+}

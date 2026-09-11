@@ -148,7 +148,6 @@ export function tickTurbine(block) {
         Multiblock.DeactivationManager.deactivateEntity(entity);
         return;
     }
-    turbine.processIO();
     energy.transferToNetwork((entity.getDynamicProperty('dorios:rateSpeed') ?? 0) * ticks);
     const fuelType = gas.getType(), fuel = TURBINE_GASES[fuelType];
     if (fuelType !== state.fuelType) { state.progress = 0; state.fuelType = fuelType; }

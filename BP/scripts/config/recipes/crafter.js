@@ -6,7 +6,20 @@ import * as DoriosLib from "DoriosLib/index.js";
  */
 const crafterRecipeBatches = [
 {
-    "bronze_plate,control_panel,bronze_plate,charged_darloonite_crystal,bronze_controller_case,charged_darloonite_crystal,bronze_plate,advanced_gas_generator,bronze_plate": {
+    "compressed_netherite_block,control_panel,compressed_netherite_block,ultimate_chip,netherite_controller_case,ultimate_chip,lead_block,stabilized_obsidian_dust,lead_block": { output: "utilitycraft:nuclear_reactor_controller", amount: 1 },
+},
+{
+    "lead_plate,item_conduit,lead_plate,item_conduit,netherite_case,item_conduit,lead_plate,item_conduit,lead_plate": { output: "utilitycraft:netherite_item_port", amount: 1 },
+    "lead_plate,fluid_pipe,lead_plate,fluid_pipe,netherite_case,fluid_pipe,lead_plate,fluid_pipe,lead_plate": { output: "utilitycraft:netherite_fluid_port", amount: 1 },
+    "lead_plate,energy_cable,lead_plate,energy_cable,netherite_case,energy_cable,lead_plate,energy_cable,lead_plate": { output: "utilitycraft:netherite_energy_port", amount: 1 },
+},
+{
+    "netherite_plate,stabilized_obsidian_dust,netherite_plate,stabilized_obsidian_dust,lead_block,stabilized_obsidian_dust,netherite_plate,stabilized_obsidian_dust,netherite_plate": { output: "utilitycraft:netherite_case", amount: 1 },
+    "lead_block,compressed_netherite_block,lead_block,netherite_plate,netherite_case,netherite_plate,lead_block,stabilized_obsidian_dust,lead_block": { output: "utilitycraft:netherite_controller_case", amount: 1 },
+},
+{
+    "bronze_plate,control_panel,bronze_plate,charged_darloonite_crystal,bronze_controller_case,charged_darloonite_crystal,bronze_plate,expert_furnator,bronze_plate": { output: "utilitycraft:combustion_chamber_controller", amount: 1 },
+    "bronze_plate,control_panel,bronze_plate,high_speed_rotor,bronze_controller_case,high_speed_rotor,bronze_plate,expert_gas_generator,bronze_plate": {
       output: "utilitycraft:gas_turbine_controller",
       amount: 1,
     },
@@ -23,7 +36,7 @@ const crafterRecipeBatches = [
     "output": "utilitycraft:steel_gas_port",
     "amount": 1
   },
-  "tin_plate,gas_pipe,tin_plate,gas_pipe,netherite_case,gas_pipe,tin_plate,gas_pipe,tin_plate": {
+  "lead_plate,gas_pipe,lead_plate,gas_pipe,netherite_case,gas_pipe,lead_plate,gas_pipe,lead_plate": {
     "output": "utilitycraft:netherite_gas_port",
     "amount": 1
   },

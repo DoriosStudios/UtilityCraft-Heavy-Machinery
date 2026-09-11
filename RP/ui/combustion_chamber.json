@@ -1,0 +1,1473 @@
+{
+    "namespace": "combustion_chamber",
+    "reactor_page": {
+        "type": "collection_panel",
+        "collection_name": "container_items",
+        "$item_collection_name": "container_items",
+        "size": [
+            162,
+            142
+        ],
+        "offset": [
+            0,
+            5
+        ],
+        "controls": [
+            {
+                "reserve@uc.item_display": {
+                    "collection_index": 2,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        18,
+                        32
+                    ],
+                    "size": [
+                        18,
+                        18
+                    ]
+                }
+            },
+            {
+                "energy_0@uc.item_display_hover_large": {
+                    "collection_index": 0,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        58,
+                        5
+                    ],
+                    "size": [
+                        16,
+                        50
+                    ]
+                }
+            },
+            {
+                "energy_1@uc.item_display_hover_large": {
+                    "collection_index": 0,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        74,
+                        5
+                    ],
+                    "size": [
+                        16,
+                        50
+                    ]
+                }
+            },
+            {
+                "energy_2@uc.item_display_hover_large": {
+                    "collection_index": 0,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        90,
+                        5
+                    ],
+                    "size": [
+                        16,
+                        50
+                    ]
+                }
+            },
+            {
+                "energy_border": {
+                    "type": "image",
+                    "texture": "textures/ui/big_energy_border",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        58,
+                        6
+                    ],
+                    "size": [
+                        48,
+                        48
+                    ],
+                    "layer": 10
+                }
+            },
+            {
+                "operation@uc.text_label": {
+                    "collection_index": 1,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        5,
+                        74
+                    ],
+                    "$text_scale": 0.55
+                }
+            },
+            {
+                "resources@uc.text_label": {
+                    "collection_index": 22,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        86,
+                        74
+                    ],
+                    "$text_scale": 0.55
+                }
+            },
+            {
+                "telemetry_screen": {
+                    "type": "image",
+                    "texture": "textures/ui/screen_thermo_bg",
+                    "anchor_from": "top_middle",
+                    "anchor_to": "top_middle",
+                    "offset": [
+                        0,
+                        70
+                    ],
+                    "size": [
+                        162,
+                        72
+                    ],
+                    "keep_ratio": false,
+                    "nineslice_size": 2,
+                    "layer": 0
+                }
+            },
+            {
+                "reactor_heading": {
+                    "type": "label",
+                    "text": "ui.hm.cc.reactor_information",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        3,
+                        60
+                    ],
+                    "size": [
+                        75,
+                        9
+                    ],
+                    "font_scale_factor": 0.75,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "tanks_heading": {
+                    "type": "label",
+                    "text": "ui.hm.cc.tanks_information",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        84,
+                        60
+                    ],
+                    "size": [
+                        75,
+                        9
+                    ],
+                    "font_scale_factor": 0.75,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "fuel_remaining@uc.text_label": {
+                    "collection_index": 2,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        3,
+                        15
+                    ],
+                    "$text_scale": 0.58
+                }
+            },
+            {
+                "manual_fuel_hint": {
+                    "type": "label",
+                    "text": "ui.hm.cc.manual_fuel_hint",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        113,
+                        20
+                    ],
+                    "size": [
+                        46,
+                        32
+                    ],
+                    "font_scale_factor": 0.58,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            }
+        ]
+    },
+    "fuel_page": {
+        "type": "collection_panel",
+        "collection_name": "container_items",
+        "$item_collection_name": "container_items",
+        "size": [
+            162,
+            142
+        ],
+        "offset": [
+            0,
+            5
+        ],
+        "controls": [
+            {
+                "automation": {
+                    "type": "label",
+                    "text": "ui.hm.cc.fuel_automation_hint",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        0,
+                        1
+                    ],
+                    "size": [
+                        162,
+                        12
+                    ],
+                    "font_scale_factor": 0.58,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "fuel_slot@uc.input_slot": {
+                    "collection_index": 21,
+                    "$slot_background_texture": "textures/ui/slots/fuel_slot",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        10,
+                        19
+                    ]
+                }
+            },
+            {
+                "coal": {
+                    "type": "image",
+                    "texture": "textures/items/coal",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        42,
+                        19
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "fuel_help": {
+                    "type": "label",
+                    "text": "ui.hm.cc.fuel_examples",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        62,
+                        19
+                    ],
+                    "size": [
+                        94,
+                        30
+                    ],
+                    "font_scale_factor": 0.58,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "reserve@uc.item_display_hover": {
+                    "collection_index": 2,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        134,
+                        43
+                    ],
+                    "size": [
+                        18,
+                        18
+                    ]
+                }
+            },
+            {
+                "bonus": {
+                    "type": "label",
+                    "text": "ui.hm.cc.fuel_bonus",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        10,
+                        50
+                    ],
+                    "size": [
+                        118,
+                        12
+                    ],
+                    "font_scale_factor": 0.58,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            }
+        ]
+    },
+    "control_page": {
+        "type": "collection_panel",
+        "collection_name": "container_items",
+        "$item_collection_name": "container_items",
+        "size": [
+            162,
+            142
+        ],
+        "offset": [
+            0,
+            5
+        ],
+        "controls": [
+            {
+                "entry_screen": {
+                    "type": "image",
+                    "texture": "textures/ui/black_background",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        4,
+                        42
+                    ],
+                    "size": [
+                        66,
+                        18
+                    ],
+                    "keep_ratio": false,
+                    "layer": 0,
+                    "alpha": 0.8
+                }
+            },
+            {
+                "instructions": {
+                    "type": "label",
+                    "text": "ui.hm.cc.control_hint",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        4,
+                        0
+                    ],
+                    "size": [
+                        154,
+                        26
+                    ],
+                    "font_scale_factor": 0.58,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "entry@uc.text_label": {
+                    "collection_index": 6,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        8,
+                        48
+                    ],
+                    "$text_scale": 0.75
+                }
+            },
+            {
+                "cancel@uc.machine_button": {
+                    "$index": 19,
+                    "$default_texture": "textures/ui/buttons/cancel",
+                    "$hover_texture": "textures/ui/buttons/cancel_selected",
+                    "$pressed_texture": "textures/ui/buttons/cancel_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        76,
+                        84
+                    ]
+                }
+            },
+            {
+                "delete@uc.machine_button": {
+                    "$index": 20,
+                    "$default_texture": "textures/ui/buttons/delete",
+                    "$hover_texture": "textures/ui/buttons/delete_selected",
+                    "$pressed_texture": "textures/ui/buttons/delete_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        52,
+                        124
+                    ]
+                }
+            },
+            {
+                "7@uc.machine_button": {
+                    "$index": 7,
+                    "$default_texture": "textures/ui/buttons/number_7",
+                    "$hover_texture": "textures/ui/buttons/number_7_selected",
+                    "$pressed_texture": "textures/ui/buttons/number_7_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        4,
+                        64
+                    ]
+                }
+            },
+            {
+                "8@uc.machine_button": {
+                    "$index": 8,
+                    "$default_texture": "textures/ui/buttons/number_8",
+                    "$hover_texture": "textures/ui/buttons/number_8_selected",
+                    "$pressed_texture": "textures/ui/buttons/number_8_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        28,
+                        64
+                    ]
+                }
+            },
+            {
+                "9@uc.machine_button": {
+                    "$index": 9,
+                    "$default_texture": "textures/ui/buttons/number_9",
+                    "$hover_texture": "textures/ui/buttons/number_9_selected",
+                    "$pressed_texture": "textures/ui/buttons/number_9_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        52,
+                        64
+                    ]
+                }
+            },
+            {
+                "4@uc.machine_button": {
+                    "$index": 10,
+                    "$default_texture": "textures/ui/buttons/number_4",
+                    "$hover_texture": "textures/ui/buttons/number_4_selected",
+                    "$pressed_texture": "textures/ui/buttons/number_4_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        4,
+                        84
+                    ]
+                }
+            },
+            {
+                "5@uc.machine_button": {
+                    "$index": 11,
+                    "$default_texture": "textures/ui/buttons/number_5",
+                    "$hover_texture": "textures/ui/buttons/number_5_selected",
+                    "$pressed_texture": "textures/ui/buttons/number_5_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        28,
+                        84
+                    ]
+                }
+            },
+            {
+                "6@uc.machine_button": {
+                    "$index": 12,
+                    "$default_texture": "textures/ui/buttons/number_6",
+                    "$hover_texture": "textures/ui/buttons/number_6_selected",
+                    "$pressed_texture": "textures/ui/buttons/number_6_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        52,
+                        84
+                    ]
+                }
+            },
+            {
+                "1@uc.machine_button": {
+                    "$index": 13,
+                    "$default_texture": "textures/ui/buttons/number_1",
+                    "$hover_texture": "textures/ui/buttons/number_1_selected",
+                    "$pressed_texture": "textures/ui/buttons/number_1_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        4,
+                        104
+                    ]
+                }
+            },
+            {
+                "2@uc.machine_button": {
+                    "$index": 14,
+                    "$default_texture": "textures/ui/buttons/number_2",
+                    "$hover_texture": "textures/ui/buttons/number_2_selected",
+                    "$pressed_texture": "textures/ui/buttons/number_2_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        28,
+                        104
+                    ]
+                }
+            },
+            {
+                "3@uc.machine_button": {
+                    "$index": 15,
+                    "$default_texture": "textures/ui/buttons/number_3",
+                    "$hover_texture": "textures/ui/buttons/number_3_selected",
+                    "$pressed_texture": "textures/ui/buttons/number_3_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        52,
+                        104
+                    ]
+                }
+            },
+            {
+                "dot@uc.machine_button": {
+                    "$index": 16,
+                    "$default_texture": "textures/ui/buttons/dot",
+                    "$hover_texture": "textures/ui/buttons/dot_selected",
+                    "$pressed_texture": "textures/ui/buttons/dot_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        4,
+                        124
+                    ]
+                }
+            },
+            {
+                "0@uc.machine_button": {
+                    "$index": 17,
+                    "$default_texture": "textures/ui/buttons/number_0",
+                    "$hover_texture": "textures/ui/buttons/number_0_selected",
+                    "$pressed_texture": "textures/ui/buttons/number_0_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        28,
+                        124
+                    ]
+                }
+            },
+            {
+                "enter@uc.machine_button": {
+                    "$index": 18,
+                    "$default_texture": "textures/ui/buttons/accept",
+                    "$hover_texture": "textures/ui/buttons/accept_selected",
+                    "$pressed_texture": "textures/ui/buttons/accept_pressed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        76,
+                        64
+                    ]
+                }
+            },
+            {
+                "recommended_rate@uc.text_label": {
+                    "collection_index": 25,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        88,
+                        47
+                    ],
+                    "size": [
+                        70,
+                        20
+                    ],
+                    "$text_scale": 0.55
+                }
+            },
+            {
+                "current_rate@uc.text_label": {
+                    "collection_index": 23,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        4,
+                        29
+                    ],
+                    "$text_scale": 0.67
+                }
+            },
+            {
+                "rotor_heading": {
+                    "type": "label",
+                    "text": "ui.hm.cc.rotor_speed",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        108,
+                        108
+                    ],
+                    "size": [
+                        50,
+                        8
+                    ],
+                    "font_scale_factor": 0.55,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "center"
+                }
+            },
+            {
+                "rotor_value@uc.centered_text_label": {
+                    "collection_index": 4,
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        107,
+                        118
+                    ],
+                    "size": [
+                        52,
+                        8
+                    ],
+                    "$text_scale": 0.55
+                }
+            }
+        ]
+    },
+    "info_page": {
+        "type": "collection_panel",
+        "collection_name": "container_items",
+        "$item_collection_name": "container_items",
+        "size": [
+            162,
+            142
+        ],
+        "offset": [
+            0,
+            5
+        ],
+        "controls": [
+            {
+                "guide_scroll@common.scrolling_panel": {
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        162,
+                        142
+                    ],
+                    "$show_background": false,
+                    "$scrolling_content": "combustion_chamber.info_guide_content",
+                    "$scroll_size": [
+                        4,
+                        138
+                    ],
+                    "$scrolling_pane_size": [
+                        162,
+                        142
+                    ],
+                    "$scrolling_pane_offset": [
+                        0,
+                        0
+                    ],
+                    "$scroll_view_port_size": [
+                        154,
+                        142
+                    ],
+                    "$scroll_view_port_max_size": [
+                        154,
+                        142
+                    ],
+                    "$scroll_view_port_offset": [
+                        0,
+                        0
+                    ],
+                    "$scrolling_pane_size_touch": [
+                        162,
+                        142
+                    ],
+                    "$scrolling_pane_offset_touch": [
+                        0,
+                        0
+                    ],
+                    "$scroll_view_port_size_touch": [
+                        154,
+                        142
+                    ],
+                    "$scroll_view_port_max_size_touch": [
+                        154,
+                        142
+                    ],
+                    "$scroll_view_port_offset_touch": [
+                        0,
+                        0
+                    ],
+                    "$scroll_size_touch": [
+                        4,
+                        138
+                    ],
+                    "$scroll_box_visible_touch": true,
+                    "$scroll_track_image_control": "common.empty_image"
+                }
+            }
+        ]
+    },
+    "utilitycraft_panel": {
+        "type": "panel",
+        "controls": [
+            {
+                "container_gamepad_helpers@common.container_gamepad_helpers": {}
+            },
+            {
+                "flying_item_renderer@common.flying_item_renderer": {
+                    "layer": 14
+                }
+            },
+            {
+                "selected_item_details_factory@common.selected_item_details_factory": {}
+            },
+            {
+                "item_lock_notification_factory@common.item_lock_notification_factory": {}
+            },
+            {
+                "root_panel@common.root_panel": {
+                    "layer": 1,
+                    "controls": [
+                        {
+                            "common_panel@common.common_panel": {}
+                        },
+                        {
+                            "chest_panel": {
+                                "type": "panel",
+                                "layer": 5,
+                                "controls": [
+                                    {
+                                        "reactor_title@chest.chest_label": {
+                                            "text": "ui.hm.cc.title_reactor",
+                                            "localize": true,
+                                            "offset": [
+                                                7,
+                                                6
+                                            ],
+                                            "bindings": [
+                                                {
+                                                    "binding_type": "view",
+                                                    "source_control_name": "cc_reactor",
+                                                    "source_property_name": "#toggle_state",
+                                                    "target_property_name": "#visible",
+                                                    "resolve_sibling_scope": false
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "fuel_title@chest.chest_label": {
+                                            "text": "ui.hm.cc.title_fuel",
+                                            "localize": true,
+                                            "offset": [
+                                                7,
+                                                6
+                                            ],
+                                            "bindings": [
+                                                {
+                                                    "binding_type": "view",
+                                                    "source_control_name": "cc_fuel",
+                                                    "source_property_name": "#toggle_state",
+                                                    "target_property_name": "#visible",
+                                                    "resolve_sibling_scope": false
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "control_title@chest.chest_label": {
+                                            "text": "ui.hm.cc.title_control",
+                                            "localize": true,
+                                            "offset": [
+                                                7,
+                                                6
+                                            ],
+                                            "bindings": [
+                                                {
+                                                    "binding_type": "view",
+                                                    "source_control_name": "cc_control",
+                                                    "source_property_name": "#toggle_state",
+                                                    "target_property_name": "#visible",
+                                                    "resolve_sibling_scope": false
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "info_title@chest.chest_label": {
+                                            "text": "ui.hm.cc.title_info",
+                                            "localize": true,
+                                            "offset": [
+                                                7,
+                                                6
+                                            ],
+                                            "bindings": [
+                                                {
+                                                    "binding_type": "view",
+                                                    "source_control_name": "cc_info",
+                                                    "source_property_name": "#toggle_state",
+                                                    "target_property_name": "#visible",
+                                                    "resolve_sibling_scope": false
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "reactor_tab@uc.toggle_button": {
+                                            "anchor_from": "top_left",
+                                            "anchor_to": "top_left",
+                                            "offset": [
+                                                -19,
+                                                10
+                                            ],
+                                            "size": [
+                                                16,
+                                                16
+                                            ],
+                                            "$toggle_name": "combustion_chamber_pages",
+                                            "$toggle_control_name": "cc_reactor",
+                                            "$toggle_group": true,
+                                            "$toggle_index": 0,
+                                            "$toggle_group_default_selected": 0,
+                                            "$toggle_default_state": true,
+                                            "$toggle_lost_reset": false,
+                                            "$toggle_size": [
+                                                16,
+                                                16
+                                            ],
+                                            "$toggle_layer": 12,
+                                            "$toggle_bg_layer": 10,
+                                            "$has_toggle_bg": true,
+                                            "$toggle_bg_texture": "textures/ui/toggle_button/left_bg",
+                                            "$toggle_unchecked": "textures/ui/toggle_button/nuclear_general_unchecked",
+                                            "$toggle_checked": "textures/ui/toggle_button/nuclear_general_checked",
+                                            "$toggle_unchecked_hover": "textures/ui/toggle_button/nuclear_general_unchecked_hover",
+                                            "$toggle_checked_hover": "textures/ui/toggle_button/nuclear_general_checked_hover",
+                                            "$toggle_hover_text": "ui.hm.cc.tab_reactor",
+                                            "$toggle_hover_text_localize": true,
+                                            "$toggle_checked_hover_text_from_hover": true
+                                        }
+                                    },
+                                    {
+                                        "reactor@combustion_chamber.reactor_page": {
+                                            "bindings": [
+                                                {
+                                                    "binding_type": "view",
+                                                    "source_control_name": "cc_reactor",
+                                                    "source_property_name": "#toggle_state",
+                                                    "target_property_name": "#visible",
+                                                    "resolve_sibling_scope": false
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "fuel_tab@uc.toggle_button": {
+                                            "anchor_from": "top_left",
+                                            "anchor_to": "top_left",
+                                            "offset": [
+                                                -19,
+                                                37
+                                            ],
+                                            "size": [
+                                                16,
+                                                16
+                                            ],
+                                            "$toggle_name": "combustion_chamber_pages",
+                                            "$toggle_control_name": "cc_fuel",
+                                            "$toggle_group": true,
+                                            "$toggle_index": 1,
+                                            "$toggle_group_default_selected": 0,
+                                            "$toggle_default_state": false,
+                                            "$toggle_lost_reset": false,
+                                            "$toggle_size": [
+                                                16,
+                                                16
+                                            ],
+                                            "$toggle_layer": 12,
+                                            "$toggle_bg_layer": 10,
+                                            "$has_toggle_bg": true,
+                                            "$toggle_bg_texture": "textures/ui/toggle_button/left_bg",
+                                            "$toggle_unchecked": "textures/ui/toggle_button/nuclear_fuel_unchecked",
+                                            "$toggle_checked": "textures/ui/toggle_button/nuclear_fuel_checked",
+                                            "$toggle_unchecked_hover": "textures/ui/toggle_button/nuclear_fuel_unchecked_hover",
+                                            "$toggle_checked_hover": "textures/ui/toggle_button/nuclear_fuel_checked_hover",
+                                            "$toggle_hover_text": "ui.hm.cc.tab_fuel",
+                                            "$toggle_hover_text_localize": true,
+                                            "$toggle_checked_hover_text_from_hover": true
+                                        }
+                                    },
+                                    {
+                                        "fuel@combustion_chamber.fuel_page": {
+                                            "bindings": [
+                                                {
+                                                    "binding_type": "view",
+                                                    "source_control_name": "cc_fuel",
+                                                    "source_property_name": "#toggle_state",
+                                                    "target_property_name": "#visible",
+                                                    "resolve_sibling_scope": false
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "control_tab@uc.toggle_button": {
+                                            "anchor_from": "top_left",
+                                            "anchor_to": "top_left",
+                                            "offset": [
+                                                -19,
+                                                64
+                                            ],
+                                            "size": [
+                                                16,
+                                                16
+                                            ],
+                                            "$toggle_name": "combustion_chamber_pages",
+                                            "$toggle_control_name": "cc_control",
+                                            "$toggle_group": true,
+                                            "$toggle_index": 2,
+                                            "$toggle_group_default_selected": 0,
+                                            "$toggle_default_state": false,
+                                            "$toggle_lost_reset": false,
+                                            "$toggle_size": [
+                                                16,
+                                                16
+                                            ],
+                                            "$toggle_layer": 12,
+                                            "$toggle_bg_layer": 10,
+                                            "$has_toggle_bg": true,
+                                            "$toggle_bg_texture": "textures/ui/toggle_button/left_bg",
+                                            "$toggle_unchecked": "textures/ui/toggle_button/nuclear_control_unchecked",
+                                            "$toggle_checked": "textures/ui/toggle_button/nuclear_control_checked",
+                                            "$toggle_unchecked_hover": "textures/ui/toggle_button/nuclear_control_unchecked_hover",
+                                            "$toggle_checked_hover": "textures/ui/toggle_button/nuclear_control_checked_hover",
+                                            "$toggle_hover_text": "ui.hm.cc.tab_control",
+                                            "$toggle_hover_text_localize": true,
+                                            "$toggle_checked_hover_text_from_hover": true
+                                        }
+                                    },
+                                    {
+                                        "control@combustion_chamber.control_page": {
+                                            "bindings": [
+                                                {
+                                                    "binding_type": "view",
+                                                    "source_control_name": "cc_control",
+                                                    "source_property_name": "#toggle_state",
+                                                    "target_property_name": "#visible",
+                                                    "resolve_sibling_scope": false
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "info_tab@uc.toggle_button": {
+                                            "anchor_from": "top_left",
+                                            "anchor_to": "top_left",
+                                            "offset": [
+                                                179,
+                                                10
+                                            ],
+                                            "size": [
+                                                16,
+                                                16
+                                            ],
+                                            "$toggle_name": "combustion_chamber_pages",
+                                            "$toggle_control_name": "cc_info",
+                                            "$toggle_group": true,
+                                            "$toggle_index": 3,
+                                            "$toggle_group_default_selected": 0,
+                                            "$toggle_default_state": false,
+                                            "$toggle_lost_reset": false,
+                                            "$toggle_size": [
+                                                16,
+                                                16
+                                            ],
+                                            "$toggle_layer": 12,
+                                            "$toggle_bg_layer": 10,
+                                            "$has_toggle_bg": true,
+                                            "$toggle_bg_texture": "textures/ui/toggle_button/right_bg",
+                                            "$toggle_unchecked": "textures/ui/toggle_button/info_unchecked",
+                                            "$toggle_checked": "textures/ui/toggle_button/info_checked",
+                                            "$toggle_unchecked_hover": "textures/ui/toggle_button/info_unchecked_hover",
+                                            "$toggle_checked_hover": "textures/ui/toggle_button/info_checked_hover",
+                                            "$toggle_hover_text": "ui.hm.cc.tab_info",
+                                            "$toggle_hover_text_localize": true,
+                                            "$toggle_checked_hover_text_from_hover": true
+                                        }
+                                    },
+                                    {
+                                        "info@combustion_chamber.info_page": {
+                                            "bindings": [
+                                                {
+                                                    "binding_type": "view",
+                                                    "source_control_name": "cc_info",
+                                                    "source_property_name": "#toggle_state",
+                                                    "target_property_name": "#visible",
+                                                    "resolve_sibling_scope": false
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "power_action": {
+                                            "type": "panel",
+                                            "anchor_from": "bottom_left",
+                                            "anchor_to": "bottom_left",
+                                            "offset": [
+                                                179,
+                                                -10
+                                            ],
+                                            "size": [
+                                                16,
+                                                16
+                                            ],
+                                            "controls": [
+                                                {
+                                                    "background": {
+                                                        "type": "image",
+                                                        "texture": "textures/ui/toggle_button/right_bg",
+                                                        "size": [
+                                                            24,
+                                                            24
+                                                        ],
+                                                        "layer": 10
+                                                    }
+                                                },
+                                                {
+                                                    "power@uc.machine_button": {
+                                                        "$index": 5,
+                                                        "anchor_from": "center",
+                                                        "anchor_to": "center",
+                                                        "offset": [
+                                                            0,
+                                                            0
+                                                        ],
+                                                        "size": [
+                                                            16,
+                                                            16
+                                                        ],
+                                                        "$button_size": [
+                                                            16,
+                                                            16
+                                                        ],
+                                                        "layer": 12
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "energy_indicator": {
+                                            "type": "collection_panel",
+                                            "collection_name": "container_items",
+                                            "$item_collection_name": "container_items",
+                                            "anchor_from": "bottom_left",
+                                            "anchor_to": "bottom_left",
+                                            "offset": [
+                                                -19,
+                                                -10
+                                            ],
+                                            "size": [
+                                                16,
+                                                16
+                                            ],
+                                            "controls": [
+                                                {
+                                                    "background": {
+                                                        "type": "image",
+                                                        "texture": "textures/ui/toggle_button/left_bg",
+                                                        "size": [
+                                                            24,
+                                                            24
+                                                        ],
+                                                        "layer": 10
+                                                    }
+                                                },
+                                                {
+                                                    "energy_icon": {
+                                                        "type": "image",
+                                                        "texture": "textures/ui/energy_icon",
+                                                        "size": [
+                                                            16,
+                                                            16
+                                                        ],
+                                                        "layer": 12
+                                                    }
+                                                },
+                                                {
+                                                    "energy_hover@uc.slot_button": {
+                                                        "collection_index": 0,
+                                                        "size": [
+                                                            16,
+                                                            16
+                                                        ],
+                                                        "layer": 13
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "fuel_inventory": {
+                                            "type": "panel",
+                                            "bindings": [
+                                                {
+                                                    "binding_type": "view",
+                                                    "source_control_name": "cc_fuel",
+                                                    "source_property_name": "#toggle_state",
+                                                    "target_property_name": "#visible",
+                                                    "resolve_sibling_scope": false
+                                                }
+                                            ],
+                                            "controls": [
+                                                {
+                                                    "inventory@common.inventory_panel_bottom_half_with_label": {}
+                                                },
+                                                {
+                                                    "hotbar@common.hotbar_grid_template": {}
+                                                },
+                                                {
+                                                    "take@common.inventory_take_progress_icon_button": {}
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "inventory_selected_icon_button@common.inventory_selected_icon_button": {}
+                        },
+                        {
+                            "gamepad_cursor@common.gamepad_cursor_button": {}
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "info_guide_content": {
+        "type": "panel",
+        "anchor_from": "top_left",
+        "anchor_to": "top_left",
+        "size": [
+            150,
+            194
+        ],
+        "controls": [
+            {
+                "description": {
+                    "type": "label",
+                    "text": "ui.hm.cc.info_description",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        148,
+                        19
+                    ],
+                    "font_scale_factor": 0.65,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "case": {
+                    "type": "image",
+                    "texture": "textures/blocks/multiblock/bronze/bronze_plated_block",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        0,
+                        24
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "structure": {
+                    "type": "label",
+                    "text": "ui.hm.cc.structure_heading",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        24,
+                        22
+                    ],
+                    "size": [
+                        124,
+                        10
+                    ],
+                    "font_scale_factor": 0.75,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "structure_details": {
+                    "type": "label",
+                    "text": "ui.hm.cc.structure_details",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        24,
+                        33
+                    ],
+                    "size": [
+                        124,
+                        32
+                    ],
+                    "font_scale_factor": 0.6,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "fuel": {
+                    "type": "image",
+                    "texture": "textures/items/coal",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        0,
+                        71
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "fuel_heading": {
+                    "type": "label",
+                    "text": "ui.hm.cc.fuel_heading",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        24,
+                        69
+                    ],
+                    "size": [
+                        124,
+                        10
+                    ],
+                    "font_scale_factor": 0.75,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "fuel_details": {
+                    "type": "label",
+                    "text": "ui.hm.cc.fuel_details",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        24,
+                        80
+                    ],
+                    "size": [
+                        124,
+                        30
+                    ],
+                    "font_scale_factor": 0.6,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "control": {
+                    "type": "image",
+                    "texture": "textures/ui/toggle_button/nuclear_control_unchecked",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        0,
+                        116
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "control_heading": {
+                    "type": "label",
+                    "text": "ui.hm.cc.control_heading",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        24,
+                        114
+                    ],
+                    "size": [
+                        124,
+                        10
+                    ],
+                    "font_scale_factor": 0.75,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "control_details": {
+                    "type": "label",
+                    "text": "ui.hm.cc.control_details",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        24,
+                        125
+                    ],
+                    "size": [
+                        124,
+                        34
+                    ],
+                    "font_scale_factor": 0.6,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            },
+            {
+                "vent": {
+                    "type": "image",
+                    "texture": "textures/blocks/multiblock/bronze/bronze_vent_panel",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        0,
+                        165
+                    ],
+                    "size": [
+                        16,
+                        16
+                    ]
+                }
+            },
+            {
+                "vent_details": {
+                    "type": "label",
+                    "text": "ui.hm.cc.vent_details",
+                    "anchor_from": "top_left",
+                    "anchor_to": "top_left",
+                    "offset": [
+                        24,
+                        165
+                    ],
+                    "size": [
+                        124,
+                        26
+                    ],
+                    "font_scale_factor": 0.6,
+                    "color": [
+                        0.22,
+                        0.22,
+                        0.22
+                    ],
+                    "shadow": false,
+                    "text_alignment": "left"
+                }
+            }
+        ]
+    }
+}

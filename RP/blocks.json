@@ -238,9 +238,6 @@
 	"utilitycraft:rod_control": {
 		"sound": "metal"
 	},
-	"utilitycraft:fluid_controller": {
-		"sound": "metal"
-	},
 	"utilitycraft:fuel_assemblies": {
 		"sound": "metal"
 	},
@@ -301,5 +298,12 @@
 	},
 	"utilitycraft:gas_turbine_controller": {
 		"sound": "copper"
+	},
+	"utilitycraft:combustion_chamber_controller": {
+		"sound": "copper"
+	},
+	"utilitycraft:netherite_controller_case": {
+		"sound": "netherite",
+		"textures": "utilitycraft_netherite_controller_case"
 	}
 }

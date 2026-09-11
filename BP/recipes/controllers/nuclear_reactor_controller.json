@@ -1,0 +1,45 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "utilitycraft:nuclear_reactor_controller"
+        },
+        "tags": [
+            "utilitycraft_workbench"
+        ],
+        "key": {
+            "N": {
+                "item": "utilitycraft:compressed_netherite_block"
+            },
+            "P": {
+                "item": "utilitycraft:control_panel"
+            },
+            "U": {
+                "item": "utilitycraft:ultimate_chip"
+            },
+            "C": {
+                "item": "utilitycraft:netherite_controller_case"
+            },
+            "L": {
+                "item": "utilitycraft:lead_block"
+            },
+            "S": {
+                "item": "utilitycraft:stabilized_obsidian_dust"
+            }
+        },
+        "pattern": [
+            "NPN",
+            "UCU",
+            "LSL"
+        ],
+        "result": {
+            "item": "utilitycraft:nuclear_reactor_controller",
+            "count": 1
+        },
+        "unlock": [
+            {
+                "item": "utilitycraft:netherite_controller_case"
+            }
+        ]
+    }
+}

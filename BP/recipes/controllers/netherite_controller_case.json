@@ -1,0 +1,41 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "utilitycraft:netherite_controller_case"
+        },
+        "tags": [
+            "utilitycraft_workbench"
+        ],
+        "key": {
+            "I": {
+                "item": "utilitycraft:lead_block"
+            },
+            "P": {
+                "item": "utilitycraft:netherite_plate"
+            },
+            "S": {
+                "item": "utilitycraft:netherite_case"
+            },
+            "D": {
+                "item": "utilitycraft:stabilized_obsidian_dust"
+            },
+            "N": {
+                "item": "utilitycraft:compressed_netherite_block"
+            }
+        },
+        "pattern": [
+            "INI",
+            "PSP",
+            "IDI"
+        ],
+        "result": {
+            "item": "utilitycraft:netherite_controller_case"
+        },
+        "unlock": [
+            {
+                "item": "utilitycraft:netherite_case"
+            }
+        ]
+    }
+}

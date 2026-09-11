@@ -1,6 +1,26 @@
 # UtilityCraft: Heavy Machinery v0.5.3
 
+## CHANGED
+- Updated Reaction Chamber Controller textures and refreshed the Reaction Chamber, Chemical Processor and Isotope Centrifuge block textures.
+- Heavy Water now consumes 4 Lapis Lazuli alongside 8,000 mB Water per 1,000 mB output, retaining its 64,000 DE base recipe cost. Updated the reaction chamber guide.
+- Increased Netherite Casing recipes to use lead blocks and Stabilized Obsidian Dust instead of lead ingots and Diamond Dust; Netherite Controller Case additionally requires a compressed netherite block.
+- Combustion Chamber now requires an Expert Furnator; Gas Turbine requires an Expert Gas Generator and two High-Speed Rotors in place of its charged crystals. Updated Workbench and Crafter recipes.
+- Removed controller-side automatic IO processing from the Combustion Chamber and Gas Turbine; multiblock ports handle resource IO.
+- Distributed sparse combustion flames throughout the chamber interior while burning, without block lookups, limiting emission to 3-5 particles per emission cycle.
+- Lowered the General fuel progress indicator, removed its hover, and added a linked Remaining Fuel readout and manual feeding hint.
+- Raised the Combustion Chamber fuel input slot by 7 pixels to align it with the fuel illustration.
+
+- Removed the obsolete Fluid Controller block and its exclusive catalog entries, translations and textures. The functional Liquid Tank Controller remains the liquid-storage controller.
+
+- Replaced the High-Speed Rotor item texture with the updated supplied sprite.
+- Compacted the Combustion Chamber Info panel spacing and reduced its scroll content height.
+
 ## ADDED
+- Added the Nuclear Reactor Controller recipe using two compressed netherite blocks, two Ultimate Chips, Netherite Controller Case, Control Panel, two Lead Blocks and Stabilized Obsidian Dust; available in Workbench and Crafter.
+- Added Netherite Item, Fluid and Energy Port recipes; all four Netherite Ports now use Lead Plates instead of Tin Plates, with matching Workbench and Crafter recipes.
+- Added Netherite Casing and Netherite Controller Case recipes using lead and netherite plates, with Workbench/Crafter support. Added the controller casing block with a temporary copy of the Netherite Casing texture.
+- Removed the standalone Efficiency heading and value above the Combustion Chamber General panel.
+- Added the bronze Combustion Chamber multiblock: shared register_fuel defaults and custom fuel support, 1.25x energy per fuel, size-based control allowing 128 BU/t per empty interior block (160 DE/t at 1.25x efficiency), Energy Cells and roof vents, persistent burn reserve, Item/Energy Ports, four-tab UI, controller textures and crafting recipe.
 - Added independent turbine visual coverage for all 11 UC/HM gases, with Steam texture fallback for unknown gases. Gas identity is preserved; only Steam and Heated Saline Coolant generate energy.
 - Added Thermal Reactor heat recovery: Water/Heavy Water produce Steam and Saline Coolant produces Heated Saline Coolant based on heat actually removed. Gas Cells provide 256,000 mB each; a full or incompatible output blocks active cooling. Added native gas output/IO, the General gas bar and updated illustrated guides.
 - Gas Turbines now accept Heated Saline Coolant at 512 DE/mB and 1.25x impulse, with matching gas volume, particles and guide icons.
@@ -203,6 +223,7 @@
 - Added a complete Tin multiblock casing family with a casing, crystal, plated and hazard blocks, ventilation panel, and item, liquid, and energy ports.
 
 ## CHANGED
+- Replaced Chemical Processor, Isotope Centrifuge and Reaction Chamber textures with the supplied 16x16 face sprites for off/on states; gave the Reaction Chamber Controller its own top, bottom, front and side textures.
 - Updated the four Utility Exo Armor item icons with the supplied artwork.
 - Updated the supplied Fluorite crystal/dust, Enriched Uranium Oxide, Spent Uranium Pellet and Rubber Sheet textures. Rubber Sheet remains available without a crafting recipe.
 - Used the supplied 12x12 reactor sprite for General and restored the compact calculator gray casing across all toggle states.

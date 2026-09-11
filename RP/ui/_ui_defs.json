@@ -18,6 +18,7 @@
     "ui/recipes/crusher.json",
     "ui/recipes/electro_press.json",
     "ui/tank_controller.json",
-    "ui/gas_turbine.json"
+    "ui/gas_turbine.json",
+    "ui/combustion_chamber.json"
   ]
 }

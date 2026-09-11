@@ -4,6 +4,18 @@
 	"resource_pack_name": "UtilityCraft Heavy Machinery",
 	"texture_name": "atlas.terrain",
 	"texture_data": {
+		"utilitycraft_reaction_chamber_controller_up": {
+			"textures": "textures/blocks/multiblock/reaction_chamber_controller_up"
+		},
+		"utilitycraft_reaction_chamber_controller_down": {
+			"textures": "textures/blocks/multiblock/reaction_chamber_controller_down"
+		},
+		"utilitycraft_reaction_chamber_controller_north": {
+			"textures": "textures/blocks/multiblock/reaction_chamber_controller_north"
+		},
+		"utilitycraft_reaction_chamber_controller_side": {
+			"textures": "textures/blocks/multiblock/reaction_chamber_controller_side"
+		},
 		"utilitycraft_reaction_chamber_off_north": {
 			"textures": "textures/blocks/machines/reaction_chamber_off_north"
 		},
@@ -144,9 +156,6 @@
 		},
 		"utilitycraft_rod_control": {
 			"textures": "textures/blocks/multiblock/rod_control"
-		},
-		"utilitycraft_fluid_controller": {
-			"textures": "textures/blocks/multiblock/fluid_controller"
 		},
 		"utilitycraft_fuel_assemblies": {
 			"textures": "textures/blocks/multiblock/fuel_assemblies"
@@ -405,18 +414,6 @@
 		},
 		"utilitycraft_fluid_cell_up": {
 			"textures": "textures/blocks/multiblock/fluid_cell_up"
-		},
-		"utilitycraft_fluid_controller_north": {
-			"textures": "textures/blocks/multiblock/fluid_controller_north"
-		},
-		"utilitycraft_fluid_controller_side": {
-			"textures": "textures/blocks/multiblock/fluid_controller_side"
-		},
-		"utilitycraft_fluid_controller_up": {
-			"textures": "textures/blocks/multiblock/fluid_controller_up"
-		},
-		"utilitycraft_fluid_controller_down": {
-			"textures": "textures/blocks/multiblock/fluid_controller_down"
 		},
 		"utilitycraft_processing_module_north": {
 			"textures": "textures/blocks/multiblock/processing_module_north"
@@ -687,6 +684,21 @@
 		},
 		"utilitycraft_gas_turbine_side": {
 			"textures": "textures/blocks/multiblock/gas_turbine/side"
+		},
+		"utilitycraft_combustion_chamber_top": {
+			"textures": "textures/blocks/multiblock/combustion_chamber/top"
+		},
+		"utilitycraft_combustion_chamber_bottom": {
+			"textures": "textures/blocks/multiblock/combustion_chamber/bottom"
+		},
+		"utilitycraft_combustion_chamber_front": {
+			"textures": "textures/blocks/multiblock/combustion_chamber/front"
+		},
+		"utilitycraft_combustion_chamber_side": {
+			"textures": "textures/blocks/multiblock/combustion_chamber/side"
+		},
+		"utilitycraft_netherite_controller_case": {
+			"textures": "textures/blocks/multiblock/netherite/netherite_controller_case"
 		}
 	}
 }

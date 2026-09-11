@@ -12,13 +12,13 @@
                 "item": "utilitycraft:bronze_plate"
             },
             "T": {
-                "item": "utilitycraft:charged_darloonite_crystal"
+                "item": "utilitycraft:high_speed_rotor"
             },
             "S": {
                 "item": "utilitycraft:bronze_controller_case"
             },
             "X": {
-                "item": "utilitycraft:advanced_gas_generator"
+                "item": "utilitycraft:expert_gas_generator"
             },
             "R": {
                 "item": "utilitycraft:control_panel"

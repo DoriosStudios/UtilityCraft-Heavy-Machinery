@@ -12,8 +12,8 @@ export const reactionRecipes = {
         output_item: { id: "utilitycraft:uranium_concentrate", amount: 1 },
         cost: 64000,
     },
-    "empty|water": {
-        required_items: 0,
+    "minecraft:lapis_lazuli|water": {
+        required_items: 4,
         required_liquid: 8000,
         output_liquid: {
             type: "heavy_water",

@@ -2,7 +2,7 @@
     "format_version": "1.20.80",
     "minecraft:block": {
         "description": {
-            "identifier": "utilitycraft:fluid_controller",
+            "identifier": "utilitycraft:combustion_chamber_controller",
             "menu_category": {
                 "category": "construction"
             },
@@ -19,26 +19,49 @@
             "minecraft:geometry": "minecraft:geometry.full_block",
             "minecraft:material_instances": {
                 "*": {
-                    "texture": "utilitycraft_fluid_controller_side",
+                    "texture": "utilitycraft_combustion_chamber_side",
                     "render_method": "alpha_test"
                 },
                 "north": {
-                    "texture": "utilitycraft_fluid_controller_north",
+                    "texture": "utilitycraft_combustion_chamber_front",
+                    "render_method": "alpha_test"
+                },
+                "south": {
+                    "texture": "utilitycraft_combustion_chamber_side",
+                    "render_method": "alpha_test"
+                },
+                "east": {
+                    "texture": "utilitycraft_combustion_chamber_side",
+                    "render_method": "alpha_test"
+                },
+                "west": {
+                    "texture": "utilitycraft_combustion_chamber_side",
                     "render_method": "alpha_test"
                 },
                 "up": {
-                    "texture": "utilitycraft_fluid_controller_up",
+                    "texture": "utilitycraft_combustion_chamber_top",
                     "render_method": "alpha_test"
                 },
                 "down": {
-                    "texture": "utilitycraft_fluid_controller_down",
+                    "texture": "utilitycraft_combustion_chamber_bottom",
                     "render_method": "alpha_test"
                 }
+            },
+            "minecraft:tick": {
+                "interval_range": [
+                    4,
+                    4
+                ]
             },
             "minecraft:destructible_by_mining": {
                 "seconds_to_destroy": 1
             },
-            "minecraft:destructible_by_explosion": false
+            "minecraft:destructible_by_explosion": false,
+            "tag:dorios:energy": {},
+            "tag:dorios:item": {},
+            "tag:dorios:multiblock.controller": {},
+            "tag:dorios:machine": {},
+            "utilitycraft:combustion_chamber": {}
         },
         "permutations": [
             {

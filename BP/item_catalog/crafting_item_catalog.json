@@ -45,6 +45,7 @@
                             "utilitycraft:tempered_steel_glass",
                             "utilitycraft:reinforced_steel_glass",
                             "utilitycraft:netherite_case",
+                            "utilitycraft:netherite_controller_case",
                             "utilitycraft:netherite_bricks",
                             "utilitycraft:netherite_plated_block",
                             "utilitycraft:stamped_netherite_plate",
@@ -76,6 +77,7 @@
                             "utilitycraft:gas_tank_controller",
                             "utilitycraft:power_condenser_controller",
                             "utilitycraft:thermo_reactor_controller",
+                            "utilitycraft:combustion_chamber_controller",
                             "utilitycraft:gas_turbine_controller"
                         ]
                     },
@@ -94,7 +96,6 @@
                             "utilitycraft:heat_conductor",
                             "utilitycraft:thermo_core",
                             "utilitycraft:rod_control",
-                            "utilitycraft:fluid_controller",
                             "utilitycraft:fuel_assemblies"
                         ]
                     },
