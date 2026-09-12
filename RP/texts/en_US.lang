@@ -125,6 +125,7 @@ item.utilitycraft:tin_chunk=Tin Chunk\n§7- Obtained by sieving Gravel\n§7- Com
 item.utilitycraft:deepslate_tin_chunk=Deepslate Tin Chunk\n§7- Obtained by sieving Crushed Cobbled Deepslate\n§7- Combine 4 to obtain Deepslate Tin Ore\n§o§9@UC: Heavy Machinery
 item.utilitycraft:enriched_uranium_pellet=Enriched Uranium Pellet\n§7- Made by pressing Enriched Uranium Oxide\n§7- Used to craft Enriched Uranium Rods with Steel Plates\n§o§9@UC: Heavy Machinery
 item.utilitycraft:spent_uranium_pellet=Spent Uranium Pellet\n§o§9@UC: Heavy Machinery
+item.utilitycraft:stabilized_nuclear_matter=Stabilized Nuclear Matter\n§o§9@UC: Heavy Machinery
 item.utilitycraft:uranium_rod=Uranium Rod\n§7- Made from Uranium Pellets and Steel Plates\n§7- Used as basic Nuclear Reactor fuel\n§o§9@UC: Heavy Machinery
 item.utilitycraft:enriched_uranium_rod=Enriched Uranium Rod\n§7- Made from Enriched Uranium Pellets and Steel Plates\n§7- Used as longer-lasting, higher-output Nuclear Reactor fuel\n§o§9@UC: Heavy Machinery
 item.utilitycraft:darloonite_crystal=Darloonite Crystal\n§7- Made by infusing an Amethyst Shard with an Echo Shard\n§7- Used to make Charged Darloonite Crystals\n§o§9@UC: Heavy Machinery

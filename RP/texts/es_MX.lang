@@ -114,6 +114,7 @@ item.utilitycraft:tin_chunk=Trozo de Estaño\n§7- Se obtiene tamizando Grava\n�
 item.utilitycraft:deepslate_tin_chunk=Trozo de Estaño de Pizarra Profunda\n§7- Se obtiene tamizando Pizarra Profunda Rocosa Triturada\n§7- Combina 4 para obtener Mena de Estaño de Pizarra Profunda\n§o§9@UC: heavy Machinery
 item.utilitycraft:enriched_uranium_pellet=Pellet de Uranio Enriquecido\n§7- Se crea prensando Óxido de Uranio Enriquecido\n§7- Se usa para fabricar Barras de Uranio Enriquecido con Placas de Acero\n§o§9@UC: heavy Machinery
 item.utilitycraft:spent_uranium_pellet=Pellet de Uranio Gastado\n§o§9@UC: heavy Machinery
+item.utilitycraft:stabilized_nuclear_matter=Materia Nuclear Estabilizada\n§o§9@UC: Heavy Machinery
 item.utilitycraft:uranium_rod=Barra de Uranio\n§7- Se crea con Pellets de Uranio y Placas de Acero\n§7- Se usa como combustible básico para el Reactor Nuclear\n§o§9@UC: heavy Machinery
 item.utilitycraft:enriched_uranium_rod=Barra de Uranio Enriquecido\n§7- Se crea con Pellets de Uranio Enriquecido y Placas de Acero\n§7- Se usa como combustible de mayor duración y potencia para el Reactor Nuclear\n§o§9@UC: heavy Machinery
 item.utilitycraft:darloonite_crystal=Cristal de Darloonite\n§7- Se crea infusionando un Fragmento de Amatista con un Fragmento de Eco\n§7- Se usa para crear Cristales de Darloonite Cargados\n§o§9@UC: heavy Machinery

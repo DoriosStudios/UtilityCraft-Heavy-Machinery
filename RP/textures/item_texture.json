@@ -176,6 +176,9 @@
 		"utilitycraft_spent_uranium_pellet": {
 			"textures": "textures/items/spent_uranium_pellet"
 		},
+		"utilitycraft_stabilized_nuclear_matter": {
+			"textures": "textures/items/stabilized_nuclear_matter"
+		},
 		"utilitycraft_fluorite_crystal": {
 			"textures": "textures/items/fluorite_crystal"
 		},

@@ -24,6 +24,7 @@
 - Compacted the Combustion Chamber Info panel spacing and reduced its scroll content height.
 
 ## ADDED
+- Added Stabilized Nuclear Matter as an advanced purple variant of the Spent Uranium Pellet, registered as a creative material without a recipe yet.
 - Added Chemical Processor recovery of 1 Spent Uranium Pellet from 1,000 mB Nuclear Waste Gas and 1,000 mB Water for 256,000 DE; gas byproducts are now optional per recipe.
 - Added Rubber Sheet, Lead Plate and Yellow Dye recipes for all four Hazmat armor pieces, available in the Workbench and Crafter.
 - Added a Reaction Chamber recipe that processes 4 Slime Balls and 250 mB Sulfuric Acid into 1 Rubber Sheet for 16,000 DE.

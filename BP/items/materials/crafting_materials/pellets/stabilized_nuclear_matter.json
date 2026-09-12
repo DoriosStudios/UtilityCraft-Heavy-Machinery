@@ -1,0 +1,11 @@
+{
+	"format_version": "1.20.80",
+	"minecraft:item": {
+		"description": {
+			"identifier": "utilitycraft:stabilized_nuclear_matter"
+		},
+		"components": {
+			"minecraft:icon": "utilitycraft_stabilized_nuclear_matter"
+		}
+	}
+}

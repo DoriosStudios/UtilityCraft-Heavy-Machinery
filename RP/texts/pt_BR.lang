@@ -124,6 +124,7 @@ item.utilitycraft:tin_chunk=Fragmento de Estanho\n§7- Obtido ao peneirar Cascal
 item.utilitycraft:deepslate_tin_chunk=Fragmento de Estanho de Ardósia Profunda\n§7- Obtido ao peneirar Bloco de Ardosiabissal Triturada\n§7- Combine 4 para obter Minério de Estanho de Ardosiabissal\n§o§9@UC: heavy Machinery
 item.utilitycraft:enriched_uranium_pellet=Pellet de Urânio Enriquecido\n§7- Feito ao prensar Óxido de Urânio Enriquecido\n§7- Usado para fabricar Barras de Urânio Enriquecido com Placas de Aço\n§o§9@UC: heavy Machinery
 item.utilitycraft:spent_uranium_pellet=Pellet de Urânio Gasto\n§o§9@UC: heavy Machinery
+item.utilitycraft:stabilized_nuclear_matter=Matéria Nuclear Estabilizada\n§o§9@UC: Heavy Machinery
 item.utilitycraft:uranium_rod=Barra de Urânio\n§7- Feita com Pellets de Urânio e Placas de Aço\n§7- Usada como combustível básico para o Reator Nuclear\n§o§9@UC: heavy Machinery
 item.utilitycraft:enriched_uranium_rod=Barra de Urânio Enriquecido\n§7- Feita com Pellets de Urânio Enriquecido e Placas de Aço\n§7- Usada como combustível de maior duração e potência para o Reator Nuclear\n§o§9@UC: heavy Machinery
 item.utilitycraft:darloonite_crystal=Cristal de Darloonite\n§7- Feito ao infundir um Fragmento de Ametista com um Fragmento de Eco\n§7- Usado para criar Cristais de Darloonite Carregados\n§o§9@UC: heavy Machinery
