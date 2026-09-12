@@ -148,8 +148,8 @@ DoriosLib.registry.blockComponent("utilitycraft:chemical_processor", {
         }
         const itemSpace = product ? (outputItem?.maxAmount ?? product.maxAmount) - (outputItem?.amount ?? 0) : Infinity;
         const gasProduct = recipe.output_gas;
-        const gasAmount = gasProduct.amount;
-        if (outputGas.getType() !== "empty" && outputGas.getType() !== gasProduct.type) {
+        const gasAmount = gasProduct?.amount ?? 0;
+        if (gasProduct && outputGas.getType() !== "empty" && outputGas.getType() !== gasProduct.type) {
             machine.showWarning("Output Gas Conflict");
             refresh();
             return;
@@ -157,7 +157,7 @@ DoriosLib.registry.blockComponent("utilitycraft:chemical_processor", {
         const maxAmountToCraft = Math.floor(Math.min(
             requiredLiquid > 0 ? liquid.get() / requiredLiquid : Infinity,
             requiredGas > 0 ? gas.get() / requiredGas : Infinity,
-            outputGas.getFreeSpace() / gasAmount,
+            gasProduct ? outputGas.getFreeSpace() / gasAmount : Infinity,
             product ? itemSpace / itemAmount : Infinity,
         ));
         if (maxAmountToCraft <= 0) {
@@ -186,8 +186,10 @@ DoriosLib.registry.blockComponent("utilitycraft:chemical_processor", {
                 result.amount = (outputItem?.amount ?? 0) + itemAmount * processCount;
                 inv.setItem(5, result);
             }
-            if (outputGas.getType() === "empty") outputGas.setType(gasProduct.type);
-            outputGas.add(gasAmount * processCount);
+            if (gasProduct) {
+                if (outputGas.getType() === "empty") outputGas.setType(gasProduct.type);
+                outputGas.add(gasAmount * processCount);
+            }
             progress -= cost * processCount;
         }
         machine.setProgress(progress, { display: false });

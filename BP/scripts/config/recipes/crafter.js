@@ -6,6 +6,19 @@ import * as DoriosLib from "DoriosLib/index.js";
  */
 const crafterRecipeBatches = [
 {
+    "rubber_sheet,rubber_sheet,rubber_sheet,rubber_sheet,lead_plate,rubber_sheet,air,yellow_dye,air": { output: "utilitycraft:hazmat_helmet", amount: 1 },
+    "rubber_sheet,yellow_dye,rubber_sheet,rubber_sheet,lead_plate,rubber_sheet,rubber_sheet,rubber_sheet,rubber_sheet": { output: "utilitycraft:hazmat_chestplate", amount: 1 },
+    "rubber_sheet,lead_plate,rubber_sheet,rubber_sheet,yellow_dye,rubber_sheet,rubber_sheet,air,rubber_sheet": { output: "utilitycraft:hazmat_leggings", amount: 1 },
+    "rubber_sheet,lead_plate,rubber_sheet,rubber_sheet,yellow_dye,rubber_sheet,air,air,air": { output: "utilitycraft:hazmat_boots", amount: 1 },
+},
+{
+    "lead_block,netherite_block,lead_block,netherite_plate,netherite_case,netherite_plate,lead_block,netherite_block,lead_block": { output: "utilitycraft:fuel_assemblies", amount: 1 },
+    "netherite_plate,control_panel,netherite_plate,lead_block,netherite_case,lead_block,netherite_plate,expert_chip,netherite_plate": { output: "utilitycraft:rod_control", amount: 1 },
+},
+{
+    "steel_plate,netherite_ingot,steel_plate,redstone_block,netherite_ingot,redstone_block,steel_plate,netherite_ingot,steel_plate": { output: "utilitycraft:high_speed_rotor", amount: 1 },
+},
+{
     "compressed_netherite_block,control_panel,compressed_netherite_block,ultimate_chip,netherite_controller_case,ultimate_chip,lead_block,stabilized_obsidian_dust,lead_block": { output: "utilitycraft:nuclear_reactor_controller", amount: 1 },
 },
 {
@@ -16,6 +29,12 @@ const crafterRecipeBatches = [
 {
     "netherite_plate,stabilized_obsidian_dust,netherite_plate,stabilized_obsidian_dust,lead_block,stabilized_obsidian_dust,netherite_plate,stabilized_obsidian_dust,netherite_plate": { output: "utilitycraft:netherite_case", amount: 1 },
     "lead_block,compressed_netherite_block,lead_block,netherite_plate,netherite_case,netherite_plate,lead_block,stabilized_obsidian_dust,lead_block": { output: "utilitycraft:netherite_controller_case", amount: 1 },
+    "stabilized_obsidian_dust,netherite_plate,stabilized_obsidian_dust,netherite_plate,lead_block,netherite_plate,stabilized_obsidian_dust,netherite_plate,stabilized_obsidian_dust": { output: "utilitycraft:netherite_plated_block", amount: 1 },
+    "air,black_dye,air,yellow_dye,netherite_plated_block,yellow_dye,air,black_dye,air": { output: "utilitycraft:stamped_netherite_plate", amount: 1 },
+    "netherite_plated_block,netherite_plated_block,air,netherite_plated_block,netherite_plated_block,air,air,air,air": { output: "utilitycraft:netherite_bricks", amount: 4 },
+    "black_dye,netherite_plated_block,yellow_dye,air,air,air,air,air,air": { output: "utilitycraft:netherite_hazard_block", amount: 1 },
+    "netherite_plate,lead_ingot,netherite_plate,lead_ingot,air,lead_ingot,netherite_plate,lead_ingot,netherite_plate": { output: "utilitycraft:netherite_vent_panel", amount: 1 },
+    "netherite_plate,lead_block,netherite_plate,lead_block,tempered_netherite_glass,lead_block,netherite_plate,lead_block,netherite_plate": { output: "utilitycraft:reinforced_netherite_glass", amount: 1 },
 },
 {
     "bronze_plate,control_panel,bronze_plate,charged_darloonite_crystal,bronze_controller_case,charged_darloonite_crystal,bronze_plate,expert_furnator,bronze_plate": { output: "utilitycraft:combustion_chamber_controller", amount: 1 },
@@ -252,4 +271,3 @@ const crafterRecipeBatches = [
 for (const batch of crafterRecipeBatches) {
   DoriosLib.registry.registerCrafterRecipe(batch);
 }
-

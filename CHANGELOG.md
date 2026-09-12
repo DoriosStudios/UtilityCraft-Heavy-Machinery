@@ -1,6 +1,14 @@
-# UtilityCraft: Heavy Machinery v0.5.3
+# UtilityCraft: Heavy Machinery v0.6.0
+
+## FIXED
+- Thermal meltdown now resets the burn rate to 1; rebuilding after meltdown restores cold, stopped initial reactor state and clears timers, production and fractional processing credits. Normal rescans retain settings.
+- Prevented invalid NaN liquid/gas bar items when reactor storage capacity is zero, including Thermal without Fluid Cells. Liquid and gas displays now use an empty frame and 0% when capacity is zero.
 
 ## CHANGED
+- Renamed Tin Crystal to Tempered Tin Glass across its identifier, assets, catalog and localization; added its Infuser recipe using 8 Tin Dust and 1 Glass.
+- Applied the dedicated Netherite Controller Case atlas as three lossless 16x16 top, bottom and side textures.
+- Standardized the initial burn rate to 1 for all reactor/generator controllers; Thermal and Combustion now match Nuclear and Gas Turbine. Existing configured rates are preserved.
+- Thermal and Nuclear Recommended Rate is now calculated only on structure activation and persisted with structural stats, using reference coolant/fuel conditions instead of live tank contents. Legacy structures require a rescan to populate the estimate.
 - Updated Reaction Chamber Controller textures and refreshed the Reaction Chamber, Chemical Processor and Isotope Centrifuge block textures.
 - Heavy Water now consumes 4 Lapis Lazuli alongside 8,000 mB Water per 1,000 mB output, retaining its 64,000 DE base recipe cost. Updated the reaction chamber guide.
 - Increased Netherite Casing recipes to use lead blocks and Stabilized Obsidian Dust instead of lead ingots and Diamond Dust; Netherite Controller Case additionally requires a compressed netherite block.
@@ -16,6 +24,12 @@
 - Compacted the Combustion Chamber Info panel spacing and reduced its scroll content height.
 
 ## ADDED
+- Added Chemical Processor recovery of 1 Spent Uranium Pellet from 1,000 mB Nuclear Waste Gas and 1,000 mB Water for 256,000 DE; gas byproducts are now optional per recipe.
+- Added Rubber Sheet, Lead Plate and Yellow Dye recipes for all four Hazmat armor pieces, available in the Workbench and Crafter.
+- Added a Reaction Chamber recipe that processes 4 Slime Balls and 250 mB Sulfuric Acid into 1 Rubber Sheet for 16,000 DE.
+- Added survival recipes for Netherite Plated Blocks, Stamped Plates, Bricks, Hazard Blocks, Vent Panels, Tempered Glass and Reinforced Glass, with matching Workbench, Crafter and Infuser support.
+- Added Fuel Assembly and Rod Control recipes for the Nuclear Reactor, available in the Workbench and Crafter.
+- Added the High-Speed Rotor recipe using four Steel Plates, three Netherite Ingots and two Redstone Blocks, available in the Workbench and Crafter.
 - Added the Nuclear Reactor Controller recipe using two compressed netherite blocks, two Ultimate Chips, Netherite Controller Case, Control Panel, two Lead Blocks and Stabilized Obsidian Dust; available in Workbench and Crafter.
 - Added Netherite Item, Fluid and Energy Port recipes; all four Netherite Ports now use Lead Plates instead of Tin Plates, with matching Workbench and Crafter recipes.
 - Added Netherite Casing and Netherite Controller Case recipes using lead and netherite plates, with Workbench/Crafter support. Added the controller casing block with a temporary copy of the Netherite Casing texture.

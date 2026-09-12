@@ -1,6 +1,8 @@
 import * as DoriosLib from "DoriosLib/index.js";
 
 const newRecipes = {
+    // Tin
+    "utilitycraft:tin_dust|minecraft:glass": { output: "utilitycraft:tempered_tin_glass", required: 8 },
     // Steel
     "utilitycraft:steel_dust|minecraft:glass": { output: "utilitycraft:tempered_steel_glass", required: 8 },
     // Darloonite
@@ -10,6 +12,8 @@ const newRecipes = {
     "utilitycraft:tin_dust|minecraft:copper_ingot": { output: "utilitycraft:brute_bronze", required: 5, input_required: 2, cost: 6400 },
     "utilitycraft:tin_dust|utilitycraft:copper_dust": { output: "utilitycraft:brute_bronze", required: 5, input_required: 2, cost: 6400 },
     "utilitycraft:bronze_dust|minecraft:glass": { output: "utilitycraft:tempered_bronze_glass", required: 8 },
+    // Netherite
+    "utilitycraft:netherite_dust|utilitycraft:compressed_glass": { output: "utilitycraft:tempered_netherite_glass", required: 8 },
 };
 
 DoriosLib.registry.registerInfuserRecipe(newRecipes);

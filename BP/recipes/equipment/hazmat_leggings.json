@@ -1,0 +1,15 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:recipe_shaped": {
+        "description": { "identifier": "utilitycraft:hazmat_leggings" },
+        "tags": ["utilitycraft_workbench"],
+        "key": {
+            "R": { "item": "utilitycraft:rubber_sheet" },
+            "L": { "item": "utilitycraft:lead_plate" },
+            "D": { "item": "minecraft:yellow_dye" }
+        },
+        "pattern": ["RLR", "RDR", "R R"],
+        "result": { "item": "utilitycraft:hazmat_leggings" },
+        "unlock": [{ "item": "utilitycraft:rubber_sheet" }]
+    }
+}

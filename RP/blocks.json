@@ -12,7 +12,7 @@
 		"sound": "stone",
 		"textures": "utilitycraft_deepslate_tin_ore"
 	},
-	"utilitycraft:tin_crystal": {
+	"utilitycraft:tempered_tin_glass": {
 		"sound": "glass"
 	},
 	"utilitycraft:tin_case": {
@@ -304,6 +304,10 @@
 	},
 	"utilitycraft:netherite_controller_case": {
 		"sound": "netherite",
-		"textures": "utilitycraft_netherite_controller_case"
+		"textures": {
+			"up": "utilitycraft_netherite_controller_case_top",
+			"down": "utilitycraft_netherite_controller_case_bottom",
+			"side": "utilitycraft_netherite_controller_case"
+		}
 	}
 }

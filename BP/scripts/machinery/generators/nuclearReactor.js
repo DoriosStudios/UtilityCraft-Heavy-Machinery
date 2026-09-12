@@ -225,7 +225,7 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
                 const maximumBurnRate = getMaximumBurnRate(fuelAssemblies, rodControls)
 
                 entity.setDynamicProperty('dorios:rateSpeed', transferRate)
-                entity.setDynamicProperty('nuclearStats', JSON.stringify({
+                const stats = {
                     fuelAssemblies,
                     rodControls,
                     heatConductors,
@@ -238,7 +238,9 @@ DoriosLib.registry.blockComponent('utilitycraft:nuclear_reactor', {
                     energyCap,
                     bounds: structure.bounds,
                     heatCapacity: getNuclearHeatCapacity(structure.bounds, components),
-                }))
+                }
+                stats.recommendedRate = getRecommendedRate(stats)
+                entity.setDynamicProperty('nuclearStats', JSON.stringify(stats))
 
                 runtimes.delete(entity.id)
                 const data = getReactorData(entity)
@@ -558,7 +560,7 @@ function updateReactorUI(data, reactor, coolant, waste) {
 
     if (reactor.container.size > 25) {
         setLabelIfChanged(reactor, '\u00A7r\u00A78Recommended Rate:\n'
-            + formatFuel(getRecommendedRate(data, coolant)) + '/t', 25)
+            + (Number.isFinite(data.recommendedRate) ? formatFuel(data.recommendedRate) + '/t' : 'Rescan required'), 25)
     }
     updateFuelBar(reactor.container, data)
 }
@@ -702,15 +704,15 @@ function clamp(value, minimum, maximum) {
     return Math.min(maximum, Math.max(minimum, Number(value) || 0))
 }
 
-/** Reference equilibrium near ideal temperature; assumes continued coolant supply. */
-function getRecommendedRate(data, coolant) {
-    const nominal = data.maximumBurnRate * (FUEL_PROFILES[data.fuelType]?.burnRateMultiplier ?? 1)
-    const fluid = coolants[coolant.getType()]
+/** Activation-only estimate: Enriched Uranium and a full, continuously supplied Heavy Water tank. */
+function getRecommendedRate(data) {
+    const nominal = data.maximumBurnRate * FUEL_PROFILES.enriched_uranium.burnRateMultiplier
+    const fluid = coolants.heavy_water
     const delta = (config.maximumTemperatureK - config.ambientTemperatureK) * config.idealTemperatureFraction
     const conductance = data.heatConductors * NUCLEAR_THERMAL.conductorConductance
     const passive = conductance * NUCLEAR_THERMAL.passiveCoolingFraction * delta
-    const active = fluid?.tier >= config.minimumCoolantTier && coolant.get() > 0
-        ? Math.min(conductance * delta, coolant.get() * NUCLEAR_THERMAL.coolantHeatPerMb * fluid.efficiency) : 0
+    const active = fluid?.tier >= config.minimumCoolantTier && fluid.efficiency > 0
+        ? Math.min(conductance * delta, data.coolantCapacity * NUCLEAR_THERMAL.coolantHeatPerMb * fluid.efficiency) : 0
     return Math.max(0, Math.min(nominal, (passive + active) / NUCLEAR_THERMAL.heatPerFuelUnit))
 }
 

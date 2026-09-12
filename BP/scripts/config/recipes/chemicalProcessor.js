@@ -1,4 +1,10 @@
 export const chemicalProcessorRecipes = {
+    "nuclear_waste_gas|water": {
+        required_gas: 1000,
+        required_liquid: 1000,
+        output_item: { id: "utilitycraft:spent_uranium_pellet", amount: 1 },
+        cost: 256000,
+    },
     "enriched_uranium_hexafluoride_gas|water": {
         required_gas: 250,
         required_liquid: 1000,

@@ -37,7 +37,7 @@ const config = {
 
     initialReactorData: {
         state: 'off',
-        rate: 100,
+        rate: 1,
         temperature: 300,
         efficiency: 0.1,
         producing: 0,
@@ -190,7 +190,7 @@ DoriosLib.registry.blockComponent('utilitycraft:thermo_reactor', {
                 const heatDissipation =
                     (components['heat_conductor'] ?? 0) * THERMO_THERMAL.conductorConductance
 
-                entity.setDynamicProperty('reactorStats', JSON.stringify({
+                const stats = {
                     lavaCapacity,
                     coolantCapacity,
                     exhaustCapacity,
@@ -200,15 +200,20 @@ DoriosLib.registry.blockComponent('utilitycraft:thermo_reactor', {
                     heatCapacity: getThermoHeatCapacity(structure.bounds, components),
                     energyCap,
                     bounds: structure.bounds
-                }))
+                }
+                stats.recommendedRate = getThermoRecommendedRate(stats)
+                entity.setDynamicProperty('reactorStats', JSON.stringify(stats))
 
                 runtimes.delete(entity.id)
                 const data = getReactorInfo(entity)
+                const rebuilding = data.meltdownPending
+                if (rebuilding) Object.assign(data, config.initialReactorData)
                 setReactorRunning(data, false)
                 data.meltdownPending = false
                 saveReactorInfo(entity, data)
                 setThermoReactorInputText(entity, String(data.rate))
                 const stores = createThermoStorages(entity, data)
+                if (rebuilding) stores.temperature.set(config.ambientTemperatureK)
                 if (stores.coolant.get() === 0) stores.coolant.setType('empty')
                 if (stores.lava.getType() === 'empty') stores.lava.setType('lava')
                 ensureGasIOConfig(entity, 'utilitycraft:thermo_reactor_controller')
@@ -441,19 +446,18 @@ function updateReactorInfoItem(data, reactor, lavaTank, coolantTank, exhaustTank
         '\u00A7r\u00A7aFilled: \u00A7f' + percent(exhaustTank.get(), data.exhaustCapacity) + '%%',
     ])
     label(23, '\u00A7r\u00A78Current Rate: ' + data.rate.toFixed(2) + ' mB/t')
-    label(25, '\u00A7r\u00A78Recommended Rate:\n' + getThermoRecommendedRate(data, coolantTank, exhaustTank).toFixed(2) + ' mB/t')
+    label(25, '\u00A7r\u00A78Recommended Rate:\n' + (Number.isFinite(data.recommendedRate) ? data.recommendedRate.toFixed(2) + ' mB/t' : 'Rescan required'))
 }
 
-/** Reference at ideal temperature; assumes a continuous coolant supply. */
-function getThermoRecommendedRate(data, coolant, exhaust) {
+/** Activation-only estimate: full Saline Coolant tank, continuous supply and gas extraction. */
+function getThermoRecommendedRate(data) {
     const delta = (CORE_TCAP_K - CORE_TMIN_K) * config.idealTemperatureFraction
     const passive = data.conductance * THERMO_THERMAL.passiveCoolingFraction * delta
-    const fluid = coolants[coolant.getType()]
-    const type = THERMO_COOLANT_OUTPUTS[coolant.getType()]
-    const outputBudget = exhaust.get() === 0 || exhaust.getType() === type
-        ? Math.max(0, exhaust.getFreeSpace() - data.exhaustCreditMb) * (THERMO_OUTPUT_HEAT[type] ?? 0) : 0
-    const active = fluid?.tier >= COOLANT_TIER && Number.isFinite(fluid.efficiency) && fluid.efficiency > 0 && coolant.get() > 0
-        ? Math.min(outputBudget, data.conductance * delta, coolant.get() * THERMO_THERMAL.coolantHeatPerMb * fluid.efficiency) : 0
+    const fluid = coolants.saline_coolant
+    const active = fluid?.tier >= COOLANT_TIER && fluid.efficiency > 0 && data.exhaustCapacity > 0
+        ? Math.min(data.conductance * delta,
+            data.coolantCapacity * THERMO_THERMAL.coolantHeatPerMb * fluid.efficiency,
+            data.exhaustCapacity * THERMO_OUTPUT_HEAT[THERMO_COOLANT_OUTPUTS.saline_coolant]) : 0
     return (passive + active) / (THERMO_THERMAL.heatPerLavaUnit * (2 - config.maximumEfficiency))
 }
 
@@ -535,6 +539,8 @@ function getThermoStatus(data, result, fuel, energySpace, validCoolant, coolantA
 function triggerThermoMeltdown(reactor, data) {
     if (data.meltdownPending) return
     data.meltdownPending = true
+    data.rate = config.initialReactorData.rate
+    setThermoReactorInputText(reactor.entity, String(data.rate))
     setReactorRunning(data, false)
     data.warning = '\u00A7cCore meltdown!'
     saveReactorInfo(reactor.entity, data)

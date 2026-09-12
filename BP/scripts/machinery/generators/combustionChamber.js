@@ -8,7 +8,7 @@ import { COMBUSTION, getCombustionStats, burnSolidFuel } from './combustionSimul
 const STATE_KEY = 'hm:combustionChamber';
 const STATS_KEY = 'hm:combustionStructure';
 const INTERFACE_ID = 'uc_heavy_machinery:combustion_controls';
-const initialState = { enabled: false, rate: 32, reserve: 0, fuelValue: 0, fuelType: 'empty' };
+const initialState = { enabled: false, rate: 1, reserve: 0, fuelValue: 0, fuelType: 'empty' };
 const config = {
     entity: { identifier: 'utilitycraft:combustion_chamber', name: 'combustion_chamber', inventory_size: 26 },
     generator: { energy_cap: 1, rate_speed_base: 0 },

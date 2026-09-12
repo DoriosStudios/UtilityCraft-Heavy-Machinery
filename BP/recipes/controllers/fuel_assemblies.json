@@ -1,0 +1,39 @@
+{
+    "format_version":  "1.20.80",
+    "minecraft:recipe_shaped":  {
+                                    "description":  {
+                                                        "identifier":  "utilitycraft:fuel_assemblies"
+                                                    },
+                                    "tags":  [
+                                                 "utilitycraft_workbench"
+                                             ],
+                                    "key":  {
+                                                "L":  {
+                                                          "item":  "utilitycraft:lead_block"
+                                                      },
+                                                "N":  {
+                                                          "item":  "minecraft:netherite_block"
+                                                      },
+                                                "P":  {
+                                                          "item":  "utilitycraft:netherite_plate"
+                                                      },
+                                                "C":  {
+                                                          "item":  "utilitycraft:netherite_case"
+                                                      }
+                                            },
+                                    "pattern":  [
+                                                    "LNL",
+                                                    "PCP",
+                                                    "LNL"
+                                                ],
+                                    "result":  {
+                                                   "count":  1,
+                                                   "item":  "utilitycraft:fuel_assemblies"
+                                               },
+                                    "unlock":  [
+                                                   {
+                                                       "item":  "utilitycraft:netherite_case"
+                                                   }
+                                               ]
+                                }
+}

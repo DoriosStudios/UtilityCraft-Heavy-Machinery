@@ -1,0 +1,11 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:recipe_shaped": {
+        "description": { "identifier": "utilitycraft:netherite_bricks" },
+        "tags": ["utilitycraft_workbench"],
+        "key": { "P": { "item": "utilitycraft:netherite_plated_block" } },
+        "pattern": ["PP", "PP"],
+        "result": { "item": "utilitycraft:netherite_bricks", "count": 4 },
+        "unlock": [{ "item": "utilitycraft:netherite_plated_block" }]
+    }
+}

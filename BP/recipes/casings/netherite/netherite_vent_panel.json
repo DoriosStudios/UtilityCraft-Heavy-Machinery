@@ -1,0 +1,14 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:recipe_shaped": {
+        "description": { "identifier": "utilitycraft:netherite_vent_panel" },
+        "tags": ["utilitycraft_workbench"],
+        "key": {
+            "P": { "item": "utilitycraft:netherite_plate" },
+            "L": { "item": "utilitycraft:lead_ingot" }
+        },
+        "pattern": ["PLP", "L L", "PLP"],
+        "result": { "item": "utilitycraft:netherite_vent_panel" },
+        "unlock": [{ "item": "utilitycraft:netherite_plate" }]
+    }
+}

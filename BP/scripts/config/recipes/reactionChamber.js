@@ -1,5 +1,11 @@
 
 export const reactionRecipes = {
+    "minecraft:slime_ball|sulfuric_acid": {
+        required_items: 4,
+        required_liquid: 250,
+        output_item: { id: "utilitycraft:rubber_sheet", amount: 1 },
+        cost: 16000,
+    },
     "minecraft:sulfur_spike|water": {
         required_items: 4,
         required_liquid: 1000,

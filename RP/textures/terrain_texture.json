@@ -307,8 +307,8 @@
 		"utilitycraft_deepslate_tin_ore": {
 			"textures": "textures/blocks/ores/deepslate_tin_ore"
 		},
-		"utilitycraft_tin_crystal": {
-			"textures": "textures/blocks/multiblock/tin/tin_crystal"
+		"utilitycraft_tempered_tin_glass": {
+			"textures": "textures/blocks/multiblock/tin/tempered_tin_glass"
 		},
 		"utilitycraft_tin_case": {
 			"textures": "textures/blocks/multiblock/tin/tin_case"
@@ -699,6 +699,12 @@
 		},
 		"utilitycraft_netherite_controller_case": {
 			"textures": "textures/blocks/multiblock/netherite/netherite_controller_case"
+		},
+		"utilitycraft_netherite_controller_case_top": {
+			"textures": "textures/blocks/multiblock/netherite/netherite_controller_case_top"
+		},
+		"utilitycraft_netherite_controller_case_bottom": {
+			"textures": "textures/blocks/multiblock/netherite/netherite_controller_case_bottom"
 		}
 	}
 }

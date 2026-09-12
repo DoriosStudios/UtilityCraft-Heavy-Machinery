@@ -2,7 +2,7 @@
 	"format_version": "1.20.80",
 	"minecraft:block": {
 		"description": {
-			"identifier": "utilitycraft:tin_crystal",
+			"identifier": "utilitycraft:tempered_tin_glass",
 			"menu_category": {
 				"category": "construction"
 			}
@@ -14,7 +14,7 @@
 			},
 			"minecraft:material_instances": {
 				"*": {
-					"texture": "utilitycraft_tin_crystal",
+					"texture": "utilitycraft_tempered_tin_glass",
 					"render_method": "blend"
 				}
 			},

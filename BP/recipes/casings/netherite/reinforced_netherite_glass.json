@@ -1,0 +1,15 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:recipe_shaped": {
+        "description": { "identifier": "utilitycraft:reinforced_netherite_glass" },
+        "tags": ["utilitycraft_workbench"],
+        "key": {
+            "P": { "item": "utilitycraft:netherite_plate" },
+            "L": { "item": "utilitycraft:lead_block" },
+            "G": { "item": "utilitycraft:tempered_netherite_glass" }
+        },
+        "pattern": ["PLP", "LGL", "PLP"],
+        "result": { "item": "utilitycraft:reinforced_netherite_glass" },
+        "unlock": [{ "item": "utilitycraft:tempered_netherite_glass" }]
+    }
+}

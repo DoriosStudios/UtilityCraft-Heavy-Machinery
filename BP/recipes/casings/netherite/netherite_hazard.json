@@ -1,0 +1,15 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:recipe_shaped": {
+        "description": { "identifier": "utilitycraft:netherite_hazard_block" },
+        "tags": ["utilitycraft_workbench"],
+        "key": {
+            "B": { "item": "minecraft:black_dye" },
+            "P": { "item": "utilitycraft:netherite_plated_block" },
+            "Y": { "item": "minecraft:yellow_dye" }
+        },
+        "pattern": ["BPY"],
+        "result": { "item": "utilitycraft:netherite_hazard_block" },
+        "unlock": [{ "item": "utilitycraft:netherite_plated_block" }]
+    }
+}

@@ -1,0 +1,42 @@
+{
+    "format_version":  "1.20.80",
+    "minecraft:recipe_shaped":  {
+                                    "description":  {
+                                                        "identifier":  "utilitycraft:rod_control"
+                                                    },
+                                    "tags":  [
+                                                 "utilitycraft_workbench"
+                                             ],
+                                    "key":  {
+                                                "P":  {
+                                                          "item":  "utilitycraft:netherite_plate"
+                                                      },
+                                                "O":  {
+                                                          "item":  "utilitycraft:control_panel"
+                                                      },
+                                                "L":  {
+                                                          "item":  "utilitycraft:lead_block"
+                                                      },
+                                                "C":  {
+                                                          "item":  "utilitycraft:netherite_case"
+                                                      },
+                                                "E":  {
+                                                          "item":  "utilitycraft:expert_chip"
+                                                      }
+                                            },
+                                    "pattern":  [
+                                                    "POP",
+                                                    "LCL",
+                                                    "PEP"
+                                                ],
+                                    "result":  {
+                                                   "count":  1,
+                                                   "item":  "utilitycraft:rod_control"
+                                               },
+                                    "unlock":  [
+                                                   {
+                                                       "item":  "utilitycraft:netherite_case"
+                                                   }
+                                               ]
+                                }
+}
