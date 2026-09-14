@@ -2,6 +2,156 @@
 	"resource_pack_name": "UtilityCraft Heavy Machinery",
 	"texture_name": "atlas.items",
 	"texture_data": {
+		"utilitycraft_nether_star_essence_bucket": {
+			"textures": "textures/items/bucket_milk"
+		},
+		"utilitycraft:nether_star_essence_00": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_00"
+		},
+		"utilitycraft:nether_star_essence_01": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_01"
+		},
+		"utilitycraft:nether_star_essence_02": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_02"
+		},
+		"utilitycraft:nether_star_essence_03": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_03"
+		},
+		"utilitycraft:nether_star_essence_04": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_04"
+		},
+		"utilitycraft:nether_star_essence_05": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_05"
+		},
+		"utilitycraft:nether_star_essence_06": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_06"
+		},
+		"utilitycraft:nether_star_essence_07": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_07"
+		},
+		"utilitycraft:nether_star_essence_08": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_08"
+		},
+		"utilitycraft:nether_star_essence_09": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_09"
+		},
+		"utilitycraft:nether_star_essence_10": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_10"
+		},
+		"utilitycraft:nether_star_essence_11": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_11"
+		},
+		"utilitycraft:nether_star_essence_12": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_12"
+		},
+		"utilitycraft:nether_star_essence_13": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_13"
+		},
+		"utilitycraft:nether_star_essence_14": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_14"
+		},
+		"utilitycraft:nether_star_essence_15": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_15"
+		},
+		"utilitycraft:nether_star_essence_16": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_16"
+		},
+		"utilitycraft:nether_star_essence_17": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_17"
+		},
+		"utilitycraft:nether_star_essence_18": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_18"
+		},
+		"utilitycraft:nether_star_essence_19": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_19"
+		},
+		"utilitycraft:nether_star_essence_20": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_20"
+		},
+		"utilitycraft:nether_star_essence_21": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_21"
+		},
+		"utilitycraft:nether_star_essence_22": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_22"
+		},
+		"utilitycraft:nether_star_essence_23": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_23"
+		},
+		"utilitycraft:nether_star_essence_24": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_24"
+		},
+		"utilitycraft:nether_star_essence_25": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_25"
+		},
+		"utilitycraft:nether_star_essence_26": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_26"
+		},
+		"utilitycraft:nether_star_essence_27": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_27"
+		},
+		"utilitycraft:nether_star_essence_28": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_28"
+		},
+		"utilitycraft:nether_star_essence_29": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_29"
+		},
+		"utilitycraft:nether_star_essence_30": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_30"
+		},
+		"utilitycraft:nether_star_essence_31": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_31"
+		},
+		"utilitycraft:nether_star_essence_32": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_32"
+		},
+		"utilitycraft:nether_star_essence_33": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_33"
+		},
+		"utilitycraft:nether_star_essence_34": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_34"
+		},
+		"utilitycraft:nether_star_essence_35": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_35"
+		},
+		"utilitycraft:nether_star_essence_36": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_36"
+		},
+		"utilitycraft:nether_star_essence_37": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_37"
+		},
+		"utilitycraft:nether_star_essence_38": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_38"
+		},
+		"utilitycraft:nether_star_essence_39": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_39"
+		},
+		"utilitycraft:nether_star_essence_40": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_40"
+		},
+		"utilitycraft:nether_star_essence_41": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_41"
+		},
+		"utilitycraft:nether_star_essence_42": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_42"
+		},
+		"utilitycraft:nether_star_essence_43": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_43"
+		},
+		"utilitycraft:nether_star_essence_44": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_44"
+		},
+		"utilitycraft:nether_star_essence_45": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_45"
+		},
+		"utilitycraft:nether_star_essence_46": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_46"
+		},
+		"utilitycraft:nether_star_essence_47": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_47"
+		},
+		"utilitycraft:nether_star_essence_48": {
+			"textures": "textures/ui/heavy_water_bar/heavy_water_48"
+		},
 		"utilitycraft:uranium_bar_00": {
 			"textures": "textures/ui/uranium_bar/uranium_bar_00"
 		},

@@ -11,15 +11,20 @@
 		"components": {
 			"minecraft:max_stack_size": 1,
 			"minecraft:durability": {
-				"max_durability": 10000
+				"max_durability": 100000,
+				"damage_chance": {
+					"min": 0,
+					"max": 0
+				}
 			},
 			"minecraft:icon": "utilitycraft_utility_exo_leggings",
 			"minecraft:wearable": {
-				"slot": "slot.armor.legs"
+				"slot": "slot.armor.legs",
+				"protection": 0
 			},
-			"minecraft:damage_absorption": {
-				"absorbable_causes": [
-					"all"
+			"minecraft:tags": {
+				"tags": [
+					"utilitycraft:energy_equipment"
 				]
 			}
 		}

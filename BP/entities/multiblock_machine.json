@@ -7,6 +7,7 @@
             "is_summonable": true,
             "is_experimental": false,
             "properties": {
+                "utilitycraft:selection_empty": { "type": "bool", "default": false },
                 "utilitycraft:players": {
                     "type": "int",
                     "default": 0,
@@ -26,9 +27,12 @@
             }
         },
         "component_groups": {
+            "utilitycraft:selection_full": {"minecraft:collision_box":{"height":1,"width":1}},
+            "utilitycraft:selection_empty": {"minecraft:collision_box":{"height":0,"width":0}},
             "utilitycraft:liquid_storage": {
                 "minecraft:type_family": {
                     "family": [
+                        "utilitycraft:block_container",
                         "inanimate",
                         "dorios:machine",
                         "dorios:multiblock",
@@ -39,6 +43,7 @@
             "utilitycraft:gas_storage": {
                 "minecraft:type_family": {
                     "family": [
+                        "utilitycraft:block_container",
                         "inanimate",
                         "dorios:machine",
                         "dorios:multiblock",
@@ -57,6 +62,7 @@
             "utilitycraft:simple_container": {
                 "minecraft:type_family": {
                     "family": [
+                        "utilitycraft:block_container",
                         "inanimate",
                         "dorios:machine",
                         "dorios:multiblock",
@@ -67,6 +73,7 @@
             "utilitycraft:basic_machine": {
                 "minecraft:type_family": {
                     "family": [
+                        "utilitycraft:block_container",
                         "inanimate",
                         "dorios:machine",
                         "dorios:multiblock",
@@ -78,6 +85,7 @@
             "utilitycraft:battery": {
                 "minecraft:type_family": {
                     "family": [
+                        "utilitycraft:block_container",
                         "inanimate",
                         "dorios:machine",
                         "dorios:multiblock",
@@ -90,6 +98,7 @@
             "utilitycraft:simple_generator": {
                 "minecraft:type_family": {
                     "family": [
+                        "utilitycraft:block_container",
                         "inanimate",
                         "dorios:machine",
                         "dorios:multiblock",
@@ -102,6 +111,7 @@
             "utilitycraft:fluid_generator": {
                 "minecraft:type_family": {
                     "family": [
+                        "utilitycraft:block_container",
                         "inanimate",
                         "dorios:machine",
                         "dorios:multiblock",
@@ -113,6 +123,7 @@
             "utilitycraft:passive_generator": {
                 "minecraft:type_family": {
                     "family": [
+                        "utilitycraft:block_container",
                         "inanimate",
                         "dorios:machine",
                         "dorios:multiblock",
@@ -124,6 +135,7 @@
             "utilitycraft:special_machine": {
                 "minecraft:type_family": {
                     "family": [
+                        "utilitycraft:block_container",
                         "inanimate",
                         "dorios:machine",
                         "dorios:multiblock",
@@ -135,6 +147,7 @@
             "utilitycraft:simple_input_machine": {
                 "minecraft:type_family": {
                     "family": [
+                        "utilitycraft:block_container",
                         "inanimate",
                         "dorios:machine",
                         "dorios:multiblock",
@@ -146,6 +159,7 @@
             "utilitycraft:simple_machine": {
                 "minecraft:type_family": {
                     "family": [
+                        "utilitycraft:block_container",
                         "inanimate",
                         "dorios:machine",
                         "dorios:multiblock",
@@ -157,6 +171,7 @@
             "utilitycraft:complex_in_machine": {
                 "minecraft:type_family": {
                     "family": [
+                        "utilitycraft:block_container",
                         "inanimate",
                         "dorios:machine",
                         "dorios:multiblock",
@@ -168,6 +183,7 @@
             "utilitycraft:complex_out_machine": {
                 "minecraft:type_family": {
                     "family": [
+                        "utilitycraft:block_container",
                         "inanimate",
                         "dorios:machine",
                         "dorios:multiblock",
@@ -179,6 +195,7 @@
             "utilitycraft:complex_machine": {
                 "minecraft:type_family": {
                     "family": [
+                        "utilitycraft:block_container",
                         "inanimate",
                         "dorios:machine",
                         "dorios:multiblock",
@@ -191,6 +208,7 @@
             "utilitycraft:simple_machine_fluid": {
                 "minecraft:type_family": {
                     "family": [
+                        "utilitycraft:block_container",
                         "inanimate",
                         "dorios:machine",
                         "dorios:multiblock",
@@ -203,6 +221,7 @@
             "utilitycraft:complex_machine_fluid": {
                 "minecraft:type_family": {
                     "family": [
+                        "utilitycraft:block_container",
                         "inanimate",
                         "dorios:machine",
                         "dorios:multiblock",
@@ -538,12 +557,14 @@
             }
         },
         "components": {
+            "minecraft:inside_block_notifier": {"block_list":[{"block":{"name":"air"},"entered_block_event":{"event":"utilitycraft:container_check_air"}}]},
             "minecraft:nameable": {
                 "always_show": false,
                 "allow_name_tag_renaming": false
             },
             "minecraft:type_family": {
                 "family": [
+                    "utilitycraft:block_container",
                     "inanimate",
                     "dorios:machine",
                     "dorios:multiblock",
@@ -588,6 +609,9 @@
             }
         },
         "events": {
+            "utilitycraft:container_check_air": {},
+            "utilitycraft:selection_full": {"set_property":{"utilitycraft:selection_empty":false},"remove":{"component_groups":["utilitycraft:selection_empty"]},"add":{"component_groups":["utilitycraft:selection_full"]}},
+            "utilitycraft:selection_empty": {"set_property":{"utilitycraft:selection_empty":true},"remove":{"component_groups":["utilitycraft:selection_full"]},"add":{"component_groups":["utilitycraft:selection_empty"]}},
             "utilitycraft:liquid_storage": {
                 "add": {
                     "component_groups": [

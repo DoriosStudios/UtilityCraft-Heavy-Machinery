@@ -5,6 +5,8 @@
 - Prevented invalid NaN liquid/gas bar items when reactor storage capacity is zero, including Thermal without Fluid Cells. Liquid and gas displays now use an empty frame and 0% when capacity is zero.
 
 ## CHANGED
+- Rebalanced nuclear waste processing around reactor output: 32,000,000 DE per Spent Uranium Pellet, 16,000,000 DE per 125 mB Nether Star Essence and 128,000,000 DE per Stabilized Nuclear Matter. The full Exo material chain costs 1,664,000,000 DE at base single-recipe rates, before machine modifiers and batching.
+- Added UtilityCore block-container selection compatibility to all six custom controller entities: the shared multiblock machine, Combustion Chamber, Gas Turbine, Nuclear Reactor, Thermal Reactor and Power Condenser. Family-based discovery and full/hidden hitboxes preserve existing inventories, family variants and inactive-controller scaling; turbine visual entities are unaffected.
 - Renamed Tin Crystal to Tempered Tin Glass across its identifier, assets, catalog and localization; added its Infuser recipe using 8 Tin Dust and 1 Glass.
 - Applied the dedicated Netherite Controller Case atlas as three lossless 16x16 top, bottom and side textures.
 - Standardized the initial burn rate to 1 for all reactor/generator controllers; Thermal and Combustion now match Nuclear and Gas Turbine. Existing configured rates are preserved.
@@ -24,8 +26,11 @@
 - Compacted the Combustion Chamber Info panel spacing and reduced its scroll content height.
 
 ## ADDED
-- Added Stabilized Nuclear Matter as an advanced purple variant of the Spent Uranium Pellet, registered as a creative material without a recipe yet.
-- Added Chemical Processor recovery of 1 Spent Uranium Pellet from 1,000 mB Nuclear Waste Gas and 1,000 mB Water for 256,000 DE; gas byproducts are now optional per recipe.
+- Added rechargeable Exo Armor: each piece stores 1,000,000,000 DE, absorbs up to 22.5% of incoming event damage and spends 1,000,000 DE per point absorbed. Charged boots cancel fall damage when they can pay its full cost; otherwise normal partial absorption applies. Armor starts empty, cannot be enchanted, and uses a 100,000-durability bar constrained to 1,000-99,000 remaining without native wear. Charge persists independently of repairs and is restored by the UtilityCraft Induction Anvil at 1 DE per stored DE.
+- Added the two-stage Reaction Chamber route to Stabilized Nuclear Matter: 1 Nether Star + 1,000 mB Sulfuric Acid yields 125 mB Nether Star Essence for 16,000,000 DE; 2 Spent Uranium Pellets + 125 mB Essence yields 1 Nuclear Matter for 128,000,000 DE. Added essence bucket handling, tank support and 49 UI levels using existing pale liquid artwork. The full Exo set uses 8 Nuclear Matter (1 bucket of essence).
+- Added Workbench and Crafter recipes for all four Utility Exo Armor pieces using Netherite Plates, Rubber Sheets, Ultimate Chips and Stabilized Nuclear Matter.
+- Added Stabilized Nuclear Matter as an advanced purple variant of the Spent Uranium Pellet, registered as a creative material with Reaction Chamber processing.
+- Added Chemical Processor recovery of 1 Spent Uranium Pellet from 1,000 mB Nuclear Waste Gas and 1,000 mB Water for 32,000,000 DE; gas byproducts are now optional per recipe.
 - Added Rubber Sheet, Lead Plate and Yellow Dye recipes for all four Hazmat armor pieces, available in the Workbench and Crafter.
 - Added a Reaction Chamber recipe that processes 4 Slime Balls and 250 mB Sulfuric Acid into 1 Rubber Sheet for 16,000 DE.
 - Added survival recipes for Netherite Plated Blocks, Stamped Plates, Bricks, Hazard Blocks, Vent Panels, Tempered Glass and Reinforced Glass, with matching Workbench, Crafter and Infuser support.
@@ -46,6 +51,7 @@
 - Added generic DoriosCore TemperatureStorage with persistent thermal capacity, internal HU/t generation, simultaneous hot/cold contacts, exact time-based heat exchange, and native temperature display independent of machine limits.
 
 ## CHANGED
+- Made all four Exo Armor recipes horizontally symmetric, replacing Lead Plates with Rubber Sheets and restoring Netherite Plates at the corners. The full set still requires 8 Stabilized Nuclear Matter.
 - Simplified Nuclear, Thermal and Gas Turbine data caching through one generic HeavyCore map keyed by entity ID. State remains persisted in dynamic properties, reloads lazily after unload/restart, and rescans refresh cached stats. Storage instances are created per update.
 
 - Standardized all Heavy Machinery block tick intervals to 4 ticks, reducing redundant controller callbacks while preserving scheduler-driven machine throughput.

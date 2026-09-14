@@ -3,7 +3,7 @@ export const chemicalProcessorRecipes = {
         required_gas: 1000,
         required_liquid: 1000,
         output_item: { id: "utilitycraft:spent_uranium_pellet", amount: 1 },
-        cost: 256000,
+        cost: 32000000,
     },
     "enriched_uranium_hexafluoride_gas|water": {
         required_gas: 250,

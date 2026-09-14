@@ -1,0 +1,38 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "utilitycraft:utility_exo_leggings"
+        },
+        "tags": [
+            "utilitycraft_workbench"
+        ],
+        "key": {
+            "N": {
+                "item": "utilitycraft:netherite_plate"
+            },
+            "U": {
+                "item": "utilitycraft:ultimate_chip"
+            },
+            "S": {
+                "item": "utilitycraft:stabilized_nuclear_matter"
+            },
+            "R": {
+                "item": "utilitycraft:rubber_sheet"
+            }
+        },
+        "pattern": [
+            "NUN",
+            "SRS",
+            "N N"
+        ],
+        "result": {
+            "item": "utilitycraft:utility_exo_leggings"
+        },
+        "unlock": [
+            {
+                "item": "utilitycraft:stabilized_nuclear_matter"
+            }
+        ]
+    }
+}

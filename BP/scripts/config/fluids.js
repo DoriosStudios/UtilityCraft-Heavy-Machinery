@@ -1,6 +1,11 @@
 import * as DoriosLib from "DoriosLib/index.js";
 
 const fluidItems = {
+    "utilitycraft:nether_star_essence_bucket": {
+        amount: 1000,
+        type: "nether_star_essence",
+        output: "minecraft:bucket",
+    },
     "utilitycraft:saline_coolant_bucket": {
         amount: 1000,
         type: "saline_coolant",
@@ -11,6 +16,7 @@ const fluidItems = {
 const fluidHolders = {
     "minecraft:bucket": {
         types: {
+            nether_star_essence: "utilitycraft:nether_star_essence_bucket",
             saline_coolant: "utilitycraft:saline_coolant_bucket",
         },
         required: 1000,

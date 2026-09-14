@@ -6,6 +6,12 @@ import * as DoriosLib from "DoriosLib/index.js";
  */
 const crafterRecipeBatches = [
 {
+    "netherite_plate,ultimate_chip,netherite_plate,stabilized_nuclear_matter,rubber_sheet,stabilized_nuclear_matter,air,air,air": { output: "utilitycraft:utility_exo_helmet", amount: 1 },
+    "netherite_plate,ultimate_chip,netherite_plate,stabilized_nuclear_matter,rubber_sheet,stabilized_nuclear_matter,netherite_plate,rubber_sheet,netherite_plate": { output: "utilitycraft:utility_exo_chestplate", amount: 1 },
+    "netherite_plate,ultimate_chip,netherite_plate,stabilized_nuclear_matter,rubber_sheet,stabilized_nuclear_matter,netherite_plate,air,netherite_plate": { output: "utilitycraft:utility_exo_leggings", amount: 1 },
+    "netherite_plate,air,netherite_plate,stabilized_nuclear_matter,ultimate_chip,stabilized_nuclear_matter,netherite_plate,rubber_sheet,netherite_plate": { output: "utilitycraft:utility_exo_boots", amount: 1 },
+},
+{
     "rubber_sheet,rubber_sheet,rubber_sheet,rubber_sheet,lead_plate,rubber_sheet,air,yellow_dye,air": { output: "utilitycraft:hazmat_helmet", amount: 1 },
     "rubber_sheet,yellow_dye,rubber_sheet,rubber_sheet,lead_plate,rubber_sheet,rubber_sheet,rubber_sheet,rubber_sheet": { output: "utilitycraft:hazmat_chestplate", amount: 1 },
     "rubber_sheet,lead_plate,rubber_sheet,rubber_sheet,yellow_dye,rubber_sheet,rubber_sheet,air,rubber_sheet": { output: "utilitycraft:hazmat_leggings", amount: 1 },

@@ -382,3 +382,4 @@ ui.hm.cc.vent_details=Roof vents release smoke while running. Full energy storag
 ui.hm.cc.manual_fuel_hint=Go to Fuel tab to manually feed fuel items.
 
 tile.utilitycraft:netherite_controller_case.name=Netherite Controller Case\n§o§9@UC: Heavy Machinery
+item.utilitycraft:nether_star_essence_bucket=Balde de ess?ncia de estrela do Nether\n?o?9@UC: Heavy Machinery
