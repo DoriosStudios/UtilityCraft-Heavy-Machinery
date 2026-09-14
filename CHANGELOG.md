@@ -1,10 +1,23 @@
 # UtilityCraft: Heavy Machinery v0.6.0
 
 ## FIXED
+- Reinforced Induction Anvil now skips item/lore writes when fully charged or unable to transfer a complete energy unit. Removed duplicate status energy-bar refreshes.
+- Fixed Exo durability overflow: pieces now use 10,200 maximum durability and ItemEnergyStorage uses 100,000 DE per point, preserving 1,000,000,000 DE capacity and 100-point margins within the signed 16-bit durability range.
+- Deferred new Exo armor initialization until after its inventory transaction, rechecking the destination before writing; initialization errors now report the item and slot in the Content Log.
 - Thermal meltdown now resets the burn rate to 1; rebuilding after meltdown restores cold, stopped initial reactor state and clears timers, production and fractional processing credits. Normal rescans retain settings.
 - Prevented invalid NaN liquid/gas bar items when reactor storage capacity is zero, including Thermal without Fluid Cells. Liquid and gas displays now use an empty frame and 0% when capacity is zero.
 
 ## CHANGED
+- Unified Exo absorption costs at 100,000 DE per absorbed damage point for hits and falls. Exo descriptions use UtilityCraft formatting and include the boots' fall protection in all three languages.
+- Redistributed Exo absorption to helmet 12.5%, chestplate 40%, leggings 30% and boots 12.5% (95% total), with energy costs following each piece's share. Added localized absorption and Reinforced Induction Anvil recharge descriptions to all four pieces.
+- Added netherite-equivalent native Exo armor points: 3/8/6/3. Native protection also works with empty energy.
+- Simplified Exo armor into one tag-based damage script. Equipped utilitycraft:exo_armor pieces with enough energy reduce damage by their per-slot shares; powered boots cancel falls. Removed armor-specific capacity, durability and item-ID registries; ItemEnergyStorage owns capacity and conversion.
+- Moved Exo energy initialization into UtilityCraft's global tag-based UtilityCore handler; Heavy Machinery no longer registers its own inventory initialization callback.
+- Item energy lore now reuses the exact machine-break energy lore builder, including gray color, indentation and stored/capacity spacing; removed the separate percentage display.
+- Item energy lore now uses the shared EnergyStorage formatter for stored energy and capacity, matching block energy units.
+- Increased Reinforced Induction Anvil energy capacity to 640 MDE.
+- Simplified Exo armor to inventory-change initialization and damage-triggered energy spending. Removed periodic player/inventory scans, legacy energy migration, per-item IDs and persistent energy debts; fresh pieces start at 100 remaining durability.
+- Restored normal block-container entity hitboxes to 1 x 1; the hidden selection state remains 0 x 0.
 - Rebalanced nuclear waste processing around reactor output: 32,000,000 DE per Spent Uranium Pellet, 16,000,000 DE per 125 mB Nether Star Essence and 128,000,000 DE per Stabilized Nuclear Matter. The full Exo material chain costs 1,664,000,000 DE at base single-recipe rates, before machine modifiers and batching.
 - Added UtilityCore block-container selection compatibility to all six custom controller entities: the shared multiblock machine, Combustion Chamber, Gas Turbine, Nuclear Reactor, Thermal Reactor and Power Condenser. Family-based discovery and full/hidden hitboxes preserve existing inventories, family variants and inactive-controller scaling; turbine visual entities are unaffected.
 - Renamed Tin Crystal to Tempered Tin Glass across its identifier, assets, catalog and localization; added its Infuser recipe using 8 Tin Dust and 1 Glass.
@@ -26,7 +39,11 @@
 - Compacted the Combustion Chamber Info panel spacing and reduced its scroll content height.
 
 ## ADDED
-- Added rechargeable Exo Armor: each piece stores 1,000,000,000 DE, absorbs up to 22.5% of incoming event damage and spends 1,000,000 DE per point absorbed. Charged boots cancel fall damage when they can pay its full cost; otherwise normal partial absorption applies. Armor starts empty, cannot be enchanted, and uses a 100,000-durability bar constrained to 1,000-99,000 remaining without native wear. Charge persists independently of repairs and is restored by the UtilityCraft Induction Anvil at 1 DE per stored DE.
+- Added a blue expanding particle at the player's feet when Exo Boots absorb a fall, adapted from the supplied hammer effect with independent asset IDs and an approximately two-block diameter.
+- Added a small blue expanding landing particle at the player's feet when powered Exo Boots absorb fall damage, adapted from the supplied hammer effect with independent asset IDs.
+- Added generic ItemEnergyStorage to DoriosCore: the utilitycraft:energy_container tag opts in, each useful durability point stores 100,000 DE, and 100 points are reserved at both ends. Capacity comes only from maximum durability. Charging rounds down, consumption rounds up, and methods return the actual DE moved. Removed generator-interaction charging.
+- Added the Reinforced Induction Anvil with the original model and graphite/violet texture, 128x base repair speed, 32,000,000 DE storage, and 1,000,000 DE/t energy-container charging. Supports speed/energy upgrades and Workbench/Crafter recipes.
+- Added rechargeable Exo Armor: 1,000,000,000 DE per piece, 95% total incoming-damage absorption across the four per-slot shares, 100,000 DE per point absorbed, and paid fall cancellation with boots. Uses ItemEnergyStorage with 10,200 durability, 100-point end margins, no enchantments/native wear, and Reinforced Induction Anvil charging. New Exo pieces start empty through the player inventory-change event.
 - Added the two-stage Reaction Chamber route to Stabilized Nuclear Matter: 1 Nether Star + 1,000 mB Sulfuric Acid yields 125 mB Nether Star Essence for 16,000,000 DE; 2 Spent Uranium Pellets + 125 mB Essence yields 1 Nuclear Matter for 128,000,000 DE. Added essence bucket handling, tank support and 49 UI levels using existing pale liquid artwork. The full Exo set uses 8 Nuclear Matter (1 bucket of essence).
 - Added Workbench and Crafter recipes for all four Utility Exo Armor pieces using Netherite Plates, Rubber Sheets, Ultimate Chips and Stabilized Nuclear Matter.
 - Added Stabilized Nuclear Matter as an advanced purple variant of the Spent Uranium Pellet, registered as a creative material with Reaction Chamber processing.
@@ -237,7 +254,7 @@
 - Added a complete Lead material family with Sieve-obtained chunks, reconstructable stone and deepslate ores, raw, dust, ingot, nugget, plate, and storage-block forms, plus dark blue Steel-derived textures and processing recipes.
 - Added a living Nuclear Reactor design document covering reactor behavior, fuel routes, gas production, enrichment, coolant moderation, waste, and implementation phases.
 - Added the first functional Nuclear Reactor multiblock, converting Enriched Uranium Rods into internal nuclear fuel and Dorios Energy.
-- Added a dedicated Nuclear Reactor interface with solid-fuel input, uranium reserve, coolant, temperature, output, structure statistics, and 0–100% power controls.
+- Added a dedicated Nuclear Reactor interface with solid-fuel input, uranium reserve, coolant, temperature, output, structure statistics, and 0â€“100% power controls.
 - Added a Creative Saline Coolant Tank that provides infinite Saline Coolant to fluid networks and compatible containers.
 - Added Tin Ore and Deepslate Tin Ore blocks with Silk Touch support and Raw Tin drops.
 - Added Deepslate Uranium Ore with Silk Touch support and Raw Uranium drops.

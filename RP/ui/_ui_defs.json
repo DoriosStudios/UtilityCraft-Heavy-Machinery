@@ -10,6 +10,7 @@
     "ui/autosieve_controller.json",
     "ui/reaction_chamber_controller.json",
     "ui/reaction_chamber.json",
+    "ui/reinforced_induction_anvil.json",
     "ui/chemical_processor.json",
     "ui/isotope_centrifuge.json",
     "ui/magmatic_chamber_controller.json",

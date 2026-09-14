@@ -11,11 +11,11 @@
 		"components": {
 			"minecraft:wearable": {
 				"slot": "slot.armor.chest",
-				"protection": 0
+				"protection": 8
 			},
 			"minecraft:max_stack_size": 1,
 			"minecraft:durability": {
-				"max_durability": 100000,
+				"max_durability": 10200,
 				"damage_chance": {
 					"min": 0,
 					"max": 0
@@ -24,7 +24,8 @@
 			"minecraft:icon": "utilitycraft_utility_exo_chestplate",
 			"minecraft:tags": {
 				"tags": [
-					"utilitycraft:energy_equipment"
+					"utilitycraft:energy_container",
+					"utilitycraft:exo_armor"
 				]
 			}
 		}

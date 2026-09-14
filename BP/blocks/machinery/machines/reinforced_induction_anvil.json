@@ -1,0 +1,123 @@
+{
+	"format_version": "1.20.80",
+	"minecraft:block": {
+		"description": {
+			"identifier": "utilitycraft:reinforced_induction_anvil",
+			"menu_category": {
+				"category": "construction"
+			},
+			"traits": {
+				"minecraft:placement_direction": {
+					"enabled_states": [
+						"minecraft:cardinal_direction"
+					],
+					"y_rotation_offset": 180
+				}
+			},
+			"states": {
+				"utilitycraft:on": [
+					false,
+					true
+				]
+			}
+		},
+		"components": {
+			"minecraft:geometry": "geometry.induction_anvil",
+			"minecraft:material_instances": {
+				"*": {
+					"texture": "utilitycraft_reinforced_induction_anvil",
+					"render_method": "alpha_test"
+				}
+			},
+			"minecraft:destructible_by_mining": {
+				"seconds_to_destroy": 3.0
+			},
+			"tag:minecraft:is_pickaxe_item_destructible": {},
+			"utilitycraft:reinforced_induction_anvil": {
+				"entity": {
+					"type": "machine",
+					"inventory_size": 6
+				},
+				"machine": {
+					"energy_cap": 640000000,
+					"energy_cost": 1000,
+					"rate_speed_base": 3200,
+					"overclock": false,
+					"upgrades": [
+						4,
+						5
+					]
+				}
+			},
+			"utilitycraft:machine_upgrades": [
+				{
+					"type": "speed",
+					"slot": 4
+				},
+				{
+					"type": "energy",
+					"slot": 5
+				}
+			],
+			"minecraft:tick": {
+				"interval_range": [
+					4,
+					4
+				]
+			},
+			"tag:dorios:machine": {},
+			"tag:dorios:energy": {},
+			"tag:dorios:item": {}
+		},
+		"permutations": [
+			{
+				"condition": "q.block_state('minecraft:cardinal_direction') == 'north' ",
+				"components": {
+					"minecraft:transformation": {
+						"rotation": [
+							0,
+							0,
+							0
+						]
+					}
+				}
+			},
+			{
+				"condition": "q.block_state('minecraft:cardinal_direction') == 'south' ",
+				"components": {
+					"minecraft:transformation": {
+						"rotation": [
+							0,
+							180,
+							0
+						]
+					}
+				}
+			},
+			{
+				"condition": "q.block_state('minecraft:cardinal_direction') == 'east' ",
+				"components": {
+					"minecraft:transformation": {
+						"rotation": [
+							0,
+							-90,
+							0
+						]
+					}
+				}
+			},
+			{
+				"condition": "q.block_state('minecraft:cardinal_direction') == 'west' ",
+				"components": {
+					"minecraft:transformation": {
+						"rotation": [
+							0,
+							90,
+							0
+						]
+					}
+				}
+			}
+		]
+	}
+}

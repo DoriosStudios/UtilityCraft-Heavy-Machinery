@@ -1,33 +1,45 @@
 # Utility Exo Armor
 
-Each piece stores 1,000,000,000 DE and starts empty. The Induction Anvil in the
-matching UtilityCraft working version transfers its available energy into the
-piece at 1 DE per stored DE. Its buffer and incoming power limit charging speed;
-ordinary repair-speed and repair-efficiency calculations do not apply.
+Each piece has 10,200 maximum durability and the `utilitycraft:energy_container`
+tag. ItemEnergyStorage derives its 1,000,000,000 DE capacity from that durability,
+using 100,000 DE per point and reserving 100 points at both ends. Remaining
+visible durability runs from 100 (empty) to 10,100 (full). New Exo pieces start
+empty when UtilityCraft's global UtilityCore inventory-change handler sees the
+energy-container tag and zero damage. Initialization
+sets 100 remaining durability. There is no interval, migration, item ID or world
+dynamic-property storage.
 
-Each charged piece absorbs 22.5% of the damage supplied to the before-hurt event,
-calculated independently from the same incoming value. Four pieces absorb 90%.
-Absorption costs 1,000,000 DE per damage point absorbed (one point is half a heart).
-A piece with insufficient energy only absorbs what it can afford. Empty pieces
-provide no protection. For example, a 20-point hit costs each piece 4,500,000 DE
-and leaves 2 points for the player with a fully powered set.
+The single `equipment/exoArmor.js` handler reads the four equipment slots and
+recognizes the `utilitycraft:exo_armor` tag, without a list of item identifiers.
+Powered pieces absorb these shares of the original damage: helmet 12.5%,
+chestplate 40%, leggings 30%, boots 12.5%, for 95% total. Each piece pays
+100,000 DE per point of its own absorbed share, rounded up by ItemEnergyStorage's
+energy unit. Damage is reduced by the sum of the powered pieces' shares. Insufficiently charged
+pieces do not contribute partial protection. Capacity and durability conversion
+belong exclusively to ItemEnergyStorage.
 
-Boots cancel fall damage entirely when they can pay 1,000,000 DE per incoming
-point. Other pieces are not charged for that fall. If the boots cannot pay for full
-cancellation, the normal partial-absorption calculation applies instead.
+Boots with the tag cancel fall damage when they can pay 100,000 DE per incoming
+damage point. A temporary same-tick batch prevents spending the same energy twice
+before the deferred equipment write. Changed equipment is never overwritten;
+there is no persistent debt, scanning, interval or legacy migration.
 
-All pieces have 100,000 maximum durability and no enchantable component or native
-protection/wear. Remaining durability is a display only: 99,000 at full charge,
-1,000 at empty. Actual DE is an item dynamic property, never inferred from repair
-damage. Thus native repairs cannot recharge armor, and the item is not destroyed
-when its charge runs out. The lore shows the exact DE and charge percentage.
+The Reinforced Induction Anvil charges the central-slot item at 1,000,000 DE/t
+base, converting 1 machine DE into 1 stored DE. A full Exo piece takes 50 seconds
+at base rate with adequate power. Speed upgrades increase throughput. A buffer of
+640,000,000 DE and energy upgrades support its input supply. Normal equipment is
+repaired at 128x the basic Induction Anvil's base rate, at the ordinary repair cost.
+The block retains the original anvil model and the graphite/violet texture.
 
-The hurt callback reserves energy immediately and defers item writes to normal
-execution. Reservations follow item IDs across equipment/inventory moves and are
-retained in world properties if the item becomes unavailable before settlement.
-The Induction Anvil sends a charging request to Heavy Machinery, which owns the
-item dynamic properties and debits the anvil's shared scoreboard energy storage.
+The previous generator-interaction and normal-anvil charging paths are removed.
+See item-energy-storage.md for vanilla-repair limitations and the generic API.
 
-Validation: `node tests/exo-armor.cjs`. Minecraft verification should cover native
-wear, enchanting-table/anvil rejection, cross-pack charging, falling and death/drop
-handling; mocked API tests cannot verify engine-specific behavior.
+Checks: `node tests/exo-armor.cjs`, `node tests/item-energy-storage.cjs`, and
+`node tests/reinforced-induction-anvil.cjs`. Minecraft checks must still cover
+native wear, UI, cable input, enchantment rejection and vanilla item combining.
+
+Native armor points match netherite: helmet 3, chestplate 8, leggings 6, boots 3.
+These remain active without energy and combine with the scripted reduction.
+
+Paid fall cancellation emits `utilitycraft:exo_fall_absorption` at the captured
+landing position: a blue expanding effect about two blocks wide, lasting 0.7
+seconds, adapted from the supplied Weapons & Armor hammer effect.

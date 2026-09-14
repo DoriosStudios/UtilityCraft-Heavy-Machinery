@@ -6,6 +6,9 @@ import * as DoriosLib from "DoriosLib/index.js";
  */
 const crafterRecipeBatches = [
 {
+    "netherite_plate,energy_cell,netherite_plate,ultimate_chip,induction_anvil,ultimate_chip,netherite_plate,energy_cell,netherite_plate": { output: "utilitycraft:reinforced_induction_anvil", amount: 1 },
+},
+{
     "netherite_plate,ultimate_chip,netherite_plate,stabilized_nuclear_matter,rubber_sheet,stabilized_nuclear_matter,air,air,air": { output: "utilitycraft:utility_exo_helmet", amount: 1 },
     "netherite_plate,ultimate_chip,netherite_plate,stabilized_nuclear_matter,rubber_sheet,stabilized_nuclear_matter,netherite_plate,rubber_sheet,netherite_plate": { output: "utilitycraft:utility_exo_chestplate", amount: 1 },
     "netherite_plate,ultimate_chip,netherite_plate,stabilized_nuclear_matter,rubber_sheet,stabilized_nuclear_matter,netherite_plate,air,netherite_plate": { output: "utilitycraft:utility_exo_leggings", amount: 1 },
