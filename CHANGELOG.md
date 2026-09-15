@@ -1,6 +1,8 @@
 # UtilityCraft: Heavy Machinery v0.6.0
 
 ## FIXED
+- Fixed broken formatting codes in the Nether Star Essence Bucket tooltip in all three languages, including the Portuguese name accent.
+- Factory controllers now charge and finish batches in the same update, process all work allowed by the scheduler interval, stop spending when inputs/outputs block, retain blocked-output progress and finish fully paid batches with an empty battery. UI refreshes only once per update. Autosieve reserves output space before consuming inputs.
 - Reinforced Induction Anvil now skips item/lore writes when fully charged or unable to transfer a complete energy unit. Removed duplicate status energy-bar refreshes.
 - Fixed Exo durability overflow: pieces now use 10,200 maximum durability and ItemEnergyStorage uses 100,000 DE per point, preserving 1,000,000,000 DE capacity and 100-point margins within the signed 16-bit durability range.
 - Deferred new Exo armor initialization until after its inventory transaction, rechecking the destination before writing; initialization errors now report the item and slot in the Content Log.
@@ -8,6 +10,10 @@
 - Prevented invalid NaN liquid/gas bar items when reactor storage capacity is zero, including Thermal without Fluid Cells. Liquid and gas displays now use an empty frame and 0% when capacity is zero.
 
 ## CHANGED
+- Moved the Saline Coolant Bucket item, texture, translations, Creative entry and fluid registration into UtilityCraft, preserving its identifier and 1,000 mB capacity.
+- Added a dedicated Nether Star Essence liquid recolor in pearl gray, pale yellow and ivory, with matching tank, bucket and all 49 UI fill levels.
+- Rebalanced minimum factories to 20x standard base throughput (2x a standard machine with maximum speed upgrades), with full batches and sufficient supplies. Removed the x4 batch penalty; Crusher/Press/Incinerator base rate is 200, Infuser/Autosieve/Magmatic 400, Reaction Chamber 1,600. Magmatic default recipe cost now matches UC at 8,000 DE.
+- Factory Processing and Speed now have square-root returns: 2+2 modules replace 4 maxed standard machines, 32+32 replace 64, and 64+64 replace 128. Whole parallel lanes are compensated in the work rate, keeping the curve exact and energy per operation constant before Efficiency. Efficiency still saves up to 75%. Rescan existing factories to refresh stats.
 - Unified Exo absorption costs at 100,000 DE per absorbed damage point for hits and falls. Exo descriptions use UtilityCraft formatting and include the boots' fall protection in all three languages.
 - Redistributed Exo absorption to helmet 12.5%, chestplate 40%, leggings 30% and boots 12.5% (95% total), with energy costs following each piece's share. Added localized absorption and Reinforced Induction Anvil recharge descriptions to all four pieces.
 - Added netherite-equivalent native Exo armor points: 3/8/6/3. Native protection also works with empty energy.

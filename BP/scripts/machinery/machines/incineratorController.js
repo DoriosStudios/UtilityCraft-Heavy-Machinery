@@ -1,3 +1,4 @@
+import { processFactory } from './factoryProcessing.js';
 import { EnergyStorage, Multiblock, MultiblockMachine, registerLinkNodeIO } from "DoriosCore/index.js"
 import * as DoriosLib from "DoriosLib/index.js";
 import { furnaceRecipes } from 'config/recipes/furnace.js'
@@ -5,8 +6,8 @@ import { furnaceRecipes } from 'config/recipes/furnace.js'
 const INPUT_SLOTS = [3, 4, 5, 6, 7, 8, 9, 10, 11]
 const OUTPUT_SLOTS = [12, 13, 14, 15, 16, 17, 18, 19, 20]
 const DEFAULT_COST = 800
-const MULTI_PENALTY = 4
-const BASE_RATE = 100
+const MULTI_PENALTY = 1
+const BASE_RATE = 200
 const CONTROLLER_REQUIREMENTS = {
     energy_cell: {
         amount: 1,
@@ -67,70 +68,45 @@ DoriosLib.registry.blockComponent('utilitycraft:incinerator_controller', {
         /** @type {MachineStats} */
         const data = raw ? JSON.parse(raw) : {};
 
-        controller.setRateMultiplier(data.speed.multiplier);
+        controller.setRateMultiplier(data.speed.multiplier * data.energyMultiplier);
 
-        const inv = controller.container;
-        const recipes = furnaceRecipes;
-        const plan = planRecipeBatches(inv, recipes, data.processing.amount);
+        const result = processFactory(controller, data, () => {
+            const inv = controller.container;
+            const recipes = furnaceRecipes;
+            const plan = planRecipeBatches(inv, recipes, data.processing.amount);
 
-        if (!plan.foundValidRecipe) {
-            updateUI(controller, data, '\u00A7eNo Input');
-            controller.setProgress(0, { slot: 2 });
-            return;
-        }
-
-        if (plan.totalCrafts <= 0) {
-            updateUI(controller, data, '\u00A7eOutput Full', plan.displayRecipe);
-            controller.setProgress(0, { slot: 2 });
-            return;
-        }
-
-        const cost = plan.totalCost;
-        data.cost = cost;
-        controller.setEnergyCost(cost);
-
-        const progress = controller.getProgress();
-
-        if (controller.energy.get() <= 0) {
-            updateUI(controller, data, '\u00A7eNo Energy', plan.displayRecipe);
-            controller.displayProgress({ slot: 2 });
-            return;
-        }
-
-        if (progress >= cost) {
-            if (plan.batches.length > 0) {
-                for (const batch of plan.batches) {
-                    const recipe = batch.recipe;
-                    MultiblockMachine.distributeOutput(
-                        controller,
-                        OUTPUT_SLOTS,
-                        recipe.output,
-                        batch.craftCount * (recipe.amount ?? 1)
-                    );
-
-                    DoriosLib.entity.removeItem(controller.entity,
-                        batch.inputType,
-                        batch.craftCount * (recipe.required ?? 1)
-                    );
-                }
-
-                controller.addProgress(-cost);
+            if (!plan.foundValidRecipe) {
+                return { status: '\u00A7eNo Input', resetProgress: true };
             }
-        } else {
-            const energyToConsume = Math.min(
-                controller.energy.get(),
-                controller.rate,
-                cost * data.energyMultiplier
-            );
 
-            controller.energy.consume(energyToConsume);
-            controller.addProgress(
-                energyToConsume / data.energyMultiplier
-            );
-        }
+            if (plan.totalCrafts <= 0) {
+                return { status: '\u00A7eOutput Full', recipe: plan.displayRecipe };
+            }
+
+            const cost = plan.totalCost;
+
+            return { cost, recipe: plan.displayRecipe, craft() {
+                if (plan.batches.length > 0) {
+                    for (const batch of plan.batches) {
+                        const recipe = batch.recipe;
+                        MultiblockMachine.distributeOutput(
+                            controller,
+                            OUTPUT_SLOTS,
+                            recipe.output,
+                            batch.craftCount * (recipe.amount ?? 1)
+                        );
+
+                        DoriosLib.entity.removeItem(controller.entity,
+                            batch.inputType,
+                            batch.craftCount * (recipe.required ?? 1)
+                        );
+                    }
+                }
+            } };
+        });
 
         controller.displayProgress({ slot: 2 });
-        updateUI(controller, data, '\u00A7aRunning', plan.displayRecipe);
+        updateUI(controller, data, result.status, result.recipe);
     }
 })
 

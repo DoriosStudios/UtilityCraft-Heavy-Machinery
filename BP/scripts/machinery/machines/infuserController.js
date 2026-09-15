@@ -1,3 +1,4 @@
+import { processFactory } from './factoryProcessing.js';
 import { EnergyStorage, Multiblock, MultiblockMachine, registerLinkNodeIO } from "DoriosCore/index.js"
 import * as DoriosLib from "DoriosLib/index.js";
 import { infuserRecipes } from 'config/recipes/infuser.js'
@@ -6,7 +7,7 @@ const CATALYST_SLOTS = [4, 5, 6, 7]
 const INPUT_SLOTS = [8, 9, 10, 11, 12, 13, 14, 15, 16]
 const OUTPUT_SLOTS = [17, 18, 19, 20, 21, 22, 23, 24, 25]
 const DEFAULT_COST = 1600
-const MULTI_PENALTY = 4
+const MULTI_PENALTY = 1
 const BASE_RATE = 400
 const CONTROLLER_REQUIREMENTS = {
     energy_cell: {
@@ -74,143 +75,112 @@ DoriosLib.registry.blockComponent('utilitycraft:infuser_controller', {
         /** @type {MachineStats} */
         const data = raw ? JSON.parse(raw) : {};
 
-        controller.setRateMultiplier(data.speed.multiplier);
+        controller.setRateMultiplier(data.speed.multiplier * data.energyMultiplier);
 
-        const inv = controller.container;
-        const recipes = infuserRecipes;
+        const result = processFactory(controller, data, () => {
+            const inv = controller.container;
+            const recipes = infuserRecipes;
 
-        let recipe = null;
+            let recipe = null;
 
-        let inputType = null;
-        let catalystType = null;
+            let inputType = null;
+            let catalystType = null;
 
-        let totalInput = 0;
-        let totalCatalyst = 0;
+            let totalInput = 0;
+            let totalCatalyst = 0;
 
-        for (const slot of INPUT_SLOTS) {
-            const item = inv.getItem(slot);
-            if (!item) continue;
+            for (const slot of INPUT_SLOTS) {
+                const item = inv.getItem(slot);
+                if (!item) continue;
 
-            if (!inputType) inputType = item.typeId;
+                if (!inputType) inputType = item.typeId;
 
-            if (item.typeId === inputType) {
-                totalInput += item.amount;
+                if (item.typeId === inputType) {
+                    totalInput += item.amount;
+                }
             }
-        }
 
-        for (const slot of CATALYST_SLOTS) {
-            const item = inv.getItem(slot);
-            if (!item) continue;
+            for (const slot of CATALYST_SLOTS) {
+                const item = inv.getItem(slot);
+                if (!item) continue;
 
-            if (!catalystType) catalystType = item.typeId;
+                if (!catalystType) catalystType = item.typeId;
 
-            if (item.typeId === catalystType) {
-                totalCatalyst += item.amount;
+                if (item.typeId === catalystType) {
+                    totalCatalyst += item.amount;
+                }
             }
-        }
 
-        if (!inputType || !catalystType) {
-            updateUI(controller, data, '§eEmpty');
-            controller.setProgress(0, { slot: 2 });
-            return;
-        }
-
-        recipe = recipes[catalystType + '|' + inputType];
-        if (!recipe) {
-            updateUI(controller, data, '§eInvalid Recipe');
-            controller.setProgress(0, { slot: 2 });
-            return;
-        }
-
-        let availableSpace = 0;
-        for (const slot of OUTPUT_SLOTS) {
-            const out = inv.getItem(slot);
-            if (!out) {
-                availableSpace += 64;
-            } else if (out.typeId === recipe.output) {
-                availableSpace += out.maxAmount - out.amount;
+            if (!inputType || !catalystType) {
+                return { status: '§eEmpty', resetProgress: true };
             }
-        }
 
-        const requiredInput = recipe.input_required ?? 1;
-        const requiredCatalyst = recipe.required ?? 1;
-        const recipeAmount = recipe.amount ?? 1;
-
-        if (requiredInput > totalInput) {
-            updateUI(controller, data, '§eMissing Input', recipe);
-            controller.setProgress(0, { slot: 2 });
-            return;
-        }
-        if (requiredCatalyst > totalCatalyst) {
-            updateUI(controller, data, '§eMissing Catalyst', recipe);
-            controller.setProgress(0, { slot: 2 });
-            return;
-        }
-
-
-        const maxProcess = Math.min(
-            data.processing.amount,
-            Math.floor(totalInput / requiredInput),
-            Math.floor(totalCatalyst / requiredCatalyst),
-            Math.floor(availableSpace / recipeAmount)
-        );
-
-        if (maxProcess <= 0) {
-            updateUI(controller, data, '§eOutput Full', recipe);
-            controller.setProgress(0, { slot: 2 });
-            return;
-        }
-
-        const cost = (recipe.cost ?? DEFAULT_COST) * MULTI_PENALTY;
-        data.cost = cost;
-        controller.setEnergyCost(cost);
-
-        const progress = controller.getProgress();
-
-        if (controller.energy.get() <= 0) {
-            updateUI(controller, data, '§eNo Energy', recipe);
-            controller.displayProgress({ slot: 2 });
-            return;
-        }
-
-        if (progress >= cost) {
-            const craftCount = maxProcess;
-
-            if (craftCount > 0) {
-                MultiblockMachine.distributeOutput(
-                    controller,
-                    OUTPUT_SLOTS,
-                    recipe.output,
-                    craftCount * recipeAmount
-                );
-
-                DoriosLib.entity.removeItem(controller.entity,
-                    inputType,
-                    craftCount * requiredInput
-                );
-
-                DoriosLib.entity.removeItem(controller.entity,
-                    catalystType,
-                    craftCount * requiredCatalyst
-                );
-
-                controller.addProgress(-cost);
+            recipe = recipes[catalystType + '|' + inputType];
+            if (!recipe) {
+                return { status: '§eInvalid Recipe', resetProgress: true };
             }
-        } else {
-            const energyToConsume = Math.min(
-                controller.energy.get(),
-                controller.rate,
-                cost * data.energyMultiplier
+
+            let availableSpace = 0;
+            for (const slot of OUTPUT_SLOTS) {
+                const out = inv.getItem(slot);
+                if (!out) {
+                    availableSpace += 64;
+                } else if (out.typeId === recipe.output) {
+                    availableSpace += out.maxAmount - out.amount;
+                }
+            }
+
+            const requiredInput = recipe.input_required ?? 1;
+            const requiredCatalyst = recipe.required ?? 1;
+            const recipeAmount = recipe.amount ?? 1;
+
+            if (requiredInput > totalInput) {
+                return { status: '§eMissing Input', recipe, resetProgress: true };
+            }
+            if (requiredCatalyst > totalCatalyst) {
+                return { status: '§eMissing Catalyst', recipe, resetProgress: true };
+            }
+
+
+            const maxProcess = Math.min(
+                data.processing.amount,
+                Math.floor(totalInput / requiredInput),
+                Math.floor(totalCatalyst / requiredCatalyst),
+                Math.floor(availableSpace / recipeAmount)
             );
 
-            controller.energy.consume(energyToConsume);
-            controller.addProgress(
-                energyToConsume / data.energyMultiplier
-            );
-        }
+            if (maxProcess <= 0) {
+                return { status: '§eOutput Full', recipe };
+            }
+
+            const cost = (recipe.cost ?? DEFAULT_COST) * MULTI_PENALTY;
+
+            return { cost, recipe, craft() {
+                const craftCount = maxProcess;
+
+                if (craftCount > 0) {
+                    MultiblockMachine.distributeOutput(
+                        controller,
+                        OUTPUT_SLOTS,
+                        recipe.output,
+                        craftCount * recipeAmount
+                    );
+
+                    DoriosLib.entity.removeItem(controller.entity,
+                        inputType,
+                        craftCount * requiredInput
+                    );
+
+                    DoriosLib.entity.removeItem(controller.entity,
+                        catalystType,
+                        craftCount * requiredCatalyst
+                    );
+                }
+            } };
+        });
 
         controller.displayProgress({ slot: 2 });
-        updateUI(controller, data, '§aRunning', recipe);
+        updateUI(controller, data, result.status, result.recipe);
     }
 })
 

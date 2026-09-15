@@ -88,11 +88,16 @@ test('essence has all bar frames, a tank entity and reversible bucket registrati
         const item = json(`BP/items/UI/nether_star_essence/utilitycraft_nether_star_essence_${frame}.json`)['minecraft:item'];
         assert.equal(item.description.identifier, `utilitycraft:nether_star_essence_${frame}`);
         const texture = atlas[item.components['minecraft:icon']].textures;
-        assert.ok(fs.existsSync(path.join(root, '../UtilityCraft/RP', texture + '.png')));
+        assert.ok(fs.existsSync(path.join(root, 'RP', texture + '.png')));
     }
     for (const [pack, folder, key] of [['BP','entities','minecraft:entity'], ['RP','entity','minecraft:client_entity']]) {
         assert.equal(json(`${pack}/${folder}/fluids/fluid_tank_nether_star_essence.json`)[key].description.identifier,
             'utilitycraft:fluid_tank_nether_star_essence');
+    }
+    const tankTexture = json('RP/entity/fluids/fluid_tank_nether_star_essence.json')['minecraft:client_entity'].description.textures.default;
+    const bucketTexture = atlas.utilitycraft_nether_star_essence_bucket.textures;
+    for (const texture of [tankTexture, bucketTexture]) {
+        assert.ok(fs.existsSync(path.join(root, 'RP', texture + '.png')));
     }
     let items, holders;
     vm.runInNewContext(read('BP/scripts/config/fluids.js').replace(/^import .*;\r?\n/gm, ''), {
