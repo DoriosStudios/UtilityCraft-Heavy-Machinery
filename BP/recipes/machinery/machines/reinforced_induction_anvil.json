@@ -1,0 +1,39 @@
+{
+    "format_version": "1.20.80",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "utilitycraft:reinforced_induction_anvil"
+        },
+        "tags": [
+            "utilitycraft_workbench"
+        ],
+        "pattern": [
+            "NEN",
+            "UAU",
+            "NEN"
+        ],
+        "key": {
+            "N": {
+                "item": "utilitycraft:netherite_plate"
+            },
+            "E": {
+                "item": "utilitycraft:energy_cell"
+            },
+            "U": {
+                "item": "utilitycraft:ultimate_chip"
+            },
+            "A": {
+                "item": "utilitycraft:induction_anvil"
+            }
+        },
+        "result": {
+            "item": "utilitycraft:reinforced_induction_anvil",
+            "count": 1
+        },
+        "unlock": [
+            {
+                "item": "utilitycraft:induction_anvil"
+            }
+        ]
+    }
+}

@@ -1,5 +1,17 @@
 
 export const reactionRecipes = {
+    "minecraft:nether_star|sulfuric_acid": {
+        required_items: 1,
+        required_liquid: 1000,
+        output_liquid: { type: "nether_star_essence", amount: 125 },
+        cost: 16000000,
+    },
+    "utilitycraft:spent_uranium_pellet|nether_star_essence": {
+        required_items: 2,
+        required_liquid: 125,
+        output_item: { id: "utilitycraft:stabilized_nuclear_matter", amount: 1 },
+        cost: 128000000,
+    },
     "minecraft:slime_ball|sulfuric_acid": {
         required_items: 4,
         required_liquid: 250,

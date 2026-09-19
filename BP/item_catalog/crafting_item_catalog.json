@@ -105,6 +105,7 @@
                         },
                         "items": [
                             "utilitycraft:isotope_centrifuge",
+                            "utilitycraft:reinforced_induction_anvil",
                             "utilitycraft:reaction_chamber",
                             "utilitycraft:chemical_processor"
                         ]
@@ -160,7 +161,7 @@
                             "utilitycraft:brute_bronze_block",
                             "utilitycraft:darloonite_crystal",
                             "utilitycraft:charged_darloonite_crystal",
-                            "utilitycraft:saline_coolant_bucket"
+                            "utilitycraft:nether_star_essence_bucket"
                         ]
                     },
                     {

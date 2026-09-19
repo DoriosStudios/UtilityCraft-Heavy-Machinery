@@ -1,3 +1,4 @@
+import { processFactory } from './factoryProcessing.js';
 import { EnergyStorage, FluidStorage, Multiblock, MultiblockMachine, registerLinkNodeIO } from "DoriosCore/index.js"
 import * as DoriosLib from "DoriosLib/index.js";
 import { reactionRecipes } from 'config/recipes/reactionChamber.js'
@@ -87,168 +88,138 @@ DoriosLib.registry.blockComponent('utilitycraft:reaction_chamber_controller', {
         /** @type {MachineStats} */
         const data = raw ? JSON.parse(raw) : {};
 
-        controller.setRateMultiplier(data.speed.multiplier);
-
-        const inv = controller.container;
-        const recipes = reactionRecipes;
+        controller.setRateMultiplier(data.speed.multiplier * data.energyMultiplier);
 
         const [inputFluid, outputFluid] =
             FluidStorage.initializeMultiple(controller.entity, 2);
 
-        let inputItemId = "empty";
-        let totalItems = 0;
+        const result = processFactory(controller, data, () => {
+            const inv = controller.container;
+            const recipes = reactionRecipes;
 
-        for (const slot of INPUT_SLOTS) {
-            const item = inv.getItem(slot);
-            if (!item) continue;
 
-            if (inputItemId === "empty") {
-                inputItemId = item.typeId;
-            }
+            let inputItemId = "empty";
+            let totalItems = 0;
 
-            if (item.typeId === inputItemId) {
-                totalItems += item.amount;
-            }
-        }
+            for (const slot of INPUT_SLOTS) {
+                const item = inv.getItem(slot);
+                if (!item) continue;
 
-        const inputFluidType = inputFluid.getType() ?? "empty";
+                if (inputItemId === "empty") {
+                    inputItemId = item.typeId;
+                }
 
-        const recipeKey = `${inputItemId}|${inputFluidType}`;
-        const recipe = recipes[recipeKey];
-
-        if (!recipe) {
-            updateUI(controller, [inputFluid, outputFluid], data, "§eNo Recipe");
-            controller.setProgress(0, { slot: 2 });
-            return;
-        }
-
-        const reqItems = recipe.required_items ?? 1;
-        const reqFluid = recipe.required_liquid ?? 0;
-
-        if (inputItemId !== "empty" && totalItems < reqItems) {
-            updateUI(controller, [inputFluid, outputFluid], data, "§eNot Enough Items", recipe);
-            controller.setProgress(0, { slot: 2 });
-            return;
-        }
-
-        if (reqFluid > 0 && inputFluid.get() < reqFluid) {
-            updateUI(controller, [inputFluid, outputFluid], data, "§eNot Enough Fluid", recipe);
-            controller.setProgress(0, { slot: 2 });
-            return;
-        }
-
-        let itemSpace = Infinity;
-        let fluidSpace = Infinity;
-
-        if (recipe.output_item) {
-            itemSpace = 0;
-            const outId = recipe.output_item.id;
-            for (const slot of OUTPUT_SLOTS) {
-                const out = inv.getItem(slot);
-                if (!out) {
-                    itemSpace += 64;
-                } else if (out.typeId === outId) {
-                    itemSpace += out.maxAmount - out.amount;
+                if (item.typeId === inputItemId) {
+                    totalItems += item.amount;
                 }
             }
-        }
 
-        if (recipe.output_liquid) {
-            const outType = recipe.output_liquid.type;
-            if (
-                outputFluid.getType() !== "empty" &&
-                outputFluid.getType() !== outType
-            ) {
-                updateUI(controller, [inputFluid, outputFluid], data, "§eWrong Output Fluid", recipe);
-                controller.setProgress(0, { slot: 2 });
-                return;
+            const inputFluidType = inputFluid.getType() ?? "empty";
+
+            const recipeKey = `${inputItemId}|${inputFluidType}`;
+            const recipe = recipes[recipeKey];
+
+            if (!recipe) {
+                return { status: "§eNo Recipe", resetProgress: true };
             }
-            fluidSpace = outputFluid.getFreeSpace();
-        }
 
-        const outItemAmt = recipe.output_item?.amount ?? 1;
-        const outFluidAmt = recipe.output_liquid?.amount ?? 0;
+            const reqItems = recipe.required_items ?? 1;
+            const reqFluid = recipe.required_liquid ?? 0;
 
-        const maxProcess = Math.min(
-            data.processing.amount,
-            inputItemId !== "empty"
-                ? Math.floor(totalItems / reqItems)
-                : Infinity,
-            reqFluid > 0
-                ? Math.floor(inputFluid.get() / reqFluid)
-                : Infinity,
-            recipe.output_item
-                ? Math.floor(itemSpace / outItemAmt)
-                : Infinity,
-            recipe.output_liquid
-                ? Math.floor(fluidSpace / outFluidAmt)
-                : Infinity
-        );
+            if (inputItemId !== "empty" && totalItems < reqItems) {
+                return { status: "§eNot Enough Items", recipe, resetProgress: true };
+            }
 
-        if (maxProcess <= 0) {
-            updateUI(controller, [inputFluid, outputFluid], data, "§eOutput Full", recipe);
-            controller.setProgress(0, { slot: 2 });
-            return;
-        }
+            if (reqFluid > 0 && inputFluid.get() < reqFluid) {
+                return { status: "§eNot Enough Fluid", recipe, resetProgress: true };
+            }
 
-        const cost = recipe.cost ?? DEFAULT_COST;
-        data.cost = cost;
-        controller.setEnergyCost(cost);
-
-        const progress = controller.getProgress();
-
-        if (controller.energy.get() <= 0) {
-            updateUI(controller, [inputFluid, outputFluid], data, "§eNo Energy", recipe);
-            controller.displayProgress({ slot: 2 });
-            return;
-        }
-
-        if (progress >= cost) {
-            const craftCount = maxProcess;
+            let itemSpace = Infinity;
+            let fluidSpace = Infinity;
 
             if (recipe.output_item) {
-                MultiblockMachine.distributeOutput(
-                    controller,
-                    OUTPUT_SLOTS,
-                    recipe.output_item.id,
-                    craftCount * outItemAmt
-                );
+                itemSpace = 0;
+                const outId = recipe.output_item.id;
+                for (const slot of OUTPUT_SLOTS) {
+                    const out = inv.getItem(slot);
+                    if (!out) {
+                        itemSpace += 64;
+                    } else if (out.typeId === outId) {
+                        itemSpace += out.maxAmount - out.amount;
+                    }
+                }
             }
 
             if (recipe.output_liquid) {
-                if (outputFluid.getType() === "empty") {
-                    outputFluid.setType(recipe.output_liquid.type);
+                const outType = recipe.output_liquid.type;
+                if (
+                    outputFluid.getType() !== "empty" &&
+                    outputFluid.getType() !== outType
+                ) {
+                    return { status: "\u00a7eWrong Output Fluid", recipe };
                 }
-                outputFluid.add(craftCount * outFluidAmt);
+                fluidSpace = outputFluid.getFreeSpace();
             }
 
-            if (inputItemId !== "empty") {
-                DoriosLib.entity.removeItem(controller.entity,
-                    inputItemId,
-                    craftCount * reqItems
-                );
-            }
+            const outItemAmt = recipe.output_item?.amount ?? 1;
+            const outFluidAmt = recipe.output_liquid?.amount ?? 0;
 
-            if (reqFluid > 0) {
-                inputFluid.consume(craftCount * reqFluid);
-            }
-
-            controller.addProgress(-cost);
-        } else {
-            const energyToConsume = Math.min(
-                controller.energy.get(),
-                controller.rate,
-                cost * data.energyMultiplier
+            const maxProcess = Math.min(
+                data.processing.amount,
+                inputItemId !== "empty"
+                    ? Math.floor(totalItems / reqItems)
+                    : Infinity,
+                reqFluid > 0
+                    ? Math.floor(inputFluid.get() / reqFluid)
+                    : Infinity,
+                recipe.output_item
+                    ? Math.floor(itemSpace / outItemAmt)
+                    : Infinity,
+                recipe.output_liquid
+                    ? Math.floor(fluidSpace / outFluidAmt)
+                    : Infinity
             );
 
-            controller.energy.consume(energyToConsume);
-            controller.addProgress(
-                energyToConsume / data.energyMultiplier
-            );
-        }
+            if (maxProcess <= 0) {
+                return { status: "§eOutput Full", recipe };
+            }
+
+            const cost = recipe.cost ?? DEFAULT_COST;
+
+            return { cost, recipe, craft() {
+                const craftCount = maxProcess;
+
+                if (recipe.output_item) {
+                    MultiblockMachine.distributeOutput(
+                        controller,
+                        OUTPUT_SLOTS,
+                        recipe.output_item.id,
+                        craftCount * outItemAmt
+                    );
+                }
+
+                if (recipe.output_liquid) {
+                    if (outputFluid.getType() === "empty") {
+                        outputFluid.setType(recipe.output_liquid.type);
+                    }
+                    outputFluid.add(craftCount * outFluidAmt);
+                }
+
+                if (inputItemId !== "empty") {
+                    DoriosLib.entity.removeItem(controller.entity,
+                        inputItemId,
+                        craftCount * reqItems
+                    );
+                }
+
+                if (reqFluid > 0) {
+                    inputFluid.consume(craftCount * reqFluid);
+                }
+            } };
+        });
 
         controller.displayProgress({ slot: 2 });
-        updateUI(controller, [inputFluid, outputFluid], data, "§aRunning", recipe);
+        updateUI(controller, [inputFluid, outputFluid], data, result.status, result.recipe);
     }
 })
 

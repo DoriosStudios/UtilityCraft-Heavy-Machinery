@@ -1,10 +1,31 @@
 # UtilityCraft: Heavy Machinery v0.6.0
 
 ## FIXED
+- Fixed broken formatting codes in the Nether Star Essence Bucket tooltip in all three languages, including the Portuguese name accent.
+- Factory controllers now charge and finish batches in the same update, process all work allowed by the scheduler interval, stop spending when inputs/outputs block, retain blocked-output progress and finish fully paid batches with an empty battery. UI refreshes only once per update. Autosieve reserves output space before consuming inputs.
+- Reinforced Induction Anvil now skips item/lore writes when fully charged or unable to transfer a complete energy unit. Removed duplicate status energy-bar refreshes.
+- Fixed Exo durability overflow: pieces now use 10,200 maximum durability and ItemEnergyStorage uses 100,000 DE per point, preserving 1,000,000,000 DE capacity and 100-point margins within the signed 16-bit durability range.
+- Deferred new Exo armor initialization until after its inventory transaction, rechecking the destination before writing; initialization errors now report the item and slot in the Content Log.
 - Thermal meltdown now resets the burn rate to 1; rebuilding after meltdown restores cold, stopped initial reactor state and clears timers, production and fractional processing credits. Normal rescans retain settings.
 - Prevented invalid NaN liquid/gas bar items when reactor storage capacity is zero, including Thermal without Fluid Cells. Liquid and gas displays now use an empty frame and 0% when capacity is zero.
 
 ## CHANGED
+- Moved the Saline Coolant Bucket item, texture, translations, Creative entry and fluid registration into UtilityCraft, preserving its identifier and 1,000 mB capacity.
+- Added a dedicated Nether Star Essence liquid recolor in pearl gray, pale yellow and ivory, with matching tank, bucket and all 49 UI fill levels.
+- Rebalanced minimum factories to 20x standard base throughput (2x a standard machine with maximum speed upgrades), with full batches and sufficient supplies. Removed the x4 batch penalty; Crusher/Press/Incinerator base rate is 200, Infuser/Autosieve/Magmatic 400, Reaction Chamber 1,600. Magmatic default recipe cost now matches UC at 8,000 DE.
+- Factory Processing and Speed now have square-root returns: 2+2 modules replace 4 maxed standard machines, 32+32 replace 64, and 64+64 replace 128. Whole parallel lanes are compensated in the work rate, keeping the curve exact and energy per operation constant before Efficiency. Efficiency still saves up to 75%. Rescan existing factories to refresh stats.
+- Unified Exo absorption costs at 100,000 DE per absorbed damage point for hits and falls. Exo descriptions use UtilityCraft formatting and include the boots' fall protection in all three languages.
+- Redistributed Exo absorption to helmet 12.5%, chestplate 40%, leggings 30% and boots 12.5% (95% total), with energy costs following each piece's share. Added localized absorption and Reinforced Induction Anvil recharge descriptions to all four pieces.
+- Added netherite-equivalent native Exo armor points: 3/8/6/3. Native protection also works with empty energy.
+- Simplified Exo armor into one tag-based damage script. Equipped utilitycraft:exo_armor pieces with enough energy reduce damage by their per-slot shares; powered boots cancel falls. Removed armor-specific capacity, durability and item-ID registries; ItemEnergyStorage owns capacity and conversion.
+- Moved Exo energy initialization into UtilityCraft's global tag-based UtilityCore handler; Heavy Machinery no longer registers its own inventory initialization callback.
+- Item energy lore now reuses the exact machine-break energy lore builder, including gray color, indentation and stored/capacity spacing; removed the separate percentage display.
+- Item energy lore now uses the shared EnergyStorage formatter for stored energy and capacity, matching block energy units.
+- Increased Reinforced Induction Anvil energy capacity to 640 MDE.
+- Simplified Exo armor to inventory-change initialization and damage-triggered energy spending. Removed periodic player/inventory scans, legacy energy migration, per-item IDs and persistent energy debts; fresh pieces start at 100 remaining durability.
+- Restored normal block-container entity hitboxes to 1 x 1; the hidden selection state remains 0 x 0.
+- Rebalanced nuclear waste processing around reactor output: 32,000,000 DE per Spent Uranium Pellet, 16,000,000 DE per 125 mB Nether Star Essence and 128,000,000 DE per Stabilized Nuclear Matter. The full Exo material chain costs 1,664,000,000 DE at base single-recipe rates, before machine modifiers and batching.
+- Added UtilityCore block-container selection compatibility to all six custom controller entities: the shared multiblock machine, Combustion Chamber, Gas Turbine, Nuclear Reactor, Thermal Reactor and Power Condenser. Family-based discovery and full/hidden hitboxes preserve existing inventories, family variants and inactive-controller scaling; turbine visual entities are unaffected.
 - Renamed Tin Crystal to Tempered Tin Glass across its identifier, assets, catalog and localization; added its Infuser recipe using 8 Tin Dust and 1 Glass.
 - Applied the dedicated Netherite Controller Case atlas as three lossless 16x16 top, bottom and side textures.
 - Standardized the initial burn rate to 1 for all reactor/generator controllers; Thermal and Combustion now match Nuclear and Gas Turbine. Existing configured rates are preserved.
@@ -24,8 +45,15 @@
 - Compacted the Combustion Chamber Info panel spacing and reduced its scroll content height.
 
 ## ADDED
-- Added Stabilized Nuclear Matter as an advanced purple variant of the Spent Uranium Pellet, registered as a creative material without a recipe yet.
-- Added Chemical Processor recovery of 1 Spent Uranium Pellet from 1,000 mB Nuclear Waste Gas and 1,000 mB Water for 256,000 DE; gas byproducts are now optional per recipe.
+- Added a blue expanding particle at the player's feet when Exo Boots absorb a fall, adapted from the supplied hammer effect with independent asset IDs and an approximately two-block diameter.
+- Added a small blue expanding landing particle at the player's feet when powered Exo Boots absorb fall damage, adapted from the supplied hammer effect with independent asset IDs.
+- Added generic ItemEnergyStorage to DoriosCore: the utilitycraft:energy_container tag opts in, each useful durability point stores 100,000 DE, and 100 points are reserved at both ends. Capacity comes only from maximum durability. Charging rounds down, consumption rounds up, and methods return the actual DE moved. Removed generator-interaction charging.
+- Added the Reinforced Induction Anvil with the original model and graphite/violet texture, 128x base repair speed, 32,000,000 DE storage, and 1,000,000 DE/t energy-container charging. Supports speed/energy upgrades and Workbench/Crafter recipes.
+- Added rechargeable Exo Armor: 1,000,000,000 DE per piece, 95% total incoming-damage absorption across the four per-slot shares, 100,000 DE per point absorbed, and paid fall cancellation with boots. Uses ItemEnergyStorage with 10,200 durability, 100-point end margins, no enchantments/native wear, and Reinforced Induction Anvil charging. New Exo pieces start empty through the player inventory-change event.
+- Added the two-stage Reaction Chamber route to Stabilized Nuclear Matter: 1 Nether Star + 1,000 mB Sulfuric Acid yields 125 mB Nether Star Essence for 16,000,000 DE; 2 Spent Uranium Pellets + 125 mB Essence yields 1 Nuclear Matter for 128,000,000 DE. Added essence bucket handling, tank support and 49 UI levels using existing pale liquid artwork. The full Exo set uses 8 Nuclear Matter (1 bucket of essence).
+- Added Workbench and Crafter recipes for all four Utility Exo Armor pieces using Netherite Plates, Rubber Sheets, Ultimate Chips and Stabilized Nuclear Matter.
+- Added Stabilized Nuclear Matter as an advanced purple variant of the Spent Uranium Pellet, registered as a creative material with Reaction Chamber processing.
+- Added Chemical Processor recovery of 1 Spent Uranium Pellet from 1,000 mB Nuclear Waste Gas and 1,000 mB Water for 32,000,000 DE; gas byproducts are now optional per recipe.
 - Added Rubber Sheet, Lead Plate and Yellow Dye recipes for all four Hazmat armor pieces, available in the Workbench and Crafter.
 - Added a Reaction Chamber recipe that processes 4 Slime Balls and 250 mB Sulfuric Acid into 1 Rubber Sheet for 16,000 DE.
 - Added survival recipes for Netherite Plated Blocks, Stamped Plates, Bricks, Hazard Blocks, Vent Panels, Tempered Glass and Reinforced Glass, with matching Workbench, Crafter and Infuser support.
@@ -46,6 +74,7 @@
 - Added generic DoriosCore TemperatureStorage with persistent thermal capacity, internal HU/t generation, simultaneous hot/cold contacts, exact time-based heat exchange, and native temperature display independent of machine limits.
 
 ## CHANGED
+- Made all four Exo Armor recipes horizontally symmetric, replacing Lead Plates with Rubber Sheets and restoring Netherite Plates at the corners. The full set still requires 8 Stabilized Nuclear Matter.
 - Simplified Nuclear, Thermal and Gas Turbine data caching through one generic HeavyCore map keyed by entity ID. State remains persisted in dynamic properties, reloads lazily after unload/restart, and rescans refresh cached stats. Storage instances are created per update.
 
 - Standardized all Heavy Machinery block tick intervals to 4 ticks, reducing redundant controller callbacks while preserving scheduler-driven machine throughput.
@@ -231,7 +260,7 @@
 - Added a complete Lead material family with Sieve-obtained chunks, reconstructable stone and deepslate ores, raw, dust, ingot, nugget, plate, and storage-block forms, plus dark blue Steel-derived textures and processing recipes.
 - Added a living Nuclear Reactor design document covering reactor behavior, fuel routes, gas production, enrichment, coolant moderation, waste, and implementation phases.
 - Added the first functional Nuclear Reactor multiblock, converting Enriched Uranium Rods into internal nuclear fuel and Dorios Energy.
-- Added a dedicated Nuclear Reactor interface with solid-fuel input, uranium reserve, coolant, temperature, output, structure statistics, and 0–100% power controls.
+- Added a dedicated Nuclear Reactor interface with solid-fuel input, uranium reserve, coolant, temperature, output, structure statistics, and 0â€“100% power controls.
 - Added a Creative Saline Coolant Tank that provides infinite Saline Coolant to fluid networks and compatible containers.
 - Added Tin Ore and Deepslate Tin Ore blocks with Silk Touch support and Raw Tin drops.
 - Added Deepslate Uranium Ore with Silk Touch support and Raw Uranium drops.

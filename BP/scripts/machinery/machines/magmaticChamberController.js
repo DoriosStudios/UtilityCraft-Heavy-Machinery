@@ -1,12 +1,13 @@
+import { processFactory } from './factoryProcessing.js';
 import { EnergyStorage, FluidStorage, Multiblock, MultiblockMachine, registerLinkNodeIO } from "DoriosCore/index.js"
 import * as DoriosLib from "DoriosLib/index.js";
 import { melterRecipes } from 'config/recipes/melter.js'
 
 const OUTPUT_LIQUID_SLOT = 3
 const INPUT_SLOTS = [4, 5, 6, 7, 8, 9, 10, 11, 12]
-const DEFAULT_COST = 6400
-const MULTI_PENALTY = 4
-const BASE_RATE = 1600
+const DEFAULT_COST = 8000
+const MULTI_PENALTY = 1
+const BASE_RATE = 400
 const FLUID_CAPACITY_CELL = 256_000
 
 const CONTROLLER_REQUIREMENTS = {
@@ -90,99 +91,74 @@ DoriosLib.registry.blockComponent('utilitycraft:magmatic_chamber_controller', {
         const raw = controller.entity.getDynamicProperty('components')
         const data = raw ? JSON.parse(raw) : {}
 
-        controller.setRateMultiplier(data.speed.multiplier)
+        controller.setRateMultiplier(data.speed.multiplier * data.energyMultiplier)
 
-        const inv = controller.container
         const outputFluid = FluidStorage.initializeSingle(controller.entity)
 
-        let recipe = null
-        let inputType = null
-        let totalInput = 0
+        const result = processFactory(controller, data, () => {
+            const inv = controller.container
 
-        for (const slot of INPUT_SLOTS) {
-            const item = inv.getItem(slot)
-            if (!item) continue
+            let recipe = null
+            let inputType = null
+            let totalInput = 0
 
-            const candidate = melterRecipes[item.typeId]
-            if (!candidate) continue
+            for (const slot of INPUT_SLOTS) {
+                const item = inv.getItem(slot)
+                if (!item) continue
 
-            if (!recipe) {
-                recipe = candidate
-                inputType = item.typeId
-            }
+                const candidate = melterRecipes[item.typeId]
+                if (!candidate) continue
 
-            if (item.typeId === inputType) {
-                totalInput += item.amount
-            }
-        }
-
-        if (!recipe || !inputType) {
-            updateUI(controller, outputFluid, data, '\u00A7eNo Input')
-            controller.setProgress(0, { slot: 2 })
-            return
-        }
-
-        if (outputFluid.getType() !== 'empty' && outputFluid.getType() !== recipe.liquid) {
-            updateUI(controller, outputFluid, data, '\u00A7eWrong Output Fluid', recipe)
-            controller.setProgress(0, { slot: 2 })
-            return
-        }
-
-        const required = recipe.required ?? 1
-        const outputAmount = recipe.amount ?? 1
-        const availableFluidSpace = outputFluid.getFreeSpace()
-
-        const maxProcess = Math.min(
-            data.processing.amount,
-            Math.floor(totalInput / required),
-            Math.floor(availableFluidSpace / outputAmount)
-        )
-
-        if (maxProcess <= 0) {
-            updateUI(controller, outputFluid, data, '\u00A7eOutput Full', recipe)
-            controller.setProgress(0, { slot: 2 })
-            return
-        }
-
-        const cost = (recipe.cost ?? DEFAULT_COST) * MULTI_PENALTY
-        data.cost = cost
-        controller.setEnergyCost(cost)
-
-        const progress = controller.getProgress()
-
-        if (controller.energy.get() <= 0) {
-            updateUI(controller, outputFluid, data, '\u00A7eNo Energy', recipe)
-            controller.displayProgress({ slot: 2 })
-            return
-        }
-
-        if (progress >= cost) {
-            const craftCount = maxProcess
-
-            if (craftCount > 0) {
-                if (outputFluid.getType() === 'empty') {
-                    outputFluid.setType(recipe.liquid)
+                if (!recipe) {
+                    recipe = candidate
+                    inputType = item.typeId
                 }
 
-                outputFluid.add(craftCount * outputAmount)
-                DoriosLib.entity.removeItem(controller.entity, inputType, craftCount * required)
-                controller.addProgress(-cost)
+                if (item.typeId === inputType) {
+                    totalInput += item.amount
+                }
             }
-        } else {
-            const energyToConsume = Math.min(
-                controller.energy.get(),
-                controller.rate,
-                cost * data.energyMultiplier
+
+            if (!recipe || !inputType) {
+                return { status: '\u00A7eNo Input', resetProgress: true };
+            }
+
+            if (outputFluid.getType() !== 'empty' && outputFluid.getType() !== recipe.liquid) {
+                return { status: '\u00A7eWrong Output Fluid', recipe };
+            }
+
+            const required = recipe.required ?? 1
+            const outputAmount = recipe.amount ?? 1
+            const availableFluidSpace = outputFluid.getFreeSpace()
+
+            const maxProcess = Math.min(
+                data.processing.amount,
+                Math.floor(totalInput / required),
+                Math.floor(availableFluidSpace / outputAmount)
             )
 
-            controller.energy.consume(energyToConsume)
-            controller.addProgress(
-                energyToConsume / data.energyMultiplier
-            )
-        }
+            if (maxProcess <= 0) {
+                return { status: '\u00A7eOutput Full', recipe };
+            }
 
-        controller.displayProgress({ slot: 2 })
-        updateUI(controller, outputFluid, data, '\u00A7aRunning', recipe)
+            const cost = (recipe.cost ?? DEFAULT_COST) * MULTI_PENALTY
+
+            return { cost, recipe, craft() {
+                const craftCount = maxProcess
+
+                if (craftCount > 0) {
+                    if (outputFluid.getType() === 'empty') {
+                        outputFluid.setType(recipe.liquid)
+                    }
+
+                    outputFluid.add(craftCount * outputAmount)
+                    DoriosLib.entity.removeItem(controller.entity, inputType, craftCount * required)
+                }
+            } };
+        });
+
+        controller.displayProgress({ slot: 2 });
+        updateUI(controller, outputFluid, data, result.status, result.recipe);
     }
 })
 

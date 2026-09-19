@@ -309,5 +309,8 @@
 			"down": "utilitycraft_netherite_controller_case_bottom",
 			"side": "utilitycraft_netherite_controller_case"
 		}
+	},
+	"utilitycraft:reinforced_induction_anvil": {
+		"sound": "anvil"
 	}
 }

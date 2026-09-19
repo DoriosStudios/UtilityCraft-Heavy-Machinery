@@ -1,3 +1,4 @@
+import { processFactory, canFitFactoryOutputs } from './factoryProcessing.js';
 import { EnergyStorage, Multiblock, MultiblockMachine, registerLinkNodeIO } from "DoriosCore/index.js"
 import * as DoriosLib from "DoriosLib/index.js";
 import { sieveRecipes } from 'config/recipes/sieve.js'
@@ -7,8 +8,8 @@ const INPUT_SLOTS = [4, 5, 6, 7, 8, 9, 10, 11, 12]
 const OUTPUT_SLOTS = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
 
 const DEFAULT_COST = 6400
-const MULTI_PENALTY = 4
-const BASE_RATE = 800
+const MULTI_PENALTY = 1
+const BASE_RATE = 400
 const CONTROLLER_REQUIREMENTS = {
     energy_cell: {
         amount: 1,
@@ -75,108 +76,91 @@ DoriosLib.registry.blockComponent('utilitycraft:autosieve_controller', {
         const raw = controller.entity.getDynamicProperty('components')
         const data = raw ? JSON.parse(raw) : {}
 
-        controller.setRateMultiplier(data.speed.multiplier)
+        controller.setRateMultiplier(data.speed.multiplier * data.energyMultiplier)
 
-        const inv = controller.container
+        const result = processFactory(controller, data, () => {
+            const inv = controller.container
 
-        const meshSlot = inv.getItem(MESH_SLOT)
-        if (!meshSlot) {
-            updateUI(controller, data, '§eNo Mesh')
-            controller.setProgress(0, { slot: 2 })
-            return
-        }
-
-        const meshComp = meshSlot.getComponent('utilitycraft:mesh')
-        if (!meshComp) {
-            updateUI(controller, data, '§eInvalid Mesh')
-            controller.setProgress(0, { slot: 2 })
-            return
-        }
-
-        const meshData = meshComp.customComponentParameters.params
-        const meshCapacity = meshSlot.amount * 9
-
-        const tier = meshData.tier
-        const multi = meshData.multiplier
-        const amountMultiplier = meshData.amount_multiplier
-
-        let inputType = null
-        let totalInput = 0
-
-        for (const slot of INPUT_SLOTS) {
-            const item = inv.getItem(slot)
-            if (!item) continue
-
-            if (!inputType) inputType = item.typeId
-            if (item.typeId === inputType) {
-                totalInput += item.amount
+            const meshSlot = inv.getItem(MESH_SLOT)
+            if (!meshSlot) {
+                return { status: '§eNo Mesh', resetProgress: true };
             }
-        }
 
-        if (!inputType || totalInput <= 0) {
-            updateUI(controller, data, '§eNo Input')
-            controller.setProgress(0, { slot: 2 })
-            return
-        }
+            const meshComp = meshSlot.getComponent('utilitycraft:mesh')
+            if (!meshComp) {
+                return { status: '§eInvalid Mesh', resetProgress: true };
+            }
 
-        const recipe = sieveRecipes[inputType]
-        if (!recipe) {
-            updateUI(controller, data, '§eInvalid Input')
-            controller.setProgress(0, { slot: 2 })
-            return
-        }
+            const meshData = meshComp.customComponentParameters.params
+            const meshCapacity = meshSlot.amount * 9
 
-        const processCount = Math.min(
-            data.processing.amount,
-            meshCapacity,
-            totalInput
-        )
+            const tier = meshData.tier
+            const multi = meshData.multiplier
+            const amountMultiplier = meshData.amount_multiplier
 
-        if (processCount <= 0) {
-            updateUI(controller, data, '§eCapacity Limit')
-            controller.setProgress(0, { slot: 2 })
-            return
-        }
+            let inputType = null
+            let totalInput = 0
 
-        const cost = (recipe.cost ?? DEFAULT_COST) * MULTI_PENALTY
-        data.cost = cost;
-        controller.setEnergyCost(cost)
+            for (const slot of INPUT_SLOTS) {
+                const item = inv.getItem(slot)
+                if (!item) continue
 
-        const progress = controller.getProgress()
+                if (!inputType) inputType = item.typeId
+                if (item.typeId === inputType) {
+                    totalInput += item.amount
+                }
+            }
 
-        if (controller.energy.get() <= 0) {
-            updateUI(controller, data, '§eNo Energy')
-            controller.displayProgress({ slot: 2 })
-            return
-        }
+            if (!inputType || totalInput <= 0) {
+                return { status: '§eNo Input', resetProgress: true };
+            }
 
-        if (progress >= cost) {
-            processAutosieveDrops(
-                controller,
-                recipe,
-                processCount,
-                tier,
-                multi,
-                amountMultiplier
+            const recipe = sieveRecipes[inputType]
+            if (!recipe) {
+                return { status: '§eInvalid Input', resetProgress: true };
+            }
+
+            let processCount = Math.min(
+                data.processing.amount,
+                meshCapacity,
+                totalInput
             )
 
-            DoriosLib.entity.removeItem(controller.entity, inputType, processCount)
-            controller.addProgress(-cost)
-        } else {
-            const energyToConsume = Math.min(
-                controller.energy.get(),
-                controller.rate,
-                cost * data.energyMultiplier
-            )
+            if (processCount <= 0) {
+                return { status: '§eCapacity Limit', resetProgress: true };
+            }
 
-            controller.energy.consume(energyToConsume)
-            controller.addProgress(
-                energyToConsume / data.energyMultiplier
-            )
-        }
+            // Reserve the largest possible roll before charging; full outputs
+            // must not consume inputs or silently discard drops.
+            const drops = recipe.filter(loot => tier >= (loot.tier ?? 0)
+                && !(loot.item === 'minecraft:flint' && tier >= 7)
+                && loot.chance * multi > 0);
+            while (processCount > 0 && !canFitFactoryOutputs(inv, OUTPUT_SLOTS,
+                drops.map(loot => ({
+                    typeId: loot.item,
+                    amount: processCount * Math.ceil((Array.isArray(loot.amount)
+                        ? loot.amount[1] : loot.amount) * (amountMultiplier || 1)),
+                })))) processCount--;
+            if (processCount <= 0) return { status: '\u00a7eOutput Full' };
 
-        controller.displayProgress({ slot: 2 })
-        updateUI(controller, data, '§aRunning')
+            const cost = (recipe.cost ?? DEFAULT_COST) * MULTI_PENALTY
+
+            return { cost, recipe: undefined, craft() {
+                processAutosieveDrops(
+                    controller,
+                    recipe,
+                    processCount,
+                    tier,
+                    multi,
+                    amountMultiplier
+                )
+
+                DoriosLib.entity.removeItem(controller.entity, inputType, processCount)
+            } };
+        });
+
+        controller.displayProgress({ slot: 2 });
+        updateUI(controller, data, result.status);
     }
 })
 

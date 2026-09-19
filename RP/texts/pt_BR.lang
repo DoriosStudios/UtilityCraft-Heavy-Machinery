@@ -19,10 +19,10 @@ entity.utilitycraft:autosieve_controller.name=Controlador de Peneirador
 entity.utilitycraft:reaction_chamber_controller.name=Controlador de Câmara de Reação
 entity.utilitycraft:magmatic_chamber_controller.name=Câmara Magmática
 
-item.utilitycraft:utility_exo_helmet=Capacete Exo Utility\n§o§9@UC: Heavy Machinery
-item.utilitycraft:utility_exo_chestplate=Peitoral Exo Utility\n§o§9@UC: Heavy Machinery
-item.utilitycraft:utility_exo_leggings=Calças Exo Utility\n§o§9@UC: Heavy Machinery
-item.utilitycraft:utility_exo_boots=Botas Exo Utility\n§o§9@UC: Heavy Machinery
+item.utilitycraft:utility_exo_helmet=Capacete Exo Utility\n§7- Absorve 12,5% do dano consumindo energia\n§7- Recarregável na Bigorna de indução reforçada\n§o§9@UC: Heavy Machinery
+item.utilitycraft:utility_exo_chestplate=Peitoral Exo Utility\n§7- Absorve 40% do dano consumindo energia\n§7- Recarregável na Bigorna de indução reforçada\n§o§9@UC: Heavy Machinery
+item.utilitycraft:utility_exo_leggings=Calças Exo Utility\n§7- Absorve 30% do dano consumindo energia\n§7- Recarregável na Bigorna de indução reforçada\n§o§9@UC: Heavy Machinery
+item.utilitycraft:utility_exo_boots=Botas Exo Utility\n§7- Absorve 12,5% do dano consumindo energia\n§7- Recarregável na Bigorna de indução reforçada\n§7- Sem dano de queda\n§o§9@UC: Heavy Machinery
 item.utilitycraft:hazmat_helmet=Capacete Hazmat\n§o§9@UC: Heavy Machinery
 item.utilitycraft:hazmat_chestplate=Peitoral Hazmat\n§o§9@UC: Heavy Machinery
 item.utilitycraft:hazmat_leggings=Calças Hazmat\n§o§9@UC: Heavy Machinery
@@ -134,7 +134,6 @@ tile.utilitycraft:tin_plated_block.name=Bloco Revestido de Estanho\n§o§9@UC: H
 tile.utilitycraft:brute_bronze_block.name=Bloco de Bronze Bruto\n§o§9@UC: Heavy Machinery
 tile.utilitycraft:raw_tin_block.name=Bloco de Estanho Bruto\n§o§9@UC: Heavy Machinery
 tile.utilitycraft:controller_case.name=Carcaça de Controlador\n§o§9@UC: Heavy Machinery
-item.utilitycraft:saline_coolant_bucket=Balde de Líquido Arrefecedor Salino\n§o§9@UC: Heavy Machinery
 item.utilitycraft:control_panel=Painel de Controle\n§o§9@UC: Heavy Machinery
 
 utilitycraft:itemGroup.controllers=Controladores
@@ -382,3 +381,7 @@ ui.hm.cc.vent_details=Roof vents release smoke while running. Full energy storag
 ui.hm.cc.manual_fuel_hint=Go to Fuel tab to manually feed fuel items.
 
 tile.utilitycraft:netherite_controller_case.name=Netherite Controller Case\n§o§9@UC: Heavy Machinery
+item.utilitycraft:nether_star_essence_bucket=Balde de essência de estrela do Nether\n§o§9@UC: Heavy Machinery
+tile.utilitycraft:reinforced_induction_anvil.name=Bigorna de indução reforçada
+entity.utilitycraft:reinforced_induction_anvil.name=Bigorna de indução reforçada
+ui.utilitycraft:info.reinforced_induction_anvil=Repara equipamento normal 128 vezes mais rápido na velocidade base.\n\nCarrega Energy Containers a 1,000,000 DE/t, usando 1 DE por DE armazenado, em unidades de 10,000 DE.\n\nReserva: 32,000,000 DE. Aceita melhorias de velocidade e energia.

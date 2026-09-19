@@ -4,6 +4,9 @@
 	"resource_pack_name": "UtilityCraft Heavy Machinery",
 	"texture_name": "atlas.terrain",
 	"texture_data": {
+		"utilitycraft_reinforced_induction_anvil": {
+			"textures": "textures/blocks/machines/reinforced_induction_anvil"
+		},
 		"utilitycraft_reaction_chamber_controller_up": {
 			"textures": "textures/blocks/multiblock/reaction_chamber_controller_up"
 		},

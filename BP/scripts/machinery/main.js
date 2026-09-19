@@ -23,3 +23,5 @@ import './machines/tankController.js'
 import './generators/gasTurbine.js'
 
 import './generators/combustionChamber.js'
+
+import './machines/reinforcedInductionAnvil.js'
