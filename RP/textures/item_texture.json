@@ -6,280 +6,280 @@
 			"textures": "textures/items/nether_star_essence_bucket"
 		},
 		"utilitycraft:nether_star_essence_00": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_00"
+			"textures": "textures/ui/nether_star_essence/f_00"
 		},
 		"utilitycraft:nether_star_essence_01": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_01"
+			"textures": "textures/ui/nether_star_essence/f_01"
 		},
 		"utilitycraft:nether_star_essence_02": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_02"
+			"textures": "textures/ui/nether_star_essence/f_02"
 		},
 		"utilitycraft:nether_star_essence_03": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_03"
+			"textures": "textures/ui/nether_star_essence/f_03"
 		},
 		"utilitycraft:nether_star_essence_04": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_04"
+			"textures": "textures/ui/nether_star_essence/f_04"
 		},
 		"utilitycraft:nether_star_essence_05": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_05"
+			"textures": "textures/ui/nether_star_essence/f_05"
 		},
 		"utilitycraft:nether_star_essence_06": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_06"
+			"textures": "textures/ui/nether_star_essence/f_06"
 		},
 		"utilitycraft:nether_star_essence_07": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_07"
+			"textures": "textures/ui/nether_star_essence/f_07"
 		},
 		"utilitycraft:nether_star_essence_08": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_08"
+			"textures": "textures/ui/nether_star_essence/f_08"
 		},
 		"utilitycraft:nether_star_essence_09": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_09"
+			"textures": "textures/ui/nether_star_essence/f_09"
 		},
 		"utilitycraft:nether_star_essence_10": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_10"
+			"textures": "textures/ui/nether_star_essence/f_10"
 		},
 		"utilitycraft:nether_star_essence_11": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_11"
+			"textures": "textures/ui/nether_star_essence/f_11"
 		},
 		"utilitycraft:nether_star_essence_12": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_12"
+			"textures": "textures/ui/nether_star_essence/f_12"
 		},
 		"utilitycraft:nether_star_essence_13": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_13"
+			"textures": "textures/ui/nether_star_essence/f_13"
 		},
 		"utilitycraft:nether_star_essence_14": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_14"
+			"textures": "textures/ui/nether_star_essence/f_14"
 		},
 		"utilitycraft:nether_star_essence_15": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_15"
+			"textures": "textures/ui/nether_star_essence/f_15"
 		},
 		"utilitycraft:nether_star_essence_16": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_16"
+			"textures": "textures/ui/nether_star_essence/f_16"
 		},
 		"utilitycraft:nether_star_essence_17": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_17"
+			"textures": "textures/ui/nether_star_essence/f_17"
 		},
 		"utilitycraft:nether_star_essence_18": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_18"
+			"textures": "textures/ui/nether_star_essence/f_18"
 		},
 		"utilitycraft:nether_star_essence_19": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_19"
+			"textures": "textures/ui/nether_star_essence/f_19"
 		},
 		"utilitycraft:nether_star_essence_20": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_20"
+			"textures": "textures/ui/nether_star_essence/f_20"
 		},
 		"utilitycraft:nether_star_essence_21": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_21"
+			"textures": "textures/ui/nether_star_essence/f_21"
 		},
 		"utilitycraft:nether_star_essence_22": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_22"
+			"textures": "textures/ui/nether_star_essence/f_22"
 		},
 		"utilitycraft:nether_star_essence_23": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_23"
+			"textures": "textures/ui/nether_star_essence/f_23"
 		},
 		"utilitycraft:nether_star_essence_24": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_24"
+			"textures": "textures/ui/nether_star_essence/f_24"
 		},
 		"utilitycraft:nether_star_essence_25": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_25"
+			"textures": "textures/ui/nether_star_essence/f_25"
 		},
 		"utilitycraft:nether_star_essence_26": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_26"
+			"textures": "textures/ui/nether_star_essence/f_26"
 		},
 		"utilitycraft:nether_star_essence_27": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_27"
+			"textures": "textures/ui/nether_star_essence/f_27"
 		},
 		"utilitycraft:nether_star_essence_28": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_28"
+			"textures": "textures/ui/nether_star_essence/f_28"
 		},
 		"utilitycraft:nether_star_essence_29": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_29"
+			"textures": "textures/ui/nether_star_essence/f_29"
 		},
 		"utilitycraft:nether_star_essence_30": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_30"
+			"textures": "textures/ui/nether_star_essence/f_30"
 		},
 		"utilitycraft:nether_star_essence_31": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_31"
+			"textures": "textures/ui/nether_star_essence/f_31"
 		},
 		"utilitycraft:nether_star_essence_32": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_32"
+			"textures": "textures/ui/nether_star_essence/f_32"
 		},
 		"utilitycraft:nether_star_essence_33": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_33"
+			"textures": "textures/ui/nether_star_essence/f_33"
 		},
 		"utilitycraft:nether_star_essence_34": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_34"
+			"textures": "textures/ui/nether_star_essence/f_34"
 		},
 		"utilitycraft:nether_star_essence_35": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_35"
+			"textures": "textures/ui/nether_star_essence/f_35"
 		},
 		"utilitycraft:nether_star_essence_36": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_36"
+			"textures": "textures/ui/nether_star_essence/f_36"
 		},
 		"utilitycraft:nether_star_essence_37": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_37"
+			"textures": "textures/ui/nether_star_essence/f_37"
 		},
 		"utilitycraft:nether_star_essence_38": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_38"
+			"textures": "textures/ui/nether_star_essence/f_38"
 		},
 		"utilitycraft:nether_star_essence_39": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_39"
+			"textures": "textures/ui/nether_star_essence/f_39"
 		},
 		"utilitycraft:nether_star_essence_40": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_40"
+			"textures": "textures/ui/nether_star_essence/f_40"
 		},
 		"utilitycraft:nether_star_essence_41": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_41"
+			"textures": "textures/ui/nether_star_essence/f_41"
 		},
 		"utilitycraft:nether_star_essence_42": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_42"
+			"textures": "textures/ui/nether_star_essence/f_42"
 		},
 		"utilitycraft:nether_star_essence_43": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_43"
+			"textures": "textures/ui/nether_star_essence/f_43"
 		},
 		"utilitycraft:nether_star_essence_44": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_44"
+			"textures": "textures/ui/nether_star_essence/f_44"
 		},
 		"utilitycraft:nether_star_essence_45": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_45"
+			"textures": "textures/ui/nether_star_essence/f_45"
 		},
 		"utilitycraft:nether_star_essence_46": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_46"
+			"textures": "textures/ui/nether_star_essence/f_46"
 		},
 		"utilitycraft:nether_star_essence_47": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_47"
+			"textures": "textures/ui/nether_star_essence/f_47"
 		},
 		"utilitycraft:nether_star_essence_48": {
-			"textures": "textures/ui/nether_star_essence_bar/nether_star_essence_48"
+			"textures": "textures/ui/nether_star_essence/f_48"
 		},
 		"utilitycraft:uranium_bar_00": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_00"
+			"textures": "textures/ui/uranium/f_00"
 		},
 		"utilitycraft:uranium_bar_01": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_01"
+			"textures": "textures/ui/uranium/f_01"
 		},
 		"utilitycraft:uranium_bar_02": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_02"
+			"textures": "textures/ui/uranium/f_02"
 		},
 		"utilitycraft:uranium_bar_03": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_03"
+			"textures": "textures/ui/uranium/f_03"
 		},
 		"utilitycraft:uranium_bar_04": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_04"
+			"textures": "textures/ui/uranium/f_04"
 		},
 		"utilitycraft:uranium_bar_05": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_05"
+			"textures": "textures/ui/uranium/f_05"
 		},
 		"utilitycraft:uranium_bar_06": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_06"
+			"textures": "textures/ui/uranium/f_06"
 		},
 		"utilitycraft:uranium_bar_07": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_07"
+			"textures": "textures/ui/uranium/f_07"
 		},
 		"utilitycraft:uranium_bar_08": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_08"
+			"textures": "textures/ui/uranium/f_08"
 		},
 		"utilitycraft:uranium_bar_09": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_09"
+			"textures": "textures/ui/uranium/f_09"
 		},
 		"utilitycraft:uranium_bar_10": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_10"
+			"textures": "textures/ui/uranium/f_10"
 		},
 		"utilitycraft:uranium_bar_11": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_11"
+			"textures": "textures/ui/uranium/f_11"
 		},
 		"utilitycraft:uranium_bar_12": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_12"
+			"textures": "textures/ui/uranium/f_12"
 		},
 		"utilitycraft:uranium_bar_13": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_13"
+			"textures": "textures/ui/uranium/f_13"
 		},
 		"utilitycraft:uranium_bar_14": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_14"
+			"textures": "textures/ui/uranium/f_14"
 		},
 		"utilitycraft:uranium_bar_15": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_15"
+			"textures": "textures/ui/uranium/f_15"
 		},
 		"utilitycraft:uranium_bar_16": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_16"
+			"textures": "textures/ui/uranium/f_16"
 		},
 		"utilitycraft:uranium_bar_17": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_17"
+			"textures": "textures/ui/uranium/f_17"
 		},
 		"utilitycraft:uranium_bar_18": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_18"
+			"textures": "textures/ui/uranium/f_18"
 		},
 		"utilitycraft:uranium_bar_19": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_19"
+			"textures": "textures/ui/uranium/f_19"
 		},
 		"utilitycraft:uranium_bar_20": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_20"
+			"textures": "textures/ui/uranium/f_20"
 		},
 		"utilitycraft:uranium_bar_21": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_21"
+			"textures": "textures/ui/uranium/f_21"
 		},
 		"utilitycraft:uranium_bar_22": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_22"
+			"textures": "textures/ui/uranium/f_22"
 		},
 		"utilitycraft:uranium_bar_23": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_23"
+			"textures": "textures/ui/uranium/f_23"
 		},
 		"utilitycraft:uranium_bar_24": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_24"
+			"textures": "textures/ui/uranium/f_24"
 		},
 		"utilitycraft:uranium_bar_25": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_25"
+			"textures": "textures/ui/uranium/f_25"
 		},
 		"utilitycraft:uranium_bar_26": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_26"
+			"textures": "textures/ui/uranium/f_26"
 		},
 		"utilitycraft:uranium_bar_27": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_27"
+			"textures": "textures/ui/uranium/f_27"
 		},
 		"utilitycraft:uranium_bar_28": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_28"
+			"textures": "textures/ui/uranium/f_28"
 		},
 		"utilitycraft:uranium_bar_29": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_29"
+			"textures": "textures/ui/uranium/f_29"
 		},
 		"utilitycraft:uranium_bar_30": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_30"
+			"textures": "textures/ui/uranium/f_30"
 		},
 		"utilitycraft:uranium_bar_31": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_31"
+			"textures": "textures/ui/uranium/f_31"
 		},
 		"utilitycraft:uranium_bar_32": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_32"
+			"textures": "textures/ui/uranium/f_32"
 		},
 		"utilitycraft:uranium_bar_33": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_33"
+			"textures": "textures/ui/uranium/f_33"
 		},
 		"utilitycraft:uranium_bar_34": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_34"
+			"textures": "textures/ui/uranium/f_34"
 		},
 		"utilitycraft:uranium_bar_35": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_35"
+			"textures": "textures/ui/uranium/f_35"
 		},
 		"utilitycraft:uranium_bar_36": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_36"
+			"textures": "textures/ui/uranium/f_36"
 		},
 		"utilitycraft:uranium_bar_37": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_37"
+			"textures": "textures/ui/uranium/f_37"
 		},
 		"utilitycraft:uranium_bar_38": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_38"
+			"textures": "textures/ui/uranium/f_38"
 		},
 		"utilitycraft:uranium_bar_39": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_39"
+			"textures": "textures/ui/uranium/f_39"
 		},
 		"utilitycraft:uranium_bar_40": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_40"
+			"textures": "textures/ui/uranium/f_40"
 		},
 		"utilitycraft:uranium_bar_41": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_41"
+			"textures": "textures/ui/uranium/f_41"
 		},
 		"utilitycraft:uranium_bar_42": {
-			"textures": "textures/ui/uranium_bar/uranium_bar_42"
+			"textures": "textures/ui/uranium/f_42"
 		},
 		"utilitycraft_bronze_ingot": {
 			"textures": "textures/items/bronze_ingot"

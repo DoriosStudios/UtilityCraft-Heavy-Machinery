@@ -353,7 +353,7 @@ ui.hm.gt.heated_saline_name=Heated Saline Coolant
 ui.hm.gt.heated_saline_value=512 DE/mB | 1.25x impulse
 
 entity.utilitycraft:combustion_chamber.name=Combustion Chamber
-tile.utilitycraft:combustion_chamber_controller.name=Combustion Chamber Controller
+tile.utilitycraft:combustion_chamber_controller.name=Combustion Chamber Controller\n§o§9@UC: Heavy Machinery
 ui.hm.cc.tab_reactor=General
 ui.hm.cc.tab_fuel=Fuel
 ui.hm.cc.tab_control=Control
@@ -383,6 +383,9 @@ ui.hm.cc.manual_fuel_hint=Go to Fuel tab to manually feed fuel items.
 
 tile.utilitycraft:netherite_controller_case.name=Netherite Controller Case\n§o§9@UC: Heavy Machinery
 item.utilitycraft:nether_star_essence_bucket=Nether Star Essence Bucket\n§o§9@UC: Heavy Machinery
-tile.utilitycraft:reinforced_induction_anvil.name=Reinforced Induction Anvil
+tile.utilitycraft:reinforced_induction_anvil.name=Reinforced Induction Anvil\n§o§9@UC: Heavy Machinery
 entity.utilitycraft:reinforced_induction_anvil.name=Reinforced Induction Anvil
 ui.utilitycraft:info.reinforced_induction_anvil=Repairs normal equipment 128x faster than the basic Induction Anvil at base speed.\n\nEnergy Containers: 1,000,000 DE/t base charging, at 1 DE per stored DE. Charge enters in complete 10,000 DE units.\n\nBuffer: 32,000,000 DE. Speed and energy upgrades are supported.\nInsert equipment in the central slot.
+
+## Quick Info addon name
+utilitycraft.identifier=§o§9@UtilityCraft

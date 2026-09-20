@@ -1,5 +1,13 @@
 # UtilityCraft: Heavy Machinery v0.6.0
 
+## Unreleased
+
+### CHANGED
+
+- Shortened all UI bar frame paths to per-type folders with `f_00`, `f_01`, etc. Updated texture references while preserving item identifiers, atlas keys and image contents.
+
+- Matched original-pack language files to ATA: Quick Info uses the shared `utilitycraft.identifier` label, while item and block tooltips preserve their individual `@Addon` attribution and existing descriptions.
+
 ## FIXED
 - Fixed broken formatting codes in the Nether Star Essence Bucket tooltip in all three languages, including the Portuguese name accent.
 - Factory controllers now charge and finish batches in the same update, process all work allowed by the scheduler interval, stop spending when inputs/outputs block, retain blocked-output progress and finish fully paid batches with an empty battery. UI refreshes only once per update. Autosieve reserves output space before consuming inputs.
