@@ -3,6 +3,7 @@
     "minecraft:block": {
         "description": {
             "identifier": "utilitycraft:combustion_chamber_controller",
+            "states": { "utilitycraft:has_selection": [true, false] },
             "menu_category": {
                 "category": "construction"
             },
@@ -64,6 +65,10 @@
             "utilitycraft:combustion_chamber": {}
         },
         "permutations": [
+            {
+                "condition": "!q.block_state('utilitycraft:has_selection')",
+                "components": { "minecraft:selection_box": false }
+            },
             {
                 "condition": "q.block_state('minecraft:cardinal_direction') == 'north' ",
                 "components": {

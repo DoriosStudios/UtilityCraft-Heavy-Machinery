@@ -1,5 +1,11 @@
 # UtilityCraft: Heavy Machinery v0.6.0
 
+Heavy Machinery now requires UtilityCraft 3.6.0 or newer. The dependency checker warns when an older version is installed.
+
+## UI/UX
+
+- Machines and multiblock controllers now support UtilityCraft's shared selection switching: interact with their inventories while standing and select their blocks while sneaking, without enlarging entity hitboxes.
+
 ## Unreleased
 
 ### CHANGED
