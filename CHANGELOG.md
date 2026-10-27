@@ -1,6 +1,6 @@
 # UtilityCraft: Heavy Machinery v0.6.0
 
-Heavy Machinery now requires UtilityCraft 3.6.0 or newer. The dependency checker warns when an older version is installed.
+Heavy Machinery now requires UtilityCraft 3.6.1 or newer for the updated block-container selection system. The dependency checker warns when an older version is installed.
 
 ## UI/UX
 
