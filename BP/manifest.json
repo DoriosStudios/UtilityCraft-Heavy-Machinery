@@ -8,7 +8,7 @@
 	},
 	"header": {
 		"name": "UtilityCraft: Heavy Machinery",
-		"description": "v0.6.0 §aRequires UtilityCraft 3.5.0+",
+		"description": "v0.6.0 §aRequires UtilityCraft 3.6.2+",
 		"min_engine_version": [
 			1,
 			21,
@@ -59,6 +59,14 @@
 		{
 			"module_name": "@minecraft/server-ui",
 			"version": "2.0.0"
+		},
+		{
+			"uuid": "9d61a8df-7d50-4624-8bff-d2c90c52a5a0",
+			"version": [
+				3,
+				6,
+				2
+			]
 		}
 	]
 }

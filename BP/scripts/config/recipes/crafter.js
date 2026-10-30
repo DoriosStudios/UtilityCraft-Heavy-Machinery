@@ -68,10 +68,6 @@ const crafterRecipeBatches = [
     "output": "utilitycraft:netherite_gas_port",
     "amount": 1
   },
-  "tin_plate,gas_pipe,tin_plate,expert_gas_tank,steel_gas_port,expert_gas_tank,tin_plate,gas_pipe,tin_plate": {
-    "output": "utilitycraft:gas_cell",
-    "amount": 1
-  },
   "steel_plate,control_panel,steel_plate,fluid_cell,controller_case,fluid_cell,steel_plate,steel_fluid_port,steel_plate": {
     "output": "utilitycraft:liquid_tank_controller",
     "amount": 1
@@ -202,10 +198,6 @@ const crafterRecipeBatches = [
       output: "utilitycraft:electro_press_controller",
       amount: 1,
     },
-    "charged_darloonite_crystal,expert_battery,charged_darloonite_crystal,expert_battery,steel_case,expert_battery,charged_darloonite_crystal,expert_battery,charged_darloonite_crystal": {
-      output: "utilitycraft:energy_cell",
-      amount: 1,
-    },
     "steel_plate,control_panel,steel_plate,charged_darloonite_crystal,controller_case,charged_darloonite_crystal,steel_plate,incinerator,steel_plate": {
       output: "utilitycraft:incinerator_controller",
       amount: 1,
@@ -218,24 +210,8 @@ const crafterRecipeBatches = [
       output: "utilitycraft:magmatic_chamber_controller",
       amount: 1,
     },
-    "tin_plate,emerald_dust,tin_plate,energy_upgrade,steel_case,energy_upgrade,tin_plate,charged_darloonite_crystal,tin_plate": {
-      output: "utilitycraft:efficiency_module",
-      amount: 1,
-    },
-    "tin_plate,fluid_pipe,tin_plate,expert_fluid_tank,steel_fluid_port,expert_fluid_tank,tin_plate,fluid_pipe,tin_plate": {
-      output: "utilitycraft:fluid_cell",
-      amount: 1,
-    },
     "netherite_plate,tin_ingot,netherite_plate,netherite_plate,steel_case,netherite_plate,netherite_plate,tin_ingot,netherite_plate": {
       output: "utilitycraft:heat_conductor",
-      amount: 1,
-    },
-    "tin_plate,expert_chip,tin_plate,charged_darloonite_crystal,controller_case,charged_darloonite_crystal,tin_plate,expert_chip,tin_plate": {
-      output: "utilitycraft:processing_module",
-      amount: 1,
-    },
-    "tin_plate,emerald_dust,tin_plate,speed_upgrade,steel_case,speed_upgrade,tin_plate,charged_darloonite_crystal,tin_plate": {
-      output: "utilitycraft:speed_module",
       amount: 1,
     },
     "tin_plate,control_panel,tin_plate,netherite_plate,steel_case,netherite_plate,tin_plate,netherite_plate,tin_plate": {

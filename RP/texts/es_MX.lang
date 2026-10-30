@@ -18,11 +18,6 @@ item.utilitycraft:hazmat_chestplate=Pechera Hazmat\n§o§9@UC: Heavy Machinery
 item.utilitycraft:hazmat_leggings=Pantalones Hazmat\n§o§9@UC: Heavy Machinery
 item.utilitycraft:hazmat_boots=Botas Hazmat\n§o§9@UC: Heavy Machinery
 
-tile.utilitycraft:processing_module.name=Módulo de Procesamiento\n§o§9@UC: Heavy Machinery
-tile.utilitycraft:speed_module.name=Módulo de Velocidad\n§o§9@UC: Heavy Machinery
-tile.utilitycraft:efficiency_module.name=Módulo de Eficiencia\n§o§9@UC: Heavy Machinery
-tile.utilitycraft:energy_cell.name=Célula de Energía\n§o§9@UC: Heavy Machinery
-tile.utilitycraft:fluid_cell.name=Célula de Líquido\n§o§9@UC: Heavy Machinery
 
 tile.utilitycraft:crusher_controller.name=Controlador de Trituradora\n§o§9@UC: Heavy Machinery
 tile.utilitycraft:incinerator_controller.name=Controlador de Incinerador\n§o§9@UC: Heavy Machinery
@@ -138,7 +133,6 @@ ui.utilitycraft:info.magmatic_chamber_controller=Funde objetos registrados para 
 ui.utilitycraft:info.power_condenser=Almacena Dorios Energy y abastece automáticamente la red conectada.\n\nAñade más Power Condenser Units o de mayor nivel para almacenar más y transferir más rápido.
 ui.utilitycraft:info.thermo_reactor=Quema lava para generar §sDorios Energy§8. Un burn rate mayor produce más energía y calor. La eficiencia mejora cerca de la temperatura ideal; sobrecalentarlo puede destruir el reactor.\n\n§8Tanques:\n- §bCoolant§8: elimina calor.\n- §vCombustible de lava§8: alimenta el reactor.\n\n§8Estructura:\n- Energy Units: más almacenamiento y transferencia.\n- Fluid Cells: más capacidad de lava.\n- Espacio vacío: más capacidad de coolant.\n- Heat Conductors: mejor refrigeración.\n- Vents superiores: liberan presión.\n\n§8Usa el teclado para fijar el burn rate y Power para iniciar o detener.
 ui.utilitycraft:info.nuclear_reactor=Consume Barras de Combustible de Uranio Enriquecido para generar §sDorios Energy§8. Los Fuel Assemblies aumentan la capacidad interna y la velocidad teórica de reacción. Cada Rod Control maneja eficientemente hasta cuatro Fuel Assemblies; los ensamblajes adicionales reducen la eficiencia hasta instalar más controles.\n\n§8Recursos:\n- §aCombustible nuclear§8: inserta Uranio Enriquecido en el slot o mediante un Item Port.\n- §bCoolant§8: cualquier refrigerante registrado elimina calor y se consume al enfriar.\n\n§8Estructura:\n- Espacio vacío: más capacidad de coolant.\n- Fuel Assemblies: más capacidad y velocidad de reacción.\n- Rod Controls: controlan eficientemente cuatro ensamblajes cada uno.\n- Heat Conductors: mejor refrigeración con coolant.\n- Energy Cells: más almacenamiento y transferencia.\n\n§8Usa el teclado para fijar el consumo de combustible en FU/t y Power para iniciar o detener.
-utilitycraft:itemGroup.components_modules=Componentes y Módulos
 utilitycraft:itemGroup.power_condenser_units=Unidades de Condensador de Energía
 utilitycraft:itemGroup.materials_resources=Materiales y Recursos\n§6(Heavy Machinery)
 utilitycraft:itemGroup.utility_tools=Herramientas Utilitarias
@@ -226,7 +220,6 @@ tile.utilitycraft:liquid_tank_controller.name=Controlador de tanque de líquidos
 entity.utilitycraft:liquid_tank_controller.name=Controlador de tanque de líquidos
 tile.utilitycraft:gas_tank_controller.name=Controlador de tanque de gases\n§o§9@UC: Heavy Machinery
 entity.utilitycraft:gas_tank_controller.name=Controlador de tanque de gases
-tile.utilitycraft:gas_cell.name=Celda de gas\n§o§9@UC: Heavy Machinery
 tile.utilitycraft:tin_gas_port.name=Puerto de gas de estaño\n§o§9@UC: Heavy Machinery
 tile.utilitycraft:bronze_gas_port.name=Puerto de gas de bronce\n§o§9@UC: Heavy Machinery
 tile.utilitycraft:steel_gas_port.name=Puerto de gas de acero\n§o§9@UC: Heavy Machinery

@@ -109,18 +109,6 @@
 		"utilitycraft_matter_condenser_controller": {
 			"textures": "textures/blocks/multiblock/matter_condenser_controller"
 		},
-		"utilitycraft_efficiency_module": {
-			"textures": "textures/blocks/multiblock/efficiency_module"
-		},
-		"utilitycraft_energy_cell": {
-			"textures": "textures/blocks/multiblock/energy_cell"
-		},
-		"utilitycraft_processing_module": {
-			"textures": "textures/blocks/multiblock/processing_module"
-		},
-		"utilitycraft_speed_module": {
-			"textures": "textures/blocks/multiblock/speed_module"
-		},
 		"utilitycraft_power_condenser_controller": {
 			"textures": "textures/blocks/multiblock/power_condenser_controller"
 		},
@@ -135,9 +123,6 @@
 		},
 		"utilitycraft_basic_power_condenser_unit": {
 			"textures": "textures/blocks/multiblock/basic_energy_condenser"
-		},
-		"utilitycraft_fluid_cell": {
-			"textures": "textures/blocks/multiblock/fluid_cell"
 		},
 		"utilitycraft_heat_conductor": {
 			"textures": "textures/blocks/multiblock/heat_conductor"
@@ -376,66 +361,6 @@
 		"utilitycraft_bronze_controller_case_down": {
 			"textures": "textures/blocks/multiblock/bronze/bronze_steel_case_down"
 		},
-		"utilitycraft_efficiency_module_north": {
-			"textures": "textures/blocks/multiblock/efficiency_module_north"
-		},
-		"utilitycraft_efficiency_module_south": {
-			"textures": "textures/blocks/multiblock/efficiency_module_south"
-		},
-		"utilitycraft_efficiency_module_east": {
-			"textures": "textures/blocks/multiblock/efficiency_module_east"
-		},
-		"utilitycraft_efficiency_module_west": {
-			"textures": "textures/blocks/multiblock/efficiency_module_west"
-		},
-		"utilitycraft_efficiency_module_up": {
-			"textures": "textures/blocks/multiblock/efficiency_module_up"
-		},
-		"utilitycraft_efficiency_module_down": {
-			"textures": "textures/blocks/multiblock/efficiency_module_down"
-		},
-		"utilitycraft_energy_cell_north": {
-			"textures": "textures/blocks/multiblock/energy_cell_north"
-		},
-		"utilitycraft_energy_cell_south": {
-			"textures": "textures/blocks/multiblock/energy_cell_south"
-		},
-		"utilitycraft_energy_cell_east": {
-			"textures": "textures/blocks/multiblock/energy_cell_east"
-		},
-		"utilitycraft_energy_cell_west": {
-			"textures": "textures/blocks/multiblock/energy_cell_west"
-		},
-		"utilitycraft_energy_cell_up": {
-			"textures": "textures/blocks/multiblock/energy_cell_up"
-		},
-		"utilitycraft_energy_cell_down": {
-			"textures": "textures/blocks/multiblock/energy_cell_down"
-		},
-		"utilitycraft_fluid_cell_side": {
-			"textures": "textures/blocks/multiblock/fluid_cell_side"
-		},
-		"utilitycraft_fluid_cell_up": {
-			"textures": "textures/blocks/multiblock/fluid_cell_up"
-		},
-		"utilitycraft_processing_module_north": {
-			"textures": "textures/blocks/multiblock/processing_module_north"
-		},
-		"utilitycraft_processing_module_south": {
-			"textures": "textures/blocks/multiblock/processing_module_south"
-		},
-		"utilitycraft_processing_module_east": {
-			"textures": "textures/blocks/multiblock/processing_module_east"
-		},
-		"utilitycraft_processing_module_west": {
-			"textures": "textures/blocks/multiblock/processing_module_west"
-		},
-		"utilitycraft_processing_module_up": {
-			"textures": "textures/blocks/multiblock/processing_module_up"
-		},
-		"utilitycraft_processing_module_down": {
-			"textures": "textures/blocks/multiblock/processing_module_down"
-		},
 		"utilitycraft_rod_control_north": {
 			"textures": "textures/blocks/multiblock/rod_control_north"
 		},
@@ -447,24 +372,6 @@
 		},
 		"utilitycraft_rod_control_down": {
 			"textures": "textures/blocks/multiblock/rod_control_down"
-		},
-		"utilitycraft_speed_module_north": {
-			"textures": "textures/blocks/multiblock/speed_module_north"
-		},
-		"utilitycraft_speed_module_south": {
-			"textures": "textures/blocks/multiblock/speed_module_south"
-		},
-		"utilitycraft_speed_module_east": {
-			"textures": "textures/blocks/multiblock/speed_module_east"
-		},
-		"utilitycraft_speed_module_west": {
-			"textures": "textures/blocks/multiblock/speed_module_west"
-		},
-		"utilitycraft_speed_module_up": {
-			"textures": "textures/blocks/multiblock/speed_module_up"
-		},
-		"utilitycraft_speed_module_down": {
-			"textures": "textures/blocks/multiblock/speed_module_down"
 		},
 		"utilitycraft_autosieve_controller_north": {
 			"textures": "textures/blocks/multiblock/autosieve_controller_north"
@@ -669,12 +576,6 @@
 		},
 		"utilitycraft_netherite_gas_port": {
 			"textures": "textures/blocks/multiblock/netherite/netherite_gas_port"
-		},
-		"utilitycraft_gas_cell_side": {
-			"textures": "textures/blocks/multiblock/gas_cell_side"
-		},
-		"utilitycraft_gas_cell_up": {
-			"textures": "textures/blocks/multiblock/gas_cell_up"
 		},
 		"utilitycraft_gas_turbine_top": {
 			"textures": "textures/blocks/multiblock/gas_turbine/top"

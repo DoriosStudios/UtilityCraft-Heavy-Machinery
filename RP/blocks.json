@@ -205,19 +205,10 @@
 	"utilitycraft:crusher_controller": {
 		"sound": "metal"
 	},
-	"utilitycraft:efficiency_module": {
-		"sound": "metal"
-	},
 	"utilitycraft:electro_press_controller": {
 		"sound": "metal"
 	},
-	"utilitycraft:energy_cell": {
-		"sound": "metal"
-	},
 	"utilitycraft:expert_power_condenser_unit": {
-		"sound": "metal"
-	},
-	"utilitycraft:fluid_cell": {
 		"sound": "metal"
 	},
 	"utilitycraft:heat_conductor": {
@@ -244,13 +235,7 @@
 	"utilitycraft:power_condenser_controller": {
 		"sound": "metal"
 	},
-	"utilitycraft:processing_module": {
-		"sound": "metal"
-	},
 	"utilitycraft:reaction_chamber_controller": {
-		"sound": "metal"
-	},
-	"utilitycraft:speed_module": {
 		"sound": "metal"
 	},
 	"utilitycraft:thermo_core": {
@@ -292,9 +277,6 @@
 	"utilitycraft:netherite_gas_port": {
 		"sound": "metal",
 		"textures": "utilitycraft_netherite_gas_port"
-	},
-	"utilitycraft:gas_cell": {
-		"sound": "metal"
 	},
 	"utilitycraft:gas_turbine_controller": {
 		"sound": "copper"

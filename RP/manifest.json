@@ -7,7 +7,7 @@
 	},
 	"header": {
 		"name": "UtilityCraft: Heavy Machinery",
-		"description": "v0.6.0 §aRequires UtilityCraft 3.5.0+",
+		"description": "v0.6.0 §aRequires UtilityCraft 3.6.2+",
 		"min_engine_version": [
 			1,
 			21,
@@ -38,6 +38,14 @@
 				0,
 				6,
 				0
+			]
+		},
+		{
+			"uuid": "b8bff6b0-417e-43fb-9451-d1d9d80c309f",
+			"version": [
+				3,
+				6,
+				2
 			]
 		}
 	]

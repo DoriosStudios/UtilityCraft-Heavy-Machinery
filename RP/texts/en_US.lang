@@ -28,11 +28,6 @@ item.utilitycraft:hazmat_chestplate=Hazmat Chestplate\n§o§9@UC: Heavy Machiner
 item.utilitycraft:hazmat_leggings=Hazmat Leggings\n§o§9@UC: Heavy Machinery
 item.utilitycraft:hazmat_boots=Hazmat Boots\n§o§9@UC: Heavy Machinery
 
-tile.utilitycraft:processing_module.name=Processing Module\n§o§9@UC: Heavy Machinery
-tile.utilitycraft:speed_module.name=Speed Module\n§o§9@UC: Heavy Machinery
-tile.utilitycraft:efficiency_module.name=Efficiency Module\n§o§9@UC: Heavy Machinery
-tile.utilitycraft:energy_cell.name=Energy Cell\n§o§9@UC: Heavy Machinery
-tile.utilitycraft:fluid_cell.name=Liquid Cell\n§o§9@UC: Heavy Machinery
 
 tile.utilitycraft:crusher_controller.name=Crusher Controller\n§o§9@UC: Heavy Machinery
 tile.utilitycraft:incinerator_controller.name=Incinerator Controller\n§o§9@UC: Heavy Machinery
@@ -139,7 +134,6 @@ item.utilitycraft:control_panel=Control Panel\n§o§9@UC: Heavy Machinery
 
 utilitycraft:itemGroup.controllers=Controllers
 utilitycraft:itemGroup.casings_ports=Casings & Ports
-utilitycraft:itemGroup.components_modules=Components and Modules
 utilitycraft:itemGroup.power_condenser_units=Power Condenser Units
 utilitycraft:itemGroup.materials_resources=Materials and Resources\n§6(Heavy Machinery)
 utilitycraft:itemGroup.utility_tools=Utility Tools
@@ -227,7 +221,6 @@ tile.utilitycraft:liquid_tank_controller.name=Liquid Tank Controller\n§o§9@UC:
 entity.utilitycraft:liquid_tank_controller.name=Liquid Tank Controller
 tile.utilitycraft:gas_tank_controller.name=Gas Tank Controller\n§o§9@UC: Heavy Machinery
 entity.utilitycraft:gas_tank_controller.name=Gas Tank Controller
-tile.utilitycraft:gas_cell.name=Gas Cell\n§o§9@UC: Heavy Machinery
 tile.utilitycraft:tin_gas_port.name=Tin Gas Port\n§o§9@UC: Heavy Machinery
 tile.utilitycraft:bronze_gas_port.name=Bronze Gas Port\n§o§9@UC: Heavy Machinery
 tile.utilitycraft:steel_gas_port.name=Steel Gas Port\n§o§9@UC: Heavy Machinery

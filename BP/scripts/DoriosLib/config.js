@@ -15,9 +15,9 @@ export const ADDON_METADATA = {
   version: "0.6.0",
   dependencies: {
     utilitycraft: {
-      version: "3.6.1",
+      version: "3.6.2",
       name: "UtilityCraft",
-      warning: "Please update to UtilityCraft 3.6.1 or newer.",
+      warning: "Please update to UtilityCraft 3.6.2 or newer.",
     },
   },
 };

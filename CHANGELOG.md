@@ -1,9 +1,21 @@
-# UtilityCraft: Heavy Machinery v0.6.0
+<!-- Upcoming release: v0.6.0. -->
 
-Heavy Machinery now requires UtilityCraft 3.6.1 or newer for the updated block-container selection system. The dependency checker warns when an older version is installed.
+Heavy Machinery now uses UtilityCraft's shared multiblock cells and machine modules and requires UtilityCraft 3.6.2 or newer. Casings, ports, controllers, and specialized components remain in Heavy Machinery.
+
+> [!WARNING]
+> Update UtilityCraft to 3.6.2 or newer alongside Heavy Machinery to keep the shared cells and modules available in existing worlds.
+
+## BLOCKS
+
+- Moved **Energy Cell**, **Liquid Cell**, **Gas Cell**, **Processing Module**, **Speed Module**, and **Efficiency Module** into UtilityCraft while preserving their identifiers and machine behavior.
+
+## RECIPES
+
+- Shared cells and modules now use UtilityCraft's Workbench and Crafter recipes, with no Heavy Machinery materials required.
 
 ## UI/UX
 
+- Shared cell and module names, tooltips, and Creative inventory entries are now provided by UtilityCraft.
 - Machines and multiblock controllers now support UtilityCraft's shared selection switching: interact with their inventories while standing and select their blocks while sneaking, without enlarging entity hitboxes.
 
 ## Unreleased
