@@ -15,6 +15,7 @@ Heavy Machinery now uses UtilityCraft's shared multiblock cells and machine modu
 
 ## UI/UX
 
+- Separated item and block names from their descriptive tooltips in every supported language, preserving descriptions, formatting, and addon attribution.
 - Shared cell and module names, tooltips, and Creative inventory entries are now provided by UtilityCraft.
 - Machines and multiblock controllers now support UtilityCraft's shared selection switching: interact with their inventories while standing and select their blocks while sneaking, without enlarging entity hitboxes.
 
